@@ -1,0 +1,39 @@
+120224  2:02:41 [Note] Plugin 'FEDERATED' is disabled.
+InnoDB: The first specified data file .\ibdata1 did not exist:
+InnoDB: a new database to be created!
+120224  2:02:41  InnoDB: Setting file .\ibdata1 size to 10 MB
+InnoDB: Database physically writes the file full: wait...
+120224  2:02:42  InnoDB: Log file .\ib_logfile0 did not exist: new to be created
+InnoDB: Setting log file .\ib_logfile0 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+120224  2:02:42  InnoDB: Log file .\ib_logfile1 did not exist: new to be created
+InnoDB: Setting log file .\ib_logfile1 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+InnoDB: Doublewrite buffer not found: creating new
+InnoDB: Doublewrite buffer created
+InnoDB: Creating foreign key constraint system tables
+InnoDB: Foreign key constraint system tables created
+120224  2:02:42  InnoDB: Started; log sequence number 0 0
+120224  2:02:43 [Note] Event Scheduler: Loaded 0 events
+120224  2:02:43 [Note] D:\server2go22\server\mysql\bin\mysqld.exe: ready for connections.
+Version: '5.1.46-community'  socket: ''  port: 3306  MySQL Community Server (GPL)
+120224  2:08:27 [Note] Plugin 'FEDERATED' is disabled.
+120224  2:08:27  InnoDB: Error: unable to create temporary file; errno: 2
+120224  2:08:27 [ERROR] Plugin 'InnoDB' init function returned error.
+120224  2:08:27 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
+Can't start server: Bind on TCP/IP port: No such file or directory
+120224  2:08:27 [ERROR] Do you already have another mysqld server running on port: 3306 ?
+120224  2:08:27 [ERROR] Aborting
+
+120224  2:08:27 [Note] mysqld.exe: Shutdown complete
+
+120224  2:08:55 [Note] Plugin 'FEDERATED' is disabled.
+120224  2:08:55  InnoDB: Error: unable to create temporary file; errno: 2
+120224  2:08:55 [ERROR] Plugin 'InnoDB' init function returned error.
+120224  2:08:55 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
+Can't start server: Bind on TCP/IP port: No such file or directory
+120224  2:08:55 [ERROR] Do you already have another mysqld server running on port: 3306 ?
+120224  2:08:55 [ERROR] Aborting
+
+120224  2:08:55 [Note] mysqld.exe: Shutdown complete
+

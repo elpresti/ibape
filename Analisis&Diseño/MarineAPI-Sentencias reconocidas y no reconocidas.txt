@@ -1,0 +1,20 @@
+marineapi0.3 - Sentencias reconocidas:
+$GPRMB
+$GPGLL
+$GPRMC
+$GPGGA
+$GPBOD
+$GPVTG
+$SDDBT
+
+Sentencias NO reconocidas:
+$SDVHW
+$SDMTW
+$SDDPT
+GRMM
+GRME
+GRMZ
+XTE
+BWC
+
+La marineapi0.4 reconoce las mismas, y no reconoce las mismas.
