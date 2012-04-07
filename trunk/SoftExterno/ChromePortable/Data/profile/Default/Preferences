@@ -1,0 +1,812 @@
+{
+   "browser": {
+      "check_default_browser": false,
+      "clear_lso_data_enabled": true,
+      "ntp": {
+         "theme_promo_remaining": -2
+      },
+      "window_placement": {
+         "bottom": 680,
+         "left": 0,
+         "maximized": true,
+         "right": 1280,
+         "top": 0,
+         "work_area_bottom": 728,
+         "work_area_left": 0,
+         "work_area_right": 1366,
+         "work_area_top": 0
+      }
+   },
+   "cloud_print": {
+      "email": ""
+   },
+   "countryid_at_install": 21843,
+   "default_apps_install_state": 2,
+   "default_search_provider": {
+      "enabled": true,
+      "encodings": "UTF-8",
+      "icon_url": "http://www.google.com/favicon.ico",
+      "id": "2",
+      "instant_url": "{google:baseURL}webhp?{google:RLZ}sourceid=chrome-instant&{google:instantFieldTrialGroupParameter}ie={inputEncoding}&ion=1{searchTerms}",
+      "keyword": "google.com.ar",
+      "name": "Google",
+      "prepopulate_id": "1",
+      "search_url": "{google:baseURL}search?{google:RLZ}{google:acceptedSuggestion}{google:originalQueryForSuggestion}{google:searchFieldtrialParameter}{google:instantFieldTrialGroupParameter}sourceid=chrome&ie={inputEncoding}&q={searchTerms}",
+      "suggest_url": "{google:baseSuggestURL}search?{google:searchFieldtrialParameter}{google:instantFieldTrialGroupParameter}client=chrome&hl={language}&q={searchTerms}"
+   },
+   "dns_prefetching": {
+      "host_referral_list": [ 2, [ "http://127.0.0.1:4001/", [ "http://127.0.0.1:4001/", 3.3770503651862125 ] ], [ "http://localhost:4001/", [ "http://code.jquery.com/", 0.8650472717714638, "http://csi.gstatic.com/", 0.877220753450146, "http://localhost:4001/", 2.8411307123179848, "http://www.google.com/", 3.4588974094939937 ] ], [ "http://www.google.com.ar/", [ "http://news.google.com.ar/", 0.3050158477937678, "http://ssl.gstatic.com/", 2.524996323578065, "http://www.google.com.ar/", 10.188317038596924, "http://www.google.com/", 1.2624820907036958 ] ], [ "http://www.skype.com/", [ "http://metrics.skype.com/", 1.3132281179390324, "http://survey.122.2o7.net/", 1.504039041058379, "http://www.google-analytics.com/", 1.3132281179390324, "http://www.skype.com/", 1.3132281179390324, "http://www.skypeassets.com/", 7.228366734638776 ] ], [ "https://fls.doubleclick.net/", [ "https://googleads.g.doubleclick.net/", 0.15217006018855844, "https://www.googleadservices.com/", 0.1714752170781517 ] ], [ "https://www.google.com/", [ "https://fls.doubleclick.net/", 3.7095784925699364, "https://fonts.googleapis.com/", 1.6074840134469732, "https://ssl.google-analytics.com/", 2.541748226390513, "https://ssl.gstatic.com/", 1.6074840134469732, "https://themes.googleusercontent.com/", 1.841050066682858, "https://tools.google.com/", 2.0746161199187436, "https://www.google.com/", 4.176710599041706, "https://www.googleadservices.com/", 3.7095784925699364 ] ] ],
+      "startup_list": [ 1, "http://code.jquery.com/", "http://csi.gstatic.com/", "http://localhost:4001/", "http://www.google.com/" ]
+   },
+   "download": {
+      "directory_upgrade": true,
+      "extensions_to_open": ""
+   },
+   "extensions": {
+      "autoupdate": {
+         "last_check": "12977459301832325",
+         "next_check": "12978204895854440"
+      },
+      "blacklistupdate": {
+         "lastpingday": "12977391599819325",
+         "version": "0.0.0.100"
+      },
+      "chrome_url_overrides": {
+         "bookmarks": [ "chrome-extension://eemcgdkfndhakfknompkggombfjjjeno/main.html" ]
+      },
+      "settings": {
+         "aemcjbfajnnmhblifaejadoecfoaebld": {
+            "blacklist": true
+         },
+         "afenhmponmfmdmbmccbmglppcmjhmhmh": {
+            "blacklist": true
+         },
+         "agmhonoepgcnakccfpidhjehlocaeaaj": {
+            "blacklist": true
+         },
+         "ahfgeienlihckogmohjhadlkjgocpleb": {
+            "active_permissions": {
+               "api": [ "appNotifications", "management", "webstorePrivate" ]
+            },
+            "app_launcher_index": -2,
+            "page_index": 0
+         },
+         "ahjfgnikolodijnpakeknpilnemojlhc": {
+            "blacklist": true
+         },
+         "alcbnnpmipohgdllkkglhkbncijplago": {
+            "blacklist": true
+         },
+         "apdmgffkfhjfeejmbjidennfjdkmmmbl": {
+            "blacklist": true
+         },
+         "bjihddggcgnblgojnmhpnngonofbnkaj": {
+            "blacklist": true
+         },
+         "bkkchglolnigbfncnbnnbhhempjkdpkf": {
+            "blacklist": true
+         },
+         "boaoagnmpennjoigkkmnjhecapibhfko": {
+            "blacklist": true
+         },
+         "boclfockfmgcppbajihcgajhpggaakgl": {
+            "blacklist": true
+         },
+         "cbbjhegipokkofhhicbckicchjpcpeni": {
+            "blacklist": true
+         },
+         "cfbdodejdeejbkffcmiaknpmojjeibpn": {
+            "blacklist": true
+         },
+         "cihlkpohodpdkdnfalhdkhhlhmhffmbe": {
+            "blacklist": true
+         },
+         "cjhklhdjonhcohlacgggcbklpnldleck": {
+            "blacklist": true
+         },
+         "clapnamcglekekmamicmbahkghdcjaeh": {
+            "blacklist": true
+         },
+         "coajchbkdbfhmhbgcjepiofllfjjcpfp": {
+            "blacklist": true
+         },
+         "danapgfidmepmcfbjjacceiaiiioieio": {
+            "blacklist": true
+         },
+         "dbiblcmlcgdjjbdpbmbcpineegngkiip": {
+            "blacklist": true
+         },
+         "dbmdicehacbaohlockjgdglcobimmjkh": {
+            "blacklist": true
+         },
+         "dgcfmgdfbfbgcpbendbhbkfjppboebed": {
+            "blacklist": true
+         },
+         "dgkemngdheppgohkjjelnkjmdeimmfml": {
+            "blacklist": true
+         },
+         "dlobhinihbmedmheccecfnkcadpehmbf": {
+            "blacklist": true
+         },
+         "dmkdhgkknhnfpdjeicefnpmhcpbimden": {
+            "blacklist": true
+         },
+         "doneghboglgnflpdicnkaojmmljgejkj": {
+            "blacklist": true
+         },
+         "dpgenihgggagjjggfocjceeobjkadcbc": {
+            "blacklist": true
+         },
+         "ebdcdchjcndpjhehacedepnggfdbfkpn": {
+            "blacklist": true
+         },
+         "edmnikahahfkfilbbjbdoiabnghbkmjc": {
+            "blacklist": true
+         },
+         "efhjelcghjkfigiagdfbfilndaffpmdj": {
+            "blacklist": true
+         },
+         "efnaljpgehfilpmkhobibbjceeeondmn": {
+            "blacklist": true
+         },
+         "egljdhfnbjahogjahnigfnbpidlmdagi": {
+            "blacklist": true
+         },
+         "ehgoiaffgjoinpkllmmnikghgpghnabc": {
+            "blacklist": true
+         },
+         "ehomcoocpagnlcakcbecdaknmacmedld": {
+            "blacklist": true
+         },
+         "fafoohpbicgbcejffcplajonhhooddle": {
+            "blacklist": true
+         },
+         "fbhiehmngojjcmljddjmgpmcockbccmo": {
+            "blacklist": true
+         },
+         "ffdcfjdljhbehggjdkdioajnknjcpbjb": {
+            "active_permissions": {
+               "api": [ "contextMenus", "cookies", "plugin", "tabs" ],
+               "explicit_host": [ "http://*/*", "https://*/*" ],
+               "scriptable_host": [ "http://*/*", "https://*/*" ]
+            },
+            "from_bookmark": false,
+            "from_webstore": false,
+            "install_time": "12976384613927485",
+            "location": 3,
+            "manifest": {
+               "allow_reload": true,
+               "background_page": "background.html",
+               "browser_action": {
+                  "default_icon": "res/logo19.png",
+                  "default_title": "Download All with DAP..."
+               },
+               "content_scripts": [ {
+                  "all_frames": true,
+                  "js": [ "js/sbc_cookies_mon.js" ],
+                  "matches": [ "http://*/*", "https://*/*" ],
+                  "run_at": "document_start"
+               } ],
+               "description": "Download your files at the fastest possible speed. DAP application must be installed on your PC for this to work.",
+               "icons": {
+                  "128": "res/logo128.png",
+                  "32": "res/logo32.png",
+                  "48": "res/logo48.png"
+               },
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCvO3uCJrrKbDuS6mEilDwvDzy7ALbeyklMJKuLpUVS3Sjo3BKIU+hf9/YAELvTY/hST7SctoGvP4MX1lYYaxk3ymupN4ac19K3JT4Ww2PXMVRr+dhWxVChP/Diiaa6xleEELF3pGvnZcGTS/8F2Y04xysKaZiM717XpCEUxtxzQQIDAQAB",
+               "name": "Download Accelerator Plus (DAP)",
+               "permissions": [ "tabs", "http://*/", "https://*/", "contextMenus", "cookies" ],
+               "plugins": [ {
+                  "path": "lib/npdapchrome.dll",
+                  "public": true
+               } ],
+               "update_url": "https://secure.speedbit.com/chrome/DAP/DAPChromeUpdate6.xml",
+               "version": "2.0.7"
+            },
+            "path": "ffdcfjdljhbehggjdkdioajnknjcpbjb\\2.0.7_0",
+            "state": 2
+         },
+         "fibgploapkhokkbncddlkcmbmiengcfp": {
+            "blacklist": true
+         },
+         "flmmgcfcpbfddenepkfmgfpbaceolcoe": {
+            "blacklist": true
+         },
+         "fmcccidacjgnfiafddkngmeolkoiihil": {
+            "blacklist": true
+         },
+         "fmonlemffgbabjifjfaoamdflijecdbk": {
+            "blacklist": true
+         },
+         "fpbippbofbmgmbojjmgfcifpmdaelcmd": {
+            "blacklist": true
+         },
+         "fpmajanjndhgpifbcbnklbiehgnpkgmf": {
+            "blacklist": true
+         },
+         "gbenikfjhilhpgagllmfgggdjaflbmbi": {
+            "blacklist": true
+         },
+         "ghgphbmpcfgkfneodjpbdanmdoemklio": {
+            "blacklist": true
+         },
+         "gjkbghdignnlcknknflbigpammebiolo": {
+            "blacklist": true
+         },
+         "gkjeccpmibljcfpfapfljciimedljpnm": {
+            "blacklist": true
+         },
+         "gnapdhmknipknfmhhnhdmhakdfhgeing": {
+            "blacklist": true
+         },
+         "gngmkbiihflpghldjnbpemaicedhdddk": {
+            "blacklist": true
+         },
+         "hbaajkahagmlkdekmbdabikbopdgpaac": {
+            "blacklist": true
+         },
+         "hcapokajkngndbglnfglpfdpoeidmpha": {
+            "blacklist": true
+         },
+         "hcpndbchnlgojmnijaldkicigmihmdca": {
+            "blacklist": true
+         },
+         "hefmoncdemhjembgbnkgglhlookbipdc": {
+            "blacklist": true
+         },
+         "hgjgaeknhmidehalnmokomhpfhbfmpcm": {
+            "blacklist": true
+         },
+         "hhfffemhgkginfafaoapljdllodppana": {
+            "blacklist": true
+         },
+         "hhfiljkpjapjjphcocclhhaldpfkkjbi": {
+            "blacklist": true
+         },
+         "hhjmkijkgojfifipdgmiemghfikbohcm": {
+            "blacklist": true
+         },
+         "hhlgbfcfbkhlmajakkcjippgpcmejkko": {
+            "blacklist": true
+         },
+         "hkbgccpdcpbdckohbknjlamamelcnlki": {
+            "blacklist": true
+         },
+         "hnipgljcblpgnnojcfldehpeknhakbgj": {
+            "blacklist": true
+         },
+         "hnkcpoijaeegompjgbjjhkdmljldaccg": {
+            "blacklist": true
+         },
+         "hpibmhghjndideebpackbdlpncgkcppp": {
+            "blacklist": true
+         },
+         "ifbkndkaolfbjjhnnhfmkbkoclpdkpli": {
+            "blacklist": true
+         },
+         "ifeijfpkjckedpclgncedmgdiaoeahmk": {
+            "blacklist": true
+         },
+         "ijecjbcgpblkacpijljpaienknanaloa": {
+            "blacklist": true
+         },
+         "ijenlpgidnapbndonoinbkhekgjonojg": {
+            "blacklist": true
+         },
+         "imfbomjbodpfgfhfahlgkkcllmhbelhk": {
+            "blacklist": true
+         },
+         "iobnpmeeecphddicmhhmdjbnlbdhjlne": {
+            "blacklist": true
+         },
+         "iomejadoamfilglofmeaffghddcgapmf": {
+            "blacklist": true
+         },
+         "janhdpmhnighonkkbkdpnljcoenpfkbh": {
+            "blacklist": true
+         },
+         "jgmpapdckakiohhebmeoemejibommimi": {
+            "blacklist": true
+         },
+         "jjnkfllhcgkgnfbekpnmoikpfihpjfli": {
+            "blacklist": true
+         },
+         "jmifipgdcllamghkhdplfjffkciekbgo": {
+            "blacklist": true
+         },
+         "jpgidahfcgiajlcbleeiaibpmmblcmnb": {
+            "blacklist": true
+         },
+         "jpkdlckejfjidmplieobnhijmoiecbhl": {
+            "blacklist": true
+         },
+         "kbipembkfhbdmkkkfbigmohilmknjnof": {
+            "blacklist": true
+         },
+         "kcanfkmhccbaheheaackijegkclkaeic": {
+            "blacklist": true
+         },
+         "kgbkdabomfdpfoibliicpmibceaoohgh": {
+            "blacklist": true
+         },
+         "kinhljbhjmcmoddhdoodekeklmjapjff": {
+            "blacklist": true
+         },
+         "kkhomejdleoonmbdhcigkhkjcghngncf": {
+            "blacklist": true
+         },
+         "kleaapgdkahaekcocmkbgfainbhihccj": {
+            "blacklist": true
+         },
+         "kolbbghckjilleabphhgeggcgpfidofi": {
+            "blacklist": true
+         },
+         "lbficnmfealeidppcbgdcbemgfjodbkg": {
+            "blacklist": true
+         },
+         "lceaiepehinnomgijphkmjccbigkljkj": {
+            "blacklist": true
+         },
+         "lifbcibllhkdhoafpjfnlhfpfgnpldfl": {
+            "active_permissions": {
+               "api": [ "plugin", "tabs" ],
+               "explicit_host": [ "http://*/*", "https://*/*" ],
+               "scriptable_host": [ "file:///*", "http://*/*", "https://*/*" ]
+            },
+            "from_bookmark": false,
+            "from_webstore": false,
+            "install_time": "12976384614265485",
+            "location": 3,
+            "manifest": {
+               "background_page": "background.html",
+               "browser_action": {
+                  "default_icon": "skype.png",
+                  "default_title": "Options"
+               },
+               "content_scripts": [ {
+                  "all_frames": true,
+                  "js": [ "contentscript.js" ],
+                  "matches": [ "http://*/*", "file://*/*", "https://*/*" ],
+                  "run_at": "document_end"
+               } ],
+               "description": "Skype Click to Call",
+               "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDMxFysW3wPKWRPPe3xuJQz3m1ZDLX1hN8EYdP37tRPf7lp8vIhG4xirlXHGK748qcLPc4Lm8WsHDhvS5okN54Kwcnw4T2tBXSCZJxMmlu14HZ5yc/t969QLTPLIbAsasq4NVo40YuP2B7umxV9BlcxZEB9TEKPEQq8DRoKhj9jBQIDAQAB",
+               "name": "Skype Click to Call",
+               "permissions": [ "tabs", "http://*/*", "https://*/*" ],
+               "plugins": [ {
+                  "path": "npSkypeChromePlugin.dll",
+                  "public": true
+               } ],
+               "version": "5.6.0.8442"
+            },
+            "path": "lifbcibllhkdhoafpjfnlhfpfgnpldfl\\5.6.0.8442_0",
+            "state": 2
+         },
+         "likifpgnijjfbdegfepoalpamlgnfofi": {
+            "blacklist": true
+         },
+         "ljcicfibknpmlcmcecddjlbgkejehhpa": {
+            "blacklist": true
+         },
+         "ljeihpebkahejeacdalhkhmckmggppif": {
+            "blacklist": true
+         },
+         "lkdimamelhbiijkiljlnedmhnnkkmlbl": {
+            "blacklist": true
+         },
+         "lljnngafekbnkpdfophmcdlbfebcbcld": {
+            "blacklist": true
+         },
+         "lnahlgmhpghkhmafjppdidhcoaomipfg": {
+            "blacklist": true
+         },
+         "lnbeebaenahmkbffnimghceldeeihfak": {
+            "blacklist": true
+         },
+         "lncjcfkpannmofmpgdfoonkniofdnaba": {
+            "blacklist": true
+         },
+         "mbmdaiddhfoljplpdhohimgieioblfif": {
+            "blacklist": true
+         },
+         "mdiehnlecbjlppbpaaipmlnhhjgepfcg": {
+            "blacklist": true
+         },
+         "mfffdpnblflpobcnekhekiahepofaane": {
+            "blacklist": true
+         },
+         "mfhfkclojmdocagbmecgcnlofppebebd": {
+            "blacklist": true
+         },
+         "mjgobkikdipfikmaoakdcdbicpioljgg": {
+            "blacklist": true
+         },
+         "mkobblpffgbncfhijabakfafmkjdmmnm": {
+            "blacklist": true
+         },
+         "mlmegahemifabfmdnndafagnncfbnahn": {
+            "blacklist": true
+         },
+         "mlmmbepkgelpbenpobinockmiehdahai": {
+            "blacklist": true
+         },
+         "mlnoedbhndgbjcbeadjfnmjloejlgojk": {
+            "blacklist": true
+         },
+         "mmjodihhmnpkldljaifiajmlnpflfhpm": {
+            "blacklist": true
+         },
+         "mnichagcickblneeijmfnmoiakigmmhf": {
+            "blacklist": true
+         },
+         "mogepbcllienegdibkfpmombhefhcoic": {
+            "blacklist": true
+         },
+         "nbieffehfdniifkgdckbndjhojohbfjj": {
+            "blacklist": true
+         },
+         "ndhkiimgbjnendpcfbiadlifmangejoa": {
+            "blacklist": true
+         },
+         "ndiogongcmocdgjciemhagfhpjamehpe": {
+            "blacklist": true
+         },
+         "nibohffepnilngkecenfdgnokfhmnkod": {
+            "blacklist": true
+         },
+         "nidodbfomffkfabciljelkbdiabkeehe": {
+            "blacklist": true
+         },
+         "nihhbeikpchdddoillfdcdinnnnllmna": {
+            "blacklist": true
+         },
+         "nlgapikcofpablcmfgaoodlhiejiehhh": {
+            "blacklist": true
+         },
+         "nmphbnbmgfccfhcmibikmhcgajjpelpf": {
+            "blacklist": true
+         },
+         "nnioepmjbjjlflmdgjanlcmbjahljeeo": {
+            "blacklist": true
+         },
+         "nochkknnbahbhmmknnmdhagelcnfagom": {
+            "blacklist": true
+         },
+         "oakhllhnbcpgagdafgbninlpjdemdmjk": {
+            "blacklist": true
+         },
+         "ocnlnkjmfnolmbclblfhfhcakldceiec": {
+            "blacklist": true
+         },
+         "onpnpccdagncipgnoofbhchlbajcjnkd": {
+            "blacklist": true
+         },
+         "ookcgejbfhcmcanfkfmmmpahflnlajbl": {
+            "blacklist": true
+         },
+         "pbekednmpdekknlffkiopooofokfmkla": {
+            "blacklist": true
+         },
+         "pbglijbamgmlcpnnpbfjkbdeheejjloj": {
+            "blacklist": true
+         },
+         "pfcelnbmkeoaeicedjomcjkcammlkdbk": {
+            "blacklist": true
+         },
+         "pfonklmafadkmcedjlodommcoipgbcde": {
+            "blacklist": true
+         },
+         "pjdhkkcnlbfebiokpeghfffajaabahfo": {
+            "blacklist": true
+         },
+         "pkbbbncikcipejaiiiioboongndhmjgl": {
+            "blacklist": true
+         },
+         "pkbkkendemaimikinaefldfljliecapm": {
+            "blacklist": true
+         },
+         "plfijddblbcdcnammpdmfccchkbdekmm": {
+            "blacklist": true
+         },
+         "pnaiiipilbpcceggeanphcpkkihnojan": {
+            "blacklist": true
+         },
+         "pnnbdjcjeiobikdfikegpclkcimgafpp": {
+            "blacklist": true
+         },
+         "pnpgiaejfbdapllkchhgchjpdbcpiooa": {
+            "blacklist": true
+         },
+         "ppmfajacidhcjbddpgmcmigffpppcadd": {
+            "blacklist": true
+         }
+      },
+      "toolbarsize": -1
+   },
+   "http_throttling": {
+      "enabled": true
+   },
+   "instant": {
+      "enabled_time": "12976384611502440"
+   },
+   "net": {
+      "http_server_properties": {
+         "clients2.google.com:443": {
+            "settings": [ {
+               "id": 5,
+               "value": 32
+            }, {
+               "id": 6,
+               "value": 0
+            } ],
+            "supports_spdy": true
+         },
+         "fls.doubleclick.net:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "fonts.googleapis.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "googleads.g.doubleclick.net:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "ssl.google-analytics.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "ssl.gstatic.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "themes.googleusercontent.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "tools.google.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "www.google.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         },
+         "www.googleadservices.com:443": {
+            "settings": [ {
+               "id": 4,
+               "value": 100
+            } ],
+            "supports_spdy": true
+         }
+      }
+   },
+   "ntp": {
+      "alt_logo_end": 0.0,
+      "alt_logo_resource_server": "https://www.google.com/support/chrome/bin/topic/30248/inproduct",
+      "alt_logo_start": 0.0,
+      "app_page_names": [ "Aplicaciones" ],
+      "pinned_urls": {
+         "af4775052a19379b5cfb577f90adaf0d": {
+            "direction": "ltr",
+            "index": 0,
+            "title": "PortableApps.com - Portable software for USB drives",
+            "url": "http://portableapps.com/"
+         }
+      },
+      "pref_version": 3,
+      "promo_build": 0,
+      "promo_closed": false,
+      "promo_end": 1323071940.0,
+      "promo_feature_mask": 0,
+      "promo_group": 46,
+      "promo_group_max": 0,
+      "promo_group_timeslice": 0,
+      "promo_is_logged_in_to_plus": false,
+      "promo_line": "\u003Ca href=\"http://www.google.es/chromebook/index.html#utm_campaign=es&utm_source=es-ntp-holidays-es-bkws&utm_medium=ntp-holidays\"\u003EDescubre los Chromebook\u003C/a\u003E \u2013 ordenador que usa Chrome",
+      "promo_platform": 0,
+      "promo_resource_cache_update": "1333726670.84344",
+      "promo_start": 1321862280.0,
+      "promo_views": 0,
+      "promo_views_max": 0,
+      "shown_sections": 1,
+      "sign_in_promo": {
+         "group": 22,
+         "group_max": 100
+      },
+      "web_resource_cache_update": "1289679884.902772",
+      "webstore_last_promo_id": "1335115"
+   },
+   "plugins": {
+      "enabled_internal_pdf3": true,
+      "enabled_nacl": true,
+      "last_internal_directory": "C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\SoftExterno\\ChromePortable\\App\\Chrome-bin\\17.0.963.65",
+      "plugins_list": [ {
+         "enabled": true,
+         "name": "Remoting Viewer",
+         "path": "internal-remoting-viewer",
+         "version": ""
+      }, {
+         "enabled": true,
+         "name": "Remoting Viewer"
+      }, {
+         "enabled": true,
+         "name": "Native Client",
+         "path": "C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\SoftExterno\\ChromePortable\\App\\Chrome-bin\\17.0.963.65\\ppGoogleNaClPluginChrome.dll",
+         "version": ""
+      }, {
+         "enabled": true,
+         "name": "Native Client"
+      }, {
+         "enabled": true,
+         "name": "Chrome PDF Viewer",
+         "path": "C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\SoftExterno\\ChromePortable\\App\\Chrome-bin\\17.0.963.65\\pdf.dll",
+         "version": ""
+      }, {
+         "enabled": true,
+         "name": "Chrome PDF Viewer"
+      }, {
+         "enabled": true,
+         "name": "Shockwave Flash",
+         "path": "C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\SoftExterno\\ChromePortable\\App\\Chrome-bin\\17.0.963.65\\gcswf32.dll",
+         "version": "11,1,102,63"
+      }, {
+         "enabled": true,
+         "name": "Shockwave Flash",
+         "path": "C:\\Windows\\SysWOW64\\Macromed\\Flash\\NPSWF32.dll",
+         "version": "10,3,181,14"
+      }, {
+         "enabled": true,
+         "name": "Flash"
+      }, {
+         "enabled": true,
+         "name": "Adobe Acrobat",
+         "path": "C:\\Program Files (x86)\\Adobe\\Reader 10.0\\Reader\\Browser\\nppdf32.dll",
+         "version": "10.1.2.45"
+      }, {
+         "enabled": false,
+         "name": "Adobe Acrobat"
+      }, {
+         "enabled": true,
+         "name": "Microsoft\u00AE Windows Media Player Firefox Plugin",
+         "path": "C:\\Program Files (x86)\\Mozilla Firefox\\plugins\\np-mswmp.dll",
+         "version": "1.0.0.8"
+      }, {
+         "enabled": true,
+         "name": "Windows Media Player"
+      }, {
+         "enabled": true,
+         "name": "Java Deployment Toolkit 6.0.310.5",
+         "path": "C:\\Program Files (x86)\\Mozilla Firefox\\plugins\\npdeployJava1.dll",
+         "version": "6.0.310.5"
+      }, {
+         "enabled": true,
+         "name": "Java(TM) Platform SE 6 U31",
+         "path": "C:\\Program Files (x86)\\Java\\jre6\\bin\\plugin2\\npjp2.dll",
+         "version": "6.0.310.5"
+      }, {
+         "enabled": true,
+         "name": "Java"
+      }, {
+         "enabled": true,
+         "name": "2007 Microsoft Office system",
+         "path": "C:\\Program Files (x86)\\Mozilla Firefox\\plugins\\NPOFF12.DLL",
+         "version": "12.0.4518.1014"
+      }, {
+         "enabled": true,
+         "name": "Microsoft Office 2010",
+         "path": "D:\\PROGRA~1\\MICROS~1\\Office14\\NPAUTHZ.DLL",
+         "version": "14.0.4730.1010"
+      }, {
+         "enabled": true,
+         "name": "Microsoft Office 2010",
+         "path": "D:\\PROGRA~1\\MICROS~1\\Office14\\NPSPWRAP.DLL",
+         "version": "14.0.4761.1000"
+      }, {
+         "enabled": true,
+         "name": "Microsoft Office"
+      }, {
+         "enabled": true,
+         "name": "Google Talk Plugin",
+         "path": "C:\\Users\\Sebastian\\AppData\\Roaming\\Mozilla\\plugins\\npgoogletalk.dll",
+         "version": "2.7.5.6365"
+      }, {
+         "enabled": true,
+         "name": "Google Talk Plugin Video Accelerator",
+         "path": "C:\\Users\\Sebastian\\AppData\\Roaming\\Mozilla\\plugins\\npgtpo3dautoplugin.dll",
+         "version": "0,1,44,15"
+      }, {
+         "enabled": true,
+         "name": "Google Talk Plugin"
+      }, {
+         "enabled": true,
+         "name": "Google Earth Plugin",
+         "path": "C:\\Program Files (x86)\\Google\\Google Earth\\plugin\\npgeplugin.dll",
+         "version": "6.2.0.5788"
+      }, {
+         "enabled": true,
+         "name": "Google Earth Plugin"
+      }, {
+         "enabled": true,
+         "name": "Google Update",
+         "path": "C:\\Program Files (x86)\\Google\\Update\\1.3.21.99\\npGoogleUpdate3.dll",
+         "version": "1.3.21.99"
+      }, {
+         "enabled": true,
+         "name": "Google Update"
+      }, {
+         "enabled": true,
+         "name": "Silverlight Plug-In",
+         "path": "C:\\Program Files (x86)\\Microsoft Silverlight\\4.0.60310.0\\npctrl.dll",
+         "version": "4.0.60310.0"
+      }, {
+         "enabled": true,
+         "name": "Silverlight"
+      }, {
+         "enabled": true,
+         "name": "Windows Live\u0099 Photo Gallery",
+         "path": "C:\\Program Files (x86)\\Windows Live\\Photo Gallery\\NPWLPG.dll",
+         "version": "15.4.3538.0513_ship.wlx.w4m4 (ship)"
+      }, {
+         "enabled": true,
+         "name": "Windows Live\u0099 Photo Gallery"
+      }, {
+         "enabled": true,
+         "name": "QUAKE LIVE",
+         "path": "C:\\ProgramData\\id Software\\QuakeLive\\npquakezero.dll",
+         "version": "0.1.0.433"
+      }, {
+         "enabled": true,
+         "name": "QUAKE LIVE"
+      }, {
+         "enabled": true,
+         "name": "Default Plug-in",
+         "path": "default_plugin",
+         "version": "1"
+      }, {
+         "enabled": true,
+         "name": "Default Plug-in"
+      } ]
+   },
+   "profile": {
+      "content_settings": {
+         "pref_version": 1
+      },
+      "exited_cleanly": true,
+      "password_manager_enabled": false
+   },
+   "session": {
+      "restore_on_startup": 4,
+      "urls_to_restore_on_startup": [ "http://localhost:4001/" ]
+   },
+   "tabs": {
+      "use_compact_navigation_bar": false,
+      "use_vertical_tabs": false
+   },
+   "translate_site_blacklist": [ "localhost" ]
+}
