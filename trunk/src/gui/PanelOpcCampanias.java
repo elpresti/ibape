@@ -11,8 +11,17 @@
 package gui;
 
 import java.awt.Color;
+import java.util.Date;
+import javax.swing.AbstractCellEditor;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableColumn;
+import org.jdesktop.swingx.JXHyperlink;
+import org.jdesktop.swingx.JXPanel;
 
 /**
  *
@@ -22,10 +31,22 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
     static PanelOpcCampanias unicaInstancia;
     private int estadoCampania=0; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada
     private Color colorOriginalBtnIniciar;
+    private DefaultTableModel modeloTabla;
+    private int NRO_COL_ID_CAMP=0;
+    private int NRO_COL_FECHA_INI=1;
+    private int NRO_COL_FECHA_FIN=2;
+    private int NRO_COL_DURACION=3;
+    private int NRO_COL_NOMBRE_CAMP=4;
+    private int NRO_COL_BARCO=5;
+    private int NRO_COL_CAPITAN=6;
+    private int NRO_COL_ACCIONES=7;
+    private int cantColumnas=8;
+    
     //</editor-fold>
     /** Creates new form PanelOpcCampanias */
     private PanelOpcCampanias() {
         initComponents();        
+        inicializaTabla();
         setGuiCampaniaFinalizada();
     }
 
@@ -50,6 +71,8 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelNuevaCampania = new org.jdesktop.swingx.JXPanel();
         panelTituloNuevaCampania = new org.jdesktop.swingx.JXPanel();
         lblNuevaCampania = new org.jdesktop.swingx.JXLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         panelDatosNuevaCampania = new org.jdesktop.swingx.JXPanel();
         panelNombreCamp = new org.jdesktop.swingx.JXPanel();
         panelLblNombre = new org.jdesktop.swingx.JXPanel();
@@ -118,23 +141,39 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
 
         tablaCampanias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "Fechas", "Nombre de Campaña", "Resumen", "Barco", "Capitan", "Acciones"
+                "Id", "Fecha Inicio", "Fecha Fin", "Duración [dias]", "Nombre de Campaña", "Barco", "Capitan", "Acciones"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaCampanias.setPreferredScrollableViewportSize(new java.awt.Dimension(450, 360));
         tablaCampanias.setPreferredSize(new java.awt.Dimension(450, 72));
+        tablaCampanias.setRowHeight(30);
         jScrollPane1.setViewportView(tablaCampanias);
-        tablaCampanias.getColumnModel().getColumn(1).setMinWidth(110);
-        tablaCampanias.getColumnModel().getColumn(1).setPreferredWidth(110);
-        tablaCampanias.getColumnModel().getColumn(5).setMinWidth(60);
-        tablaCampanias.getColumnModel().getColumn(5).setPreferredWidth(60);
-        tablaCampanias.getColumnModel().getColumn(5).setMaxWidth(60);
+        tablaCampanias.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaCampanias.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaCampanias.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaCampanias.getColumnModel().getColumn(4).setMinWidth(80);
+        tablaCampanias.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tablaCampanias.getColumnModel().getColumn(7).setMinWidth(0);
+        tablaCampanias.getColumnModel().getColumn(7).setPreferredWidth(0);
+        tablaCampanias.getColumnModel().getColumn(7).setMaxWidth(0);
 
         panelTablaCampanias.add(jScrollPane1);
 
@@ -153,6 +192,22 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         lblNuevaCampania.setText("Nueva Campaña:");
         lblNuevaCampania.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTituloNuevaCampania.add(lblNuevaCampania);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        panelTituloNuevaCampania.add(jButton1);
+
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        panelTituloNuevaCampania.add(jButton2);
 
         panelNuevaCampania.add(panelTituloNuevaCampania, java.awt.BorderLayout.NORTH);
 
@@ -267,7 +322,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelBtnCampania.setPreferredSize(new java.awt.Dimension(500, 50));
         panelBtnCampania.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnComenzarCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnComenzarCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnComenzarCampania.setText("Iniciar campaña");
         btnComenzarCampania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -276,7 +331,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelBtnCampania.add(btnComenzarCampania);
 
-        btnPausarReanudarCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnPausarReanudarCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnPausarReanudarCampania.setText("Pausar campaña");
         btnPausarReanudarCampania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -285,7 +340,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelBtnCampania.add(btnPausarReanudarCampania);
 
-        btnFinalizarCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnFinalizarCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnFinalizarCampania.setText("Finalizar campaña");
         btnFinalizarCampania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,6 +387,14 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
         }
 }//GEN-LAST:event_btnFinalizarCampaniaActionPerformed
 
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    agregaUnaFilaCampania(1,"nnombre","bbarcoo","ccapitan",2,new Date(2011, 4, 12),new Date(2011,5,4));
+}//GEN-LAST:event_jButton1ActionPerformed
+
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    controllers.ControllerCampania.getInstance().obtenerCampanias();
+}//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComenzarCampania;
     private javax.swing.JButton btnFinalizarCampania;
@@ -339,6 +402,8 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
     private javax.swing.JTextField campoBarcoCampania;
     private javax.swing.JTextField campoCapitanCampania;
     private javax.swing.JTextField campoNombreCampania;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXLabel lblBarco;
@@ -385,7 +450,7 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
     }    
     
 /* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase 
-   
+*/   
      public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         JPanel elPanel= new PanelOpcCampanias();
@@ -393,7 +458,7 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
         elFrame.add(elPanel); 
         elFrame.setVisible(true);
     }
-*/
+
 
     public void setGuiCampaniaIniciada() {
         controlaPanelNuevaCampania(false);
@@ -401,18 +466,20 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
         btnFinalizarCampania.setVisible(true);
         btnPausarReanudarCampania.setVisible(true);
         setEstadoCampania(1);
+        // controllers.ControllerCampania.getInstance().obtenerCampanias();
         
     }
     
     public void setGuiCampaniaPausada() {
         btnPausarReanudarCampania.setText("Reanudar campaña");
         setEstadoCampania(2);
-        actualizaGrillaCampanias();
+        // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
     
     public void setGuiCampaniaReanudada() {
-        btnPausarReanudarCampania.setText("Pausar campaña");
+        btnPausarReanudarCampania.setText("Pausar campaña");        
         setEstadoCampania(1);
+        // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
     
     public void setGuiCampaniaFinalizada() {
@@ -425,6 +492,7 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
         btnComenzarCampania.setVisible(true);
         btnPausarReanudarCampania.setText("Pausar campaña");
         setEstadoCampania(0);
+        // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
 
     /**
@@ -455,7 +523,132 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
         this.estadoCampania = estadoCampania;
     }
 
-    private void actualizaGrillaCampanias() {
-        controllers.ControllerCampania.getInstance().obtenerCampanias();
+    public void vaciaTabla() {                
+        modeloTabla.setRowCount(0);
     }
+
+    public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan, int estado, Date fechaInicio, Date fechaFin) {        
+        Object[] fila = new Object[cantColumnas]; //creamos la fila
+        PanelOpcCampaniasAcciones panelAcciones = new PanelOpcCampaniasAcciones();
+        fila[NRO_COL_ACCIONES]=panelAcciones;
+        fila[NRO_COL_FECHA_INI]=fechaInicio;
+        fila[NRO_COL_FECHA_FIN]=fechaFin;
+        fila[NRO_COL_CAPITAN]=capitan;
+        fila[NRO_COL_NOMBRE_CAMP]=nombre;
+        fila[NRO_COL_BARCO]=barco;
+        fila[NRO_COL_ID_CAMP]=id;
+        
+        modeloTabla.addRow(fila);        
+    }
+
+    public void agregaUnaFilaCampania2() {        
+        Object[] fila = new Object[2]; //creamos la fila
+        fila[0]="Columna0"; //Fila0
+        fila[1]="Columna1"; //Fila1
+        modeloTabla.addRow(fila);        
+    }
+    
+    private void inicializaTabla() {
+        //String[] columnas = new String[cantColumnas];
+        //columnas[NRO_COL_ID_CAMP]="ID";
+        //columnas[NRO_COL_ACCIONES]="Acciones";
+        //columnas[NRO_COL_BARCO]="Barco";
+        //columnas[NRO_COL_CAPITAN]="Capitan";
+        //columnas[NRO_COL_DURACION]="Duracion";
+        //columnas[NRO_COL_FECHA_FIN]="Fecha Fin";
+        //columnas[NRO_COL_FECHA_INI]="Fecha Inicio";
+        //columnas[NRO_COL_NOMBRE_CAMP]="Nombre campaña";        
+        //modeloTabla = new javax.swing.table.TableModel(new Object[][]{},columnas);        
+        //tablaCampanias.setModel(modeloTabla);
+                                       
+                 //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
+         //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
+        TableColumn columnaAcciones = new TableColumn();
+        columnaAcciones.setHeaderValue("Acciones!");
+        columnaAcciones.setMinWidth(100);
+        columnaAcciones.setPreferredWidth(100);
+        columnaAcciones.setCellEditor(new PanelOpcCampaniasAcciones());
+        columnaAcciones.setCellRenderer(new PanelOpcCampaniasAcciones());        
+        tablaCampanias.addColumn(columnaAcciones);        
+        tablaCampanias.setEditingColumn(6);
+        //tablaCampanias.setEditingRow(0);
+        modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
+        tablaCampanias.setModel(modeloTabla);         
+        
+        
+        
+        vaciaTabla();
+        // Se crea el JScrollPane, el JTable y se pone la cabecera...
+         //JScrollPane scroll = new JScrollPane();
+         //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
+         //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
+         //scroll.setViewportView(tablaCampanias);
+         //scroll.setColumnHeaderView (tablaCampanias.getTableHeader());        
+        //tablaCampanias.setVisibleRowCount(6);
+        
+/* si queremos que algun campo sea editable, capturar el evento y demas... 
+        TableColumn column = tablaCampanias.getColumnModel().getColumn(NRO_COL_ACCIONES);
+        JXHyperlink btnGuardar = new JXHyperlink(); btnGuardar.setText("guardar");
+        JXHyperlink btnModificar = new JXHyperlink(); btnModificar.setText("modif");
+        JXHyperlink btnEliminar = new JXHyperlink(); btnEliminar.setText("Eliminar");
+        
+        
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXHyperlinkBtnGuardarActionPerformed(evt);
+            }
+        });
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //jXHyperlinkBtnModificarActionPerformed(evt);
+                System.out.println("no hace nada xq falta codificar el método");
+            }
+        });
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //jXHyperlinkBtnEliminarActionPerformed(evt);
+                System.out.println("no hace nada xq falta codificar el método");
+            }
+        });
+        
+        //Indicamos el CellEditor column
+        column.setCellEditor(new DefaultCellEditor(btnEliminar));
+
+        //Metodo para controlar el texto ingresado en el JTextField.
+
+    }
+
+    private void jXHyperlinkBtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            //String tmp = this.fieldPago.getText();
+            //Double Pago = Double.parseDouble(tmp);
+            //Obtenemos el numero de fila donde estamos ubicamos en este momento.
+            int fila = tablaCampanias.getSelectedRow();
+
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "No se selecciono ninguna fila", "Mensaje", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int id = (int)tablaCampanias.getValueAt(fila, 0);
+            Double Deuda = Double.parseDouble(tmp);
+            tmp = String.valueOf(tablaCampanias.getValueAt(fila, 5));
+            Double Saldo = Double.parseDouble(tmp);
+            if (Pago < 0) {
+                JOptionPane.showMessageDialog(this, "El pago no puede ser negativo", "Mensaje", JOptionPane.WARNING_MESSAGE);
+                tablaCampanias.setValueAt(0.0, fila, 4);
+                return;
+            }
+
+            //Actualizamos otra columna con los valores, esta columna debe ser editable
+            tablaCampanias.setValueAt(Pago, fila, 5);
+            tablaCampanias.repaint();
+            modeloTabla.fireTableDataChanged();
+            JOptionPane.showMessageDialog(this, "Presionaste Enter pago de " + Pago, "Mensaje", JOptionPane.WARNING_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+*/
+    }   
+    
 }
