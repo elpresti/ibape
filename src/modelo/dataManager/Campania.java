@@ -11,9 +11,12 @@ import java.util.ArrayList;
  * @author Sebastian
  */
 public class Campania {
+    private int id;
     private String nombre;
     private String barco;
     private String capitan;
+    private java.util.Date fechaInicio;
+    private java.util.Date fechaFin;
     private int estado;
     private Poi ultimoPoiConImg;
     private ArrayList<Poi> pois;
@@ -105,6 +108,20 @@ public class Campania {
         this.pois = pois;
     }
     
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+    
     public boolean agregarPoi(Poi nuevoPoi){
         boolean sePudo=false;
         //-------- metodo pendiente --------
@@ -130,5 +147,35 @@ public class Campania {
         //-------- metodo pendiente --------
         return poisEncontrados;
     }
+
+    /**
+     * @return the fechaInicio
+     */
+    public java.util.Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    /**
+     * @param fechaInicio the fechaInicio to set
+     */
+    public void setFechaInicio(java.util.Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    /**
+     * @return the fechaFin
+     */
+    public java.util.Date getFechaFin() {
+        return fechaFin;
+    }
+
+    /**
+     * @param fechaFin the fechaFin to set
+     */
+    public void setFechaFin(java.util.Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+
     
 }
