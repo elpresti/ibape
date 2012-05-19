@@ -12,31 +12,18 @@ import java.util.ArrayList;
  */
 public class Campania {
     private int id;
-    private String nombre;
+    private String descripcion;
     private String barco;
     private String capitan;
     private java.util.Date fechaInicio;
     private java.util.Date fechaFin;
-    private int estado;
+    private String folderHistorico;
+    private int estado; //2=Pausada 1=en curso  0=finalizada
     private Poi ultimoPoiConImg;
     private ArrayList<Poi> pois;
 
     public Campania(){        
-    }
-    
-    /**
-     * @return the nombre
-     */
-    public String getNombre() {
-        return nombre;
-    }
-
-    /**
-     * @param nombre the nombre to set
-     */
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    }    
 
     /**
      * @return the barco
@@ -174,6 +161,34 @@ public class Campania {
      */
     public void setFechaFin(java.util.Date fechaFin) {
         this.fechaFin = fechaFin;
+    }
+
+    /**
+     * @return the folderHistorico
+     */
+    public String getFolderHistorico() {
+        return folderHistorico;
+    }
+
+    /**
+     * @param folderHistorico the folderHistorico to set
+     */
+    public void setFolderHistorico(String folderHistorico) {
+        this.folderHistorico = folderHistorico;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
 
