@@ -40,7 +40,8 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
     private int NRO_COL_BARCO=5;
     private int NRO_COL_CAPITAN=6;
     private int NRO_COL_ACCIONES=7;
-    private int cantColumnas=8;
+    private int NRO_COL_TIENE_HISTORICO=8;
+    private int cantColumnas=9;
     
     //</editor-fold>
     /** Creates new form PanelOpcCampanias */
@@ -144,14 +145,14 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id", "Fecha Inicio", "Fecha Fin", "Duración [dias]", "Nombre de Campaña", "Barco", "Capitan", "Acciones"
+                "Id", "Fecha Inicio", "Fecha Fin", "Duración [dias]", "Nombre de Campaña", "Barco", "Capitan", "Acciones", "Historico"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -388,11 +389,15 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
 }//GEN-LAST:event_btnFinalizarCampaniaActionPerformed
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    agregaUnaFilaCampania(1,"nnombre","bbarcoo","ccapitan",2,new Date(2011, 4, 12),new Date(2011,5,4));
+    modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampanias().get(0);
+    campania.setBarco(campania.getBarco()+"123");
+    campania.setDescripcion(campania.getDescripcion()+"123");
+    campania.setCapitan(campania.getCapitan()+"123");
+    modelo.dataManager.AdministraCampanias.getInstance().modificarCampania(campania);
 }//GEN-LAST:event_jButton1ActionPerformed
 
 private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    controllers.ControllerCampania.getInstance().obtenerCampanias();
+    modelo.dataManager.AdministraCampanias.getInstance().eliminarCampania(persistencia.BrokerCampania.getInstance().getCampaniaFromDb(1));
 }//GEN-LAST:event_jButton2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -527,7 +532,8 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         modeloTabla.setRowCount(0);
     }
 
-    public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan, int estado, Date fechaInicio, Date fechaFin) {        
+    public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan, 
+            int estado, Date fechaInicio, Date fechaFin, boolean tieneHistorico) {
         Object[] fila = new Object[cantColumnas]; //creamos la fila
         PanelOpcCampaniasAcciones panelAcciones = new PanelOpcCampaniasAcciones();
         fila[NRO_COL_ACCIONES]=panelAcciones;
@@ -537,6 +543,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         fila[NRO_COL_NOMBRE_CAMP]=nombre;
         fila[NRO_COL_BARCO]=barco;
         fila[NRO_COL_ID_CAMP]=id;
+        fila[NRO_COL_TIENE_HISTORICO]=tieneHistorico;
         
         modeloTabla.addRow(fila);        
     }
@@ -561,8 +568,9 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         //modeloTabla = new javax.swing.table.TableModel(new Object[][]{},columnas);        
         //tablaCampanias.setModel(modeloTabla);
                                        
-                 //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
-         //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
+        //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
+        //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
+/*
         TableColumn columnaAcciones = new TableColumn();
         columnaAcciones.setHeaderValue("Acciones!");
         columnaAcciones.setMinWidth(100);
@@ -572,11 +580,9 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         tablaCampanias.addColumn(columnaAcciones);        
         tablaCampanias.setEditingColumn(6);
         //tablaCampanias.setEditingRow(0);
+*/
         modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
-        tablaCampanias.setModel(modeloTabla);         
-        
-        
-        
+        tablaCampanias.setModel(modeloTabla);                 
         vaciaTabla();
         // Se crea el JScrollPane, el JTable y se pone la cabecera...
          //JScrollPane scroll = new JScrollPane();
@@ -649,6 +655,6 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             JOptionPane.showMessageDialog(this, "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 */
-    }   
+    }
     
 }

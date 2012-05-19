@@ -161,7 +161,7 @@
                     <Component class="org.jdesktop.swingx.JXTable" name="tablaCampanias">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="8" rowCount="0">
+                          <Table columnCount="9" rowCount="0">
                             <Column editable="false" title="Id" type="java.lang.Integer"/>
                             <Column editable="false" title="Fecha Inicio" type="java.lang.Object"/>
                             <Column editable="false" title="Fecha Fin" type="java.lang.Object"/>
@@ -170,6 +170,7 @@
                             <Column editable="false" title="Barco" type="java.lang.Object"/>
                             <Column editable="false" title="Capitan" type="java.lang.Object"/>
                             <Column editable="true" title="Acciones" type="java.lang.Object"/>
+                            <Column editable="false" title="Historico" type="java.lang.Boolean"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -210,6 +211,11 @@
                               <Renderer/>
                             </Column>
                             <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>

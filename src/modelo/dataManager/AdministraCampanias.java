@@ -16,7 +16,8 @@ import persistencia.Logueador;
 public class AdministraCampanias {
     static AdministraCampanias unicaInstancia;
     private Campania campaniaEnCurso;
-    private ArrayList<Campania> campanias;
+    private ArrayList<Campania> campanias=new ArrayList();
+    private String historicoFileName="historico.db";
     
     private AdministraCampanias(){        
     }
@@ -39,6 +40,11 @@ public class AdministraCampanias {
             //crea la dbHistorico.db en este directorio para alojar el historico, 
                 //si no puede termina con exception, borra su directorio creado y luego su entrada en TablaCampanias
             //agrega el objeto nuevaCamp al ArrayList de campanias
+            if (persistencia.BrokerCampania.getInstance().insertCampania(nuevaCamp)){
+                nuevaCamp.setId(persistencia.BrokerCampania.getInstance().getIdUltimoInsert());
+                campanias.add(nuevaCamp);
+                sePudo = true;
+            }
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); }
@@ -51,6 +57,11 @@ public class AdministraCampanias {
             //busca el objeto en TablaCampanias campModificada.getId() y le actualiza sus valores, si no puede termina con exception
             //busca el objeto en el ArrayList campanias segun campModificada.getId(), si no encuentra termina con exception
             //si encuentra le actualiza sus valores, sino exception            
+            persistencia.BrokerCampania.getInstance().updateCampania(campModificada);
+            //la buscamos en el ArrayList de campanias y la borramos para agregar la modificada
+            campanias.remove(getCampania(campModificada.getId()));
+            campanias.add(campModificada);                        
+            sePudo=true;
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); }
@@ -59,7 +70,15 @@ public class AdministraCampanias {
     
     public boolean eliminarCampania(Campania campAeliminar){
         boolean sePudo=false;
-        // --------- método pendiente -----------
+        try {
+            //borra el objeto con ID campAeliminar.getId() de la TablaCampanias
+            persistencia.BrokerCampania.getInstance().deleteCampania(campAeliminar);
+            //borra el objeto con ID campAeliminar.getId() del ArrayList campanias
+            campanias.remove(getCampania(campAeliminar.getId()));
+            sePudo=true;
+        }
+        catch (Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
         return sePudo;
     }
     
@@ -83,7 +102,27 @@ public class AdministraCampanias {
         this.campanias = campanias;
     }
 
-    public boolean leerCampaniasDelDisco(){
+    public boolean leerCampaniasDeLaDB() {
+        boolean sePudo=false;
+        try {
+            setCampanias(persistencia.BrokerCampania.getInstance().getCampaniasFromDB());
+            //verificamos si está en disco el historico de las campañas que dicen tener historico            
+            for (int i=0;i<getCampanias().size();i++){
+                if (getCampanias().get(i).getFolderHistorico() != null && (getCampanias().get(i).getFolderHistorico().length()>0)){
+                    if (!(verificaSiTieneHistorico(getCampanias().get(i).getId()))){
+                        getCampanias().get(i).setFolderHistorico(null);
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+  
+/*    
+    public boolean leerCampaniasDelDisco(){  // <---- método posiblemente innecesario
         boolean sePudo=false;
         // metodo pendiente que lee las campanias del disco, transforma cada
         // una en un objeto de tipo Campania y la agrega al ArrayList "campanias"
@@ -92,8 +131,8 @@ public class AdministraCampanias {
             //if que chequea si existe el directorio "Historico"
             File pathHistorico = new File("Historico");
             if (pathHistorico.exists()){               
-                //tilda el atributo verificado=false de todas las entradas de TablaCampanias
-                persistencia.BrokerCampania.getInstance().setTodosVerificados(false);
+                //tilda el atributo tieneHistorico=false de todas las entradas de TablaCampanias
+                persistencia.BrokerCampania.getInstance().setTodosTienenHistorico(false);
                 //obtiene las carpetas del directorio
                 FileFilter fileFilter = new FileFilter() {
                     public boolean accept(File file) {
@@ -102,12 +141,12 @@ public class AdministraCampanias {
                 };
                 File[] dirs = pathHistorico.listFiles(fileFilter);
                 // por cada carpeta leida chequea que el nombre corresponda a alguna
-                // entrada de TablaCampanias y la marca verificado=true
+                // entrada de TablaCampanias y la marca tieneHistorico=true
                 for (int i=0;i<dirs.length;i++){
-                    persistencia.BrokerCampania.getInstance().setVerificado(dirs[i].getName());
+                    persistencia.BrokerCampania.getInstance().setTieneHistorico(dirs[i].getName());
                 }
-                // elimina de TablaCampanias todas las verificado=false;
-                persistencia.BrokerCampania.getInstance().borraNoVerificados();
+                // elimina de TablaCampanias todas las tieneHistorico=false;
+                persistencia.BrokerCampania.getInstance().borraNoTienenHistorico();
                 int[] idsCampania = persistencia.BrokerCampania.getInstance().obtieneTodosLosIds();
                 for (int i=0;i<idsCampania.length;i++){
                     campanias.add(persistencia.BrokerCampania.getInstance().getCampaniaFromDb(idsCampania[i]));
@@ -123,6 +162,34 @@ public class AdministraCampanias {
         }                
         return sePudo;
     }
+*/
+    
+    public boolean verificaSiTieneHistorico(int idCampania){
+        boolean tieneHistorico=false;
+        String folderHistorico = getCampania(idCampania).getFolderHistorico();
+        File historico = new File("Historico\\" + folderHistorico + "\\" + getHistoricoFileName());
+        if (historico.exists()) {
+            tieneHistorico = true;
+        }
+        return tieneHistorico;
+    }
+    
+    public boolean creaFileHistorico(int idCampania){
+        boolean sePudo=false;
+        try {
+            modelo.dataManager.Campania campania = getCampania(idCampania);
+            String folderHistorico = "camp"+campania.getId();
+            File historico = new File("Historico\\"+folderHistorico+"\\"+getHistoricoFileName());
+            historico.mkdirs();
+            campania.setFolderHistorico(folderHistorico);
+            persistencia.BrokerCampania.getInstance().updateCampania(campania);
+            sePudo=true;
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
     
     public Campania getCampania(int id){
         Campania campania = null;
@@ -135,6 +202,20 @@ public class AdministraCampanias {
             i++;
         }
         return campania;
+    }
+
+    /**
+     * @return the historicoFileName
+     */
+    public String getHistoricoFileName() {
+        return historicoFileName;
+    }
+
+    /**
+     * @param historicoFileName the historicoFileName to set
+     */
+    public void setHistoricoFileName(String historicoFileName) {
+        this.historicoFileName = historicoFileName;
     }
     
 }
