@@ -177,7 +177,6 @@ public class BrokerCampania extends BrokerPpal{
         boolean sePudo = false;
 
         try {       
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   
             String fechaInicio = null;
             if (campania.getFechaInicio() != null) {

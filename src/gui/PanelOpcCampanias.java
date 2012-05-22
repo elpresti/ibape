@@ -411,7 +411,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnComenzarCampaniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarCampaniaActionPerformed
-        if (validaCampos()) {  
+        if (validaCampos()) {
             if (controllers.ControllerCampania.getInstance().nuevaCampania(campoNombreCampania.getText(), campoCapitanCampania.getText(), campoBarcoCampania.getText())){
                 setGuiCampaniaIniciada();
                 controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso();
@@ -873,7 +873,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private boolean guardarCampaniaModificada() {
         boolean sePudo=false;
         if (getIdDeCampaniaSeleccionada()>=0){
-            modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(getIdDeCampaniaSeleccionada());
+            
             if (validaCampos()){
                 ControllerCampania.getInstance().modificarCampania(
                         getIdDeCampaniaSeleccionada(), 
