@@ -10,13 +10,18 @@
  */
 package gui;
 
+import controllers.ControllerCampania;
 import java.awt.Color;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
@@ -27,28 +32,29 @@ import org.jdesktop.swingx.JXPanel;
  *
  * @author Sebastian
  */
+
 public class PanelOpcCampanias extends javax.swing.JPanel {
     static PanelOpcCampanias unicaInstancia;
-    private int estadoCampania=0; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada
+    private int estadoCampania; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada
     private Color colorOriginalBtnIniciar;
     private DefaultTableModel modeloTabla;
-    private int NRO_COL_ID_CAMP=0;
-    private int NRO_COL_FECHA_INI=1;
-    private int NRO_COL_FECHA_FIN=2;
-    private int NRO_COL_DURACION=3;
-    private int NRO_COL_NOMBRE_CAMP=4;
-    private int NRO_COL_BARCO=5;
-    private int NRO_COL_CAPITAN=6;
-    private int NRO_COL_ACCIONES=7;
-    private int NRO_COL_TIENE_HISTORICO=8;
-    private int cantColumnas=9;
+    private boolean modificandoCampania;
+    private int NRO_COL_ID_CAMP;
+    private int NRO_COL_FECHA_INI;
+    private int NRO_COL_FECHA_FIN;
+    private int NRO_COL_DURACION;
+    private int NRO_COL_NOMBRE_CAMP;
+    private int NRO_COL_BARCO;
+    private int NRO_COL_CAPITAN;
+    private int NRO_COL_ACCIONES;
+    private int NRO_COL_TIENE_HISTORICO;
+    private int cantColumnas;
     
     //</editor-fold>
     /** Creates new form PanelOpcCampanias */
     private PanelOpcCampanias() {
-        initComponents();        
-        inicializaTabla();
-        setGuiCampaniaFinalizada();
+        initComponents();     
+        inicializador();        
     }
 
     /** This method is called from within the constructor to
@@ -69,11 +75,16 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         lblTituloTabla = new org.jdesktop.swingx.JXLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCampanias = new org.jdesktop.swingx.JXTable();
+        panelAccionesCampElegida = new org.jdesktop.swingx.JXPanel();
+        lblAccionesCampania = new org.jdesktop.swingx.JXLabel();
+        panelAcciones = new org.jdesktop.swingx.JXPanel();
+        btnModificar = new org.jdesktop.swingx.JXHyperlink();
+        btnGuardar = new org.jdesktop.swingx.JXHyperlink();
+        btnEliminar = new org.jdesktop.swingx.JXHyperlink();
+        panelSeparador = new org.jdesktop.swingx.JXPanel();
         panelNuevaCampania = new org.jdesktop.swingx.JXPanel();
         panelTituloNuevaCampania = new org.jdesktop.swingx.JXPanel();
         lblNuevaCampania = new org.jdesktop.swingx.JXLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         panelDatosNuevaCampania = new org.jdesktop.swingx.JXPanel();
         panelNombreCamp = new org.jdesktop.swingx.JXPanel();
         panelLblNombre = new org.jdesktop.swingx.JXPanel();
@@ -115,9 +126,9 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         jScrollPane2.setMinimumSize(new java.awt.Dimension(480, 410));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(480, 410));
 
-        panelCentro.setMaximumSize(new java.awt.Dimension(460, 410));
+        panelCentro.setMaximumSize(new java.awt.Dimension(460, 510));
         panelCentro.setMinimumSize(new java.awt.Dimension(460, 410));
-        panelCentro.setPreferredSize(new java.awt.Dimension(460, 410));
+        panelCentro.setPreferredSize(new java.awt.Dimension(460, 510));
         panelCentro.setScrollableTracksViewportHeight(false);
         panelCentro.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
@@ -136,13 +147,14 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
 
         panelTablaCampanias.add(panelTituloTabla);
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(450, 220));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(450, 220));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 220));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(450, 200));
 
         tablaCampanias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
                 "Id", "Fecha Inicio", "Fecha Fin", "Duración [dias]", "Nombre de Campaña", "Barco", "Capitan", "Acciones", "Historico"
@@ -163,22 +175,83 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaCampanias.setPreferredScrollableViewportSize(new java.awt.Dimension(450, 360));
-        tablaCampanias.setPreferredSize(new java.awt.Dimension(450, 72));
+        tablaCampanias.setFont(new java.awt.Font("Tahoma", 0, 12));
         tablaCampanias.setRowHeight(30);
+        tablaCampanias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaCampaniasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaCampanias);
         tablaCampanias.getColumnModel().getColumn(0).setMinWidth(0);
         tablaCampanias.getColumnModel().getColumn(0).setPreferredWidth(0);
         tablaCampanias.getColumnModel().getColumn(0).setMaxWidth(0);
-        tablaCampanias.getColumnModel().getColumn(4).setMinWidth(80);
-        tablaCampanias.getColumnModel().getColumn(4).setPreferredWidth(80);
+        tablaCampanias.getColumnModel().getColumn(3).setMinWidth(0);
+        tablaCampanias.getColumnModel().getColumn(3).setPreferredWidth(0);
+        tablaCampanias.getColumnModel().getColumn(4).setMinWidth(90);
+        tablaCampanias.getColumnModel().getColumn(4).setPreferredWidth(90);
         tablaCampanias.getColumnModel().getColumn(7).setMinWidth(0);
         tablaCampanias.getColumnModel().getColumn(7).setPreferredWidth(0);
         tablaCampanias.getColumnModel().getColumn(7).setMaxWidth(0);
+        tablaCampanias.getColumnModel().getColumn(8).setMinWidth(30);
+        tablaCampanias.getColumnModel().getColumn(8).setPreferredWidth(30);
+        tablaCampanias.getColumnModel().getColumn(8).setMaxWidth(30);
 
         panelTablaCampanias.add(jScrollPane1);
 
         panelCentro.add(panelTablaCampanias);
+
+        panelAccionesCampElegida.setMaximumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setMinimumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setLayout(new java.awt.GridLayout(1, 2));
+
+        lblAccionesCampania.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAccionesCampania.setText("Acciones sobre la campaña elegida:");
+        lblAccionesCampania.setFont(new java.awt.Font("Tahoma", 0, 14));
+        panelAccionesCampElegida.add(lblAccionesCampania);
+
+        panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+
+        btnModificar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\imgs\\iconos\\tabla-icono-editar.png")); // NOI18N
+        btnModificar.setText("");
+        btnModificar.setToolTipText("Modificar campaña");
+        btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnModificar);
+
+        btnGuardar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\imgs\\iconos\\tabla-icono-guardar.png")); // NOI18N
+        btnGuardar.setText("");
+        btnGuardar.setToolTipText("Guardar cambios");
+        btnGuardar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnGuardar);
+
+        btnEliminar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\imgs\\iconos\\tabla-icono-eliminar.png")); // NOI18N
+        btnEliminar.setText("");
+        btnEliminar.setToolTipText("Eliminar campaña");
+        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnEliminar);
+
+        panelAccionesCampElegida.add(panelAcciones);
+
+        panelCentro.add(panelAccionesCampElegida);
+
+        panelSeparador.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelCentro.add(panelSeparador);
 
         panelNuevaCampania.setMaximumSize(new java.awt.Dimension(450, 160));
         panelNuevaCampania.setMinimumSize(new java.awt.Dimension(450, 160));
@@ -193,22 +266,6 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         lblNuevaCampania.setText("Nueva Campaña:");
         lblNuevaCampania.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTituloNuevaCampania.add(lblNuevaCampania);
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        panelTituloNuevaCampania.add(jButton1);
-
-        jButton2.setText("jButton2");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        panelTituloNuevaCampania.add(jButton2);
 
         panelNuevaCampania.add(panelTituloNuevaCampania, java.awt.BorderLayout.NORTH);
 
@@ -354,18 +411,14 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnComenzarCampaniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComenzarCampaniaActionPerformed
-        boolean camposRequeridos = campoBarcoCampania.getText().length() > 2 && 
-                campoCapitanCampania.getText().length() > 2  &&
-                campoNombreCampania.getText().length() > 2;
-        if (camposRequeridos) {  
+        if (validaCampos()) {  
             if (controllers.ControllerCampania.getInstance().nuevaCampania(campoNombreCampania.getText(), campoCapitanCampania.getText(), campoBarcoCampania.getText())){
                 setGuiCampaniaIniciada();
+                controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso();
             }
             else
               { JOptionPane.showMessageDialog(null, "Hubo un error al intentar guardar la nueva campaña"); }
         }
-        else
-        { JOptionPane.showMessageDialog(null,"Complete los campos de Nueva campaña con datos válidos"); }
 }//GEN-LAST:event_btnComenzarCampaniaActionPerformed
 
 private void btnPausarReanudarCampaniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausarReanudarCampaniaActionPerformed
@@ -384,39 +437,59 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE
                     ) == 0) {
-            setGuiCampaniaFinalizada();
+            if (ControllerCampania.getInstance().finalizaCampaniaEnCurso()){
+                setGuiCampaniaFinalizada();
+            }
+            else 
+                { JOptionPane.showConfirmDialog(null, "No se pudo finalizar la Campaña en curso"); }
         }
 }//GEN-LAST:event_btnFinalizarCampaniaActionPerformed
 
-private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampanias().get(0);
-    campania.setBarco(campania.getBarco()+"123");
-    campania.setDescripcion(campania.getDescripcion()+"123");
-    campania.setCapitan(campania.getCapitan()+"123");
-    modelo.dataManager.AdministraCampanias.getInstance().modificarCampania(campania);
-}//GEN-LAST:event_jButton1ActionPerformed
+private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    controllers.ControllerCampania.getInstance().borrarCampania(getIdDeCampaniaSeleccionada());
+    controlaPanelAccionesCampania();
+}//GEN-LAST:event_btnEliminarActionPerformed
 
-private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    modelo.dataManager.AdministraCampanias.getInstance().eliminarCampania(persistencia.BrokerCampania.getInstance().getCampaniaFromDb(1));
-}//GEN-LAST:event_jButton2ActionPerformed
+private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+    setGuiModificarFilaElegida();
+    setModificandoCampania(true);
+    controlaPanelAccionesCampania();    
+}//GEN-LAST:event_btnModificarActionPerformed
+
+private void tablaCampaniasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaCampaniasMouseClicked
+    controlaPanelAccionesCampania();
+}//GEN-LAST:event_tablaCampaniasMouseClicked
+
+private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    if (guardarCampaniaModificada()){
+        setModificandoCampania(false);
+        controlaPanelAccionesCampania();
+        lblNuevaCampania.setText("Nueva Campaña:");
+        cargarDatosDeCampaniaEnCurso();        
+    }
+}//GEN-LAST:event_btnGuardarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComenzarCampania;
+    private org.jdesktop.swingx.JXHyperlink btnEliminar;
     private javax.swing.JButton btnFinalizarCampania;
+    private org.jdesktop.swingx.JXHyperlink btnGuardar;
+    private org.jdesktop.swingx.JXHyperlink btnModificar;
     private javax.swing.JButton btnPausarReanudarCampania;
     private javax.swing.JTextField campoBarcoCampania;
     private javax.swing.JTextField campoCapitanCampania;
     private javax.swing.JTextField campoNombreCampania;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private org.jdesktop.swingx.JXLabel lblAccionesCampania;
     private org.jdesktop.swingx.JXLabel lblBarco;
     private org.jdesktop.swingx.JXLabel lblCapitan;
     private org.jdesktop.swingx.JXLabel lblNombre;
     private org.jdesktop.swingx.JXLabel lblNuevaCampania;
     private org.jdesktop.swingx.JXLabel lblTituloCampanias;
     private org.jdesktop.swingx.JXLabel lblTituloTabla;
+    private org.jdesktop.swingx.JXPanel panelAcciones;
+    private org.jdesktop.swingx.JXPanel panelAccionesCampElegida;
     private org.jdesktop.swingx.JXPanel panelBarcoCamp;
     private org.jdesktop.swingx.JXPanel panelBtnCampania;
     private org.jdesktop.swingx.JXPanel panelCampoBarco;
@@ -430,6 +503,7 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private org.jdesktop.swingx.JXPanel panelLblNombre;
     private org.jdesktop.swingx.JXPanel panelNombreCamp;
     private org.jdesktop.swingx.JXPanel panelNuevaCampania;
+    private org.jdesktop.swingx.JXPanel panelSeparador;
     private org.jdesktop.swingx.JXPanel panelTablaCampanias;
     private org.jdesktop.swingx.JXPanel panelTitulo;
     private org.jdesktop.swingx.JXPanel panelTituloNuevaCampania;
@@ -446,16 +520,45 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         lblCapitan.setEnabled(estado);
         campoCapitanCampania.setEnabled(estado);        
     }
+    
+    private void controlaPanelAccionesCampania(){
+        boolean estado;
+        if ((modeloTabla.getRowCount()>0) && (getIdDeCampaniaSeleccionada()>=0) && (getIdDeCampaniaSeleccionada() != ControllerCampania.getInstance().getIdCampaniaEnCurso())){
+           estado = true;
+        }
+        else { estado = false; }
+        lblAccionesCampania.setEnabled(estado);
+        btnEliminar.setEnabled(estado);
+        btnModificar.setEnabled(estado);
+        btnGuardar.setEnabled(estado);        
+        if (isModificandoCampania()){
+            btnGuardar.setVisible(true);            
+            btnModificar.setVisible(false);
+            btnEliminar.setVisible(false);
+            tablaCampanias.setEnabled(false);
+            btnComenzarCampania.setEnabled(false);
+            btnFinalizarCampania.setEnabled(false);
+            btnPausarReanudarCampania.setEnabled(false);
+        }
+        else
+            { btnGuardar.setVisible(false); 
+              btnModificar.setVisible(true);
+              btnEliminar.setVisible(true);
+              tablaCampanias.setEnabled(true);
+              btnComenzarCampania.setEnabled(true);
+              btnFinalizarCampania.setEnabled(true);
+              btnPausarReanudarCampania.setEnabled(true);              
+            }
+    }
 
     public static PanelOpcCampanias getInstance() {
        if (unicaInstancia == null) {
-          unicaInstancia = new PanelOpcCampanias();          
+          unicaInstancia = new PanelOpcCampanias();
        }
        return unicaInstancia;
     }    
     
-/* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase 
-*/   
+/* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase    
      public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         JPanel elPanel= new PanelOpcCampanias();
@@ -463,13 +566,13 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         elFrame.add(elPanel); 
         elFrame.setVisible(true);
     }
-
+*/    
 
     public void setGuiCampaniaIniciada() {
         controlaPanelNuevaCampania(false);
         btnComenzarCampania.setVisible(false);
         btnFinalizarCampania.setVisible(true);
-        btnPausarReanudarCampania.setVisible(true);
+        btnPausarReanudarCampania.setVisible(true);        
         setEstadoCampania(1);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
         
@@ -526,36 +629,31 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
      */
     public void setEstadoCampania(int estadoCampania) {
         this.estadoCampania = estadoCampania;
+        controlaPanelAccionesCampania();        
     }
 
     public void vaciaTabla() {                
         modeloTabla.setRowCount(0);
     }
 
-    public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan, 
+    public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan,
             int estado, Date fechaInicio, Date fechaFin, boolean tieneHistorico) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Object[] fila = new Object[cantColumnas]; //creamos la fila
         PanelOpcCampaniasAcciones panelAcciones = new PanelOpcCampaniasAcciones();
         fila[NRO_COL_ACCIONES]=panelAcciones;
-        fila[NRO_COL_FECHA_INI]=fechaInicio;
-        fila[NRO_COL_FECHA_FIN]=fechaFin;
+        if (fechaInicio != null) { fila[NRO_COL_FECHA_INI]=sdf.format(fechaInicio); }
+        if (fechaFin != null){ fila[NRO_COL_FECHA_FIN]=sdf.format(fechaFin); }
         fila[NRO_COL_CAPITAN]=capitan;
         fila[NRO_COL_NOMBRE_CAMP]=nombre;
         fila[NRO_COL_BARCO]=barco;
         fila[NRO_COL_ID_CAMP]=id;
         fila[NRO_COL_TIENE_HISTORICO]=tieneHistorico;
-        
-        modeloTabla.addRow(fila);        
+
+        modeloTabla.addRow(fila);
     }
 
-    public void agregaUnaFilaCampania2() {        
-        Object[] fila = new Object[2]; //creamos la fila
-        fila[0]="Columna0"; //Fila0
-        fila[1]="Columna1"; //Fila1
-        modeloTabla.addRow(fila);        
-    }
-    
-    private void inicializaTabla() {
+    private void inicializador() {
         //String[] columnas = new String[cantColumnas];
         //columnas[NRO_COL_ID_CAMP]="ID";
         //columnas[NRO_COL_ACCIONES]="Acciones";
@@ -580,10 +678,24 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         tablaCampanias.addColumn(columnaAcciones);        
         tablaCampanias.setEditingColumn(6);
         //tablaCampanias.setEditingRow(0);
-*/
+*/       
+        estadoCampania=0; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada   
+        modificandoCampania=false;
+        NRO_COL_ID_CAMP=0;
+        NRO_COL_FECHA_INI=1;
+        NRO_COL_FECHA_FIN=2;
+        NRO_COL_DURACION=3;
+        NRO_COL_NOMBRE_CAMP=4;
+        NRO_COL_BARCO=5;
+        NRO_COL_CAPITAN=6;
+        NRO_COL_ACCIONES=7;
+        NRO_COL_TIENE_HISTORICO=8;
+        cantColumnas=9;        
         modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
-        tablaCampanias.setModel(modeloTabla);                 
-        vaciaTabla();
+        tablaCampanias.setModel(modeloTabla);   
+        cargaGrillaCampanias();
+        setGuiCampaniaFinalizada();    
+        controlaPanelAccionesCampania();
         // Se crea el JScrollPane, el JTable y se pone la cabecera...
          //JScrollPane scroll = new JScrollPane();
          //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
@@ -655,6 +767,134 @@ private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             JOptionPane.showMessageDialog(this, "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 */
+    }
+    
+    public int getIdDeCampaniaSeleccionada(){
+        int salida = -1;
+        int filaSeleccionada = tablaCampanias.getSelectedRow();   
+        if (filaSeleccionada>=0){
+            salida = (Integer) modeloTabla.getValueAt(filaSeleccionada, NRO_COL_ID_CAMP);
+        }                
+        return salida;
+    }
+    
+    public void cargaGrillaCampanias() {        
+        vaciaTabla();
+        ArrayList<modelo.dataManager.Campania> campanias = modelo.dataManager.AdministraCampanias.getInstance().getCampanias();
+        if ((campanias == null) || (campanias.size() == 0) ) {
+            modelo.dataManager.AdministraCampanias.getInstance().leerCampaniasDeLaDB();
+            campanias = modelo.dataManager.AdministraCampanias.getInstance().getCampanias();            
+        }        
+        if ((!(campanias == null)) && (campanias.size() > 0)) {
+            // while (), pongo cada objeto Campania en la grilla de campanias                    
+            int i = 0;
+            while (i < campanias.size()) {
+                agregaUnaFilaCampania(
+                        campanias.get(i).getId(),
+                        campanias.get(i).getDescripcion(),
+                        campanias.get(i).getBarco(),
+                        campanias.get(i).getCapitan(),
+                        campanias.get(i).getEstado(),
+                        campanias.get(i).getFechaInicio(),
+                        campanias.get(i).getFechaFin(),
+                        (campanias.get(i).getFolderHistorico() != null && campanias.get(i).getFolderHistorico().length() > 0)
+                        );
+                i++;
+            }
+            marcaCampaniaEnCurso();
+        }
+    }
+
+    public void setGuiModificarFilaElegida() {
+       int filaSeleccionada = tablaCampanias.getSelectedRow();
+       if (filaSeleccionada>=0){
+           lblNuevaCampania.setText("Modificar datos de campaña:");
+           controlaPanelNuevaCampania(true);
+           campoBarcoCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_BARCO));           
+           campoCapitanCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_CAPITAN));
+           campoNombreCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_NOMBRE_CAMP));
+       }
+    }
+
+    /**
+     * @return the modificandoCampania
+     */
+    public boolean isModificandoCampania() {
+        return modificandoCampania;
+    }
+
+    /**
+     * @param modificandoCampania the modificandoCampania to set
+     */
+    public void setModificandoCampania(boolean modificandoCampania) {
+        this.modificandoCampania = modificandoCampania;
+    }
+    
+    public void marcaCampaniaEnCurso(){
+        boolean encontro=false;
+        //recorre las campañas de la tabla y cuando encuentre una que no tiene fecha de fin,
+        //será la campaña en curso, y en su fecha de fin le pondrá el texto que la distinga
+        int i = 0;
+        int idLeido;
+        while ((i<modeloTabla.getRowCount()) && (!(encontro))){
+            idLeido=(Integer)modeloTabla.getValueAt(i, NRO_COL_ID_CAMP);
+            if (idLeido == ControllerCampania.getInstance().getIdCampaniaEnCurso()){
+                encontro = true;
+            }
+            else
+            {   i++;  }
+        }
+        if (encontro) {
+            modeloTabla.setValueAt("EN CURSO", i, NRO_COL_FECHA_FIN);
+        }
+    }
+
+    private void cargarDatosDeCampaniaEnCurso() {
+        if (getEstadoCampania() == 1){
+            int idCampEnCurso = ControllerCampania.getInstance().getIdCampaniaEnCurso();
+            if (idCampEnCurso>=0){
+                modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso();
+                campoBarcoCampania.setText(campania.getBarco());
+                campoBarcoCampania.setEnabled(false);
+                campoCapitanCampania.setText(campania.getCapitan());
+                campoCapitanCampania.setEnabled(false);
+                campoNombreCampania.setText(campania.getDescripcion());
+                campoNombreCampania.setEnabled(false);
+            }
+        }
+        else{
+            campoBarcoCampania.setText("");
+            campoCapitanCampania.setText("");
+            campoNombreCampania.setText("");
+        }
+        
+    }
+
+    private boolean guardarCampaniaModificada() {
+        boolean sePudo=false;
+        if (getIdDeCampaniaSeleccionada()>=0){
+            modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(getIdDeCampaniaSeleccionada());
+            if (validaCampos()){
+                ControllerCampania.getInstance().modificarCampania(
+                        getIdDeCampaniaSeleccionada(), 
+                        campoNombreCampania.getText(), 
+                        campoCapitanCampania.getText(), 
+                        campoBarcoCampania.getText());
+                JOptionPane.showMessageDialog(null, "Cambios guardardos!");                
+                sePudo=true;
+            }            
+        }        
+        return sePudo;
+    }
+
+    private boolean validaCampos() {
+        boolean camposRequeridos = campoBarcoCampania.getText().length() > 2 && 
+                campoCapitanCampania.getText().length() > 2  &&
+                campoNombreCampania.getText().length() > 2;
+        if (!(camposRequeridos)){
+            JOptionPane.showMessageDialog(null, "Error! Ha ingresado valores invalidos");
+        }
+        return camposRequeridos;
     }
     
 }
