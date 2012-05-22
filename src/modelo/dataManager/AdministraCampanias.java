@@ -7,6 +7,7 @@ package modelo.dataManager;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import persistencia.Logueador;
 
 /**
@@ -43,6 +44,7 @@ public class AdministraCampanias {
             if (persistencia.BrokerCampania.getInstance().insertCampania(nuevaCamp)){
                 nuevaCamp.setId(persistencia.BrokerCampania.getInstance().getIdUltimoInsert());
                 campanias.add(nuevaCamp);
+                setCampaniaEnCurso(nuevaCamp);
                 sePudo = true;
             }
         }
@@ -84,9 +86,25 @@ public class AdministraCampanias {
     
     public boolean finalizarCampaniaEnCurso(){
         boolean sePudo=false;
-        // --------- método pendiente -----------
+        try {
+            //traigo de memoria el objeto que representa la campañas en curso
+            Campania campEnCurso = getCampaniaEnCurso();
+            //lo quito de la lista de campañas en memoria
+            campanias.remove(campEnCurso);
+            //le grabo la fecha de finalización actual
+            campEnCurso.setFechaFin(Calendar.getInstance().getTime());
+            //lo actualizo en la base de datos
+            persistencia.BrokerCampania.getInstance().updateCampania(campEnCurso);
+            //lo vuelvo a agregar actualizado a la lista de campañas en memoria
+            campanias.add(campEnCurso);
+            //dejo vacía la campaña en curso
+            setCampaniaEnCurso(null);
+            sePudo=true;
+        }
+        catch (Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
         return sePudo;
-    }   
+    }
 
     /**
      * @return the campanias
@@ -216,6 +234,20 @@ public class AdministraCampanias {
      */
     public void setHistoricoFileName(String historicoFileName) {
         this.historicoFileName = historicoFileName;
+    }
+
+    /**
+     * @return the campaniaEnCurso
+     */
+    public Campania getCampaniaEnCurso() {
+        return campaniaEnCurso;
+    }
+
+    /**
+     * @param campaniaEnCurso the campaniaEnCurso to set
+     */
+    public void setCampaniaEnCurso(Campania campaniaEnCurso) {
+        this.campaniaEnCurso = campaniaEnCurso;
     }
     
 }

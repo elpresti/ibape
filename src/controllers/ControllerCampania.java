@@ -22,31 +22,6 @@ public class ControllerCampania {
        return unicaInstancia;
     }
 
-    public void mostrarCampanias() {
-        gui.PanelOpcCampanias.getInstance().vaciaTabla();
-        if (modelo.dataManager.AdministraCampanias.getInstance().getCampanias() == null) {
-            modelo.dataManager.AdministraCampanias.getInstance().leerCampaniasDeLaDB();
-        }
-        ArrayList<modelo.dataManager.Campania> campanias = modelo.dataManager.AdministraCampanias.getInstance().getCampanias();
-        if (campanias != null){
-            // while (), pongo cada objeto Campania en la grilla de campanias        
-            int i = 0;
-            while (i < campanias.size()) {
-                gui.PanelOpcCampanias.getInstance().agregaUnaFilaCampania(
-                        campanias.get(i).getId(),
-                        campanias.get(i).getDescripcion(),
-                        campanias.get(i).getBarco(),
-                        campanias.get(i).getCapitan(),
-                        campanias.get(i).getEstado(),
-                        campanias.get(i).getFechaInicio(),
-                        campanias.get(i).getFechaFin(),
-                        (campanias.get(i).getFolderHistorico() != null && campanias.get(i).getFolderHistorico().length() > 0)
-                        );
-                i++;
-            }
-        }
-    }
-
     public boolean nuevaCampania(String descripcion, String capitan, String barco){
         boolean sePudo=false;
         if ((descripcion.length()>1) && (capitan.length()>1) && (barco.length()>1)){
@@ -58,7 +33,7 @@ public class ControllerCampania {
             campania.setDescripcion(descripcion);
             if (modelo.dataManager.AdministraCampanias.getInstance().agregarCampania(campania)) {
                 sePudo=true;
-                mostrarCampanias();
+                gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
             }
         }
         return sePudo;
@@ -67,7 +42,7 @@ public class ControllerCampania {
     public boolean borrarCampania(int idCampania){
         boolean sePudo=false;
         if (AdministraCampanias.getInstance().eliminarCampania(AdministraCampanias.getInstance().getCampania(idCampania))){
-            mostrarCampanias();            
+            gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
             sePudo=true;
         }        
         return sePudo;
@@ -82,11 +57,28 @@ public class ControllerCampania {
             campania.setCapitan(capitan);
             campania.setDescripcion(nombre);
             if (modelo.dataManager.AdministraCampanias.getInstance().modificarCampania(campania)) {             
-                mostrarCampanias();
+                gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
                 sePudo=true;                
             }
         }
         return sePudo;
+    }
+    
+    public boolean finalizaCampaniaEnCurso() {
+        boolean sePudo = false;
+        if (modelo.dataManager.AdministraCampanias.getInstance().finalizarCampaniaEnCurso()){
+            gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
+            sePudo=true;
+        }        
+        return sePudo;
+    }
+
+    public int getIdCampaniaEnCurso() {
+        int salida = -2;
+        if (modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
+            salida = modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso().getId();
+        }
+        return salida;
     }
 
 }
