@@ -8,10 +8,6 @@ package vista;
  *
  * @author Sebastian
  */
-public class prueba2 {
-
-
-    //chau
-    
+public class prueba2 {   
     
 }
