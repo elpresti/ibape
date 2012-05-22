@@ -15,11 +15,14 @@ public class prueba3 {
     }
      public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
-
-        
+        elFrame.setSize(500, 500);
+        elFrame.add(new prueba3());
+        elFrame.setVisible(true);
         int nosecuanto = 10;
         elFrame.add(nosecuanto);
         
     }
+
+     new Number;
 
 }
