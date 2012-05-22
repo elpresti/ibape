@@ -9,7 +9,9 @@ package vista;
  * @author Sebastian
  */
 public class prueba2 {
-    //hola
+
+
+    //chau
     
     
 }
