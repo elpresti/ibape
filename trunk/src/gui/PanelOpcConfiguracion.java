@@ -1027,7 +1027,7 @@ private void btnConectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN
           btnDesconectaGps.setVisible(true);
           chkEstadoGps.setEnabled(false);
           setPanelConfigGps(false);
-        }
+        }    
 }//GEN-LAST:event_btnConectaGpsActionPerformed
 
 private void btnDesconectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectaGpsActionPerformed
@@ -1035,8 +1035,8 @@ private void btnDesconectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//
         JOptionPane.showMessageDialog(this, "Hubo un error en la conexión al GPS y no se detuvo");
     }
     else
-        { habilitaBtnConectaGps();  
-          if (modelo.dataCapture.Sonda.getInstance().getEstadoConexion()==2) { 
+        { habilitaBtnConectaGps();
+          if (modelo.dataCapture.Sonda.getInstance().getEstadoConexion()==2) {
               btnDesconectaSondaActionPerformed(null);
           }
         }
@@ -1048,17 +1048,17 @@ private void btnConectaSondaActionPerformed(java.awt.event.ActionEvent evt) {//G
         PanelBarraDeEstado.getInstance().mostrarMensaje("Hubo un error en la conexión a la Sonda y no se inició",1);        
     }
     else
-        { 
+        {
             btnConectaSonda.setVisible(false);
             btnDesconectaSonda.setVisible(true);
             chkEstadoSonda.setEnabled(false);
-            setPanelConfigSonda(false);            
+            setPanelConfigSonda(false);
         }
 }//GEN-LAST:event_btnConectaSondaActionPerformed
 
 private void btnDesconectaSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectaSondaActionPerformed
     if (!(controllers.ControllerPpal.getInstance().detenerLecturaSonda())) {
-        JOptionPane.showMessageDialog(this, "Hubo un error en la conexión a la Sonda y no se detuvo");        
+        JOptionPane.showMessageDialog(this, "Hubo un error en la conexión a la Sonda y no se detuvo");
     }
     else
         { btnConectaSonda.setVisible(true);
@@ -1072,7 +1072,8 @@ private void comboPuertoSondaActionPerformed(java.awt.event.ActionEvent evt) {//
     if (((String)getComboPuertoGps().getSelectedItem()).equals((String)getComboPuertoSonda().getSelectedItem()))
       {
         setPanelConfigSonda(false);
-        getComboPuertoSonda().setEnabled(true);
+        if (chkEstadoSonda.isSelected() && (!(modelo.dataCapture.PuertosSerieDelSO.getInstance().isLeyendoPuertos()))) 
+            { getComboPuertoSonda().setEnabled(true); }
       }
     else
         { setPanelConfigSonda(true); }
@@ -1464,7 +1465,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
        return sePudo;
     }    
     
-    private void setPanelConfigGps(boolean estado) {
+    public void setPanelConfigGps(boolean estado) {
         //Activo el panel de configuración del GPS
         lblTxtConfigGps.setEnabled(estado);
         lblPuertoGps.setEnabled(estado);
@@ -1480,7 +1481,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         lblGpsEstado.setEnabled(estado);
     }
     
-    private void setPanelConfigSonda(boolean estado) {
+    public void setPanelConfigSonda(boolean estado) {
         //Activo el panel de configuración de la Sonda
         lblTxtConfigSonda.setEnabled(estado);
         lblPuertoSonda.setEnabled(estado);
@@ -1509,11 +1510,11 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
   
     public static PanelOpcConfiguracion getInstance() {
        if (unicaInstancia == null) {
-          unicaInstancia = new PanelOpcConfiguracion();          
-       }       
+          unicaInstancia = new PanelOpcConfiguracion();
+       }
        return unicaInstancia;
-    }    
-    
+    }
+
     public void clickEnChkEstadoGps() {
         if (chkEstadoGps.isSelected()) {
             chkEstadoGps.setSelected(true);
@@ -1539,9 +1540,10 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             chkEstadoSonda.setSelected(true);
             setPanelConfigSonda(true);//Desactivo el panel de configuración de la Sonda        
             chkEstadoDetectaPeces.setEnabled(true);
+            comboPuertoSondaActionPerformed(null);
         }
         else
-        {           
+        {
             chkEstadoSonda.setSelected(false);
             setPanelConfigSonda(false);//Desactivo el panel de configuración de la Sonda        
             chkEstadoDetectaPeces.setEnabled(false);
@@ -1639,7 +1641,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         while (i<elementos.size()){
             comboPuertoGps.addItem(elementos.get(i));
             i++;
-        }        
+        }
+        
     }
     
     public void setContenidoComboCOMsonda(ArrayList<String> elementos){
@@ -1663,6 +1666,5 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             btnEscaneaPuertos.setToolTipText("Busca todos los puertos serie de esta computadora");
             btnEscaneaPuertos.setEnabled(true);            
         }
-            
     }
 }

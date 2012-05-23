@@ -213,7 +213,6 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
 
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
 
-        btnModificar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\imgs\\iconos\\tabla-icono-editar.png")); // NOI18N
         btnModificar.setText("");
         btnModificar.setToolTipText("Modificar campaña");
         btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -224,7 +223,6 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelAcciones.add(btnModificar);
 
-        btnGuardar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\imgs\\iconos\\tabla-icono-guardar.png")); // NOI18N
         btnGuardar.setText("");
         btnGuardar.setToolTipText("Guardar cambios");
         btnGuardar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -235,7 +233,6 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelAcciones.add(btnGuardar);
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian\\Dropbox\\NetBeansProjects\\IBAPE\\imgs\\iconos\\tabla-icono-eliminar.png")); // NOI18N
         btnEliminar.setText("");
         btnEliminar.setToolTipText("Eliminar campaña");
         btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -640,7 +637,6 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             int estado, Date fechaInicio, Date fechaFin, boolean tieneHistorico) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Object[] fila = new Object[cantColumnas]; //creamos la fila
-        PanelOpcCampaniasAcciones panelAcciones = new PanelOpcCampaniasAcciones();
         fila[NRO_COL_ACCIONES]=panelAcciones;
         if (fechaInicio != null) { fila[NRO_COL_FECHA_INI]=sdf.format(fechaInicio); }
         if (fechaFin != null){ fila[NRO_COL_FECHA_FIN]=sdf.format(fechaFin); }
@@ -692,7 +688,8 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         NRO_COL_TIENE_HISTORICO=8;
         cantColumnas=9;        
         modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
-        tablaCampanias.setModel(modeloTabla);   
+        tablaCampanias.setModel(modeloTabla);
+        cargaIconosDeBotones();
         cargaGrillaCampanias();
         setGuiCampaniaFinalizada();    
         controlaPanelAccionesCampania();
@@ -895,6 +892,12 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             JOptionPane.showMessageDialog(null, "Error! Ha ingresado valores invalidos");
         }
         return camposRequeridos;
+    }
+
+    private void cargaIconosDeBotones() {
+        btnGuardar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-guardar.png"));
+        btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
+        btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
     }
     
 }
