@@ -47,6 +47,7 @@ public class LanSonda {
     }
 
     private void inicializar() {
+        //trabajo de hoy
         setEstadoConexion(0);
     }
     
