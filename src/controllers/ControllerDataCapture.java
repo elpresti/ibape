@@ -89,12 +89,18 @@ public class ControllerDataCapture implements java.util.Observer{
     private void setEstadoLeyendoPuertosSerieSO() {
         ArrayList<String> mensaje = new ArrayList<String> ();
         mensaje.add("Obteniendo listado de puertos del Sistema Operativo, puede llevar hasta 2 minutos...");
+        gui.PanelOpcConfiguracion.getInstance().getChkEstadoGps().setEnabled(false);
+        gui.PanelOpcConfiguracion.getInstance().setPanelConfigGps(false);
+        gui.PanelOpcConfiguracion.getInstance().setPanelConfigSonda(false);        
         gui.PanelOpcConfiguracion.getInstance().setContenidoComboCOMgps(mensaje);
         gui.PanelOpcConfiguracion.getInstance().setContenidoComboCOMsonda(mensaje);
     }
 
     private void setCombosPuertosSerieDelSO(ArrayList<String> puertosSerie) {
         gui.PanelOpcConfiguracion.getInstance().btnEscanearPuertosPresionado(false);
+        gui.PanelOpcConfiguracion.getInstance().getChkEstadoGps().setEnabled(true);
+        gui.PanelOpcConfiguracion.getInstance().setPanelConfigGps(true);
+        gui.PanelOpcConfiguracion.getInstance().setPanelConfigSonda(true);
         gui.PanelOpcConfiguracion.getInstance().setContenidoComboCOMgps(puertosSerie);
         gui.PanelOpcConfiguracion.getInstance().setContenidoComboCOMsonda(puertosSerie);
     }    
