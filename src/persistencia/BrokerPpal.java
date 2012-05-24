@@ -50,7 +50,8 @@ import java.util.logging.Logger;
     
     public void inicializador() {
         setDbName("dbIbape.db");
-        setConectado(false);
+        setConectado(false);        
+        this.creaConexionNueva();        
     }
 
     /**
@@ -125,12 +126,24 @@ import java.util.logging.Logger;
 
     public boolean creaTodasLasTablas() {
         boolean sePudo = true; 
-        try {            
+        try {        
+            // Creacion de Tablas            
             sePudo = sePudo && crearTablaCampanias();
             sePudo = sePudo && crearTablaLances();
-            sePudo = sePudo && crearTriggersIdCampania();
-            sePudo = sePudo && crearTablaCondiciones();  
+            sePudo = sePudo && crearTablaEspecies();
+            sePudo = sePudo && crearTablaCajones();             
             sePudo = sePudo && crearTablaPois();
+            sePudo = sePudo && crearTablaMarcas();
+            sePudo = sePudo && crearTablaCategoriasPoi();
+//            sePudo = sePudo && crearTablaVariables(); 
+//            sePudo = sePudo && crearTablaCondiciones(); 
+//            sePudo = sePudo && crearTablaAlertas(); 
+//            sePudo = sePudo && crearTablaCondicionesPorAlerta(); 
+            
+            //Creacion de Triggers
+            
+            sePudo = sePudo && crearTriggersIdCampania();
+            
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); 
@@ -332,5 +345,82 @@ import java.util.logging.Logger;
         }
         return salida;
     }
-    
+
+    public boolean crearTablaCajones() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE Cajones ("
+            + "  idLance            integer NOT NULL,"
+            + "  idEspecie          integer NOT NULL,"                        
+            + "  cantidad           integer NOT NULL,"
+            + "  PRIMARY KEY        (idLance,idEspecie),"
+            + "  /* Foreign keys */ "
+            + "  FOREIGN KEY (idLance)"
+            + "    REFERENCES Lances(id)"
+            + "  FOREIGN KEY (idEspecie)"
+            + "    REFERENCES Especies(id)"                    
+            + ");";
+            getStatement().executeUpdate(codigoCreacion);                                    
+            sePudo=true;
+        }
+        catch(Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }
+       public boolean crearTablaEspecies() {
+            boolean sePudo = false;
+            try {
+                String codigoCreacion = "CREATE TABLE Especies ("
+                + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                + "  nombre             nvarchar(100)"                                              
+                + ");";
+                getStatement().executeUpdate(codigoCreacion);                                    
+                sePudo=true;
+            }
+            catch(Exception e)
+                { Logueador.getInstance().agregaAlLog(e.toString()); }
+            return sePudo;
+        }
+
+    private boolean crearTablaMarcas() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE Marcas ("
+            + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "  idPois             integer NOT NULL,"                        
+            + "  prof               float NOT NULL," 
+            + "  areaFisica         nvarchar(100) NOT NULL," 
+            + "  areaImagen         nvarchar(100) NOT NULL," 
+            + "  /* Foreign keys */ "
+            + "  FOREIGN KEY (idPois)"
+            + "    REFERENCES Pois(id)"                   
+            + ");";
+            getStatement().executeUpdate(codigoCreacion);                                    
+            sePudo=true;
+        }
+        catch(Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }
+
+    public boolean crearTablaCategoriasPoi() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE CategoriasPoi ("
+            + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "  titulo             nvarchar(100) NOT NULL,"                        
+            + "  pathIcono          nvarchar(300) NOT NULL"                   
+            + ");";
+            getStatement().executeUpdate(codigoCreacion);                                    
+            sePudo=true;
+        }
+        catch(Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }
+
+    private boolean crearTablaCondicionesPorAlerta() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }
+
