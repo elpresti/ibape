@@ -135,10 +135,10 @@ import java.util.logging.Logger;
             sePudo = sePudo && crearTablaPois();
             sePudo = sePudo && crearTablaMarcas();
             sePudo = sePudo && crearTablaCategoriasPoi();
-//            sePudo = sePudo && crearTablaVariables(); 
-//            sePudo = sePudo && crearTablaCondiciones(); 
-//            sePudo = sePudo && crearTablaAlertas(); 
-//            sePudo = sePudo && crearTablaCondicionesPorAlerta(); 
+            sePudo = sePudo && crearTablaVariables(); 
+            sePudo = sePudo && crearTablaCondiciones(); 
+            sePudo = sePudo && crearTablaAlertas(); 
+            sePudo = sePudo && crearTablaCondicionesPorAlerta(); 
             
             //Creacion de Triggers
             
@@ -420,7 +420,60 @@ import java.util.logging.Logger;
     }
 
     private boolean crearTablaCondicionesPorAlerta() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE CondicionesPorAlerta ("
+            + "  idCondicion        integer NOT NULL,"
+            + "  idAlerta           integer NOT NULL,"                        
+            + "  PRIMARY KEY        (idCondicion,idAlerta),"
+            + "  /* Foreign keys */ "
+            + "  FOREIGN KEY (idCondicion)"
+            + "    REFERENCES Condiciones(id)"
+            + "  FOREIGN KEY (idAlerta)"
+            + "    REFERENCES Alertas(id)"                    
+            + ");";
+            getStatement().executeUpdate(codigoCreacion);                                    
+            sePudo=true;
+        }
+        catch(Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }
+
+    private boolean crearTablaVariables() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE Variables ("
+            + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "  nombre             nvarchar(100) NOT NULL,"
+            + "  opcionesCombo      nvarchar(100) NOT NULL,"
+            + "  cantValores        int NOT NULL"                   
+            + ");";
+            getStatement().executeUpdate(codigoCreacion);                                    
+            sePudo=true;
+        }
+        catch(Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }
+
+    private boolean crearTablaAlertas() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE Alertas ("
+            + "  id             integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "  titulo         nvarchar(100) NOT NULL,"
+            + "  estado         boolean NOT NULL,"
+            + "  mensaje        nvarchar(300) NOT NULL,"
+            + "  flagsAcciones  int NOT NULL"
+            + ");";
+            getStatement().executeUpdate(codigoCreacion);                        
+            
+            sePudo=true;
+        }
+        catch(Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
     }
 }
 
