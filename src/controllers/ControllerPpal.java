@@ -27,7 +27,7 @@ public class ControllerPpal {
     public void accionesAlIniciar(){
         ControllerDataCapture.getInstance().obtienePuertosComExistentes();            
         gui.PanelOpcConfiguracion.getInstance().btnEscanearPuertosPresionado(true);
-        persistencia.BrokerCampania.getInstance().creaConexionNueva();
+        persistencia.BrokerCampania.getInstance();
     }
     
     public static ControllerPpal getInstance() {
