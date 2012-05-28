@@ -90,38 +90,6 @@ public class BrokerCampania extends BrokerPpal{
         }
         return campania;
     }
-
-    //-----------------   métodos posiblemente innecesarios   ------------------------
-/*    
-    public boolean setTodosTienenHistorico(boolean b) {
-        boolean sePudo=false;
-        System.out.println("setTodosTienenHistorico() Not yet implemented");
-        return sePudo;        
-    }
-
-    public boolean setTieneHistorico(String folderName) {
-        //busca en la tabla campanias la primer entrada que coincidan con este folderName y las marca como tieneHistorico=true
-        // si encuentra mas de una entrada las demas las ignora ya que quedaran con tieneHistorico=false y luego seran eliminadas
-        boolean sePudo=false;
-        System.out.println("setTieneHistorico() Not yet implemented");
-        return sePudo; 
-    }
-    
-    public boolean borraNoTienenHistorico() {
-        boolean sePudo=false;
-        System.out.println("borraNoTienenHistorico() Not yet implemented");
-        return sePudo;
-    }
-
-    public int[] obtieneTodosLosIds() {        
-        System.out.println("obtieneTodosLosIds() Not yet implemented");
-        //consulta que me devuelve todos los Ids de las campanias que hay en TablaCampanias
-        // int[] ids = new int[resulset.numberOfRows()];
-        int[] ids = null;
-        return ids;
-    }
-*/
-    //-----------------------------------------------------------------------
     
     public boolean insertCampania(modelo.dataManager.Campania campania){
         boolean sePudo = false;

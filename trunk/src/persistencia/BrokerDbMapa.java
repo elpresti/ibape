@@ -96,7 +96,7 @@ public class BrokerDbMapa implements Runnable{
         }
     }
 
-    public boolean modify(Punto p) {
+    public boolean update(Punto p) {
         boolean sePudo=false;
         //...metodo pendiente
         return sePudo;
