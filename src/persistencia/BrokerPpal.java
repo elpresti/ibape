@@ -22,6 +22,8 @@ import java.util.logging.Logger;
     private boolean conectado;
     private String dbName;
 
+ 
+    
     public BrokerPpal() {
         inicializador();
     }
@@ -145,6 +147,10 @@ import java.util.logging.Logger;
             sePudo = sePudo && crearTriggersIdCampania();
             sePudo = sePudo && crearTriggersIdLance();
             sePudo = sePudo && crearTriggersIdEspecie();
+            sePudo = sePudo && crearTriggersIdPois();
+            sePudo = sePudo && crearTriggersIdAlerta();
+            
+            //Analizar si es necesario crear triggers para las FK restantes, por ahora, considero que no.
             
         }
         catch (Exception e)
@@ -268,6 +274,17 @@ import java.util.logging.Logger;
             + "END;";
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
 
+            codigoCreacion=
+            "CREATE TRIGGER fki_pois_idCampania "
+            + "BEFORE INSERT ON pois "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM campanias WHERE id = NEW.idCampania) IS NULL)"
+            + "     THEN RAISE(ABORT, 'insert on table \"pois\" violates foreign key constraint \"fk_idCampania\"')"
+            + "  END; "
+            + "END;";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+            
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion=
             "CREATE TRIGGER fku_lance_idCampania "
@@ -277,9 +294,22 @@ import java.util.logging.Logger;
             + "     WHEN ((SELECT id FROM campanias WHERE id = NEW.idCampania) IS NULL)"
             + "     THEN RAISE(ABORT, 'update on table \"lances\" violates foreign key constraint \"fk_idCampania\"')"
             + "  END; "
+            + "END;";           
+
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+            
+            codigoCreacion=
+            "CREATE TRIGGER fku_pois_idCampania "
+            + "BEFORE UPDATE ON pois "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM campanias WHERE id = NEW.idCampania) IS NULL)"
+            + "     THEN RAISE(ABORT, 'update on table \"pois\" violates foreign key constraint \"fk_idCampania\"')"
+            + "  END; "
             + "END;";
 
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+          
 
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion=
@@ -293,7 +323,17 @@ import java.util.logging.Logger;
             + "END; ";
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
 
-
+            codigoCreacion=
+            "CREATE TRIGGER fkd_pois_idCampania "
+            + "BEFORE DELETE ON campanias "
+            + "FOR EACH ROW BEGIN "
+            + "  SELECT CASE "
+            + "    WHEN ((SELECT idCampania FROM pois WHERE idCampania = OLD.id) IS NOT NULL) "
+            + "    THEN RAISE(ABORT, 'delete on table \"campanias\" violates foreign key constraint \"fk_idCampania\"') "
+            + "  END; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+            
             /*Borrado en cascada */
             codigoCreacion=
             "CREATE TRIGGER fkd_lances_campanias_id "
@@ -302,6 +342,15 @@ import java.util.logging.Logger;
             + "   DELETE from lances WHERE idCampania = OLD.id; "
             + "END; ";
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+            
+            codigoCreacion=
+            "CREATE TRIGGER fkd_pois_campanias_id "
+            + "BEFORE DELETE ON campanias "
+            + "FOR EACH ROW BEGIN "
+            + "   DELETE from pois WHERE idCampania = OLD.id; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+            
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); 
@@ -595,6 +644,126 @@ import java.util.logging.Logger;
             }                
         return sePudo;
     }
+
+    private boolean crearTriggersIdPois() {
+    boolean sePudo=true;
+        try {                                                
+            //---------------- triggers de la FK idPois -----------------------
+            
+            /*TRIGGER ON INSERT, si la clave primaria no permite nulos */
+            String codigoCreacion=
+            "CREATE TRIGGER fki_marcas_idPois "
+            + "BEFORE INSERT ON marcas "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM pois WHERE id = NEW.idPois) IS NULL)"
+            + "     THEN RAISE(ABORT, 'insert on table \"marcas\" violates foreign key constraint \"fk_idPois\"')"
+            + "  END; "
+            + "END;";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+            /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
+            codigoCreacion=
+            "CREATE TRIGGER fku_marcas_idPois "
+            + "BEFORE UPDATE ON marcas "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM pois WHERE id = NEW.idPois) IS NULL)"
+            + "     THEN RAISE(ABORT, 'update on table \"marcas\" violates foreign key constraint \"fk_idPois\"')"
+            + "  END; "
+            + "END;";
+
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+            /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
+            codigoCreacion=
+            "CREATE TRIGGER fkd_marcas_idPois "
+            + "BEFORE DELETE ON pois "
+            + "FOR EACH ROW BEGIN "
+            + "  SELECT CASE "
+            + "    WHEN ((SELECT idPois FROM marcas WHERE idPois = OLD.id) IS NOT NULL) "
+            + "    THEN RAISE(ABORT, 'delete on table \"pois\" violates foreign key constraint \"fk_idPois\"') "
+            + "  END; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+
+            /*Borrado en cascada */
+            codigoCreacion=
+            "CREATE TRIGGER fkd_marcas_pois_id "
+            + "BEFORE DELETE ON pois "
+            + "FOR EACH ROW BEGIN "
+            + "   DELETE from marcas WHERE idPois = OLD.id; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+        }
+        catch (Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); 
+              sePudo=false;  
+            }                
+        return sePudo;
+
+    }
+
+    private boolean crearTriggersIdAlerta() {
+        boolean sePudo=true;
+        try {                                                
+            //---------------- triggers de la FK idAlerta -----------------------
+            
+            /*TRIGGER ON INSERT, si la clave primaria no permite nulos */
+            String codigoCreacion=
+            "CREATE TRIGGER fki_CondicionesPorAlerta_idAlerta "
+            + "BEFORE INSERT ON CondicionesPorAlerta "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM Alertas WHERE id = NEW.idAlerta) IS NULL)"
+            + "     THEN RAISE(ABORT, 'insert on table \"CondicionesPorAlerta\" violates foreign key constraint \"fk_idAlerta\"')"
+            + "  END; "
+            + "END;";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+            /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
+            codigoCreacion=
+            "CREATE TRIGGER fku_CondicionesPorAlerta_idAlerta "
+            + "BEFORE UPDATE ON CondicionesPorAlerta "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM Alertas WHERE id = NEW.idAlerta) IS NULL)"
+            + "     THEN RAISE(ABORT, 'update on table \"CondicionesPorAlerta\" violates foreign key constraint \"fk_idAlerta\"')"
+            + "  END; "
+            + "END;";
+
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+            /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
+            codigoCreacion=
+            "CREATE TRIGGER fkd_CondicionesPorAlerta_idAlerta "
+            + "BEFORE DELETE ON Alertas "
+            + "FOR EACH ROW BEGIN "
+            + "  SELECT CASE "
+            + "    WHEN ((SELECT idAlerta FROM CondicionesPorAlerta WHERE idAlerta = OLD.id) IS NOT NULL) "
+            + "    THEN RAISE(ABORT, 'delete on table \"Alertas\" violates foreign key constraint \"fk_idAlerta\"') "
+            + "  END; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+
+            /*Borrado en cascada */
+            codigoCreacion=
+            "CREATE TRIGGER fkd_CondicionesPorAlerta_Alerta_id "
+            + "BEFORE DELETE ON Alertas "
+            + "FOR EACH ROW BEGIN "
+            + "   DELETE from CondicionesPorAlerta WHERE idAlerta = OLD.id; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+        }
+        catch (Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); 
+              sePudo=false;  
+            }                
+        return sePudo;
+}
+
 }
 
 
