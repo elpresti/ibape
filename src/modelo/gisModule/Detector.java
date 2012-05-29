@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.media.jai.JAI;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+//import javax.media.jai.JAI;
+//import javax.swing.ImageIcon;
+//import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class Detector {

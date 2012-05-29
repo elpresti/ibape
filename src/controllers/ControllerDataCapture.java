@@ -130,4 +130,9 @@ public class ControllerDataCapture implements java.util.Observer{
               }
     }
 
+    public void setParametrosLan() {
+        String ruta=gui.PanelOpcConfiguracion.getInstance().getCampoRutaHistorico().getText();
+        modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoRemoto(ruta);
+    }
+
 }

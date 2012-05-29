@@ -12,13 +12,17 @@ package gui;
 
 import controllers.ControllerDataCapture;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import modelo.dataCapture.LanSonda;
 import org.jdom.Element;
 import persistencia.BrokerConfig;
 import persistencia.Logueador;
@@ -137,7 +141,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelLanStatus = new javax.swing.JPanel();
         panelTodoLanStatus = new org.jdesktop.swingx.JXPanel();
         panelBtnConecta = new org.jdesktop.swingx.JXPanel();
-        btnPruebaLan = new javax.swing.JButton();
+        btnConectarLan = new javax.swing.JButton();
         panelLANconexionColor = new javax.swing.JPanel();
         LanEstado = new javax.swing.JPanel();
         panelLANconexionTxt = new org.jdesktop.swingx.JXPanel();
@@ -249,7 +253,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTxtDispositivos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         lblDispositivos.setText("Dispositivos a utilizar:");
-        lblDispositivos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblDispositivos.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTxtDispositivos.add(lblDispositivos);
 
         panelBtnEscanearPuertos.setMaximumSize(new java.awt.Dimension(300, 25));
@@ -751,7 +755,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelCampoRutaHistorico.setMinimumSize(new java.awt.Dimension(500, 85));
         panelCampoRutaHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        campoRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14));
+        campoRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         campoRutaHistorico.setText("\\\\192.168.1.4\\imagenesSonda");
         campoRutaHistorico.setEnabled(false);
         campoRutaHistorico.setMaximumSize(new java.awt.Dimension(250, 23));
@@ -778,10 +782,15 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelBtnConecta.setPreferredSize(new java.awt.Dimension(200, 30));
         panelBtnConecta.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 3));
 
-        btnPruebaLan.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnPruebaLan.setText("Probar conexión");
-        btnPruebaLan.setEnabled(false);
-        panelBtnConecta.add(btnPruebaLan);
+        btnConectarLan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnConectarLan.setText("Conectar");
+        btnConectarLan.setEnabled(false);
+        btnConectarLan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConectarLanActionPerformed(evt);
+            }
+        });
+        panelBtnConecta.add(btnConectarLan);
 
         panelTodoLanStatus.add(panelBtnConecta);
 
@@ -979,7 +988,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelBotonGuardar.setPreferredSize(new java.awt.Dimension(500, 50));
         panelBotonGuardar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
 
-        btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14));
+        btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnGuardar.setText("Guardar cambios");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1084,18 +1093,27 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     btnEscanearPuertosPresionado(true);
 }//GEN-LAST:event_btnEscaneaPuertosActionPerformed
 
+    private void btnConectarLanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarLanActionPerformed
+        // TODO add your handling code here:
+        if(campoRutaHistorico.getText().length()>3){
+            ControllerDataCapture.getInstance().setParametrosLan();
+        }else{
+            JOptionPane.showMessageDialog(null, "Ingrese una ruta valida");
+    }            
+    }//GEN-LAST:event_btnConectarLanActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GpsEstado;
     private javax.swing.JPanel LanEstado;
     private javax.swing.JPanel SondaEstado;
     private javax.swing.JButton btnConectaGps;
     private javax.swing.JButton btnConectaSonda;
+    private javax.swing.JButton btnConectarLan;
     private javax.swing.JButton btnDesconectaGps;
     private javax.swing.JButton btnDesconectaSonda;
     private javax.swing.JButton btnEscaneaPuertos;
     private javax.swing.JButton btnExaminarRutaHistorico;
     private javax.swing.JButton btnGuardar;
-    private javax.swing.JButton btnPruebaLan;
     private javax.swing.JTextField campoRutaHistorico;
     private javax.swing.JCheckBox chkEstadoDetectaPeces;
     private javax.swing.JCheckBox chkEstadoGps;
@@ -1502,7 +1520,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         lblTxtRutaHistorico.setEnabled(estado);
         campoRutaHistorico.setEnabled(estado);
         btnExaminarRutaHistorico.setEnabled(estado);
-        btnPruebaLan.setEnabled(estado);
+        btnConectarLan.setEnabled(estado);
         LanEstado.setEnabled(estado);
         lblLanEstado.setEnabled(estado);        
     }
@@ -1611,14 +1629,15 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }    
     
     
-/* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
+// codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
      public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
         elFrame.add(new PanelOpcConfiguracion()); 
         elFrame.setVisible(true);
+
     }
-*/
+
 
     public void habilitaBtnConectaGps() {
         btnConectaGps.setVisible(true);
