@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import java.awt.Color;
 
 /**
  *
@@ -83,34 +84,47 @@ public class OperacionesBasicas {
 	}
 
     public static void main(String[] args){
-        //Cargamos  la imagen en un objeto BufferImage
-        OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
-        //Creamos los filtro para esta imagen
-        Filtros filtros = new Filtros(getInstance().getAncho(),getInstance().getAlto());
-        //metodo con ancho de 550 recorta imagen
-        //Filtros filtros = new Filtros(getInstance().getAncho(),550);
-        //La erosionamos
-        BufferedImage imgProcesada = filtros.erode(getInstance().getImagenOriginal());
-        //Al resultado lo binarizamos con un umbral de 20
-        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
 
-        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
-        imgProcesada = segmentacion.Bordes(imgProcesada);
-        //grabamos la imagen en disco
-        getInstance().grabarImagen(imgProcesada);
+        int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
+
+//        //Cargamos  la imagen en un objeto BufferImage
+//        OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
+//        //Creamos los filtro para esta imagen
+//        Filtros filtros = new Filtros(getInstance().getAncho(),getInstance().getAlto());
+//        //metodo con ancho de 550 recorta imagen
+//        //Filtros filtros = new Filtros(getInstance().getAncho(),550);
+//        //La erosionamos
+//        BufferedImage imgProcesada = filtros.erode(getInstance().getImagenOriginal());
+//        //Al resultado lo binarizamos con un umbral de 20
+//        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+//
+//        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
+//        imgProcesada = segmentacion.Bordes(imgProcesada);
+//        //grabamos la imagen en disco
+//        getInstance().grabarImagen(imgProcesada);
     }
 
     public int cuantosPecesHay(String rutaImg){
         int cantPeces = 0;
-        //Leemos la imagen con obtenerImagen()
-        //Creamos los filtros para la imagen con la clase Filtros
-        //La erosionamos con Filtros.erode()
-        //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20)
-        //Creamos la segmentacion para esta imagen con la clase Segmentacion
-        //Obtenemos bordes de la imagen binarizada segmentacion.Bordes(imgProcesada)
-        //
 
-        //ArrayList<Integer> fondo = buscaFondo(BufferedImage )
+        //Leemos la imagen con obtenerImagen()
+        OperacionesBasicas.getInstance().obtenerImagen(rutaImg);
+        //Creamos los filtros para la imagen con la clase Filtros
+        Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
+        //La erosionamos con Filtros.erode()
+        BufferedImage imgProcesada = filtros.erode(getImagenOriginal());
+        //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20
+        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+        //Creamos la segmentacion para esta imagen con la clase Segmentacion
+      //  Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
+        //Obtenemos bordes de la imagen binarizada segmentacion.Bordes(imgProcesada)
+      //  imgProcesada = segmentacion.Bordes(imgProcesada);
+
+        imgProcesada = filtros.erode(imgProcesada);
+        getInstance().grabarImagen(imgProcesada);
+
+        //Armo el arreglo de la posicion del fondo en todo el ancho de la imagen.
+        ArrayList<Integer> fondo = buscaFondo(imgProcesada);
 
         //buscaMarcas(fondo)
 
@@ -120,9 +134,43 @@ public class OperacionesBasicas {
 
     public ArrayList<Integer> buscaFondo (BufferedImage img) {
 
-        ArrayList<Integer> fondo = new ArrayList();
+//        int ancho = img.getWidth();
+//		int alto = img.getHeight();
+//        int valorRGB;
+//		int valoresRGB[] = new int[3];
+//		float valoresHSB[] = new float[3];
+		Colores col = new Colores();
+//		int negro = col.obtieneNumeroColor("Negro");
+//		int marron = col.obtieneNumeroColor("Marron");
+//        int rgbs[];
+//	    float hsb[];
+//        rgbs = new int[3];
+//        int value = 0;
+//        hsb = new float[3];
+
+
+        for(int contAncho=1;contAncho<966;contAncho++){
+
+			for(int contAlto=635;contAlto>0;contAlto--){
+
+     
+       //         System.out.println(colorpixel);
+                
+               // Colores col = new Colores();
+                Object e = col.obtieneColor(img.getRGB(contAncho, contAlto));
+            //    if (!(col.getColoresMap().get(e).equals("Negro"))) {
+                System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
+
+           //     }
+            }
+        }
+
+//				if(col.obtieneColor(valorRGB)!=negro){
+//					if(col.obtieneColor(imagen.getRGB(contAncho,contAlto))!=marron){
+
         //Recorremos la imagen de abajo a arriba y de izquierda a derecha en busqueda del borde. Para esto haremos lo sigueinte:
             //Creamos un Vector del tamanio de imagen.getAncho()
+        ArrayList<Integer> fondo = new ArrayList();
             //Obtenemos el valor RGB del pixel que esta en x=0,y=0
             //Si ese valor RGB es blanco, leo el valor RGB del pixel que esta en x=0,y=y+1
             //Si ese valor RGB no es blanco, guardo el valor y en  Vector[x] (Altura del borde)
