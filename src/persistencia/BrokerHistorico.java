@@ -4,10 +4,12 @@
  */
 package persistencia;
 
+import java.io.File;
 import java.util.ArrayList;
 import modelo.dataManager.Campania;
 import modelo.dataManager.Punto;
 import java.sql.*;
+import modelo.dataManager.AdministraCampanias;
 
 /**
  *
@@ -24,8 +26,13 @@ public class BrokerHistorico {
     private Connection conexion;
     private Statement statement;
     private ResultSet resultSet;
-    private String dbName;
+    private String dbFileName;
+    private String folderNameHistorico;
     
+    
+    private BrokerHistorico(){
+        inicializaBrokerHistorico();
+    }
     
     public static BrokerHistorico getInstance() {
        if (unicaInstancia == null)
@@ -125,13 +132,56 @@ public class BrokerHistorico {
         ArrayList<Punto> recorrido = new ArrayList();            
         // --- método pendiente ---
         return recorrido;
-    }
+    }    
     
-    public boolean creaDbYtablas() {
+    public boolean creaConexionNueva() {
+        boolean sePudo = false;
+        try {
+            Campania campEnCurso = AdministraCampanias.getInstance().getCampaniaEnCurso();
+            boolean yaTeniaHistorico=false;
+            //si la campaña en curso no tiene dbhistorico, la creamos
+            if (!(AdministraCampanias.getInstance().verificaSiTieneHistorico(campEnCurso.getId()))){
+                if (!(creaFoldersHistorico(campEnCurso.getId()))){
+                    return false;
+                }
+            }
+            else { yaTeniaHistorico = true; }
+
+            Class.forName("org.sqlite.JDBC");
+            // Observar que el archivo .db es la base de datos del Historico y se crea en el directorio de Historico de la campania en curso
+            setConexion(DriverManager.getConnection("jdbc:sqlite:" + getFolderNameHistorico()+"\\"+getCampaignFolderName(campEnCurso.getId())+"\\"+ getDbFileName()));
+
+            setStatement(getConexion().createStatement());            
+            
+            if (!(yaTeniaHistorico)) { creaTodasLasTablas(); }
+            //getStatement().close();
+            //getConexion().close();
+            sePudo = true;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return sePudo;
+    }    
+
+    public boolean creaFoldersHistorico(int idCampania){
         boolean sePudo=false;
-        // --- metodo pendiente ---
+        try {
+            modelo.dataManager.Campania campania = AdministraCampanias.getInstance().getCampania(idCampania);
+            File foldersHistorico = new File(getFolderNameHistorico()+"\\"+getCampaignFolderName(campania.getId()));
+            foldersHistorico.mkdirs();
+            campania.setFolderHistorico(getCampaignFolderName(campania.getId()));
+            //actualizo la campania en memoria
+            AdministraCampanias.getInstance().modificarCampania(campania);
+            //actualizo la campania en la tabla campanias
+            persistencia.BrokerCampania.getInstance().updateCampania(campania);
+            sePudo=true;
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
+    
     
     private void close() {
 /*                
@@ -191,29 +241,14 @@ public class BrokerHistorico {
     }           
 
 
-    private boolean inicializaBrokerHistorico(){
-        boolean sePudo=false;                                     
-/*        
-        connect = null;
-        setStatement(null);
-        setResultSet(null);
-        java.sql.Timestamp t =new java.sql.Timestamp(new java.util.Date().getTime()); setUltimoInsert(t);        
-        setTableName("PUNTOS");
-        setDbName("dbHistorico.db");
-        //orden de los campos de la estructura de la tabla
-        setCampoIDpos(0);
-        setCampoFECHApos(1);
-        setCampoLATITUDpos(2);
-        setCampoLONGITUDpos(3);
-        setCampoVELOCIDADpos(4);
-        setCampoPROFUNDIDADpos(5);
-        setCampoOBJETOpos(6);
-        setCampoTEMPAGUApos(7);
-        setCampoCOMENTARIOSpos(8);
-        setCampoLEIDOpos(9);
-        setCampoKMLpos(10);
-*/
-        return sePudo;
+    private void inicializaBrokerHistorico(){                                       
+        setGuardaDatosGps(false);
+        setGuardaDatosSonda(false);
+        setGuardaDatosPeces(false);
+        setGuardaDatosSondaSets(false);
+        setFolderNameHistorico("Historico");
+        setCampania(AdministraCampanias.getInstance().getCampaniaEnCurso());
+        setDbFileName("historico.db");        
 }    
                 
 
@@ -262,15 +297,176 @@ public class BrokerHistorico {
     /**
      * @return the dbName
      */
-    public String getDbName() {
-        return dbName;
+    public String getDbFileName() {
+        return dbFileName;
     }
 
     /**
      * @param dbName the dbName to set
      */
-    public void setDbName(String dbName) {
-        this.dbName = dbName;
+    public void setDbFileName(String dbName) {
+        this.dbFileName = dbName;
     }
+    
+    private String getCampaignFolderName(int id) {
+        return "camp"+id;
+    }
+
+    private boolean creaTodasLasTablas() {
+        boolean sePudo = true; 
+        try {        
+            // Creacion de Tablas            
+            sePudo = sePudo && crearTablaPuntos();
+            sePudo = sePudo && crearTablaSondaSets();
+            
+            //Creacion de Triggers           
+            sePudo = sePudo && crearTriggersIdSondaSets();            
+        }
+        catch (Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); 
+              sePudo=false;
+            }
+
+        return sePudo;
+    }
+
+    private boolean crearTablaPuntos() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE Puntos ("
+            + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "  fechaYhora         TIMESTAMP NOT NULL,"
+            + "  latitud            REAL NOT NULL,"
+            + "  latHemisferio      CHAR NOT NULL,"
+            + "  longitud           REAL NOT NULL,"
+            + "  lonHemisferio      CHAR NOT NULL,"
+            + "  altitud            REAL,"
+            + "  velocidad          REAL,"
+            + "  rumbo              REAL,"
+            + "  profundidad        REAL,"
+            + "  velocidadAgua      REAL,"
+            + "  tempAgua           REAL,"
+            + "  idSondaSets        integer NOT NULL,"
+            + "  /* Foreign keys */ "
+            + "  FOREIGN KEY (idSondaSets)"
+            + "    REFERENCES SondaSets(id)"
+            + ");";            
+  
+            getStatement().executeUpdate(codigoCreacion);
+            sePudo=true;
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }         
+
+    private boolean crearTablaSondaSets() {
+//frec,gain,stc,lw,gs, escala,shift,Eexp,unidad de medida,unidad,hora,lat,e/o,long,n/s,Velocidad,rumbo,fecha,velocidad promedio,profundidad ,c
+// 0,   30,  30,  22,  1,   7000,0,   2,   40,  0,   201035, 4156.9628S, W, 06139.5662W, S, 010., 111., 100511, 10,  6207,  18,
+//Escala,Eexp,profundidad,shift        estan expresadas en centimetros
+//temperatura esta expresada en grados Celsius        
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE SondaSets ("
+            + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+            + "  frecuencia         integer," //LOW/MID/HIGH
+            + "  ganancia           integer,"
+            + "  stc                integer," //STC (Valor de Ganancia variable)
+            + "  lineaBlanca        integer," //WL (White Line)                    
+            + "  velPantalla        integer," //GS (G.SPEEP: Velocidad Pantalla)                    
+            + "  escala             integer," //Escala (Unit) [centimetros]
+            + "  shift              integer," //Desplazamiento [centimetros]
+            + "  expander           integer," //Tamaño de expander del fondo [centimetros]                    
+            + "  unidadMedida       integer," //???????
+            + "  unidad             integer" //???????
+            + ");";            
+            getStatement().executeUpdate(codigoCreacion);
+            sePudo=true;
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;        
+    }    
+
+    private boolean crearTriggersIdSondaSets() {
+        boolean sePudo=true;
+        try {                                                
+            //---------------- triggers de la FK idSondaSets -----------------------
+            
+            /*TRIGGER ON INSERT, si la clave primaria no permite nulos */
+            String codigoCreacion=
+            "CREATE TRIGGER fki_punto_idSondaSets "
+            + "BEFORE INSERT ON puntos "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)"
+            + "     THEN RAISE(ABORT, 'insert on table \"puntos\" violates foreign key constraint \"fk_idSondaSets\"')"
+            + "  END; "
+            + "END;";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+            /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
+            codigoCreacion=
+            "CREATE TRIGGER fku_punto_idSondaSets "
+            + "BEFORE UPDATE ON puntos "
+            + "FOR EACH ROW BEGIN"
+            + "  SELECT CASE"
+            + "     WHEN ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)"
+            + "     THEN RAISE(ABORT, 'update on table \"puntos\" violates foreign key constraint \"fk_idSondaSets\"')"
+            + "  END; "
+            + "END;";
+
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+            /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
+            codigoCreacion=
+            "CREATE TRIGGER fkd_punto_idSondaSets "
+            + "BEFORE DELETE ON SondaSets "
+            + "FOR EACH ROW BEGIN "
+            + "  SELECT CASE "
+            + "    WHEN ((SELECT idSondaSets FROM puntos WHERE idSondaSets = OLD.id) IS NOT NULL) "
+            + "    THEN RAISE(ABORT, 'delete on table \"SondaSets\" violates foreign key constraint \"fk_idSondaSets\"') "
+            + "  END; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+
+
+            /*Borrado en cascada */
+            codigoCreacion=
+            "CREATE TRIGGER fkd_puntos_SondaSets_id "
+            + "BEFORE DELETE ON SondaSets "
+            + "FOR EACH ROW BEGIN "
+            + "   DELETE from puntos WHERE idSondaSets = OLD.id; "
+            + "END; ";
+            if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
+        }
+        catch (Exception e)
+            { Logueador.getInstance().agregaAlLog(e.toString()); 
+              sePudo=false;  
+            }                
+        return sePudo;
+    }
+    
+    public static void main(String[] args) {
+        controllers.ControllerCampania.getInstance().nuevaCampania("Campaña de prueba", "Gavilan", "El Marisco 1");
+        BrokerHistorico.getInstance().creaConexionNueva();
+    }
+
+    /**
+     * @return the folderHistorico
+     */
+    public String getFolderNameHistorico() {
+        return folderNameHistorico;
+    }
+
+    /**
+     * @param folderHistorico the folderHistorico to set
+     */
+    public void setFolderNameHistorico(String folderHistorico) {
+        this.folderNameHistorico = folderHistorico;
+    }
+    
     
 }
