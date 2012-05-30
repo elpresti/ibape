@@ -83,15 +83,16 @@ public class LanSonda {
         File dirRemoto = new File(getCarpetaHistoricoRemoto());
         String[] archivosR = dirRemoto.list();
         String[] archivosNuevos = null;
-        int i = 0;
+       
 
         if (archivosR == null) {
             System.out.println("No hay ficheros en el directorio especificado");
         } else {
-            Date fechaUltimoLocal = verFecha(archivosL[archivosL.length]);
-            for (int x = 0; x < archivosL.length; x++) {
-
-                if (verFecha(archivosR[x].toString()).compareTo(fechaUltimoLocal) > 0) {
+            Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal()+"\\"+archivosL[archivosL.length-1]);
+             int i = 0;
+             for (int x = 0; x < archivosL.length-1; x++) {
+                Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto()+"\\"+archivosR[x].toString());
+                if (fechaUltimoRemoto.compareTo(fechaUltimoLocal) > 0) {
                     System.out.println(archivosL[x]); //archivo remoto que no esta en local (fechaR>fechaL)
                     archivosNuevos[i] = archivosL[x];
                     i++;
