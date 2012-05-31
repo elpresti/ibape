@@ -134,8 +134,9 @@ public class OperacionesBasicas {
 
     public ArrayList<Integer> buscaFondo (BufferedImage img) {
 
-//        int ancho = img.getWidth();
-//		int alto = img.getHeight();
+        ArrayList<Integer> fondo = new ArrayList<Integer>();
+        int ancho = img.getWidth();
+		int alto = img.getHeight();
 //        int valorRGB;
 //		int valoresRGB[] = new int[3];
 //		float valoresHSB[] = new float[3];
@@ -148,29 +149,42 @@ public class OperacionesBasicas {
 //        int value = 0;
 //        hsb = new float[3];
 
+        boolean noencontrofondo = true;
+        int contAncho = 1;
+        int contAlto = alto;
 
-        for(int contAncho=1;contAncho<966;contAncho++){
 
-			for(int contAlto=635;contAlto>0;contAlto--){
 
-     
-       //         System.out.println(colorpixel);
+            while (contAncho<ancho)  {
+
+
+                contAlto = alto;
+			    while((contAlto>0) && (noencontrofondo=true)) {
+
+             //   if compara("Blanco") {
+                    Object e2 = col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto)));
+
+                    boolean e = (e2.equals("Blanco"));
+
+                    
                 
-               // Colores col = new Colores();
-                Object e = col.obtieneColor(img.getRGB(contAncho, contAlto));
-            //    if (!(col.getColoresMap().get(e).equals("Negro"))) {
-                System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
 
-           //     }
+
+                contAlto--;
+                }
+
+            contAncho++;
             }
-        }
+
+            
+        
 
 //				if(col.obtieneColor(valorRGB)!=negro){
 //					if(col.obtieneColor(imagen.getRGB(contAncho,contAlto))!=marron){
 
         //Recorremos la imagen de abajo a arriba y de izquierda a derecha en busqueda del borde. Para esto haremos lo sigueinte:
             //Creamos un Vector del tamanio de imagen.getAncho()
-        ArrayList<Integer> fondo = new ArrayList();
+   //     ArrayList<Integer> fondo = new ArrayList();
             //Obtenemos el valor RGB del pixel que esta en x=0,y=0
             //Si ese valor RGB es blanco, leo el valor RGB del pixel que esta en x=0,y=y+1
             //Si ese valor RGB no es blanco, guardo el valor y en  Vector[x] (Altura del borde)
@@ -179,8 +193,20 @@ public class OperacionesBasicas {
                 //2: y <= imagen.getAlto()
          //Esto  lo repetimos hasta llegar a x = imagen.getAncho() incluido
         //Ahora tenemos en el Vector la posicion del fondo de toda la imagen
+        
+
+
         return fondo;
     }
+//
+//      public boolean compara(String color){
+//        Colores col = new Colores();
+//        boolean bol=false;
+//        if (col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto))).equals(color))
+//            return true;
+//        else return false;
+//
+//    }
 
     public ArrayList<modelo.dataManager.Marca> buscaMarcas(ArrayList<Integer> fondo){
         ArrayList<modelo.dataManager.Marca> marcas = new ArrayList<modelo.dataManager.Marca>();
