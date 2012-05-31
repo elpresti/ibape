@@ -4,23 +4,14 @@
  */
 package modelo.dataCapture;
 
-import gui.PanelOpcConfiguracion;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import persistencia.Logueador;
 
 /**
@@ -54,21 +45,13 @@ public class LanSonda {
             //extrae la IP de la rutaSondaImgs e intenta establecer una conexion con el equipo remoto,
             //si no hay exception --> salida=true;
             InetAddress IPaddress = InetAddress.getByName(getCarpetaHistoricoRemoto());
-            //byte[] bytes = IPaddress.getAddress();
-            // Convierte los bytes de la dirección IP a valores sin
-            // signo y los presenta separados por espacios
-            /*for (int cnt = 0; cnt < bytes.length; cnt++) {
-            int uByte = bytes[cnt] < 0 ? bytes[cnt] + 256 : bytes[cnt];
-            System.out.print(uByte + ".");
-            
-            }*/
             sePudo = IPaddress.isReachable(5000); //5000=tiempo de espera por respuesta del equipo
-            //test
+            /*//test
             if (sePudo) {
                 System.out.println("El equipo responde -" + IPaddress);
             } else {
                 System.out.println("El equipo NO responde-" + IPaddress);
-            }
+            }*/
         } catch (IOException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
@@ -82,19 +65,18 @@ public class LanSonda {
         String[] archivosL = dirLocal.list();
         File dirRemoto = new File(getCarpetaHistoricoRemoto());
         String[] archivosR = dirRemoto.list();
-        String[] archivosNuevos = null;
-       
+        String[] archivosNuevos = {""};
 
         if (archivosR == null) {
             System.out.println("No hay ficheros en el directorio especificado");
         } else {
-            Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal()+"\\"+archivosL[archivosL.length-1]);
-             int i = 0;
-             for (int x = 0; x < archivosL.length-1; x++) {
-                Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto()+"\\"+archivosR[x].toString());
+            Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length - 1]);
+            int i = 0;
+            for (int x = 0; x <= archivosR.length - 1; x++) {
+                Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto() + "\\" + archivosR[x].toString());
                 if (fechaUltimoRemoto.compareTo(fechaUltimoLocal) > 0) {
-                    System.out.println(archivosL[x]); //archivo remoto que no esta en local (fechaR>fechaL)
-                    archivosNuevos[i] = archivosL[x];
+                    //System.out.println(archivosR[x]); //archivo remoto que no esta en local (fechaR>ultimo(fechaL))
+                    archivosNuevos[i] = archivosR[x];
                     i++;
                 }
             }
@@ -103,7 +85,6 @@ public class LanSonda {
     }
 
     private void inicializar() {
-        //trabajo de hoy
         setEstadoConexion(0);
     }
 
@@ -111,24 +92,19 @@ public class LanSonda {
         boolean sePudo = false;
         //intenta listar archivos de la rutaIP especificada y si lo logra hace setHistoricoRemoto(rutaSondaImgs),
         //si no hay exception --> salida=true;
-        // Archivo o directorio a mover 
-        File archivo = null;
-
-        for (int x = 0; x < archivos.length; x++) {
-            archivo = new File(archivos[x]);
+        int x = 0;
+        while (x <= archivos.length - 1) {
             try {
-                //boolean semovio = archivo.renameTo(new File(getCarpetaHistoricoLocal(), archivo.getName()));
-                copy(archivos[x], getCarpetaHistoricoLocal() + archivo.getName());
-                sePudo = true;
-                /*if (!semovio) {
-                System.out.println("no se pudo copiar " + archivo.getName());//Entonces no se movió el archivo al nuevo directorio}
-                }
-                sePudo = semovio; //no es muy cierto esto, porq si falla uno y el q sigue no es true
-                 */
+                String from = getCarpetaHistoricoRemoto() + "\\" + archivos[x];
+                String to = getCarpetaHistoricoLocal() + "\\" + archivos[x];
+                copy(from, to);
             } catch (IOException ex) {
-                sePudo = false;
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
+            x++;
+        }
+        if (x == archivos.length - 1) {
+            sePudo = true;
         }
         return sePudo;
     }
@@ -137,14 +113,6 @@ public class LanSonda {
         File arch = new File(archivo);
         long ms = arch.lastModified();
         Date d = new Date(ms);
-        /*Calendar c = new GregorianCalendar();
-        c.setTime(d);
-        fechaNueva[0] = c.get(Calendar.DATE);//Integer.toString(c.get(Calendar.DATE));
-        fechaNueva[1] = c.get(Calendar.MONTH);
-        fechaNueva[2] = c.get(Calendar.YEAR);
-        fechaNueva[3] = c.get(Calendar.HOUR_OF_DAY);
-        fechaNueva[4] = c.get(Calendar.MINUTE);
-        fechaNueva[5] = c.get(Calendar.SECOND); */
         return d;
     }
 
@@ -227,14 +195,16 @@ public class LanSonda {
     public void setFyhUltimoArchivoLeido(java.util.Date fyhUltimoArchivoLeido) {
         this.fyhUltimoArchivoLeido = fyhUltimoArchivoLeido;
     }
-    
-         public static void main(String[] args) {      
-        // OK - LanSonda.getInstance().verificaConexionAequipo("NECROPHAGIST-PC");
-        // OK - LanSonda.getInstance().verificaAccesoAcarpetaRemota("\\\\192.168.1.102\\Users\\Necrophagist\\Desktop\\Tesis\\asd"); //tiene que empezar con las 4\
+
+    /*
+    public static void main(String[] args) {
+        //tests        
         LanSonda.getInstance().setCarpetaHistoricoLocal("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd");
         LanSonda.getInstance().setCarpetaHistoricoRemoto("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd1");
-        LanSonda.getInstance().hayArchivosNuevos();
-        
+        // OK - LanSonda.getInstance().verificaConexionAequipo("NECROPHAGIST-PC");
+        // OK - LanSonda.getInstance().verificaAccesoAcarpetaRemota("\\\\192.168.1.102\\Users\\Necrophagist\\Desktop\\Tesis\\asd"); //tiene que empezar con las 4\
+        // OK - LanSonda.getInstance().hayArchivosNuevos();
+        // OK -LanSonda.getInstance().copiarArchivosRemotos(LanSonda.getInstance().hayArchivosNuevos());
     }
-    
+    */
 }
