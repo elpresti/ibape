@@ -11,6 +11,7 @@ package modelo.dataManager;
 public class CategoriaPoi {
     private String titulo;
     private String pathIcono;
+    private int id;
     
     public CategoriaPoi(){
     }
@@ -41,6 +42,14 @@ public class CategoriaPoi {
      */
     public void setPathIcono(String pathIcono) {
         this.pathIcono = pathIcono;
+    }
+
+    public void setId(int id) {
+        this.id=id;
+    }
+
+    public int getId() {
+        return id;
     }
     
 }

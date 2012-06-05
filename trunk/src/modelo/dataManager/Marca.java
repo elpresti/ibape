@@ -11,6 +11,7 @@ package modelo.dataManager;
 public class Marca {
     private double profundidad;
     private String areaImagen;
+    private int id;
     
     public Marca(){        
     }
@@ -47,5 +48,13 @@ public class Marca {
         double profProm=0;
         //----------- metodo pendiente ------------
         return profProm;
+    }
+
+    public void setId(int id) {
+        this.id =id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 }
