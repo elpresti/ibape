@@ -10,15 +10,16 @@ import java.util.ArrayList;
  *
  * @author Sebastian
  */
-public class Poi {
+public class POI {
     private double latitud;
     private double longitud;
     private java.util.Date fechaHora;    
     private CategoriaPoi categoria;
     private ArrayList<Marca> marcas;
-    private String pathImg; 
+    private String pathImg;
+    private int id;
     
-    public Poi(){        
+    public POI(){        
     }
 
     /**
@@ -109,5 +110,11 @@ public class Poi {
         double profProm=0;
         //---------- metodo pendiente --------
         return profProm;
-    }    
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
 }

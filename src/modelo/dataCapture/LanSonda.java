@@ -204,7 +204,7 @@ public class LanSonda {
         // OK - LanSonda.getInstance().verificaConexionAequipo("NECROPHAGIST-PC");
         // OK - LanSonda.getInstance().verificaAccesoAcarpetaRemota("\\\\192.168.1.102\\Users\\Necrophagist\\Desktop\\Tesis\\asd"); //tiene que empezar con las 4\
         // OK - LanSonda.getInstance().hayArchivosNuevos();
-        // OK -LanSonda.getInstance().copiarArchivosRemotos(LanSonda.getInstance().hayArchivosNuevos());
-    }
-    */
+         LanSonda.getInstance().copiarArchivosRemotos(LanSonda.getInstance().hayArchivosNuevos());
+    }*/
+    
 }
