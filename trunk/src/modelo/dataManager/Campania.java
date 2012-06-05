@@ -19,8 +19,8 @@ public class Campania {
     private java.util.Date fechaFin;
     private String folderHistorico;
     private int estado; //2=Pausada 1=en curso  0=finalizada
-    private Poi ultimoPoiConImg;
-    private ArrayList<Poi> pois;
+    private POI ultimoPoiConImg;
+    private ArrayList<POI> pois;
 
     public Campania(){        
     }
@@ -70,28 +70,28 @@ public class Campania {
     /**
      * @return the ultimoPoiConImg
      */
-    public Poi getUltimoPoiConImg() {
+    public POI getUltimoPoiConImg() {
         return ultimoPoiConImg;
     }
 
     /**
      * @param ultimoPoiConImg the ultimoPoiConImg to set
      */
-    public void setUltimoPoiConImg(Poi ultimoPoiConImg) {
+    public void setUltimoPoiConImg(POI ultimoPoiConImg) {
         this.ultimoPoiConImg = ultimoPoiConImg;
     }
 
     /**
      * @return the pois
      */
-    public ArrayList<Poi> getPois() {
+    public ArrayList<POI> getPois() {
         return pois;
     }
 
     /**
      * @param pois the pois to set
      */
-    public void setPois(ArrayList<Poi> pois) {
+    public void setPois(ArrayList<POI> pois) {
         this.pois = pois;
     }
     
@@ -109,26 +109,26 @@ public class Campania {
         this.id = id;
     }
     
-    public boolean agregarPoi(Poi nuevoPoi){
+    public boolean agregarPoi(POI nuevoPoi){
         boolean sePudo=false;
         //-------- metodo pendiente --------
         return sePudo;
     }
     
-    public boolean modificarPoi(Poi poiAmodificar){
+    public boolean modificarPoi(POI poiAmodificar){
         boolean sePudo=false;
         //-------- metodo pendiente --------
         return sePudo;
     }
     
-    public boolean eliminarPoi(Poi poiAeliminar){
+    public boolean eliminarPoi(POI poiAeliminar){
         boolean sePudo=false;
         //-------- metodo pendiente --------
         return sePudo;
     }
     
-    public ArrayList<Poi> obtenerPois(ArrayList<CategoriaPoi> cats){
-        ArrayList<Poi> poisEncontrados=new ArrayList<Poi>();
+    public ArrayList<POI> obtenerPois(ArrayList<CategoriaPoi> cats){
+        ArrayList<POI> poisEncontrados=new ArrayList<POI>();
         //método que obtiene el listado de Pois que sean de las categorias solicitadas
         
         //-------- metodo pendiente --------
