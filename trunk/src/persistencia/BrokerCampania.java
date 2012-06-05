@@ -143,39 +143,31 @@ public class BrokerCampania extends BrokerPpal{
 
     public boolean updateCampania(modelo.dataManager.Campania campania){
         boolean sePudo = false;
-
-        try {       
-  
+        try {         
             String fechaInicio = null;
             if (campania.getFechaInicio() != null) {
                 fechaInicio = ""+campania.getFechaInicio().getTime()+"";
-            }            
-            
+            }                        
             String fechaFin = null;
             if (campania.getFechaFin() != null) {
                 fechaFin = ""+campania.getFechaFin().getTime()+"";
-            }               
-            
+            }                           
             String folderHistorico = null;
             if (campania.getFolderHistorico() != null){
                 folderHistorico = "'"+campania.getFolderHistorico()+"'";
-            }
-            
+            }            
             String descripcion = null;
             if (campania.getDescripcion() != null){
                 descripcion = "'"+campania.getDescripcion()+"'";
             }
-
             String barco = null;
             if (campania.getBarco() != null){
                 barco = "'"+campania.getBarco()+"'";
             }
-
             String capitan = null;
             if (campania.getCapitan() != null){
                 capitan = "'"+campania.getCapitan()+"'";
-            }
-            
+            }           
             String estado = String.valueOf(campania.getEstado());
             
             String sqlQuery = "UPDATE Campanias "
@@ -194,7 +186,7 @@ public class BrokerCampania extends BrokerPpal{
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
-        
+
         return sePudo;
     }
     
@@ -213,6 +205,6 @@ public class BrokerCampania extends BrokerPpal{
         }        
         
         return sePudo;
-    }
+    }        
 
 }

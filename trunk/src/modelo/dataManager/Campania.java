@@ -23,7 +23,7 @@ public class Campania {
     private ArrayList<Poi> pois;
 
     public Campania(){        
-    }    
+    }
 
     /**
      * @return the barco

@@ -4,11 +4,15 @@
  */
 package modelo.dataManager;
 
+import java.util.Date;
+
 /**
  *
  * @author Sebastian
  */
-public class SondaSets {
+public class SondaSet {
+    private Date usadoDesde;
+    private Date usadoHasta;
     private int frecuencia; // LOW/1=MID/HIGH (rango de valores posibles: 0-255)
     private int ganancia; // (rango de valores posibles: 0-255)
     private int stc; // STC (Valor de Ganancia variable) (rango de valores posibles: 0-255)
@@ -18,13 +22,13 @@ public class SondaSets {
     private int shift; // Desplazamiento [centimetros] (rango de valores posibles: 0-59800) (este valor multiplicado por 2.5 da el desplazamiento de 0 en centímetros)
     private int expander; // Tamaño de expander del fondo (rango de valores posibles: 0-32, 0=OFF) (valor en metros del expander)
     private int unidadDeEscala; // 0= metros ,1= brasas, y 2= pies usados para calcular la escala
-    static SondaSets unicaInstancia;
+    static SondaSet unicaInstancia;
     
-    private SondaSets (){}
+    private SondaSet (){}
     
-    public static SondaSets getInstance(){
+    public static SondaSet getInstance(){
         if (unicaInstancia == null){
-            unicaInstancia=new SondaSets();
+            unicaInstancia=new SondaSet();
         }
         return unicaInstancia;
     }
@@ -153,6 +157,34 @@ public class SondaSets {
      */
     public void setUnidadDeEscala(int unidadDeEscala) {
         this.unidadDeEscala = unidadDeEscala;
+    }
+
+    /**
+     * @return the usadoDesde
+     */
+    public Date getUsadoDesde() {
+        return usadoDesde;
+    }
+
+    /**
+     * @param usadoDesde the usadoDesde to set
+     */
+    public void setUsadoDesde(Date usadoDesde) {
+        this.usadoDesde = usadoDesde;
+    }
+
+    /**
+     * @return the usadoHasta
+     */
+    public Date getUsadoHasta() {
+        return usadoHasta;
+    }
+
+    /**
+     * @param usadoHasta the usadoHasta to set
+     */
+    public void setUsadoHasta(Date usadoHasta) {
+        this.usadoHasta = usadoHasta;
     }
 
 
