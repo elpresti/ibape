@@ -392,7 +392,7 @@ import java.util.logging.Logger;
                 salida = rs.getInt(1);
             }            
         } catch (SQLException ex) {
-            Logger.getLogger(BrokerPpal.class.getName()).log(Level.SEVERE, null, ex);
+            Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return salida;
     }

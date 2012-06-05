@@ -73,11 +73,26 @@ public class AdministraCampanias {
     public boolean eliminarCampania(Campania campAeliminar){
         boolean sePudo=false;
         try {
-            //borra el objeto con ID campAeliminar.getId() de la TablaCampanias
-            persistencia.BrokerCampania.getInstance().deleteCampania(campAeliminar);
-            //borra el objeto con ID campAeliminar.getId() del ArrayList campanias
-            campanias.remove(getCampania(campAeliminar.getId()));
-            sePudo=true;
+              //si la campAeliminar tiene historico, lo borra
+              boolean borraHistorico = true;
+              if (AdministraCampanias.getInstance().verificaSiTieneHistorico(campAeliminar.getId())){
+                  
+                 if (persistencia.BrokerHistorico.getInstance().borraHistorico(campAeliminar.getId())){
+                    Logueador.getInstance().agregaAlLog("Se borró el Historico de la Campaña especificada");
+                 }
+                 else { 
+                     Logueador.getInstance().agregaAlLog("No se pudo borrar el historico de la Campaña especificada"); 
+                     borraHistorico = false;
+                 }
+                 
+              }
+              //borra el objeto con ID campAeliminar.getId() de la TablaCampanias
+              boolean borraCampDeTabla = persistencia.BrokerCampania.getInstance().deleteCampania(campAeliminar);            
+              //borra el objeto con ID campAeliminar.getId() del ArrayList campanias (osea, de memoria)
+              campanias.remove(campAeliminar);
+
+              Logueador.getInstance().agregaAlLog("Se borró de la Base de Datos la campaña especificada");
+              sePudo=borraCampDeTabla && borraHistorico;
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); }
@@ -136,49 +151,6 @@ public class AdministraCampanias {
         }
         return sePudo;
     }
-  
-/*    
-    public boolean leerCampaniasDelDisco(){  // <---- método posiblemente innecesario
-        boolean sePudo=false;
-        // metodo pendiente que lee las campanias del disco, transforma cada
-        // una en un objeto de tipo Campania y la agrega al ArrayList "campanias"
-        campanias.clear();
-        try {
-            //if que chequea si existe el directorio "Historico"
-            File pathHistorico = new File("Historico");
-            if (pathHistorico.exists()){               
-                //tilda el atributo tieneHistorico=false de todas las entradas de TablaCampanias
-                persistencia.BrokerCampania.getInstance().setTodosTienenHistorico(false);
-                //obtiene las carpetas del directorio
-                FileFilter fileFilter = new FileFilter() {
-                    public boolean accept(File file) {
-                        return file.isDirectory();
-                    }
-                };
-                File[] dirs = pathHistorico.listFiles(fileFilter);
-                // por cada carpeta leida chequea que el nombre corresponda a alguna
-                // entrada de TablaCampanias y la marca tieneHistorico=true
-                for (int i=0;i<dirs.length;i++){
-                    persistencia.BrokerCampania.getInstance().setTieneHistorico(dirs[i].getName());
-                }
-                // elimina de TablaCampanias todas las tieneHistorico=false;
-                persistencia.BrokerCampania.getInstance().borraNoTienenHistorico();
-                int[] idsCampania = persistencia.BrokerCampania.getInstance().obtieneTodosLosIds();
-                for (int i=0;i<idsCampania.length;i++){
-                    campanias.add(persistencia.BrokerCampania.getInstance().getCampaniaFromDb(idsCampania[i]));
-                }
-            }
-            else
-              { //si no existe termina y vacía la TablaCampanias
-                persistencia.BrokerCampania.getInstance().vaciaTablaCampanias(); }
-            //sePudo=true;
-        }
-        catch (Exception e ){
-            Logueador.getInstance().agregaAlLog(e.toString());
-        }                
-        return sePudo;
-    }
-*/
     
     public boolean verificaSiTieneHistorico(int idCampania){
         boolean tieneHistorico=false;

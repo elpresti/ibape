@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -443,8 +444,15 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
 }//GEN-LAST:event_btnFinalizarCampaniaActionPerformed
 
 private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-    controllers.ControllerCampania.getInstance().borrarCampania(getIdDeCampaniaSeleccionada());
-    controlaPanelAccionesCampania();
+    String txtPregunta = "Está por eliminar una campaña del disco, está usted seguro?";
+    boolean tieneHistorico = (Boolean) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_TIENE_HISTORICO);
+    if (tieneHistorico){
+        txtPregunta = "ATENCIÓN! La campaña que pretende eliminar del disco contiene datos históricos, está seguro que desea eliminar la campaña y su historico?";
+    }
+    if (JOptionPane.showConfirmDialog(null, txtPregunta, "Eliminar campaña seleccionada", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+        controllers.ControllerCampania.getInstance().borrarCampania(getIdDeCampaniaSeleccionada());
+        controlaPanelAccionesCampania();        
+    }
 }//GEN-LAST:event_btnEliminarActionPerformed
 
 private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -768,7 +776,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     
     public int getIdDeCampaniaSeleccionada(){
         int salida = -1;
-        int filaSeleccionada = tablaCampanias.getSelectedRow();   
+        int filaSeleccionada = tablaCampanias.getSelectedRow();
         if (filaSeleccionada>=0){
             salida = (Integer) modeloTabla.getValueAt(filaSeleccionada, NRO_COL_ID_CAMP);
         }                

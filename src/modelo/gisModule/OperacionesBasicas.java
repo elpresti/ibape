@@ -113,13 +113,17 @@ public class OperacionesBasicas {
         Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
         //La erosionamos con Filtros.erode()
         BufferedImage imgProcesada = filtros.erode(getImagenOriginal());
+        getInstance().grabarImagen(imgProcesada);
         //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20
         imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
-      //  Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
+        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
+        getInstance().grabarImagen(imgProcesada);
         //Obtenemos bordes de la imagen binarizada segmentacion.Bordes(imgProcesada)
-      //  imgProcesada = segmentacion.Bordes(imgProcesada);
-
+        imgProcesada = segmentacion.Bordes(imgProcesada);
+        getInstance().grabarImagen(imgProcesada);
+        
         imgProcesada = filtros.erode(imgProcesada);
         getInstance().grabarImagen(imgProcesada);
 
