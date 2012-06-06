@@ -56,53 +56,64 @@ public class Csv {
         return unicaInstancia;
     }
 
-    public ArrayList<SondaSetHistorico> leerCsv(String rutaCsv){
+    public ArrayList<SondaSetHistorico> getSondaSetsFromCsv(String rutaCsv){
         ArrayList<SondaSetHistorico> sshDistintos = new ArrayList();
         try {            
             CsvReader sondaSets = new CsvReader(rutaCsv);
             try {                 
                  SondaSetHistorico ssAnterior = new SondaSetHistorico();
                  int i=0;
+                 int frecuenciaLeida;
+                 int gananciaLeida;
+                 int stcLeido;
+                 int lwLeido;
+                 int gsLeido;
+                 int escalaLeida;
+                 int expanderLeido;
+                 int shiftLeido;
+                 int unidadLeida;
+                 Date fechaYhoraLeida;
                  while (sondaSets.readRecord()) {
-                    if (Integer.parseInt(sondaSets.get(NRO_COL_FRECUENCIA).trim()) != ssAnterior.getFrecuencia() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_GANANCIA).trim()) != ssAnterior.getGanancia() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_STC).trim()) != ssAnterior.getStc() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_LW).trim()) != ssAnterior.getLineaBlanca() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_GS).trim()) != ssAnterior.getVelPantalla() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_ESCALA).trim()) != ssAnterior.getEscala() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_SHIFT).trim()) != ssAnterior.getShift() || 
-                        Integer.parseInt(sondaSets.get(NRO_COL_UNIDAD).trim()) != ssAnterior.getUnidadDeEscala()
-                            ){                        
-                        ssAnterior.setFrecuencia(Integer.parseInt(sondaSets.get(NRO_COL_FRECUENCIA).trim()));
-                        ssAnterior.setGanancia(Integer.parseInt(sondaSets.get(NRO_COL_GANANCIA).trim()));
-                        ssAnterior.setStc(Integer.parseInt(sondaSets.get(NRO_COL_STC).trim()));
-                        ssAnterior.setLineaBlanca(Integer.parseInt(sondaSets.get(NRO_COL_LW).trim()));
-                        ssAnterior.setVelPantalla(Integer.parseInt(sondaSets.get(NRO_COL_GS).trim()));
-                        ssAnterior.setEscala(Integer.parseInt(sondaSets.get(NRO_COL_ESCALA).trim()));
-                        ssAnterior.setShift(Integer.parseInt(sondaSets.get(NRO_COL_SHIFT).trim()));
-                        ssAnterior.setUnidadDeEscala(Integer.parseInt(sondaSets.get(NRO_COL_UNIDAD).trim()));
-                        Date fechaYhora = armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),Integer.parseInt(sondaSets.get(NRO_COL_HORA).trim()));
-                        ssAnterior.setUsadoDesde(fechaYhora);
-                        ssAnterior.setUsadoHasta(fechaYhora);
-                        sshDistintos.add(ssAnterior);
+                    if (sondaSets.getColumnCount()>1) {
+                        frecuenciaLeida = Integer.parseInt(sondaSets.get(NRO_COL_FRECUENCIA).trim());
+                        gananciaLeida = Integer.parseInt(sondaSets.get(NRO_COL_GANANCIA).trim());
+                        stcLeido = Integer.parseInt(sondaSets.get(NRO_COL_STC).trim());
+                        lwLeido = Integer.parseInt(sondaSets.get(NRO_COL_LW).trim());
+                        gsLeido = Integer.parseInt(sondaSets.get(NRO_COL_GS).trim());
+                        escalaLeida = Integer.parseInt(sondaSets.get(NRO_COL_ESCALA).trim());
+                        expanderLeido = Integer.parseInt(sondaSets.get(NRO_COL_EXPANDER).trim());
+                        shiftLeido = Integer.parseInt(sondaSets.get(NRO_COL_SHIFT).trim());
+                        unidadLeida = Integer.parseInt(sondaSets.get(NRO_COL_UNIDAD).trim());
+                        fechaYhoraLeida = armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),
+                                    Integer.parseInt(sondaSets.get(NRO_COL_HORA).trim()));                        
+                        if (frecuenciaLeida != ssAnterior.getFrecuencia() || 
+                            gananciaLeida != ssAnterior.getGanancia() || 
+                            stcLeido != ssAnterior.getStc() || 
+                            lwLeido != ssAnterior.getLineaBlanca() || 
+                            gsLeido != ssAnterior.getVelPantalla() || 
+                            escalaLeida != ssAnterior.getEscala() || 
+                            expanderLeido != ssAnterior.getExpander() ||                                 
+                            shiftLeido != ssAnterior.getShift() || 
+                            unidadLeida != ssAnterior.getUnidadDeEscala()
+                                ){  
+                            SondaSetHistorico unSondaSet = new SondaSetHistorico();
+                            unSondaSet.setFrecuencia(frecuenciaLeida);
+                            unSondaSet.setGanancia(gananciaLeida);
+                            unSondaSet.setStc(stcLeido);
+                            unSondaSet.setLineaBlanca(lwLeido);
+                            unSondaSet.setVelPantalla(gsLeido);
+                            unSondaSet.setEscala(escalaLeida);
+                            unSondaSet.setShift(shiftLeido);
+                            unSondaSet.setExpander(expanderLeido);
+                            unSondaSet.setUnidadDeEscala(unidadLeida);
+                            unSondaSet.setUsadoDesde(fechaYhoraLeida);
+                            unSondaSet.setUsadoHasta(fechaYhoraLeida);
+                            sshDistintos.add(unSondaSet);
+                            ssAnterior = unSondaSet;
+                        }
+                        else
+                        {   sshDistintos.get(sshDistintos.size()-1).setUsadoHasta(fechaYhoraLeida);      }
                     }
-                    else
-                      { Date fechaYhora = armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),Integer.parseInt(sondaSets.get(NRO_COL_HORA).trim()));
-                        sshDistintos.get(sshDistintos.size()-1).setUsadoHasta(fechaYhora);
-                      }
-/*                        
-                    String frecuencia = sondaSets.get(NRO_COL_FRECUENCIA);
-                    String ganancia = sondaSets.get(NRO_COL_GANANCIA);
-                    String stc = sondaSets.get(NRO_COL_STC);
-                    String lw = sondaSets.get(NRO_COL_LW);
-                    String gs = sondaSets.get(NRO_COL_GS);
-                    String escala = sondaSets.get(NRO_COL_ESCALA);
-                    String shift = sondaSets.get(NRO_COL_SHIFT);
-                    String expander = sondaSets.get(NRO_COL_EXPANDER);
-                    String unidad = sondaSets.get(NRO_COL_UNIDAD);
-                    String hora = sondaSets.get(NRO_COL_HORA);
-                    String fecha = sondaSets.get(NRO_COL_FECHA);
-*/
                     i++;
                  }
                  sondaSets.close();
@@ -141,10 +152,10 @@ public class Csv {
         calendario.set(anio, mes-1, dia, hora, minutos, segundos);        
         return calendario.getTime();
     }
+
     
-    public static void main(String[] args){
-        Csv csv = getInstance();
-        ArrayList<SondaSetHistorico> sshDistintos = csv.leerCsv("Historico\\camp34\\TestValoresCsv.txt");
+    public static void main(String[] args){        
+        ArrayList<SondaSetHistorico> sshDistintos = Csv.getInstance().getSondaSetsFromCsv("Historico\\camp34\\TestValoresCsv.txt");
         //sePudo = sePudo;
     }
     
