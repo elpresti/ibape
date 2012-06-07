@@ -113,19 +113,19 @@ public class OperacionesBasicas {
         Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
         //La erosionamos con Filtros.erode()
         BufferedImage imgProcesada = filtros.erode(getImagenOriginal());
-        getInstance().grabarImagen(imgProcesada);
+//        getInstance().grabarImagen(imgProcesada);
         //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20
         imgProcesada = filtros.Binarizacion(imgProcesada, 20);
-        getInstance().grabarImagen(imgProcesada);
+//        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
-        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
+//        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
         getInstance().grabarImagen(imgProcesada);
         //Obtenemos bordes de la imagen binarizada segmentacion.Bordes(imgProcesada)
-        imgProcesada = segmentacion.Bordes(imgProcesada);
-        getInstance().grabarImagen(imgProcesada);
+//        imgProcesada = segmentacion.Bordes(imgProcesada);
+//        getInstance().grabarImagen(imgProcesada);
         
-        imgProcesada = filtros.erode(imgProcesada);
-        getInstance().grabarImagen(imgProcesada);
+//        imgProcesada = filtros.erode(imgProcesada);
+//        getInstance().grabarImagen(imgProcesada);
 
         //Armo el arreglo de la posicion del fondo en todo el ancho de la imagen.
         ArrayList<Integer> fondo = buscaFondo(imgProcesada);
@@ -154,29 +154,36 @@ public class OperacionesBasicas {
 //        hsb = new float[3];
 
         boolean noencontrofondo = true;
-        int contAncho = 1;
-        int contAlto = alto;
+        int contAncho = 1;      //maximo 966
+        int contAlto = alto-2;    //maximo 635
 
 
+          
 
-            while (contAncho<ancho)  {
+            while (contAncho<ancho )  {
 
+//              Object e = col.obtieneColor(img.getRGB(contAncho, contAlto));
+//                if (!(col.getColoresMap().get(e).equals("Negro"))) {
+//                System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
+//
+                contAlto = alto-2;
+                noencontrofondo=true;
 
-                contAlto = alto;
-			    while((contAlto>0) && (noencontrofondo=true)) {
+                while((contAlto>0) && (noencontrofondo==true)) {
 
-             //   if compara("Blanco") {
-                    Object e2 = col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto)));
+                    Object e = col.obtieneColor(img.getRGB(contAncho, contAlto));
 
-                    boolean e = (e2.equals("Blanco"));
+   //               Object color = col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto)));
 
-                    
-                
+   //               if (col.getColoresMap().get(e).equals("Blanco")) {
+                    if (!(col.getColoresMap().get(e).equals("Blanco"))){
+                    //System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
 
-
-                contAlto--;
+                        noencontrofondo=false;
+                    }
+                    contAlto--;
                 }
-
+                fondo.add(contAlto+1);
             contAncho++;
             }
 
@@ -203,7 +210,7 @@ public class OperacionesBasicas {
         return fondo;
     }
 //
-//      public boolean compara(String color){
+//      public boolean compara(String color, BufferedImage img){
 //        Colores col = new Colores();
 //        boolean bol=false;
 //        if (col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto))).equals(color))
