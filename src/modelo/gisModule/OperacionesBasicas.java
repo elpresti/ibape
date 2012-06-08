@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 
+
 /**
  *
  * @author emmmau
@@ -128,24 +129,27 @@ public class OperacionesBasicas {
 //        getInstance().grabarImagen(imgProcesada);
 
         //Armo el arreglo de la posicion del fondo en todo el ancho de la imagen.
-        ArrayList<Integer> fondo = buscaFondo(imgProcesada);
-
+       // ArrayList<Integer> fondo = buscaFondo(imgProcesada);
+        int fondo[] = new int[967];
+        fondo = buscaFondo(imgProcesada);
         //buscaMarcas(fondo)
 
 
         return cantPeces;
     }
 
-    public ArrayList<Integer> buscaFondo (BufferedImage img) {
+    public int[] buscaFondo (BufferedImage img) {
 
-        ArrayList<Integer> fondo = new ArrayList<Integer>();
+       // ArrayList<Integer> fondo = new ArrayList<Integer>();
+        
         int ancho = img.getWidth();
 		int alto = img.getHeight();
 //        int valorRGB;
 //		int valoresRGB[] = new int[3];
 //		float valoresHSB[] = new float[3];
 		Colores col = new Colores();
-//		int negro = col.obtieneNumeroColor("Negro");
+		int fondo[] = new int[967];
+//        int negro = col.obtieneNumeroColor("Negro");
 //		int marron = col.obtieneNumeroColor("Marron");
 //        int rgbs[];
 //	    float hsb[];
@@ -176,14 +180,21 @@ public class OperacionesBasicas {
    //               Object color = col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto)));
 
    //               if (col.getColoresMap().get(e).equals("Blanco")) {
-                    if (!(col.getColoresMap().get(e).equals("Blanco"))){
+                    if ((col.getColoresMap().get(e).equals("Negro"))){
                     //System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
-
-                        noencontrofondo=false;
+                            if (((contAncho==1) || ((Math.abs(contAlto-fondo[contAncho-1])) <5))) {
+                                noencontrofondo=false;
+                             }
                     }
                     contAlto--;
                 }
-                fondo.add(contAlto+1);
+                if (contAlto <5) {
+                   fondo[contAncho]=fondo[contAncho-1];
+
+                }
+                else {
+                   fondo[contAncho]=contAlto+1;
+                }
             contAncho++;
             }
 
