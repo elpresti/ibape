@@ -14,7 +14,7 @@ import persistencia.Logueador;
  */
 public class ControllerPpal {
     static ControllerPpal unicaInstancia;    
-    private ControllerDataCapture contDataCapture=ControllerDataCapture.getInstance();
+    private ControllerConfig contConfig=ControllerConfig.getInstance();
     
     public void accionesAlSalir(){
         if (BrokerDbMapa.getInstance().isUsarMapaNavegacion()){
@@ -22,12 +22,13 @@ public class ControllerPpal {
             modelo.gisModule.Browser.getInstance().cerrarBrowserPortable();            
         }
         controllers.ControllerPpal.getInstance().guardarConfigPanelConfig();
-    }   
+    }
     
     public void accionesAlIniciar(){
-        ControllerDataCapture.getInstance().obtienePuertosComExistentes();            
+        ControllerConfig.getInstance().obtienePuertosComExistentes();            
         gui.PanelOpcConfiguracion.getInstance().btnEscanearPuertosPresionado(true);
         persistencia.BrokerCampania.getInstance();
+        controllers.ControllerHistorico.getInstance();
     }
     
     public static ControllerPpal getInstance() {
@@ -39,6 +40,7 @@ public class ControllerPpal {
     public boolean guardarConfigPanelConfig(){
         boolean sePudo=true;
         gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();
+        gui.PanelOpcCampanias c = gui.PanelOpcCampanias.getInstance();
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Gps(
                 String.valueOf(p.getChkEstadoGps().isSelected()), 
                 p.getComboPuertoGps().getSelectedItem().toString(), 
@@ -59,10 +61,10 @@ public class ControllerPpal {
                 p.getComboVelocidad().getSelectedItem().toString(), 
                 p.getComboTemp().getSelectedItem().toString());
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Historico(
-                String.valueOf(p.getChkHistoricoGps().isSelected()), 
-                String.valueOf(p.getChkHistoricoSonda().isSelected()), 
-                String.valueOf(p.getChkHistoricoPeces().isSelected()), 
-                String.valueOf(p.getChkHistoricoSondaSets().isSelected()));
+                String.valueOf(c.getChkHistoricoGps().isSelected()), 
+                String.valueOf(c.getChkHistoricoSonda().isSelected()), 
+                String.valueOf(c.getChkHistoricoPeces().isSelected()), 
+                String.valueOf(c.getChkHistoricoSondaSets().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().guardaConfiguracion();
         return sePudo;
     }

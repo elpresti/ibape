@@ -97,6 +97,9 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
           persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
+       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       }
     }
     else
     if (s.getSentenceId().equals("DBT"))
@@ -104,6 +107,9 @@ public void sentenceRead(SentenceEvent event) {
        seModifico=seModifico | getPunto().setProfundidad(dbt.getDepth());
        if (seModifico && bmn.isUsarMapaNavegacion()){
           persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
+       }
+       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosSonda()){
+          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
        }
     }
     else
@@ -118,6 +124,9 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
+       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       }
     }
     else
     if (s.getSentenceId().equals("VTG"))
@@ -127,6 +136,9 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
+       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       }
     }
     else
     if (s.getSentenceId().equals("GGA"))
@@ -134,6 +146,9 @@ public void sentenceRead(SentenceEvent event) {
        seModifico=seModifico | getPunto().setAltitud(gga.getAltitude());
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
+       }
+       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
        }
     }
     

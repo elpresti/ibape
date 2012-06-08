@@ -20,7 +20,7 @@ public class AdministraCampanias {
     private Campania campaniaEnCurso;
     private ArrayList<Campania> campanias=new ArrayList();
     
-    private AdministraCampanias(){        
+    private AdministraCampanias(){
     }
     
     
