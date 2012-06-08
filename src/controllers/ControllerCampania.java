@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import modelo.dataManager.AdministraCampanias;
+import org.jdom.Element;
+import persistencia.BrokerConfig;
+import persistencia.Logueador;
 
 /**
  *
@@ -81,4 +84,24 @@ public class ControllerCampania {
         return salida;
     }
 
+    public boolean leeDocYseteaPanelConfig_Historico(){
+        boolean sePudo=false;
+        //-- Actualiza los campos que corresponden del Document        
+        try {
+            Element raizConfiguracionIbape= BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
+            Element parametros=raizConfiguracionIbape.getChild("Parametros");        
+            gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosGps").getBooleanValue());
+            if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected()){
+                gui.PanelOpcCampanias.getInstance().clickEnChkHistoricoGps();
+            }
+            gui.PanelOpcCampanias.getInstance().getChkHistoricoSonda().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosSonda").getBooleanValue());
+            gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosProcImg").getBooleanValue());
+            gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosConfigSonda").getBooleanValue());
+            sePudo=true;
+            }
+        catch (Exception e) 
+            {  Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }    
+    
 }

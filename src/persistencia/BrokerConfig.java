@@ -184,6 +184,7 @@ public class BrokerConfig {
         
         //Traemos los valores actuales del Panel Configuracion
         gui.PanelOpcConfiguracion i = gui.PanelOpcConfiguracion.getInstance();
+        gui.PanelOpcCampanias c = gui.PanelOpcCampanias.getInstance();
         Element gpsConfig =  new Element("PanelConfiguracion-GPS");
         gpsConfig.setAttribute("Estado",String.valueOf(i.getChkEstadoGps().isSelected()));
         gpsConfig.setAttribute("ComboPuerto",i.getComboPuertoGps().getSelectedItem().toString());
@@ -212,10 +213,10 @@ public class BrokerConfig {
         elemConfig.addContent(unidades);
 
         Element historico =  new Element("PanelConfiguracion-Historico");
-        historico.setAttribute("GuardarDatosGps",String.valueOf(i.getChkHistoricoGps().isSelected()));
-        historico.setAttribute("GuardarDatosSonda",String.valueOf(i.getChkHistoricoSonda().isSelected()));
-        historico.setAttribute("GuardarDatosProcImg",String.valueOf(i.getChkHistoricoPeces().isSelected()));
-        historico.setAttribute("GuardarDatosConfigSonda",String.valueOf(i.getChkHistoricoSondaSets().isSelected()));
+        historico.setAttribute("GuardarDatosGps",String.valueOf(c.getChkHistoricoGps().isSelected()));
+        historico.setAttribute("GuardarDatosSonda",String.valueOf(c.getChkHistoricoSonda().isSelected()));
+        historico.setAttribute("GuardarDatosProcImg",String.valueOf(c.getChkHistoricoPeces().isSelected()));
+        historico.setAttribute("GuardarDatosConfigSonda",String.valueOf(c.getChkHistoricoSondaSets().isSelected()));
         elemConfig.addContent(historico);
         
         Element alertas =  new Element("PanelConfiguracion-Alertas");

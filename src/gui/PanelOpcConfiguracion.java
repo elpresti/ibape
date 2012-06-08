@@ -10,7 +10,7 @@
  */
 package gui;
 
-import controllers.ControllerDataCapture;
+import controllers.ControllerConfig;
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -164,12 +164,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         lblTemp = new org.jdesktop.swingx.JXLabel();
         panelComboTemp = new org.jdesktop.swingx.JXPanel();
         comboTemp = new javax.swing.JComboBox();
-        panelHistorico = new org.jdesktop.swingx.JXPanel();
-        lblHistorico = new org.jdesktop.swingx.JXLabel();
-        chkHistoricoGps = new javax.swing.JCheckBox();
-        chkHistoricoSonda = new javax.swing.JCheckBox();
-        chkHistoricoPeces = new javax.swing.JCheckBox();
-        chkHistoricoSondaSets = new javax.swing.JCheckBox();
         panelBotonGuardar = new org.jdesktop.swingx.JXPanel();
         btnGuardar = new javax.swing.JButton();
 
@@ -184,7 +178,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTitulo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 8));
 
         lblTitulo.setText("Configuración");
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         panelTitulo.add(lblTitulo);
 
         add(panelTitulo, java.awt.BorderLayout.NORTH);
@@ -253,7 +247,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTxtDispositivos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         lblDispositivos.setText("Dispositivos a utilizar:");
-        lblDispositivos.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblDispositivos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtDispositivos.add(lblDispositivos);
 
         panelBtnEscanearPuertos.setMaximumSize(new java.awt.Dimension(300, 25));
@@ -277,7 +271,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        chkEstadoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkEstadoGps.setLabel("GPS");
         chkEstadoGps.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -295,7 +289,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblTxtConfigGps.setText("Configuración de conexion al GPS:");
         lblTxtConfigGps.setEnabled(false);
-        lblTxtConfigGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTxtConfigGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloConfigGps.add(lblTxtConfigGps);
 
         panelConfigGps.add(panelTituloConfigGps);
@@ -309,7 +303,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblPuertoGps.setText("Puerto");
         lblPuertoGps.setEnabled(false);
-        lblPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloPuertoGps.add(lblPuertoGps);
 
         panelPuertoComGps.add(panelTituloPuertoGps);
@@ -319,7 +313,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboPuertoGps.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboPuertoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        comboPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboPuertoGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
         comboPuertoGps.setEnabled(false);
         comboPuertoGps.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -364,7 +358,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelGPSconexionTxt.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblGpsEstado.setEnabled(false);
-        lblGpsEstado.setFont(new java.awt.Font("Arial", 0, 14));
+        lblGpsEstado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblGpsEstado.setText("Desconectado");
         panelGPSconexionTxt.add(lblGpsEstado);
 
@@ -385,7 +379,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblVelocidadGps.setText("Velocidad (bps)");
         lblVelocidadGps.setEnabled(false);
-        lblVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloVelocidadGps.add(lblVelocidadGps);
 
         panelVelocidadGps.add(panelTituloVelocidadGps);
@@ -395,7 +389,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboVelocidadGps.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboVelocidadGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1200", "2400", "4800", "9600", "19200", "38400" }));
         comboVelocidadGps.setEnabled(false);
         comboVelocidadGps.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -416,7 +410,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblBitsDatosGps.setText("Bits de Datos");
         lblBitsDatosGps.setEnabled(false);
-        lblBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloBitsDatosGps.add(lblBitsDatosGps);
 
         panelBitsDeDatosGps.add(panelTituloBitsDatosGps);
@@ -426,7 +420,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboBitsDatosGps.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboBitsDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        comboBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboBitsDatosGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
         comboBitsDatosGps.setEnabled(false);
         comboBitsDatosGps.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -436,7 +430,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelBtnConectaGps.setPreferredSize(new java.awt.Dimension(200, 30));
 
-        btnConectaGps.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnConectaGps.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnConectaGps.setText("Conectar");
         btnConectaGps.setEnabled(false);
         btnConectaGps.addActionListener(new java.awt.event.ActionListener() {
@@ -446,7 +440,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         });
         panelBtnConectaGps.add(btnConectaGps);
 
-        btnDesconectaGps.setFont(new java.awt.Font("Tahoma", 1, 12));
+        btnDesconectaGps.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnDesconectaGps.setText("Desconectar");
         btnDesconectaGps.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -470,7 +464,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblParidadGps.setText("Paridad");
         lblParidadGps.setEnabled(false);
-        lblParidadGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblParidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloParidadGps.add(lblParidadGps);
 
         panelParidadGps.add(panelTituloParidadGps);
@@ -480,7 +474,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboParidadGps.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboParidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboParidadGps.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboParidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboParidadGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ninguno", "Par", "Impar" }));
         comboParidadGps.setEnabled(false);
         comboParidadGps.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -498,7 +492,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        chkEstadoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkEstadoSonda.setText("SONDA");
         chkEstadoSonda.setEnabled(false);
         chkEstadoSonda.addActionListener(new java.awt.event.ActionListener() {
@@ -517,7 +511,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblTxtConfigSonda.setText("Configuración de conexion a la Sonda:");
         lblTxtConfigSonda.setEnabled(false);
-        lblTxtConfigSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTxtConfigSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloConfigSonda.add(lblTxtConfigSonda);
 
         panelConfigSonda.add(panelTituloConfigSonda);
@@ -531,7 +525,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblPuertoSonda.setText("Puerto");
         lblPuertoSonda.setEnabled(false);
-        lblPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloPuertoSonda.add(lblPuertoSonda);
 
         panelPuertoComSonda.add(panelTituloPuertoSonda);
@@ -541,7 +535,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboPuertoSonda.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboPuertoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        comboPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboPuertoSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
         comboPuertoSonda.setEnabled(false);
         comboPuertoSonda.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -591,7 +585,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelSondaConexionTxt.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblSondaEstado.setEnabled(false);
-        lblSondaEstado.setFont(new java.awt.Font("Arial", 0, 14));
+        lblSondaEstado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblSondaEstado.setText("Desconectado");
         panelSondaConexionTxt.add(lblSondaEstado);
 
@@ -612,7 +606,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblVelocidadSonda.setText("Velocidad (bps)");
         lblVelocidadSonda.setEnabled(false);
-        lblVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloVelocidadSonda.add(lblVelocidadSonda);
 
         panelVelocidadSonda.add(panelTituloVelocidadSonda);
@@ -622,7 +616,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboVelocidadSonda.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboVelocidadSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1200", "2400", "4800", "9600", "19200", "38400" }));
         comboVelocidadSonda.setEnabled(false);
         comboVelocidadSonda.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -643,7 +637,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblBitsDatosSonda.setText("Bits de Datos");
         lblBitsDatosSonda.setEnabled(false);
-        lblBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloBitsDatosSonda.add(lblBitsDatosSonda);
 
         panelBitsDeDatosSonda.add(panelTituloBitsDatosSonda);
@@ -653,7 +647,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboBitsDatosSonda.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboBitsDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
-        comboBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboBitsDatosSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
         comboBitsDatosSonda.setEnabled(false);
         comboBitsDatosSonda.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -663,7 +657,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelBtnConectaSonda.setPreferredSize(new java.awt.Dimension(200, 30));
 
-        btnConectaSonda.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnConectaSonda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnConectaSonda.setText("Conectar");
         btnConectaSonda.setEnabled(false);
         btnConectaSonda.addActionListener(new java.awt.event.ActionListener() {
@@ -673,7 +667,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         });
         panelBtnConectaSonda.add(btnConectaSonda);
 
-        btnDesconectaSonda.setFont(new java.awt.Font("Tahoma", 1, 12));
+        btnDesconectaSonda.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnDesconectaSonda.setText("Desconecta");
         btnDesconectaSonda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -697,7 +691,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblParidadSonda.setText("Paridad");
         lblParidadSonda.setEnabled(false);
-        lblParidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblParidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloParidadSonda.add(lblParidadSonda);
 
         panelParidadSonda.add(panelTituloParidadSonda);
@@ -707,7 +701,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboParidadSonda.setPreferredSize(new java.awt.Dimension(350, 100));
         panelComboParidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboParidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboParidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboParidadSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ninguno", "Par", "Impar" }));
         comboParidadSonda.setEnabled(false);
         comboParidadSonda.setMaximumSize(new java.awt.Dimension(120, 20));
@@ -725,7 +719,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelPeces.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoDetectaPeces.setFont(new java.awt.Font("Tahoma", 0, 14));
+        chkEstadoDetectaPeces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkEstadoDetectaPeces.setText("Detección de Peces");
         chkEstadoDetectaPeces.setEnabled(false);
         chkEstadoDetectaPeces.addActionListener(new java.awt.event.ActionListener() {
@@ -746,7 +740,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblTxtRutaHistorico.setText(" Ruta al Historico Remoto (sonda):");
         lblTxtRutaHistorico.setEnabled(false);
-        lblTxtRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTxtRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloRutaHistorico.add(lblTxtRutaHistorico, java.awt.BorderLayout.SOUTH);
 
         panelConfigHistorico.add(panelTituloRutaHistorico);
@@ -763,7 +757,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         campoRutaHistorico.setPreferredSize(new java.awt.Dimension(250, 23));
         panelCampoRutaHistorico.add(campoRutaHistorico);
 
-        btnExaminarRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14));
+        btnExaminarRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExaminarRutaHistorico.setText("Examinar");
         btnExaminarRutaHistorico.setEnabled(false);
         panelCampoRutaHistorico.add(btnExaminarRutaHistorico);
@@ -827,7 +821,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         lblLanEstado.setText("Desconectado");
         lblLanEstado.setEnabled(false);
-        lblLanEstado.setFont(new java.awt.Font("Arial", 0, 14));
+        lblLanEstado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         panelLANconexionTxt.add(lblLanEstado);
 
         panelTodoLanStatus.add(panelLANconexionTxt);
@@ -848,7 +842,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTituloUnidades.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
         lblUnidades.setText("Unidades:");
-        lblUnidades.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblUnidades.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloUnidades.add(lblUnidades);
 
         panelUnidades.add(panelTituloUnidades);
@@ -863,7 +857,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTxtDistancia.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
 
         lblDistancia.setText("Distancia");
-        lblDistancia.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblDistancia.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtDistancia.add(lblDistancia);
 
         panelDistancia.add(panelTxtDistancia);
@@ -873,7 +867,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboDistancia.setPreferredSize(new java.awt.Dimension(350, 37));
         panelComboDistancia.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboDistancia.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboDistancia.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboDistancia.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Kilometros", "Millas" }));
         comboDistancia.setMaximumSize(new java.awt.Dimension(130, 23));
         comboDistancia.setMinimumSize(new java.awt.Dimension(130, 23));
@@ -892,7 +886,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTxtVelocidad.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
 
         lblVelocidad.setText("Velocidad");
-        lblVelocidad.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblVelocidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtVelocidad.add(lblVelocidad);
 
         panelVelocidad.add(panelTxtVelocidad);
@@ -902,7 +896,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboVelocidad.setPreferredSize(new java.awt.Dimension(350, 37));
         panelComboVelocidad.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboVelocidad.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboVelocidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboVelocidad.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Km/h", "Nudos" }));
         comboVelocidad.setMaximumSize(new java.awt.Dimension(130, 23));
         comboVelocidad.setMinimumSize(new java.awt.Dimension(130, 23));
@@ -921,7 +915,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTxtTemp.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
 
         lblTemp.setText("Temperatura");
-        lblTemp.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTemp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtTemp.add(lblTemp);
 
         panelTemperatura.add(panelTxtTemp);
@@ -931,7 +925,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboTemp.setPreferredSize(new java.awt.Dimension(350, 37));
         panelComboTemp.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboTemp.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboTemp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboTemp.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Celcius", "Farenheit", "Kelvin" }));
         comboTemp.setMaximumSize(new java.awt.Dimension(130, 23));
         comboTemp.setMinimumSize(new java.awt.Dimension(130, 23));
@@ -943,41 +937,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelUnidades.add(panelTemperatura);
 
         panelOpcionesGrales.add(panelUnidades);
-
-        panelHistorico.setMaximumSize(new java.awt.Dimension(450, 150));
-        panelHistorico.setMinimumSize(new java.awt.Dimension(450, 150));
-        panelHistorico.setPreferredSize(new java.awt.Dimension(450, 150));
-        panelHistorico.setLayout(new java.awt.GridLayout(5, 1));
-
-        lblHistorico.setText("Historico:");
-        lblHistorico.setFont(new java.awt.Font("Tahoma", 0, 14));
-        panelHistorico.add(lblHistorico);
-
-        chkHistoricoGps.setFont(new java.awt.Font("Tahoma", 0, 14));
-        chkHistoricoGps.setText("Guardar datos del GPS");
-        chkHistoricoGps.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkHistoricoGpsActionPerformed(evt);
-            }
-        });
-        panelHistorico.add(chkHistoricoGps);
-
-        chkHistoricoSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
-        chkHistoricoSonda.setText("Guardar datos de la SONDA");
-        chkHistoricoSonda.setEnabled(false);
-        panelHistorico.add(chkHistoricoSonda);
-
-        chkHistoricoPeces.setFont(new java.awt.Font("Tahoma", 0, 14));
-        chkHistoricoPeces.setText("Guardar datos obtenidos del procesamiento de imagen");
-        chkHistoricoPeces.setEnabled(false);
-        panelHistorico.add(chkHistoricoPeces);
-
-        chkHistoricoSondaSets.setFont(new java.awt.Font("Tahoma", 0, 14));
-        chkHistoricoSondaSets.setText("Guardar datos de configuración de la sonda");
-        chkHistoricoSondaSets.setEnabled(false);
-        panelHistorico.add(chkHistoricoSondaSets);
-
-        panelOpcionesGrales.add(panelHistorico);
 
         jScrollPane1.setViewportView(panelOpcionesGrales);
 
@@ -1005,11 +964,6 @@ private void chkEstadoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     clickEnChkEstadoGps();
 }//GEN-LAST:event_chkEstadoGpsActionPerformed
 
-private void chkHistoricoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoGpsActionPerformed
-// TODO add your handling code here:
-    clickEnChkHistoricoGps();
-}//GEN-LAST:event_chkHistoricoGpsActionPerformed
-
 private void chkEstadoSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEstadoSondaActionPerformed
     clickEnChkEstadoSonda();
 }//GEN-LAST:event_chkEstadoSondaActionPerformed
@@ -1022,6 +976,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
    
     if (controllers.ControllerPpal.getInstance().guardarConfigPanelConfig()){
         JOptionPane.showMessageDialog(this, "Se guardaron los cambios correctamente");
+        controllers.ControllerHistorico.getInstance().configuraBrokerHistorico();
     }
     else { JOptionPane.showMessageDialog(this, "Hubo un error y no se guardaron los cambios"); }
 }//GEN-LAST:event_btnGuardarActionPerformed
@@ -1089,14 +1044,14 @@ private void comboPuertoSondaActionPerformed(java.awt.event.ActionEvent evt) {//
 }//GEN-LAST:event_comboPuertoSondaActionPerformed
 
 private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscaneaPuertosActionPerformed
-    ControllerDataCapture.getInstance().obtienePuertosComExistentes();    
+    controllers.ControllerConfig.getInstance().obtienePuertosComExistentes();    
     btnEscanearPuertosPresionado(true);
 }//GEN-LAST:event_btnEscaneaPuertosActionPerformed
 
     private void btnConectarLanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarLanActionPerformed
         // TODO add your handling code here:
         if(campoRutaHistorico.getText().length()>3){
-            ControllerDataCapture.getInstance().setParametrosLan();
+            controllers.ControllerConfig.getInstance().setParametrosLan();
         }else{
             JOptionPane.showMessageDialog(null, "Ingrese una ruta valida");
     }            
@@ -1118,10 +1073,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JCheckBox chkEstadoDetectaPeces;
     private javax.swing.JCheckBox chkEstadoGps;
     private javax.swing.JCheckBox chkEstadoSonda;
-    private javax.swing.JCheckBox chkHistoricoGps;
-    private javax.swing.JCheckBox chkHistoricoPeces;
-    private javax.swing.JCheckBox chkHistoricoSonda;
-    private javax.swing.JCheckBox chkHistoricoSondaSets;
     private javax.swing.JComboBox comboBitsDatosGps;
     private javax.swing.JComboBox comboBitsDatosSonda;
     private javax.swing.JComboBox comboDistancia;
@@ -1139,7 +1090,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXLabel lblDispositivos;
     private org.jdesktop.swingx.JXLabel lblDistancia;
     private java.awt.Label lblGpsEstado;
-    private org.jdesktop.swingx.JXLabel lblHistorico;
     private org.jdesktop.swingx.JXLabel lblLanEstado;
     private org.jdesktop.swingx.JXLabel lblParidadGps;
     private org.jdesktop.swingx.JXLabel lblParidadSonda;
@@ -1185,7 +1135,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelGeneralidades;
     private org.jdesktop.swingx.JXPanel panelGps;
     private javax.swing.JPanel panelGpsStatus;
-    private org.jdesktop.swingx.JXPanel panelHistorico;
     private org.jdesktop.swingx.JXPanel panelIdioma;
     private javax.swing.JPanel panelLANconexionColor;
     private org.jdesktop.swingx.JXPanel panelLANconexionTxt;
@@ -1256,38 +1205,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
 
     public void setChkEstadoSonda(JCheckBox chkEstadoSonda) {
         this.chkEstadoSonda = chkEstadoSonda;
-    }
-
-    public JCheckBox getChkHistoricoGps() {
-        return chkHistoricoGps;
-    }
-
-    public void setChkHistoricoGps(JCheckBox chkHistoricoGps) {
-        this.chkHistoricoGps = chkHistoricoGps;
-    }
-
-    public JCheckBox getChkHistoricoPeces() {
-        return chkHistoricoPeces;
-    }
-
-    public void setChkHistoricoPeces(JCheckBox chkHistoricoPeces) {
-        this.chkHistoricoPeces = chkHistoricoPeces;
-    }
-
-    public JCheckBox getChkHistoricoSonda() {
-        return chkHistoricoSonda;
-    }
-
-    public void setChkHistoricoSonda(JCheckBox chkHistoricoSonda) {
-        this.chkHistoricoSonda = chkHistoricoSonda;
-    }
-
-    public JCheckBox getChkHistoricoSondaSets() {
-        return chkHistoricoSondaSets;
-    }
-
-    public void setChkHistoricoSondaSets(JCheckBox chkHistoricoSondaSets) {
-        this.chkHistoricoSondaSets = chkHistoricoSondaSets;
     }
 
     public JComboBox getComboBitsDatosGps() {
@@ -1454,30 +1371,10 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             {  Logueador.getInstance().agregaAlLog(e.toString()); }
         return sePudo;
     }    
-
-    public boolean leeDocYseteaPanelConfig_Historico(){
-        boolean sePudo=false;
-        //-- Actualiza los campos que corresponden del Document
-        try {
-            Element raizConfiguracionIbape= BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
-            Element parametros=raizConfiguracionIbape.getChild("Parametros");        
-            getChkHistoricoGps().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosGps").getBooleanValue());
-            if (getChkHistoricoGps().isSelected()){
-                clickEnChkHistoricoGps();
-            }
-            getChkHistoricoSonda().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosSonda").getBooleanValue());
-            getChkHistoricoPeces().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosProcImg").getBooleanValue());
-            getChkHistoricoSondaSets().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosConfigSonda").getBooleanValue());
-            sePudo=true;
-            }
-        catch (Exception e) 
-            {  Logueador.getInstance().agregaAlLog(e.toString()); }
-        return sePudo;
-    }    
     
     private boolean leeDocYseteaConfiguraciones(){
        boolean sePudo=true; 
-       sePudo=sePudo && leeDocYseteaPanelConfig_Gps() && leeDocYseteaPanelConfig_Historico();
+       sePudo=sePudo && leeDocYseteaPanelConfig_Gps() && controllers.ControllerCampania.getInstance().leeDocYseteaPanelConfig_Historico();
        sePudo=sePudo && leeDocYseteaPanelConfig_Lan() && leeDocYseteaPanelConfig_Sonda();
        sePudo=sePudo && leeDocYseteaPanelConfig_Unidades();
        return sePudo;
@@ -1581,23 +1478,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             setPanelConfigLan(false);//Desactivo el panel de configuración Lan        
         }        
     }
-    
-    public void clickEnChkHistoricoGps(){
-        if (chkHistoricoGps.isSelected()) {
-            chkHistoricoGps.setSelected(true);
-            chkHistoricoSonda.setEnabled(true);
-            chkHistoricoSondaSets.setEnabled(true);
-            chkHistoricoPeces.setEnabled(true);
-        }
-        else
-        {   
-            chkHistoricoGps.setSelected(false);
-            chkHistoricoSonda.setEnabled(false);
-            chkHistoricoSondaSets.setEnabled(false);
-            chkHistoricoPeces.setEnabled(false);        
-        }        
-    }
-        
+            
     public void setGpsDesconectado(){
         GpsEstado.setBackground(Color.red);
         lblGpsEstado.setText("Desconectado");

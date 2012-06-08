@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import persistencia.Logueador;
 
@@ -18,15 +20,15 @@ import persistencia.Logueador;
  *
  * @author Sebastian
  */
-public class LanSonda {
-
+public class LanSonda implements Runnable {
+    Thread lanThread;
     static final int BUFFER_SIZE = 2048;
     static final byte[] buffer = new byte[BUFFER_SIZE];
     static LanSonda unicaInstancia;
-    private int estadoConexion; //0=desconectado, 1=conectando, 2=conectado
+    private int estadoConexion; // 0=desconectado, 1=conectando, 2=conectado
     private String carpetaHistoricoLocal;
     private String carpetaHistoricoRemoto;
-    private java.util.Date fyhUltimoArchivoLeido;
+    private java.util.Date fyhUltimaLecturaRemota;
 
     private LanSonda() {
         inicializar();
@@ -183,28 +185,69 @@ public class LanSonda {
     }
 
     /**
-     * @return the fyhUltimoArchivoLeido
+     * @return the fyhUltimaLecturaRemota
      */
-    public java.util.Date getFyhUltimoArchivoLeido() {
-        return fyhUltimoArchivoLeido;
+    public java.util.Date getFyhUltimaLecturaRemota() {
+        return fyhUltimaLecturaRemota;
     }
 
     /**
-     * @param fyhUltimoArchivoLeido the fyhUltimoArchivoLeido to set
+     * @param fyhUltimaLecturaRemota the fyhUltimaLecturaRemota to set
      */
-    public void setFyhUltimoArchivoLeido(java.util.Date fyhUltimoArchivoLeido) {
-        this.fyhUltimoArchivoLeido = fyhUltimoArchivoLeido;
+    public void setFyhUltimaLecturaRemota(java.util.Date fyhUltimaLecturaRemota) {
+        this.fyhUltimaLecturaRemota = fyhUltimaLecturaRemota;
+        System.out.println("Ultima vez que se leyo la carpeta remota: "+fyhUltimaLecturaRemota.toString());
     }
 
-    /*
+    public void run(){
+        setEstadoConexion(1);
+        if (verificaConexionAequipo()){
+            setEstadoConexion(2);
+            Thread esteThread = Thread.currentThread();
+            while ((lanThread == esteThread) && (getEstadoConexion()==2)){    
+                try{
+                    if (verificaConexionAequipo()){
+                        String[] archivosNuevos = hayArchivosNuevos();
+                        setFyhUltimaLecturaRemota(Calendar.getInstance().getTime());
+                        if (archivosNuevos.length>0){
+                            copiarArchivosRemotos(archivosNuevos);                            
+                        }
+                        Thread.sleep(10000); //dispara la rutina de chequeo cada 10seg
+                    }
+                    else { setEstadoConexion(0); }                    
+                }
+                catch (Exception e)
+                { persistencia.Logueador.getInstance().agregaAlLog(e.toString()); }
+            }            
+        }
+        else
+            { setEstadoConexion(0); }
+        lanThread=null;
+    }
+            
+    public void start(){
+        if (lanThread == null){
+            lanThread = new Thread(this);
+            lanThread.setPriority(Thread.MIN_PRIORITY);
+            lanThread.start();
+        }
+    }
+    
+    
+
     public static void main(String[] args) {
         //tests        
-        LanSonda.getInstance().setCarpetaHistoricoLocal("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd");
-        LanSonda.getInstance().setCarpetaHistoricoRemoto("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd1");
+            //LanSonda.getInstance().setCarpetaHistoricoLocal("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd");
+            //LanSonda.getInstance().setCarpetaHistoricoRemoto("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd1");
         // OK - LanSonda.getInstance().verificaConexionAequipo("NECROPHAGIST-PC");
         // OK - LanSonda.getInstance().verificaAccesoAcarpetaRemota("\\\\192.168.1.102\\Users\\Necrophagist\\Desktop\\Tesis\\asd"); //tiene que empezar con las 4\
         // OK - LanSonda.getInstance().hayArchivosNuevos();
-         LanSonda.getInstance().copiarArchivosRemotos(LanSonda.getInstance().hayArchivosNuevos());
-    }*/
+            //LanSonda.getInstance().copiarArchivosRemotos(LanSonda.getInstance().hayArchivosNuevos());
+        getInstance().setCarpetaHistoricoLocal("\\Historico");
+        //getInstance().setCarpetaHistoricoRemoto("\\\\192.168.169.128\\Compartida");
+        getInstance().setCarpetaHistoricoRemoto("\\\\192.168.0.102\\2011");
+        getInstance().start();
+    }
+
     
 }

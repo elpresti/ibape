@@ -9,8 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.dataManager.Punto;
 import modelo.dataManager.PuntoHistorico;
 
 /**
@@ -22,6 +24,7 @@ public class BrokerPuntoHistorico extends BrokerHistorico {
     private boolean guardaDatosGps;
     private boolean guardaDatosSonda;
     private boolean guardaDatosPeces;
+    private Date fYhUltimoInsert;
     private PreparedStatement psInsert;
     private PreparedStatement psUpdate;
     private PreparedStatement psDelete;
@@ -78,6 +81,34 @@ public class BrokerPuntoHistorico extends BrokerHistorico {
     public void setGuardaDatosPeces(boolean guardaDatosPeces) {
         this.guardaDatosPeces = guardaDatosPeces;
     }
+    
+    public boolean insertPunto(Punto pto) {
+        boolean sePudo = false;
+        if ((pto.getFechaYhora().getTime() - getfYhUltimoInsert().getTime()) >= 5000) { //10000=10seg. 
+            try {
+                if (pto.getFechaYhora() != null){
+                    getPsInsert().setLong(1, pto.getFechaYhora().getTime());
+                }
+                getPsInsert().setDouble(2,pto.getLatitud());//guardamos la latitud en Grados Decimales
+                getPsInsert().setDouble(3,pto.getLongitud());//guardamos la longitud en Grados Decimales --> Valor decimal = grados + (minutos/60) + (y 3600 segundos)
+                getPsInsert().setDouble(4,pto.getAltitud());
+                getPsInsert().setDouble(5,pto.getVelocidad());
+                getPsInsert().setDouble(6,pto.getRumbo());
+                getPsInsert().setDouble(7,pto.getProfundidad());
+                getPsInsert().setDouble(8,pto.getVelocidadAgua());
+                getPsInsert().setDouble(9,pto.getTempAgua());
+                System.out.println("Insert PH: "+getPsInsert().toString());
+                if (getPsInsert().executeUpdate() > 0) {
+                    setfYhUltimoInsert(Calendar.getInstance().getTime());
+                    sePudo = true;                    
+                }
+            } catch (SQLException ex) {
+                Logueador.getInstance().agregaAlLog(ex.toString());
+            }            
+        }       
+        return sePudo;
+    }
+    
     
     public boolean insertPunto(PuntoHistorico ph) {
         boolean sePudo = false;
@@ -285,6 +316,20 @@ public class BrokerPuntoHistorico extends BrokerHistorico {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return ultimoId;        
+    }
+
+    /**
+     * @return the fYhUltimoInsert
+     */
+    public Date getfYhUltimoInsert() {
+        return fYhUltimoInsert;
+    }
+
+    /**
+     * @param fYhUltimoInsert the fYhUltimoInsert to set
+     */
+    public void setfYhUltimoInsert(Date fYhUltimoInsert) {
+        this.fYhUltimoInsert = fYhUltimoInsert;
     }
     
 }

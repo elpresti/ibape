@@ -154,9 +154,11 @@ public class Csv {
     }
 
     
+/*    
     public static void main(String[] args){        
         ArrayList<SondaSetHistorico> sshDistintos = Csv.getInstance().getSondaSetsFromCsv("Historico\\camp34\\TestValoresCsv.txt");
         //sePudo = sePudo;
     }
+*/
     
 }
