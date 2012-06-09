@@ -18,11 +18,11 @@ import modelo.dataManager.SondaSetHistorico;
  *
  * @author Sebastian
  */
-public abstract class BrokerHistorico {
+public abstract class BrokerHistorico implements Runnable{
     private static Thread dbHthread;
     private static Campania campania;
     private static Connection conexion;
-    private static Statement statement;    
+    private static Statement statement;
     private static String dbFileName;
     private static String folderNameHistorico;    
     
@@ -44,7 +44,7 @@ public abstract class BrokerHistorico {
         this.campania = campania;
     }
         
-    public boolean creaConexionNueva() {
+    private boolean creaConexionNueva() {
         boolean sePudo = false;
         try {
             setCampania(AdministraCampanias.getInstance().getCampaniaEnCurso());
@@ -113,39 +113,29 @@ public abstract class BrokerHistorico {
     }
     
     public void run() {
-        // --- método pendiente ---
         try {            
-
+              creaConexionNueva();
         } catch (Exception e) {            
-            Logueador.getInstance().agregaAlLog(e.toString());
+              Logueador.getInstance().agregaAlLog(e.toString());
         }
-        // ------------------------
     }
     
     public boolean disparaEjecucion(){
         boolean sePudo = false;
-/*        
-        if (!(isGuardaDatosGps())) {
-            if (BdbMap == null) {
-                inicializaBrokerHistorico();
-                BdbMap = new Thread(this);
-                BdbMap.setPriority(Thread.MIN_PRIORITY);
-                BdbMap.start();
-                sePudo=true;
-            }
-        }    
-*/
+        if (dbHthread == null) {
+            inicializaBrokerHistorico();
+            dbHthread = new Thread(this);
+            dbHthread.setPriority(Thread.MIN_PRIORITY);
+            dbHthread.start();
+            sePudo = true;
+        }
         return sePudo;
     }           
     
     public boolean detieneEjecucion(){
         boolean sePudo = false;
-/*        
-        if (!(BdbMap == null)) {
-           BdbMap = null;
-           sePudo=true;
-        }
-*/        
+        persistencia.BrokerHistoricoPunto.getInstance().inicializador();
+        persistencia.BrokerHistoricoSondaSet.getInstance().inicializador();
         return sePudo;
     }           
 
@@ -362,8 +352,8 @@ public abstract class BrokerHistorico {
             + "BEFORE INSERT ON puntos "
             + "FOR EACH ROW BEGIN"
             + "  SELECT CASE"
-            + "     WHEN ((new.foo_id IS NOT NULL) AND "
-            + " ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)"
+            + "     WHEN "//((new.foo_id IS NOT NULL) AND "
+            + " ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL) "
             + "     THEN RAISE(ABORT, 'insert on table \"puntos\" violates foreign key constraint \"fki_idSondaSets\"')"
             + "  END; "
             + "END;";
@@ -410,8 +400,10 @@ public abstract class BrokerHistorico {
             }                
         return sePudo;
     }    
-    
+
+/*    
     public static void main(String[] args) {
+        "THEN": 
         //método para testear ABM de Puntos y ABM de SondaSets
         controllers.ControllerCampania.getInstance().nuevaCampania("Campaña de prueba","Probando", "BrokerHistorico");
         PuntoHistorico ph = new PuntoHistorico();
@@ -427,7 +419,7 @@ public abstract class BrokerHistorico {
         ph.setVelocidad(21.322);
         ph.setVelocidadAgua(2.54);
 
-        BrokerPuntoHistorico brokerPuntoHistorico = BrokerPuntoHistorico.getInstance();        
+        BrokerHistoricoPunto brokerPuntoHistorico = BrokerHistoricoPunto.getInstance();        
         
         brokerPuntoHistorico.insertPunto(ph); //A-Punto
 
@@ -446,7 +438,7 @@ public abstract class BrokerHistorico {
         
         puntos = brokerPuntoHistorico.getPuntos(null, null);
         
-        BrokerSondaSetHistorico brokerSsh = BrokerSondaSetHistorico.getInstance();
+        BrokerHistoricoSondaSet brokerSsh = BrokerHistoricoSondaSet.getInstance();
         
         SondaSetHistorico sondaSet = new SondaSetHistorico();
         sondaSet.setGanancia(10);
@@ -468,7 +460,8 @@ public abstract class BrokerHistorico {
         brokerSsh.updateSondaSet(sondaSet); //M-SondaSet
         SondaSetHistorico ssHistorico = brokerSsh.getSondaSet(1);
         SondaSetHistorico ssHistoricoId2 = brokerSsh.getUltimoSondaSet();
-        brokerSsh.deleteSondaSet(ssHistoricoId2);       //B-SondaSet                         
+        brokerSsh.deleteSondaSet(ssHistoricoId2);       //B-SondaSet 
     }
+*/
     
 }

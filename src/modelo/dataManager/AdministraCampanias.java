@@ -77,7 +77,7 @@ public class AdministraCampanias {
               boolean borraHistorico = true;
               if (AdministraCampanias.getInstance().verificaSiTieneHistorico(campAeliminar.getId())){
 
-                 if (persistencia.BrokerPuntoHistorico.getInstance().borraHistorico(campAeliminar.getId())){
+                 if (persistencia.BrokerHistoricoPunto.getInstance().borraHistorico(campAeliminar.getId())){
                     Logueador.getInstance().agregaAlLog("Se borró el Historico de la Campaña especificada");
                  }
                  else { 
@@ -157,7 +157,7 @@ public class AdministraCampanias {
         Campania campania = getCampania(idCampania);
         if (campania.getFolderHistorico() != null && (campania.getFolderHistorico().length()>0)){
             String folderHistorico = campania.getFolderHistorico();
-            File historico = new File(persistencia.BrokerPuntoHistorico.getInstance().getFolderNameHistorico()+"\\" + folderHistorico + "\\" + persistencia.BrokerPuntoHistorico.getInstance().getDbFileName());
+            File historico = new File(persistencia.BrokerHistoricoPunto.getInstance().getFolderNameHistorico()+"\\" + folderHistorico + "\\" + persistencia.BrokerHistoricoPunto.getInstance().getDbFileName());
             if (historico.exists()) {
                 tieneHistorico = true;
             }            

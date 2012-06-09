@@ -109,6 +109,9 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         chkHistoricoSonda = new javax.swing.JCheckBox();
         chkHistoricoPeces = new javax.swing.JCheckBox();
         chkHistoricoSondaSets = new javax.swing.JCheckBox();
+        panelLogueoHistorico = new org.jdesktop.swingx.JXPanel();
+        btnIniciarLogueoHistorico = new javax.swing.JButton();
+        btnDetenerLogueoHistorico = new javax.swing.JButton();
         panelBtnCampania = new org.jdesktop.swingx.JXPanel();
         btnComenzarCampania = new javax.swing.JButton();
         btnPausarReanudarCampania = new javax.swing.JButton();
@@ -135,8 +138,8 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         jScrollPane2.setPreferredSize(new java.awt.Dimension(480, 410));
 
         panelCentro.setMaximumSize(new java.awt.Dimension(460, 1510));
-        panelCentro.setMinimumSize(new java.awt.Dimension(460, 656));
-        panelCentro.setPreferredSize(new java.awt.Dimension(460, 656));
+        panelCentro.setMinimumSize(new java.awt.Dimension(460, 676));
+        panelCentro.setPreferredSize(new java.awt.Dimension(460, 676));
         panelCentro.setScrollableTracksViewportHeight(false);
         panelCentro.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
@@ -379,15 +382,14 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         jXTaskPaneContainer1.setBackground(new java.awt.Color(240, 240, 240));
         jXTaskPaneContainer1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        historicoDeCampania.setCollapsed(true);
         historicoDeCampania.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         historicoDeCampania.setTitle("Historico de campaña:");
         historicoDeCampania.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        panelHistorico.setMaximumSize(new java.awt.Dimension(450, 130));
-        panelHistorico.setMinimumSize(new java.awt.Dimension(450, 130));
-        panelHistorico.setPreferredSize(new java.awt.Dimension(450, 130));
-        panelHistorico.setLayout(new java.awt.GridLayout(4, 1));
+        panelHistorico.setMaximumSize(new java.awt.Dimension(450, 150));
+        panelHistorico.setMinimumSize(new java.awt.Dimension(450, 150));
+        panelHistorico.setPreferredSize(new java.awt.Dimension(450, 150));
+        panelHistorico.setLayout(new java.awt.GridLayout(5, 1));
 
         chkHistoricoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkHistoricoGps.setSelected(true);
@@ -415,7 +417,34 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         chkHistoricoSondaSets.setSelected(true);
         chkHistoricoSondaSets.setText("Guardar datos de configuración de la sonda");
         chkHistoricoSondaSets.setEnabled(false);
+        chkHistoricoSondaSets.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkHistoricoSondaSetsActionPerformed(evt);
+            }
+        });
         panelHistorico.add(chkHistoricoSondaSets);
+
+        panelLogueoHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 3));
+
+        btnIniciarLogueoHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnIniciarLogueoHistorico.setText("Iniciar Logueo");
+        btnIniciarLogueoHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarLogueoHistoricoActionPerformed(evt);
+            }
+        });
+        panelLogueoHistorico.add(btnIniciarLogueoHistorico);
+
+        btnDetenerLogueoHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnDetenerLogueoHistorico.setText("Detener Logueo");
+        btnDetenerLogueoHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetenerLogueoHistoricoActionPerformed(evt);
+            }
+        });
+        panelLogueoHistorico.add(btnDetenerLogueoHistorico);
+
+        panelHistorico.add(panelLogueoHistorico);
 
         historicoDeCampania.add(panelHistorico);
 
@@ -529,15 +558,32 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void chkHistoricoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoGpsActionPerformed
-        // TODO add your handling code here:
         clickEnChkHistoricoGps();
     }//GEN-LAST:event_chkHistoricoGpsActionPerformed
 
+    private void chkHistoricoSondaSetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoSondaSetsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkHistoricoSondaSetsActionPerformed
+
+    private void btnIniciarLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarLogueoHistoricoActionPerformed
+        controllers.ControllerCampania.getInstance().iniciarLogueoHistorico();
+        btnDetenerLogueoHistorico.setVisible(true);
+        btnIniciarLogueoHistorico.setVisible(false);        
+    }//GEN-LAST:event_btnIniciarLogueoHistoricoActionPerformed
+
+    private void btnDetenerLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerLogueoHistoricoActionPerformed
+        controllers.ControllerCampania.getInstance().detenerLogueoHistorico();
+        btnDetenerLogueoHistorico.setVisible(false);
+        btnIniciarLogueoHistorico.setVisible(true);
+    }//GEN-LAST:event_btnDetenerLogueoHistoricoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComenzarCampania;
+    private javax.swing.JButton btnDetenerLogueoHistorico;
     private org.jdesktop.swingx.JXHyperlink btnEliminar;
     private javax.swing.JButton btnFinalizarCampania;
     private org.jdesktop.swingx.JXHyperlink btnGuardar;
+    private javax.swing.JButton btnIniciarLogueoHistorico;
     private org.jdesktop.swingx.JXHyperlink btnModificar;
     private javax.swing.JButton btnPausarReanudarCampania;
     private javax.swing.JTextField campoBarcoCampania;
@@ -572,6 +618,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private org.jdesktop.swingx.JXPanel panelLbBarco;
     private org.jdesktop.swingx.JXPanel panelLblCapitan;
     private org.jdesktop.swingx.JXPanel panelLblNombre;
+    private org.jdesktop.swingx.JXPanel panelLogueoHistorico;
     private org.jdesktop.swingx.JXPanel panelNombreCamp;
     private org.jdesktop.swingx.JXPanel panelNuevaCampania;
     private org.jdesktop.swingx.JXPanel panelSeparador;
@@ -643,10 +690,10 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         controlaPanelNuevaCampania(false);
         btnComenzarCampania.setVisible(false);
         btnFinalizarCampania.setVisible(true);
-        btnPausarReanudarCampania.setVisible(true);        
+        btnPausarReanudarCampania.setVisible(true);
+        historicoDeCampania.setVisible(true);
         setEstadoCampania(1);
-        // controllers.ControllerCampania.getInstance().obtenerCampanias();
-        
+        // controllers.ControllerCampania.getInstance().obtenerCampanias();        
     }
     
     public void setGuiCampaniaPausada() {
@@ -671,6 +718,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         btnComenzarCampania.setVisible(true);
         btnPausarReanudarCampania.setText("Pausar campaña");
         setEstadoCampania(0);
+        historicoDeCampania.setVisible(false);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
 
@@ -763,6 +811,8 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         cantColumnas=9;        
         modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
         tablaCampanias.setModel(modeloTabla);
+        btnDetenerLogueoHistorico.setVisible(false);
+        historicoDeCampania.setVisible(false);
         cargaIconosDeBotones();
         cargaGrillaCampanias();
         setGuiCampaniaFinalizada();    

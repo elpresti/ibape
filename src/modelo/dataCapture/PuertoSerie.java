@@ -97,8 +97,8 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
           persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
-       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
-          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
        }
     }
     else
@@ -108,8 +108,8 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
           persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
-       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosSonda()){
-          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosSonda()){
+          persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
        }
     }
     else
@@ -124,8 +124,8 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
-       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
-          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
        }
     }
     else
@@ -136,8 +136,8 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
-       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
-          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
        }
     }
     else
@@ -147,8 +147,8 @@ public void sentenceRead(SentenceEvent event) {
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
-       if (seModifico && persistencia.BrokerPuntoHistorico.getInstance().isGuardaDatosGps()){
-          persistencia.BrokerPuntoHistorico.getInstance().insertPunto(punto.getInstance());
+       if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
+          persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
        }
     }
     
