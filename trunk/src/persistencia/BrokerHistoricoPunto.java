@@ -19,7 +19,7 @@ import modelo.dataManager.PuntoHistorico;
  *
  * @author Sebastian
  */
-public class BrokerPuntoHistorico extends BrokerHistorico {
+public class BrokerHistoricoPunto extends BrokerHistorico {
 
     private boolean guardaDatosGps;
     private boolean guardaDatosSonda;
@@ -28,15 +28,15 @@ public class BrokerPuntoHistorico extends BrokerHistorico {
     private PreparedStatement psInsert;
     private PreparedStatement psUpdate;
     private PreparedStatement psDelete;
-    static BrokerPuntoHistorico unicaInstancia;
+    static BrokerHistoricoPunto unicaInstancia;
     
-    private BrokerPuntoHistorico() {
+    private BrokerHistoricoPunto() {
         inicializador();
     }
     
-    public static BrokerPuntoHistorico getInstance() {
+    public static BrokerHistoricoPunto getInstance() {
        if (unicaInstancia == null)
-          unicaInstancia = new BrokerPuntoHistorico();       
+          unicaInstancia = new BrokerHistoricoPunto();       
        return unicaInstancia;
     }         
     
@@ -216,7 +216,7 @@ public class BrokerPuntoHistorico extends BrokerHistorico {
         return recorrido;
     }    
 
-    private void inicializador() {
+    public void inicializador() {
         setGuardaDatosGps(false);
         setGuardaDatosSonda(false);
         setGuardaDatosPeces(false);

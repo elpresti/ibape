@@ -13,21 +13,21 @@ import modelo.dataManager.SondaSetHistorico;
  *
  * @author Sebastian
  */
-public class BrokerSondaSetHistorico extends BrokerHistorico {
+public class BrokerHistoricoSondaSet extends BrokerHistorico {
     private boolean guardaDatosSondaSets;
     private PreparedStatement psInsert;
     private PreparedStatement psUpdate;
     private PreparedStatement psDelete;    
-    static BrokerSondaSetHistorico unicaInstancia;
+    static BrokerHistoricoSondaSet unicaInstancia;
     
-    private BrokerSondaSetHistorico(){
+    private BrokerHistoricoSondaSet(){
         inicializador();
     }
     
     
-    public static BrokerSondaSetHistorico getInstance() {
+    public static BrokerHistoricoSondaSet getInstance() {
        if (unicaInstancia == null)
-          unicaInstancia = new BrokerSondaSetHistorico();       
+          unicaInstancia = new BrokerHistoricoSondaSet();       
        return unicaInstancia;
     }    
     

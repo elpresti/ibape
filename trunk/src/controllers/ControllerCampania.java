@@ -103,5 +103,21 @@ public class ControllerCampania {
             {  Logueador.getInstance().agregaAlLog(e.toString()); }
         return sePudo;
     }    
+
+    public void iniciarLogueoHistorico() {
+        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosGps(gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected());
+        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosSonda(gui.PanelOpcCampanias.getInstance().getChkHistoricoSonda().isSelected());
+        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosPeces(gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().isSelected());
+        persistencia.BrokerHistoricoSondaSet.getInstance().setGuardaDatosSondaSets(gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().isSelected());
+        if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected()){
+            persistencia.BrokerHistoricoSondaSet.getInstance().disparaEjecucion();
+        }
+        else
+          { JOptionPane.showMessageDialog(null, "Para iniciar el alojamiento de historico deben guardarse los datos leidos por el GPS"); }
+    }
+
+    public void detenerLogueoHistorico() {
+        persistencia.BrokerHistoricoSondaSet.getInstance().detieneEjecucion();
+    }
     
 }

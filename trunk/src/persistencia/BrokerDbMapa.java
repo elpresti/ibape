@@ -290,7 +290,7 @@ public class BrokerDbMapa implements Runnable{
            sePudo=true;
         }
         return sePudo;
-    }           
+    }
 
 
     private boolean inicializaBrokerDbMapa(){

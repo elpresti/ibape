@@ -4,8 +4,8 @@
  */
 package controllers;
 
-import persistencia.BrokerPuntoHistorico;
-import persistencia.BrokerSondaSetHistorico;
+import persistencia.BrokerHistoricoPunto;
+import persistencia.BrokerHistoricoSondaSet;
 
 /**
  *
@@ -13,8 +13,8 @@ import persistencia.BrokerSondaSetHistorico;
  */
 public class ControllerHistorico {
     static ControllerHistorico unicaInstancia;
-    private BrokerPuntoHistorico brokerPuntoHistorico;
-    private BrokerSondaSetHistorico brokerSondaSetHistorico;
+    private BrokerHistoricoPunto brokerPuntoHistorico;
+    private BrokerHistoricoSondaSet brokerSondaSetHistorico;
             
     private ControllerHistorico(){
         inicializador();
@@ -27,8 +27,8 @@ public class ControllerHistorico {
     }
 
     private void inicializador() {
-        brokerPuntoHistorico = BrokerPuntoHistorico.getInstance();
-        brokerSondaSetHistorico = BrokerSondaSetHistorico.getInstance();
+        brokerPuntoHistorico = BrokerHistoricoPunto.getInstance();
+        brokerSondaSetHistorico = BrokerHistoricoSondaSet.getInstance();
         configuraBrokerHistorico();
         
     }
