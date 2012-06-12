@@ -142,8 +142,8 @@ public class OperacionesBasicas {
 
        // ArrayList<Integer> fondo = new ArrayList<Integer>();
         
-        int ancho = img.getWidth();
-		int alto = img.getHeight();
+        ancho = img.getWidth();
+		alto = img.getHeight();
 //        int valorRGB;
 //		int valoresRGB[] = new int[3];
 //		float valoresHSB[] = new float[3];
@@ -182,7 +182,7 @@ public class OperacionesBasicas {
    //               if (col.getColoresMap().get(e).equals("Blanco")) {
                     if ((col.getColoresMap().get(e).equals("Negro"))){
                     //System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
-                            if (((contAncho==1) || ((Math.abs(contAlto-fondo[contAncho-1])) <5))) {
+                            if (((contAncho==1) || ((Math.abs(contAlto-promedio(fondo))) <5))) {
                                 noencontrofondo=false;
                              }
                     }
@@ -229,6 +229,25 @@ public class OperacionesBasicas {
 //        else return false;
 //
 //    }
+
+    public int promedio(int[] fondo){
+        int cont = 1;       // contador
+        int suma = 0;    // suma
+
+
+        while (fondo[cont] != 0 ) {
+            suma += suma+fondo[cont];
+            cont++;
+        }
+
+        // promedio
+        int promedio = suma / (cont-1);
+
+     return promedio;
+    }
+
+
+
 
     public ArrayList<modelo.dataManager.Marca> buscaMarcas(ArrayList<Integer> fondo){
         ArrayList<modelo.dataManager.Marca> marcas = new ArrayList<modelo.dataManager.Marca>();
