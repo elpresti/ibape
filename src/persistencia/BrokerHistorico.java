@@ -131,14 +131,18 @@ public abstract class BrokerHistorico implements Runnable{
         }
         return sePudo;
     }           
-    
+        
     public boolean detieneEjecucion(){
         boolean sePudo = false;
         persistencia.BrokerHistoricoPunto.getInstance().inicializador();
         persistencia.BrokerHistoricoSondaSet.getInstance().inicializador();
+        dbHthread = null;
         return sePudo;
     }           
 
+    public boolean estaLogueando(){
+        return dbHthread != null;
+    }
 
     private void inicializaBrokerHistorico(){
         setFolderNameHistorico("Historico");
@@ -348,38 +352,42 @@ public abstract class BrokerHistorico implements Runnable{
             
             /*TRIGGER ON INSERT, si la clave primaria SI permite nulos */
             String codigoCreacion=
-            "CREATE TRIGGER fki_punto_idSondaSets "
-            + "BEFORE INSERT ON puntos "
-            + "FOR EACH ROW BEGIN"
+            " CREATE TRIGGER fki_punto_idSondaSets "
+            + " BEFORE INSERT ON puntos "
+            + " FOR EACH ROW "
+            + " BEGIN "
             + "  SELECT CASE"
-            + "     WHEN "//((new.foo_id IS NOT NULL) AND "
-            + " ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL) "
-            + "     THEN RAISE(ABORT, 'insert on table \"puntos\" violates foreign key constraint \"fki_idSondaSets\"')"
+            + "     WHEN ((new.idSondaSets IS NOT NULL) AND "
+            + "          ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)) THEN "
+            + "     RAISE(ABORT, 'insert on table \"puntos\" violates foreign key constraint \"fki_punto_idSondaSets\"') "
             + "  END; "
-            + "END;";
+            + " END; ";            
+            
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
 
-            /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
+            /*TRIGGER ON UPDATE, si la clave primaria SI permite nulos */
             codigoCreacion=
             "CREATE TRIGGER fku_punto_idSondaSets "
             + "BEFORE UPDATE ON puntos "
             + "FOR EACH ROW BEGIN"
             + "  SELECT CASE"
-            + "     WHEN ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)"
-            + "     THEN RAISE(ABORT, 'update on table \"puntos\" violates foreign key constraint \"fk_idSondaSets\"')"
+            + "     WHEN ((new.idSondaSets IS NOT NULL) AND "
+            + "          ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)) "
+            + "     THEN RAISE(ABORT, 'update on table \"puntos\" violates foreign key constraint \"fku_punto_idSondaSets\"')"
             + "  END; "
             + "END;";
 
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
 
-            /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
+            /*TRIGGER ON DELETE, si la clave primaria SI permite nulos */
             codigoCreacion=
             "CREATE TRIGGER fkd_punto_idSondaSets "
             + "BEFORE DELETE ON SondaSets "
             + "FOR EACH ROW BEGIN "
             + "  SELECT CASE "
-            + "    WHEN ((SELECT idSondaSets FROM puntos WHERE idSondaSets = OLD.id) IS NOT NULL) "
-            + "    THEN RAISE(ABORT, 'delete on table \"SondaSets\" violates foreign key constraint \"fk_idSondaSets\"') "
+            + "    WHEN ((new.idSondaSets IS NOT NULL) AND "
+            + "         ((SELECT idSondaSets FROM puntos WHERE idSondaSets = OLD.id) IS NOT NULL)) "
+            + "    THEN RAISE(ABORT, 'delete on table \"SondaSets\" violates foreign key constraint \"fkd_punto_idSondaSets\"') "
             + "  END; "
             + "END; ";
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }

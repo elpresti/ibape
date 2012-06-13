@@ -36,9 +36,10 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
     /** Creates new form PanelOpcConfiguracion */
     private PanelOpcConfiguracion() {
-        initComponents();       
+        initComponents();
         btnDesconectaGps.setVisible(false);
         btnDesconectaSonda.setVisible(false);
+        btnDesconectaLan.setVisible(false);
         leeDocYseteaConfiguraciones();
     }
 
@@ -131,7 +132,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboParidadSonda = new org.jdesktop.swingx.JXPanel();
         comboParidadSonda = new javax.swing.JComboBox();
         panelPeces = new org.jdesktop.swingx.JXPanel();
-        chkEstadoDetectaPeces = new javax.swing.JCheckBox();
+        chkEstadoLan = new javax.swing.JCheckBox();
         panelConfigHistorico = new org.jdesktop.swingx.JXPanel();
         panelTituloRutaHistorico = new org.jdesktop.swingx.JXPanel();
         lblTxtRutaHistorico = new org.jdesktop.swingx.JXLabel();
@@ -141,7 +142,8 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelLanStatus = new javax.swing.JPanel();
         panelTodoLanStatus = new org.jdesktop.swingx.JXPanel();
         panelBtnConecta = new org.jdesktop.swingx.JXPanel();
-        btnConectarLan = new javax.swing.JButton();
+        btnConectaLan = new javax.swing.JButton();
+        btnDesconectaLan = new javax.swing.JButton();
         panelLANconexionColor = new javax.swing.JPanel();
         LanEstado = new javax.swing.JPanel();
         panelLANconexionTxt = new org.jdesktop.swingx.JXPanel();
@@ -719,15 +721,15 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelPeces.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoDetectaPeces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        chkEstadoDetectaPeces.setText("Detección de Peces");
-        chkEstadoDetectaPeces.setEnabled(false);
-        chkEstadoDetectaPeces.addActionListener(new java.awt.event.ActionListener() {
+        chkEstadoLan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkEstadoLan.setText("Detección de Peces");
+        chkEstadoLan.setEnabled(false);
+        chkEstadoLan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkEstadoDetectaPecesActionPerformed(evt);
+                chkEstadoLanActionPerformed(evt);
             }
         });
-        panelPeces.add(chkEstadoDetectaPeces);
+        panelPeces.add(chkEstadoLan);
 
         panelConfigHistorico.setMaximumSize(new java.awt.Dimension(500, 60));
         panelConfigHistorico.setMinimumSize(new java.awt.Dimension(500, 60));
@@ -776,15 +778,24 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelBtnConecta.setPreferredSize(new java.awt.Dimension(200, 30));
         panelBtnConecta.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 3));
 
-        btnConectarLan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnConectarLan.setText("Conectar");
-        btnConectarLan.setEnabled(false);
-        btnConectarLan.addActionListener(new java.awt.event.ActionListener() {
+        btnConectaLan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnConectaLan.setText("Conectar");
+        btnConectaLan.setEnabled(false);
+        btnConectaLan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConectarLanActionPerformed(evt);
+                btnConectaLanActionPerformed(evt);
             }
         });
-        panelBtnConecta.add(btnConectarLan);
+        panelBtnConecta.add(btnConectaLan);
+
+        btnDesconectaLan.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnDesconectaLan.setText("Desconectar");
+        btnDesconectaLan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesconectaLanActionPerformed(evt);
+            }
+        });
+        panelBtnConecta.add(btnDesconectaLan);
 
         panelTodoLanStatus.add(panelBtnConecta);
 
@@ -968,9 +979,9 @@ private void chkEstadoSondaActionPerformed(java.awt.event.ActionEvent evt) {//GE
     clickEnChkEstadoSonda();
 }//GEN-LAST:event_chkEstadoSondaActionPerformed
 
-private void chkEstadoDetectaPecesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEstadoDetectaPecesActionPerformed
+private void chkEstadoLanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEstadoLanActionPerformed
     clickEnChkEstadoDetectaPeces();
-}//GEN-LAST:event_chkEstadoDetectaPecesActionPerformed
+}//GEN-LAST:event_chkEstadoLanActionPerformed
 
 private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
    
@@ -1048,30 +1059,43 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     btnEscanearPuertosPresionado(true);
 }//GEN-LAST:event_btnEscaneaPuertosActionPerformed
 
-    private void btnConectarLanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectarLanActionPerformed
-        // TODO add your handling code here:
+    private void btnConectaLanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectaLanActionPerformed
         if(campoRutaHistorico.getText().length()>3){
             controllers.ControllerConfig.getInstance().setParametrosLan();
+            controllers.ControllerConfig.getInstance().disparaLecturaLan();
         }else{
             JOptionPane.showMessageDialog(null, "Ingrese una ruta valida");
-    }            
-    }//GEN-LAST:event_btnConectarLanActionPerformed
+        }
+    }//GEN-LAST:event_btnConectaLanActionPerformed
+
+    private void btnDesconectaLanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectaLanActionPerformed
+    if (!(controllers.ControllerConfig.getInstance().detenerLecturaLan())) {
+        JOptionPane.showMessageDialog(this, "Hubo un error en la conexión a la Sonda y no se detuvo");
+    }
+    else
+        { btnConectaLan.setVisible(true);
+          btnDesconectaLan.setVisible(false);
+          chkEstadoLan.setEnabled(true);
+          setPanelConfigSonda(true);
+        }
+    }//GEN-LAST:event_btnDesconectaLanActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GpsEstado;
     private javax.swing.JPanel LanEstado;
     private javax.swing.JPanel SondaEstado;
     private javax.swing.JButton btnConectaGps;
+    private javax.swing.JButton btnConectaLan;
     private javax.swing.JButton btnConectaSonda;
-    private javax.swing.JButton btnConectarLan;
     private javax.swing.JButton btnDesconectaGps;
+    private javax.swing.JButton btnDesconectaLan;
     private javax.swing.JButton btnDesconectaSonda;
     private javax.swing.JButton btnEscaneaPuertos;
     private javax.swing.JButton btnExaminarRutaHistorico;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JTextField campoRutaHistorico;
-    private javax.swing.JCheckBox chkEstadoDetectaPeces;
     private javax.swing.JCheckBox chkEstadoGps;
+    private javax.swing.JCheckBox chkEstadoLan;
     private javax.swing.JCheckBox chkEstadoSonda;
     private javax.swing.JComboBox comboBitsDatosGps;
     private javax.swing.JComboBox comboBitsDatosSonda;
@@ -1184,11 +1208,11 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }
 
     public JCheckBox getChkEstadoDetectaPeces() {
-        return chkEstadoDetectaPeces;
+        return chkEstadoLan;
     }
 
     public void setChkEstadoDetectaPeces(JCheckBox chkEstadoDetectaPeces) {
-        this.chkEstadoDetectaPeces = chkEstadoDetectaPeces;
+        this.chkEstadoLan = chkEstadoDetectaPeces;
     }
 
     public JCheckBox getChkEstadoGps() {
@@ -1417,7 +1441,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         lblTxtRutaHistorico.setEnabled(estado);
         campoRutaHistorico.setEnabled(estado);
         btnExaminarRutaHistorico.setEnabled(estado);
-        btnConectarLan.setEnabled(estado);
+        btnConectaLan.setEnabled(estado);
         LanEstado.setEnabled(estado);
         lblLanEstado.setEnabled(estado);        
     }
@@ -1443,8 +1467,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             chkEstadoSonda.setEnabled(false);
             chkEstadoSonda.setSelected(false);
             setPanelConfigSonda(false);//Desactivo el panel de configuración del GPS        
-            chkEstadoDetectaPeces.setEnabled(false);
-            chkEstadoDetectaPeces.setSelected(false);
+            chkEstadoLan.setEnabled(false);
+            chkEstadoLan.setSelected(false);
             setPanelConfigLan(false);//Desactivo el panel de configuración del GPS        
         }        
     }
@@ -1454,27 +1478,27 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         if (chkEstadoSonda.isSelected()) {
             chkEstadoSonda.setSelected(true);
             setPanelConfigSonda(true);//Desactivo el panel de configuración de la Sonda        
-            chkEstadoDetectaPeces.setEnabled(true);
+            chkEstadoLan.setEnabled(true);
             comboPuertoSondaActionPerformed(null);
         }
         else
         {
             chkEstadoSonda.setSelected(false);
             setPanelConfigSonda(false);//Desactivo el panel de configuración de la Sonda        
-            chkEstadoDetectaPeces.setEnabled(false);
-            chkEstadoDetectaPeces.setSelected(false);
+            chkEstadoLan.setEnabled(false);
+            chkEstadoLan.setSelected(false);
             setPanelConfigLan(false);//Desactivo el panel de configuración de LAN
         }           
     }
     
     public void clickEnChkEstadoDetectaPeces(){
-        if (chkEstadoDetectaPeces.isSelected()) {
-            chkEstadoDetectaPeces.setSelected(true);
+        if (chkEstadoLan.isSelected()) {
+            chkEstadoLan.setSelected(true);
             setPanelConfigLan(true);//Desactivo el panel de configuración de la Sonda
         }
         else
         {           
-            chkEstadoDetectaPeces.setSelected(false);
+            chkEstadoLan.setSelected(false);
             setPanelConfigLan(false);//Desactivo el panel de configuración Lan        
         }        
     }
@@ -1498,27 +1522,39 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         SondaEstado.setBackground(Color.red);
         lblSondaEstado.setText("Desconectado");
     }
+
+    public void setLanDesconectado() {
+        LanEstado.setBackground(Color.red);
+        lblLanEstado.setText("Desconectado");
+    }    
     
     public void setSondaConectando(){
         SondaEstado.setBackground(Color.orange);
-        lblSondaEstado.setText("Conectando...");        
+        lblSondaEstado.setText("Conectando...");
     }
+    
+    public void setLanConectando() {
+        LanEstado.setBackground(Color.orange);
+        lblLanEstado.setText("Conectando...");
+    }    
     
     public void setSondaConectado(){
         SondaEstado.setBackground(Color.green);
-        lblSondaEstado.setText("Conectado");                
-    }    
-    
-    
+        lblSondaEstado.setText("Conectado");
+    }
+
+    public void setLanConectado() {
+        LanEstado.setBackground(Color.green);
+        lblLanEstado.setText("Conectado");
+    }
+
 // codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
      public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
         elFrame.add(new PanelOpcConfiguracion()); 
         elFrame.setVisible(true);
-
     }
-
 
     public void habilitaBtnConectaGps() {
         btnConectaGps.setVisible(true);
@@ -1533,6 +1569,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         chkEstadoSonda.setEnabled(true);
         setPanelConfigSonda(true);
     }
+    
+    public void habilitaBtnConectaLan() {
+        btnConectaLan.setVisible(true);
+        btnDesconectaLan.setVisible(false);
+        chkEstadoLan.setEnabled(true);
+        setPanelConfigLan(true);
+    }    
 
     public void setContenidoComboCOMgps(ArrayList<String> elementos){
         comboPuertoGps.removeAllItems();
@@ -1567,4 +1610,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             btnEscaneaPuertos.setEnabled(true);            
         }
     }
+
+
+
 }
