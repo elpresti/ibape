@@ -496,6 +496,7 @@ private void btnComenzarCampaniaActionPerformed(java.awt.event.ActionEvent evt) 
             if (controllers.ControllerCampania.getInstance().nuevaCampania(campoNombreCampania.getText(), campoCapitanCampania.getText(), campoBarcoCampania.getText())){
                 setGuiCampaniaIniciada();
                 controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso();
+                btnIniciarLogueoHistoricoActionPerformed(null);
             }
             else
               { JOptionPane.showMessageDialog(null, "Hubo un error al intentar guardar la nueva campaña"); }
@@ -505,9 +506,16 @@ private void btnComenzarCampaniaActionPerformed(java.awt.event.ActionEvent evt) 
 private void btnPausarReanudarCampaniaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausarReanudarCampaniaActionPerformed
     if (!(getEstadoCampania()==2)){
         setGuiCampaniaPausada();
+        if (persistencia.BrokerHistoricoPunto.getInstance().estaLogueando()){
+            btnDetenerLogueoHistoricoActionPerformed(null);
+        }        
     }
     else
-        { setGuiCampaniaReanudada(); }
+        { setGuiCampaniaReanudada(); 
+          if (!(persistencia.BrokerHistoricoPunto.getInstance().estaLogueando())){
+                btnIniciarLogueoHistoricoActionPerformed(null);
+          }
+        }
     
 }//GEN-LAST:event_btnPausarReanudarCampaniaActionPerformed
 
@@ -519,6 +527,7 @@ private void btnFinalizarCampaniaActionPerformed(java.awt.event.ActionEvent evt)
                     JOptionPane.WARNING_MESSAGE
                     ) == 0) {
             if (ControllerCampania.getInstance().finalizaCampaniaEnCurso()){
+                btnDetenerLogueoHistoricoActionPerformed(null);
                 setGuiCampaniaFinalizada();
             }
             else 
@@ -567,14 +576,12 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     private void btnIniciarLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarLogueoHistoricoActionPerformed
         controllers.ControllerCampania.getInstance().iniciarLogueoHistorico();
-        btnDetenerLogueoHistorico.setVisible(true);
-        btnIniciarLogueoHistorico.setVisible(false);        
+        setGuiHistoricoLogueando(true);
     }//GEN-LAST:event_btnIniciarLogueoHistoricoActionPerformed
 
     private void btnDetenerLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerLogueoHistoricoActionPerformed
         controllers.ControllerCampania.getInstance().detenerLogueoHistorico();
-        btnDetenerLogueoHistorico.setVisible(false);
-        btnIniciarLogueoHistorico.setVisible(true);
+        setGuiHistoricoLogueando(false);
     }//GEN-LAST:event_btnDetenerLogueoHistoricoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1070,6 +1077,15 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             chkHistoricoSondaSets.setEnabled(false);
             chkHistoricoPeces.setEnabled(false);        
         }        
+    }
+
+    private void setGuiHistoricoLogueando(boolean estado) {
+        btnDetenerLogueoHistorico.setVisible(estado);
+        btnIniciarLogueoHistorico.setVisible(!(estado));
+        chkHistoricoGps.setEnabled(!(estado));
+        chkHistoricoPeces.setEnabled(!(estado));
+        chkHistoricoSonda.setEnabled(!(estado));
+        chkHistoricoSondaSets.setEnabled(!(estado));
     }
     
     

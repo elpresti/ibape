@@ -20,7 +20,7 @@ import persistencia.Logueador;
  *
  * @author Sebastian
  */
-public class LanSonda implements Runnable {
+public class LanSonda extends java.util.Observable implements Runnable {
     Thread lanThread;
     static final int BUFFER_SIZE = 2048;
     static final byte[] buffer = new byte[BUFFER_SIZE];
@@ -41,7 +41,7 @@ public class LanSonda implements Runnable {
         return unicaInstancia;
     }
 
-    public boolean verificaConexionAequipo() {
+    public boolean verificaConexionAequipo2() {
         boolean sePudo = false;
         try {
             //extrae la IP de la rutaSondaImgs e intenta establecer una conexion con el equipo remoto,
@@ -60,6 +60,23 @@ public class LanSonda implements Runnable {
         return sePudo;
     }
 
+    
+    public boolean verificaConexionAequipo() {
+        boolean sePudo = false;
+        //verifica si se pude abrir la carpeta remota, del equipo remoto
+        try{
+            File dirRemoto = new File(getCarpetaHistoricoRemoto());
+            if (dirRemoto.list() != null){
+                sePudo = true;
+            }
+        }    
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+    
+    
     public String[] hayArchivosNuevos() {
         //verifica si existen archivos nuevos, si hay devuelve sus filename en el vector,
         //sino devuelve el vector con archivosNuevos.size()=0
@@ -68,15 +85,24 @@ public class LanSonda implements Runnable {
         File dirRemoto = new File(getCarpetaHistoricoRemoto());
         String[] archivosR = dirRemoto.list();
         String[] archivosNuevos = {""};
+        int i = 0;        
 
         if (archivosR == null) {
             System.out.println("No hay ficheros en el directorio especificado");
         } else {
-            Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length - 1]);
-            int i = 0;
-            for (int x = 0; x <= archivosR.length - 1; x++) {
-                Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto() + "\\" + archivosR[x].toString());
-                if (fechaUltimoRemoto.compareTo(fechaUltimoLocal) > 0) {
+            if (archivosL.length>0){
+                Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length - 1]);
+                for (int x = 0; x <= archivosR.length - 1; x++) {
+                    Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto() + "\\" + archivosR[x].toString());
+                    if (fechaUltimoRemoto.compareTo(fechaUltimoLocal) > 0) {
+                        //System.out.println(archivosR[x]); //archivo remoto que no esta en local (fechaR>ultimo(fechaL))
+                        archivosNuevos[i] = archivosR[x];
+                        i++;
+                    }
+                }
+            }
+            else{
+                for (int x = 0; x <= archivosR.length - 1; x++) {
                     //System.out.println(archivosR[x]); //archivo remoto que no esta en local (fechaR>ultimo(fechaL))
                     archivosNuevos[i] = archivosR[x];
                     i++;
@@ -154,6 +180,8 @@ public class LanSonda implements Runnable {
      */
     public void setEstadoConexion(int estadoConexion) {
         this.estadoConexion = estadoConexion;
+        setChanged();
+        notifyObservers();        
     }
 
     /**
@@ -197,6 +225,8 @@ public class LanSonda implements Runnable {
     public void setFyhUltimaLecturaRemota(java.util.Date fyhUltimaLecturaRemota) {
         this.fyhUltimaLecturaRemota = fyhUltimaLecturaRemota;
         System.out.println("Ultima vez que se leyo la carpeta remota: "+fyhUltimaLecturaRemota.toString());
+        setChanged();
+        notifyObservers();        
     }
 
     public void run(){
@@ -231,9 +261,7 @@ public class LanSonda implements Runnable {
             lanThread.setPriority(Thread.MIN_PRIORITY);
             lanThread.start();
         }
-    }
-    
-    
+    }    
 
     public static void main(String[] args) {
         //tests        
@@ -249,5 +277,22 @@ public class LanSonda implements Runnable {
         getInstance().start();
     }
 
+    public boolean disparaLectura() {
+        boolean sePudo=false;
+        if ((getCarpetaHistoricoLocal().length()>1) && (getCarpetaHistoricoRemoto().length()>1)) {
+            this.start();
+            sePudo = true;
+        }    
+        return sePudo;
+    }
+
+    public boolean detieneLectura() {
+        boolean sePudo=false;
+        if (lanThread != null) {
+            lanThread=null;
+            sePudo = true;
+        }    
+        return sePudo;
+    }    
     
 }

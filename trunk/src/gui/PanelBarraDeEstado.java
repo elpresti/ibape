@@ -236,18 +236,36 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         lblSondaEstado.setForeground(Color.white);
     }
     
+    public void setLanDesconectado() {
+        LanEstado.setBackground(Color.red);
+        LanEstado.setToolTipText("Desconectado");
+        lblLanEstado.setForeground(Color.white);
+    }    
+    
     public void setSondaConectando(){
         SondaEstado.setBackground(Color.orange);
         SondaEstado.setToolTipText("Conectando...");        
         lblSondaEstado.setForeground(Color.black);
     }
     
+    public void setLanConectando() {
+        LanEstado.setBackground(Color.orange);
+        LanEstado.setToolTipText("Conectando...");        
+        lblLanEstado.setForeground(Color.black);
+    }
+    
     public void setSondaConectado(){
         SondaEstado.setBackground(Color.green);
         SondaEstado.setToolTipText("Conectado");                
         lblSondaEstado.setForeground(Color.black);
-    }      
-
+    }
+    
+    public void setLanConectado() {
+        LanEstado.setBackground(Color.green);
+        LanEstado.setToolTipText("Conectado");                
+        lblLanEstado.setForeground(Color.black);
+    }
+    
     public void mostrarMensaje(String msg){
         if ((msg.contains("gnu."))|| 
             (msg.contains("java."))){
@@ -327,4 +345,8 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
       int idMensajeAmostrar=0;      
       return idMensajeAmostrar;
     }
+
+
+
+
 }

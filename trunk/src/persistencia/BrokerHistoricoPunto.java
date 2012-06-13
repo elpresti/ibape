@@ -84,9 +84,9 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     
     public boolean insertPunto(Punto pto) {
         boolean sePudo = false;
-        if ((pto.getFechaYhora().getTime() - getfYhUltimoInsert().getTime()) >= 5000) { //10000=10seg. 
+        if ((Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 10000) { //10000=10seg. 
             try {
-                if (pto.getFechaYhora() != null){
+                if (pto.getFechaYhora() != null){ 
                     getPsInsert().setLong(1, pto.getFechaYhora().getTime());
                 }
                 getPsInsert().setDouble(2,pto.getLatitud());//guardamos la latitud en Grados Decimales
@@ -113,9 +113,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     public boolean insertPunto(PuntoHistorico ph) {
         boolean sePudo = false;
         try {
-            if (ph.getFechaYhora() != null){
-                getPsInsert().setLong(1, ph.getFechaYhora().getTime());
-            }            
+            getPsInsert().setLong(1, Calendar.getInstance().getTime().getTime());          
             getPsInsert().setDouble(2,ph.getLatitud());//guardamos la latitud en Grados Decimales
             getPsInsert().setDouble(3,ph.getLongitud());//guardamos la longitud en Grados Decimales --> Valor decimal = grados + (minutos/60) + (y 3600 segundos)
             getPsInsert().setDouble(4,ph.getAltitud());
@@ -140,7 +138,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
         try {
             if (ph.getFechaYhora() != null){
                 getPsUpdate().setLong(1, ph.getFechaYhora().getTime());
-            }            
+            }
             getPsUpdate().setDouble(2, ph.getLatitud());//guardamos la latitud en Grados Decimales
             getPsUpdate().setDouble(3, ph.getLongitud());//guardamos la longitud en Grados Decimales
             getPsUpdate().setDouble(4, ph.getAltitud());
@@ -220,6 +218,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
         setGuardaDatosGps(false);
         setGuardaDatosSonda(false);
         setGuardaDatosPeces(false);
+        setfYhUltimoInsert(Calendar.getInstance().getTime());        
     }
 
     /**

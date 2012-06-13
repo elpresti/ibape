@@ -7,8 +7,10 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Observable;
 import modelo.dataCapture.Gps;
+import modelo.dataCapture.LanSonda;
 import modelo.dataCapture.PuertosSerieDelSO;
 import modelo.dataCapture.Sonda;
+import persistencia.Logueador;
 
 /**
  *
@@ -18,11 +20,12 @@ public class ControllerConfig  implements java.util.Observer {
     static ControllerConfig unicaInstancia; 
     private Gps gps = Gps.getInstance();
     private Sonda sonda = Sonda.getInstance();
-    private PuertosSerieDelSO puertosSerie = PuertosSerieDelSO.getInstance();    
+    private PuertosSerieDelSO puertosSerie = PuertosSerieDelSO.getInstance();
+    private LanSonda lanSonda = LanSonda.getInstance();
 
     public static ControllerConfig getInstance() {
        if (unicaInstancia == null)
-          unicaInstancia = new ControllerConfig();       
+          unicaInstancia = new ControllerConfig();
        return unicaInstancia;
     }
 
@@ -30,13 +33,12 @@ public class ControllerConfig  implements java.util.Observer {
         gps.addObserver(this);
         sonda.addObserver(this);
         puertosSerie.addObserver(this);
+        lanSonda.addObserver(this);
     }
     
     public void obtienePuertosComExistentes(){        
         puertosSerie.start();
-    }
-    
-    
+    }        
     
     public void setEstadoGps(int nroEstado){
         if (nroEstado==0){
@@ -71,8 +73,19 @@ public class ControllerConfig  implements java.util.Observer {
     }
 
     public void setEstadoLan(int nroEstado){
-        
-        
+        if (nroEstado==0){
+            gui.PanelOpcConfiguracion.getInstance().setLanDesconectado();
+            gui.PanelBarraDeEstado.getInstance().setLanDesconectado();
+            gui.PanelOpcConfiguracion.getInstance().habilitaBtnConectaLan();
+        }
+        else if (nroEstado==1){
+            gui.PanelOpcConfiguracion.getInstance().setLanConectando();
+            gui.PanelBarraDeEstado.getInstance().setLanConectando();
+        }
+        else if (nroEstado == 2){
+            gui.PanelOpcConfiguracion.getInstance().setLanConectado();
+            gui.PanelBarraDeEstado.getInstance().setLanConectado();
+        }                
     }
     
 
@@ -105,7 +118,6 @@ public class ControllerConfig  implements java.util.Observer {
     
     
     public void update(Observable o, Object arg) {
-
       if (o == gps){
           setEstadoGps(gps.getEstadoConexion());
       }
@@ -130,7 +142,31 @@ public class ControllerConfig  implements java.util.Observer {
     public void setParametrosLan() {
         String ruta=gui.PanelOpcConfiguracion.getInstance().getCampoRutaHistorico().getText();
         modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoRemoto(ruta);
+        modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal("Historico\\camp34");
     }
 
-    
+    public boolean detenerLecturaLan() {
+        boolean sePudo = false;
+        try{
+            lanSonda.detieneLectura();
+            sePudo=true;
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+
+    public boolean disparaLecturaLan() {
+        boolean sePudo = false;
+        try{
+            lanSonda.disparaLectura();
+            sePudo=true;
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+
 }

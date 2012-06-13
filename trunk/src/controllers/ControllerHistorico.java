@@ -13,8 +13,8 @@ import persistencia.BrokerHistoricoSondaSet;
  */
 public class ControllerHistorico {
     static ControllerHistorico unicaInstancia;
-    private BrokerHistoricoPunto brokerPuntoHistorico;
-    private BrokerHistoricoSondaSet brokerSondaSetHistorico;
+    private BrokerHistoricoPunto brokerHistoricoPunto;
+    private BrokerHistoricoSondaSet brokerHistoricoSondaSet;
             
     private ControllerHistorico(){
         inicializador();
@@ -27,17 +27,15 @@ public class ControllerHistorico {
     }
 
     private void inicializador() {
-        brokerPuntoHistorico = BrokerHistoricoPunto.getInstance();
-        brokerSondaSetHistorico = BrokerHistoricoSondaSet.getInstance();
-        configuraBrokerHistorico();
-        
+        brokerHistoricoPunto = BrokerHistoricoPunto.getInstance();
+        brokerHistoricoSondaSet = BrokerHistoricoSondaSet.getInstance();        
     }
 
     public void configuraBrokerHistorico() {
-        brokerPuntoHistorico.setGuardaDatosGps(gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected());
-        brokerPuntoHistorico.setGuardaDatosSonda(gui.PanelOpcCampanias.getInstance().getChkHistoricoSonda().isSelected());
-        brokerPuntoHistorico.setGuardaDatosPeces(gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().isSelected());
-        brokerSondaSetHistorico.setGuardaDatosSondaSets(gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().isSelected());        
+        brokerHistoricoPunto.setGuardaDatosGps(gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected());
+        brokerHistoricoPunto.setGuardaDatosSonda(gui.PanelOpcCampanias.getInstance().getChkHistoricoSonda().isSelected());
+        brokerHistoricoPunto.setGuardaDatosPeces(gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().isSelected());
+        brokerHistoricoSondaSet.setGuardaDatosSondaSets(gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().isSelected());
     }
    
     

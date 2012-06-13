@@ -1319,7 +1319,7 @@
                     <Property name="verticalGap" type="int" value="0"/>
                   </Layout>
                   <SubComponents>
-                    <Component class="javax.swing.JCheckBox" name="chkEstadoDetectaPeces">
+                    <Component class="javax.swing.JCheckBox" name="chkEstadoLan">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="14" style="0"/>
@@ -1328,7 +1328,7 @@
                         <Property name="enabled" type="boolean" value="false"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkEstadoDetectaPecesActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkEstadoLanActionPerformed"/>
                       </Events>
                     </Component>
                     <Container class="org.jdesktop.swingx.JXPanel" name="panelConfigHistorico">
@@ -1457,7 +1457,7 @@
                                 <Property name="verticalGap" type="int" value="3"/>
                               </Layout>
                               <SubComponents>
-                                <Component class="javax.swing.JButton" name="btnConectarLan">
+                                <Component class="javax.swing.JButton" name="btnConectaLan">
                                   <Properties>
                                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                       <Font name="Tahoma" size="12" style="0"/>
@@ -1466,7 +1466,18 @@
                                     <Property name="enabled" type="boolean" value="false"/>
                                   </Properties>
                                   <Events>
-                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConectarLanActionPerformed"/>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConectaLanActionPerformed"/>
+                                  </Events>
+                                </Component>
+                                <Component class="javax.swing.JButton" name="btnDesconectaLan">
+                                  <Properties>
+                                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                                      <Font name="Tahoma" size="12" style="1"/>
+                                    </Property>
+                                    <Property name="text" type="java.lang.String" value="Desconectar"/>
+                                  </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDesconectaLanActionPerformed"/>
                                   </Events>
                                 </Component>
                               </SubComponents>
