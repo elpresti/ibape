@@ -1549,12 +1549,14 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }
 
 // codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
-     public static void main(String[] args) {
+/*     public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
         elFrame.add(new PanelOpcConfiguracion()); 
         elFrame.setVisible(true);
-    }
+    } 
+   */
+  
 
     public void habilitaBtnConectaGps() {
         btnConectaGps.setVisible(true);

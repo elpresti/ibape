@@ -10,12 +10,28 @@
  */
 package gui;
 
+import java.awt.Color;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import modelo.alertas.Alerta;
+
 /**
  *
  * @author Sebastian
  */
 public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
+    
     static PanelOpcAlertasAgregaEdita unicaInstancia;
+    private int NRO_COL_ID_CONDICION;
+    private int NRO_COL_DESCRIPCION;
+    private int NRO_COL_ACCIONES;
+    private int cantColumnas;
+    private boolean modificandoCondicion;
+    private Color colorOriginalBtnIniciar;
+    private DefaultTableModel modeloTabla;
+    private Alerta alertaAct;
+    
 
     /** Creates new form PanelOpcAlertasAgregaEdita */
     private PanelOpcAlertasAgregaEdita() {
@@ -51,9 +67,12 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelTablaCondiciones = new org.jdesktop.swingx.JXPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCondiciones = new org.jdesktop.swingx.JXTable();
+        panelAccionesCampElegida = new org.jdesktop.swingx.JXPanel();
+        lblAccionesCondicion = new org.jdesktop.swingx.JXLabel();
+        panelAcciones = new org.jdesktop.swingx.JXPanel();
+        btnModificar = new org.jdesktop.swingx.JXHyperlink();
+        btnEliminar = new org.jdesktop.swingx.JXHyperlink();
         panelNuevaCondicion = new org.jdesktop.swingx.JXPanel();
-        panelTituloCondicion = new org.jdesktop.swingx.JXPanel();
-        lblTituloNuevaCondicion = new org.jdesktop.swingx.JXLabel();
         panelDatosCondicion = new org.jdesktop.swingx.JXPanel();
         panelVariable = new org.jdesktop.swingx.JXPanel();
         panelLblVariable = new org.jdesktop.swingx.JXPanel();
@@ -125,7 +144,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoNombre.setPreferredSize(new java.awt.Dimension(400, 33));
         panelCampoNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        campoNombre.setFont(new java.awt.Font("Tahoma", 0, 14));
+        campoNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         campoNombre.setText("Ingrese aqui el nombre de la alerta");
         campoNombre.setMaximumSize(new java.awt.Dimension(300, 23));
         campoNombre.setMinimumSize(new java.awt.Dimension(300, 23));
@@ -165,10 +184,12 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
 
         panelDatosAlerta.add(panelEstado);
 
+        panelTxtCondiciones.setMinimumSize(new java.awt.Dimension(370, 20));
+        panelTxtCondiciones.setPreferredSize(new java.awt.Dimension(370, 15));
         panelTxtCondiciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblCondiciones.setText("Condiciones que deben cumplirse para que ocurra la alerta:");
-        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtCondiciones.add(lblCondiciones);
 
         panelDatosAlerta.add(panelTxtCondiciones);
@@ -193,37 +214,65 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        tablaCondiciones.setPreferredSize(new java.awt.Dimension(450, 60));
         jScrollPane1.setViewportView(tablaCondiciones);
         tablaCondiciones.getColumnModel().getColumn(0).setMinWidth(400);
         tablaCondiciones.getColumnModel().getColumn(0).setPreferredWidth(400);
         tablaCondiciones.getColumnModel().getColumn(0).setMaxWidth(400);
-        tablaCondiciones.getColumnModel().getColumn(1).setResizable(false);
-        tablaCondiciones.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tablaCondiciones.getColumnModel().getColumn(1).setMinWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(1).setPreferredWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(1).setMaxWidth(0);
 
         panelTablaCondiciones.add(jScrollPane1);
 
-        panelMedio.add(panelTablaCondiciones, java.awt.BorderLayout.CENTER);
+        panelAccionesCampElegida.setMaximumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setMinimumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setLayout(new java.awt.GridLayout(1, 2));
 
+        lblAccionesCondicion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAccionesCondicion.setText("Acciones sobre la alerta elegida:");
+        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelAccionesCampElegida.add(lblAccionesCondicion);
+
+        panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+
+        btnModificar.setText("");
+        btnModificar.setToolTipText("Modificar campaña");
+        btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnModificar);
+
+        btnEliminar.setText("");
+        btnEliminar.setToolTipText("Eliminar campaña");
+        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnEliminar);
+
+        panelAccionesCampElegida.add(panelAcciones);
+
+        panelTablaCondiciones.add(panelAccionesCampElegida);
+
+        panelMedio.add(panelTablaCondiciones, java.awt.BorderLayout.LINE_END);
+
+        panelNuevaCondicion.setAlignmentY(3.0F);
         panelNuevaCondicion.setPreferredSize(new java.awt.Dimension(500, 200));
         panelNuevaCondicion.setLayout(new javax.swing.BoxLayout(panelNuevaCondicion, javax.swing.BoxLayout.PAGE_AXIS));
-
-        panelTituloCondicion.setMaximumSize(new java.awt.Dimension(500, 30));
-        panelTituloCondicion.setMinimumSize(new java.awt.Dimension(500, 30));
-        panelTituloCondicion.setPreferredSize(new java.awt.Dimension(500, 30));
-        panelTituloCondicion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-
-        lblTituloNuevaCondicion.setText("Nueva Condición:");
-        lblTituloNuevaCondicion.setFont(new java.awt.Font("Tahoma", 0, 14));
-        panelTituloCondicion.add(lblTituloNuevaCondicion);
-
-        panelNuevaCondicion.add(panelTituloCondicion);
 
         panelDatosCondicion.setMaximumSize(new java.awt.Dimension(500, 170));
         panelDatosCondicion.setMinimumSize(new java.awt.Dimension(500, 170));
@@ -366,7 +415,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
         panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        btnVolver.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnVolver.setFont(new java.awt.Font("Tahoma", 0, 14));
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -394,9 +443,25 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     PanelOpcAlertas.getInstance().getPanelAlertasPpal().setVisible(true);
 }//GEN-LAST:event_btnVolverActionPerformed
 
+private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+    setGuiModificarFilaElegida();
+    setModificandoCondicion(true);
+    controlaPanelAccionesCondicion();
+}//GEN-LAST:event_btnModificarActionPerformed
+
+private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+    String txtPregunta = "Está por eliminar una alerta del disco, está usted seguro?";
+    if (JOptionPane.showConfirmDialog(null, txtPregunta, "Eliminar alerta seleccionada", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+        controllers.ControllerAlertas.getInstance().borrarAlerta(getIdDeCondicionSeleccionada());
+        controlaPanelAccionesCondicion();
+    }
+}//GEN-LAST:event_btnEliminarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private org.jdesktop.swingx.JXHyperlink btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private org.jdesktop.swingx.JXHyperlink btnModificar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JTextField campoNombre;
     private javax.swing.JComboBox comboEstado;
@@ -405,15 +470,17 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    private org.jdesktop.swingx.JXLabel lblAccionesCondicion;
     private org.jdesktop.swingx.JXLabel lblAlertaNueva;
     private org.jdesktop.swingx.JXLabel lblCondiciones;
     private org.jdesktop.swingx.JXLabel lblEstado;
     private org.jdesktop.swingx.JXLabel lblNombre;
     private org.jdesktop.swingx.JXLabel lblRelacion;
-    private org.jdesktop.swingx.JXLabel lblTituloNuevaCondicion;
     private org.jdesktop.swingx.JXLabel lblValMax;
     private org.jdesktop.swingx.JXLabel lblValMin;
     private org.jdesktop.swingx.JXLabel lblVariable;
+    private org.jdesktop.swingx.JXPanel panelAcciones;
+    private org.jdesktop.swingx.JXPanel panelAccionesCampElegida;
     private org.jdesktop.swingx.JXPanel panelAgregaEdita;
     private org.jdesktop.swingx.JXPanel panelBtnAgrega;
     private org.jdesktop.swingx.JXPanel panelCampoNombre;
@@ -438,7 +505,6 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private org.jdesktop.swingx.JXPanel panelRelacion;
     private org.jdesktop.swingx.JXPanel panelSuperior;
     private org.jdesktop.swingx.JXPanel panelTablaCondiciones;
-    private org.jdesktop.swingx.JXPanel panelTituloCondicion;
     private org.jdesktop.swingx.JXPanel panelTxtCondiciones;
     private org.jdesktop.swingx.JXPanel panelValMax;
     private org.jdesktop.swingx.JXPanel panelValMin;
@@ -446,11 +512,237 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private org.jdesktop.swingx.JXTable tablaCondiciones;
     // End of variables declaration//GEN-END:variables
  
+    private void inicializador() {
+        //String[] columnas = new String[cantColumnas];
+        //columnas[NRO_COL_ID_CAMP]="ID";
+        //columnas[NRO_COL_ACCIONES]="Acciones";
+        //columnas[NRO_COL_BARCO]="Barco";
+        //columnas[NRO_COL_CAPITAN]="Capitan";
+        //columnas[NRO_COL_DURACION]="Duracion";
+        //columnas[NRO_COL_FECHA_FIN]="Fecha Fin";
+        //columnas[NRO_COL_FECHA_INI]="Fecha Inicio";
+        //columnas[NRO_COL_NOMBRE_CAMP]="Nombre campaña";        
+        //modeloTabla = new javax.swing.table.TableModel(new Object[][]{},columnas);        
+        //tablaCampanias.setModel(modeloTabla);
+                                       
+        //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
+        //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
+/*
+        TableColumn columnaAcciones = new TableColumn();
+        columnaAcciones.setHeaderValue("Acciones!");
+        columnaAcciones.setMinWidth(100);
+        columnaAcciones.setPreferredWidth(100);
+        columnaAcciones.setCellEditor(new PanelOpcCampaniasAcciones());
+        columnaAcciones.setCellRenderer(new PanelOpcCampaniasAcciones());        
+        tablaCampanias.addColumn(columnaAcciones);        
+        tablaCampanias.setEditingColumn(6);
+        //tablaCampanias.setEditingRow(0);
+*/        
+        modificandoCondicion=false;
+        NRO_COL_ID_CONDICION=0;
+        NRO_COL_DESCRIPCION=1;
+        NRO_COL_DESCRIPCION=2;
+        cantColumnas=3;        
+        modeloTabla = (DefaultTableModel) tablaCondiciones.getModel();
+        tablaCondiciones.setModel(modeloTabla);
+        cargaIconosDeBotones();
+        cargaGrillaCondiciones();  
+        controlaPanelAccionesCondicion();
+        // Se crea el JScrollPane, el JTable y se pone la cabecera...
+         //JScrollPane scroll = new JScrollPane();
+         //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
+         //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
+         //scroll.setViewportView(tablaCampanias);
+         //scroll.setColumnHeaderView (tablaCampanias.getTableHeader());        
+        //tablaCampanias.setVisibleRowCount(6);
+        
+/* si queremos que algun campo sea editable, capturar el evento y demas... 
+        TableColumn column = tablaCampanias.getColumnModel().getColumn(NRO_COL_ACCIONES);
+        JXHyperlink btnGuardar = new JXHyperlink(); btnGuardar.setText("guardar");
+        JXHyperlink btnModificar = new JXHyperlink(); btnModificar.setText("modif");
+        JXHyperlink btnEliminar = new JXHyperlink(); btnEliminar.setText("Eliminar");
+        
+        
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jXHyperlinkBtnGuardarActionPerformed(evt);
+            }
+        });
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //jXHyperlinkBtnModificarActionPerformed(evt);
+                System.out.println("no hace nada xq falta codificar el método");
+            }
+        });
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                //jXHyperlinkBtnEliminarActionPerformed(evt);
+                System.out.println("no hace nada xq falta codificar el método");
+            }
+        });
+        
+        //Indicamos el CellEditor column
+        column.setCellEditor(new DefaultCellEditor(btnEliminar));
+
+        //Metodo para controlar el texto ingresado en el JTextField.
+
+    }
+
+    private void jXHyperlinkBtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
+        try {
+            //String tmp = this.fieldPago.getText();
+            //Double Pago = Double.parseDouble(tmp);
+            //Obtenemos el numero de fila donde estamos ubicamos en este momento.
+            int fila = tablaCampanias.getSelectedRow();
+
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "No se selecciono ninguna fila", "Mensaje", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            int id = (int)tablaCampanias.getValueAt(fila, 0);
+            Double Deuda = Double.parseDouble(tmp);
+            tmp = String.valueOf(tablaCampanias.getValueAt(fila, 5));
+            Double Saldo = Double.parseDouble(tmp);
+            if (Pago < 0) {
+                JOptionPane.showMessageDialog(this, "El pago no puede ser negativo", "Mensaje", JOptionPane.WARNING_MESSAGE);
+                tablaCampanias.setValueAt(0.0, fila, 4);
+                return;
+            }
+
+            //Actualizamos otra columna con los valores, esta columna debe ser editable
+            tablaCampanias.setValueAt(Pago, fila, 5);
+            tablaCampanias.repaint();
+            modeloTabla.fireTableDataChanged();
+            JOptionPane.showMessageDialog(this, "Presionaste Enter pago de " + Pago, "Mensaje", JOptionPane.WARNING_MESSAGE);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+*/
+    }
+    
+        private void cargaIconosDeBotones() {
+        btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
+        btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
+    }
+    
     public static PanelOpcAlertasAgregaEdita getInstance() {
        if (unicaInstancia == null) {
           unicaInstancia = new PanelOpcAlertasAgregaEdita();          
        }
        return unicaInstancia;
+    }
+
+    private void cargaGrillaCondiciones() {
+        vaciaTabla();
+        List<modelo.alertas.Condicion> condiciones = getAlertaAct().getCondiciones();
+        /*
+        if ((condiciones == null) || (condiciones.isEmpty()) ) {
+            modelo.alertas.AdministraAlertas.getInstance().leerAlertasDeLaDB();
+            alertas = modelo.alertas.AdministraAlertas.getInstance().getAlertas();            
+        }   
+         */
+         
+        if ((!(condiciones == null)) && (condiciones.size() > 0)) {
+            // while (), pongo cada objeto Condicion en la grilla de condiciones                    
+            int i = 0;
+            while (i < condiciones.size()) {
+                agregaUnaFilaCondicion(
+                        condiciones.get(i).getId(),
+                        condiciones.get(i).getDescripcion()
+                        );
+                i++;
+            }
+            
+        }
+    }
+
+    private void vaciaTabla() {
+        modeloTabla.setRowCount(0);
+    }
+
+    /**
+     * @return the alertaAct
+     */
+    public Alerta getAlertaAct() {
+        return alertaAct;
+    }
+
+    /**
+     * @param alertaAct the alertaAct to set
+     */
+    public void setAlertaAct(Alerta alertaAct) {
+        this.alertaAct = alertaAct;
+    }
+
+    private void agregaUnaFilaCondicion(int id, String descripcion) {
+        Object[] fila = new Object[cantColumnas]; //creamos la fila
+        fila[NRO_COL_ACCIONES]=panelAcciones;
+        fila[NRO_COL_ID_CONDICION]=id;
+        fila[NRO_COL_DESCRIPCION]=descripcion;
+        modeloTabla.addRow(fila);
+    }
+
+    private void controlaPanelAccionesCondicion() {
+        
+        boolean estado;
+        
+        if ((modeloTabla.getRowCount()>0) && (getIdDeCondicionSeleccionada()>=0)){
+           estado = true;
+        }
+        else { estado = false; }
+        lblAccionesCondicion.setEnabled(estado);
+        btnEliminar.setEnabled(estado);
+        btnModificar.setEnabled(estado);  
+        if (isModificandoCondicion()){          
+            btnModificar.setVisible(false);
+            btnEliminar.setVisible(false);
+            tablaCondiciones.setEnabled(false);
+        }
+        else
+            { 
+              btnModificar.setVisible(true);
+              btnEliminar.setVisible(true);
+              tablaCondiciones.setEnabled(true);            
+            }
+    }
+
+    /**
+     * @return the modificandoCondicion
+     */
+    public boolean isModificandoCondicion() {
+        return modificandoCondicion;
+    }
+
+    /**
+     * @param modificandoCondicion the modificandoCondicion to set
+     */
+    public void setModificandoCondicion(boolean modificandoCondicion) {
+        this.modificandoCondicion = modificandoCondicion;
+    }
+
+    private int getIdDeCondicionSeleccionada() {
+                int salida = -1;
+        int filaSeleccionada = tablaCondiciones.getSelectedRow();
+        if (filaSeleccionada>=0){
+            salida = (Integer) modeloTabla.getValueAt(filaSeleccionada, NRO_COL_ID_CONDICION);
+        }                
+        return salida;
+    }
+
+    private void setGuiModificarFilaElegida() {
+       int filaSeleccionada = tablaCondiciones.getSelectedRow();
+       if (filaSeleccionada>=0){
+           //Pendiente: Mostrar panel para modificacion de Condicion elegida
+           
+           /*
+           lblNuevaAlerta.setText("Modificar datos de alerta:");
+           controlaPanelNuevaCampania(true);
+           campoBarcoCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_BARCO));           
+           campoCapitanCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_CAPITAN));
+           campoNombreCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_NOMBRE_CAMP));       
+           */
+       }
     }
 
 }
