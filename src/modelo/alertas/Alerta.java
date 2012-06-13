@@ -29,36 +29,43 @@ public class Alerta {
     */
     
     
-    public static int getId() {
+    public int getId() {
         return id;
     }
 
     /**
      * @return the mensaje
      */
-    public static String getMensaje() {
+    public String getMensaje() {
         return mensaje;
     }
 
     /**
      * @param aMensaje the mensaje to set
      */
-    public static void setMensaje(String aMensaje) {
+    public void setMensaje(String aMensaje) {
         mensaje = aMensaje;
     }
 
     /**
      * @return the flagsAcciones
      */
-    public static int getFlagsAcciones() {
+    public int getFlagsAcciones() {
         return flagsAcciones;
     }
 
     /**
      * @param aFlagsAcciones the flagsAcciones to set
      */
-    public static void setFlagsAcciones(int aFlagsAcciones) {
+    public void setFlagsAcciones(int aFlagsAcciones) {
         flagsAcciones = aFlagsAcciones;
+    }
+
+    /**
+     * @param aId the id to set
+     */
+    public void setId(int aId) {
+        id = aId;
     }
 
     /**
@@ -103,7 +110,7 @@ public class Alerta {
         condiciones = aCondiciones;
     }
     
-    public boolean agregarCondicion(String variable, String relacion, float valorMin, float valorMax){
+    public boolean agregarCondicion(Condicion c){
         return true;
     }
     public boolean modificarCondicion(Condicion c){

@@ -13,6 +13,7 @@ public class Condicion {
     private float valorMinimo;
     private float valorMaximo;
     private String relacion;
+    private String descripcion;
     private int id;
     private int idVariable;
 
@@ -70,5 +71,19 @@ public class Condicion {
      */
     public int getIdVariable() {
         return idVariable;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

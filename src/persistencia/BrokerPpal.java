@@ -140,7 +140,6 @@ import java.util.logging.Logger;
             sePudo = sePudo && crearTablaVariables(); 
             sePudo = sePudo && crearTablaCondiciones(); 
             sePudo = sePudo && crearTablaAlertas(); 
-            sePudo = sePudo && crearTablaCondicionesPorAlerta(); 
             
             //Creacion de Triggers
             
@@ -171,18 +170,13 @@ import java.util.logging.Logger;
 /*
      public static void main(String[] args) {
         //boolean a = BrokerPpal.getInstance().creaConexionNueva();
-         BrokerCampania brokerCampania = new BrokerCampania();
+        //BrokerCampania brokerCampania = new BrokerCampania();
+         BrokerAlertas brokerAlertas = new BrokerAlertas();
         //BrokerPpal.getInstance().creacionTest();
     }
 */
     
-/*
-    public static BrokerPpal getInstance() {
-       if (unicaInstancia == null)
-          unicaInstancia = new BrokerPpal();       
-       return unicaInstancia;
-    }
-*/
+
     
     public boolean crearTablaCondiciones(){
         boolean sePudo = false;
@@ -192,10 +186,14 @@ import java.util.logging.Logger;
             + "  valor1      float(50) NOT NULL,"
             + "  valor2      float(50) NOT NULL,"
             + "  relacion    nvarchar(50) NOT NULL,"
+            + "  descripcion    nvarchar(50) NOT NULL,"
             + "  idVariable  integer NOT NULL,"
+            + "  idAlerta  integer NOT NULL,"
             + "  /* Foreign keys */ "
             + "  FOREIGN KEY (idVariable)"
-            + "    REFERENCES Variable(id)"
+            + "    REFERENCES Variables(id)"
+            + "  FOREIGN KEY (idAlerta)"
+            + "    REFERENCES Alertas(id)"
             + ");";
             getStatement().executeUpdate(codigoCreacion);
             
@@ -470,26 +468,6 @@ import java.util.logging.Logger;
         return sePudo;
     }
 
-    private boolean crearTablaCondicionesPorAlerta() {
-        boolean sePudo = false;
-        try {
-            String codigoCreacion = "CREATE TABLE CondicionesPorAlerta ("
-            + "  idCondicion        integer NOT NULL,"
-            + "  idAlerta           integer NOT NULL,"                        
-            + "  PRIMARY KEY        (idCondicion,idAlerta),"
-            + "  /* Foreign keys */ "
-            + "  FOREIGN KEY (idCondicion)"
-            + "    REFERENCES Condiciones(id)"
-            + "  FOREIGN KEY (idAlerta)"
-            + "    REFERENCES Alertas(id)"                    
-            + ");";
-            getStatement().executeUpdate(codigoCreacion);                                    
-            sePudo=true;
-        }
-        catch(Exception e)
-            { Logueador.getInstance().agregaAlLog(e.toString()); }
-        return sePudo;
-    }
 
     private boolean crearTablaVariables() {
         boolean sePudo = false;
@@ -712,24 +690,24 @@ import java.util.logging.Logger;
             
             /*TRIGGER ON INSERT, si la clave primaria no permite nulos */
             String codigoCreacion=
-            "CREATE TRIGGER fki_CondicionesPorAlerta_idAlerta "
-            + "BEFORE INSERT ON CondicionesPorAlerta "
+            "CREATE TRIGGER fki_Condiciones_idAlerta "
+            + "BEFORE INSERT ON Condiciones "
             + "FOR EACH ROW BEGIN"
             + "  SELECT CASE"
             + "     WHEN ((SELECT id FROM Alertas WHERE id = NEW.idAlerta) IS NULL)"
-            + "     THEN RAISE(ABORT, 'insert on table \"CondicionesPorAlerta\" violates foreign key constraint \"fk_idAlerta\"')"
+            + "     THEN RAISE(ABORT, 'insert on table \"Condiciones\" violates foreign key constraint \"fk_idAlerta\"')"
             + "  END; "
             + "END;";
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
 
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion=
-            "CREATE TRIGGER fku_CondicionesPorAlerta_idAlerta "
-            + "BEFORE UPDATE ON CondicionesPorAlerta "
+            "CREATE TRIGGER fku_Condiciones_idAlerta "
+            + "BEFORE UPDATE ON Condiciones "
             + "FOR EACH ROW BEGIN"
             + "  SELECT CASE"
             + "     WHEN ((SELECT id FROM Alertas WHERE id = NEW.idAlerta) IS NULL)"
-            + "     THEN RAISE(ABORT, 'update on table \"CondicionesPorAlerta\" violates foreign key constraint \"fk_idAlerta\"')"
+            + "     THEN RAISE(ABORT, 'update on table \"Condiciones\" violates foreign key constraint \"fk_idAlerta\"')"
             + "  END; "
             + "END;";
 
@@ -737,11 +715,11 @@ import java.util.logging.Logger;
 
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion=
-            "CREATE TRIGGER fkd_CondicionesPorAlerta_idAlerta "
+            "CREATE TRIGGER fkd_Condiciones_idAlerta "
             + "BEFORE DELETE ON Alertas "
             + "FOR EACH ROW BEGIN "
             + "  SELECT CASE "
-            + "    WHEN ((SELECT idAlerta FROM CondicionesPorAlerta WHERE idAlerta = OLD.id) IS NOT NULL) "
+            + "    WHEN ((SELECT idAlerta FROM Condiciones WHERE idAlerta = OLD.id) IS NOT NULL) "
             + "    THEN RAISE(ABORT, 'delete on table \"Alertas\" violates foreign key constraint \"fk_idAlerta\"') "
             + "  END; "
             + "END; ";
@@ -750,10 +728,10 @@ import java.util.logging.Logger;
 
             /*Borrado en cascada */
             codigoCreacion=
-            "CREATE TRIGGER fkd_CondicionesPorAlerta_Alerta_id "
+            "CREATE TRIGGER fkd_Condiciones_Alerta_id "
             + "BEFORE DELETE ON Alertas "
             + "FOR EACH ROW BEGIN "
-            + "   DELETE from CondicionesPorAlerta WHERE idAlerta = OLD.id; "
+            + "   DELETE from Condiciones WHERE idAlerta = OLD.id; "
             + "END; ";
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
         }

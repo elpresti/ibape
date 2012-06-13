@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import modelo.alertas.Alerta;
 import modelo.alertas.Condicion;
 import persistencia.BrokerPpal;
 
@@ -60,7 +61,7 @@ public class BrokerAlertas extends BrokerPpal{
                     sePudo = true;
                 }else{sePudo=false;}
             }
-                //Ahora obtengo el id de la alerta insertada para insertar en la tabla alertasXcondiciones
+                //Ahora obtengo el id de la alerta insertada para insertar en la tabla condiciones
                 if (sePudo){
                 sqlQuery = "SELECT max(id) from alertas";
                 System.out.println("Select: "+sqlQuery);
@@ -74,13 +75,16 @@ public class BrokerAlertas extends BrokerPpal{
                for (Condicion c:alerta.getCondiciones()){
                    if (c.getId()==0){
                     sqlQuery = "INSERT INTO Condiciones"
-                        + "(idVariable,valor1,valor2,relacion)"
+                        + "(idVariable,idAlerta,valor1,valor2,relacion,descripcion)"
                         + "VALUES"
-                        +"("+c.getIdVariable()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getRelacion()+")";
+                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getRelacion()+","+c.getDescripcion()+")";
                         System.out.println("Insert: "+sqlQuery);
                         if (getStatement().executeUpdate(sqlQuery) > 0) {
                             sePudo = true;
                         }else{sePudo=false;}
+                        
+                        /*
+                        
                             //Ahora obtengo el id de la condicion insertada para insertar en la tabla alertasXcondiciones
                             if (sePudo){
                                 sqlQuery = "SELECT max(id) from condiciones";
@@ -102,19 +106,7 @@ public class BrokerAlertas extends BrokerPpal{
                             sePudo = true;
                         }else{sePudo=false;}      
                         }
-                        
-                   }else{
-                       //En caso de que la condicion ya exista entonces inserto en alertasXcondiciones con el Id ya existente
-                       if (sePudo){
-                            sqlQuery = "INSERT INTO CondicionesPorAlerta"
-                        + "(idCondicion,idAlerta)"
-                        + "VALUES"
-                        +"("+c.getId()+","+idAlerta+")";
-                        System.out.println("Insert: "+sqlQuery);
-                        if (getStatement().executeUpdate(sqlQuery) > 0) {
-                            sePudo = true;
-                        }else{sePudo=false;}                    
-                        }
+                        */
                    }
                    //Continuacion for
                    
@@ -152,63 +144,32 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
                     sePudo = true;
                 }else{sePudo=false;}
         
+                //Borro todas las condiciones correspondientes a esta alerta
+                
+                sqlQuery = "DELETE FROM Condiciones "
+                            + "WHERE (idAlerta = "+alerta.hashCode()+")";
+                            System.out.println("DELETE: "+sqlQuery);
+                            if (getStatement().executeUpdate(sqlQuery) > 0) {
+                                sePudo = true;
+                            }
+                
                 //Inserto condiciones en Tabla de Condiciones
  
-               for (Condicion c:alerta.getCondiciones()){
-                   if (c.getId()==0){
-                    sqlQuery = "INSERT INTO Condiciones"
-                        + "(idVariable,valor1,valor2,relacion)"
+               for (Condicion c:alerta.getCondiciones()){        
+                        
+                        sqlQuery = "INSERT INTO Condiciones"
+                        + "(idVariable,idAlerta,valor1,valor2,relacion,descripcion)"
                         + "VALUES"
-                        +"("+c.getIdVariable()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getRelacion()+")";
+                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getRelacion()+","+c.getDescripcion()+")";
                         System.out.println("Insert: "+sqlQuery);
                         if (getStatement().executeUpdate(sqlQuery) > 0) {
                             sePudo = true;
                         }else{sePudo=false;}
-                            //Ahora obtengo el id de la condicion insertada para insertar en la tabla alertasXcondiciones
-                            if (sePudo){
-                                sqlQuery = "SELECT max(id) from condiciones";
-                                System.out.println("Select: "+sqlQuery);
-                                rs= getStatement().executeQuery(sqlQuery);
-                                if ( rs != null) {
-                                    idCondicion=rs.getInt("id");
-                                    sePudo = true;
-                                }else{sePudo=false;}
-                            }
-                        // Ya con los 2 Ids necesarios inserto en alertasXcondiciones
-                        if (sePudo){
-                            sqlQuery = "INSERT INTO CondicionesPorAlerta"
-                        + "(idCondicion,idAlerta)"
-                        + "VALUES"
-                        +"("+idCondicion+","+idAlerta+")";
-                        System.out.println("Insert: "+sqlQuery);
-                        if (getStatement().executeUpdate(sqlQuery) > 0) {
-                            sePudo = true;
-                        }else{sePudo=false;}      
-                        }
-                        
-                   }else{
-                       //En caso de que la condicion ya exista (en condiciones) entonces verifico si no existe e inserto en alertasXcondiciones con el Id ya existente
-                       if (sePudo){
-                            sqlQuery = "SELECT * FROM CondicionesPorAlerta WHERE "
-                        + "(idCondicion="+idCondicion+" AND "+"idAlerta="+idAlerta+")";
-                        System.out.println("Select: "+sqlQuery);
-                        if (getStatement().executeQuery(sqlQuery) ==null) {
-                            //En este caso inserto un registro en la tabla
-                            sqlQuery = "INSERT INTO CondicionesPorAlerta"
-                            + "(idCondicion,idAlerta)"
-                            + "VALUES"
-                            +"("+idCondicion+","+idAlerta+")";
-                            System.out.println("Insert: "+sqlQuery);
-                            if (getStatement().executeUpdate(sqlQuery) > 0) {
-                                sePudo = true;
-                            }else{sePudo=false;}    
-                        }else{//En este caso no hago nada porque ya existe el registro   
-                        }
-                       }                    
-                   }
+                            
                    //Continuacion for
                    
                    }
+                   /* "Comentado posterior a reforma de modelo de Datos
                    //Obtengo todas los idCondicion de la tabla condicionesPorAlerta para ver
                    //si se eliminaron condiciones de esta alerta y en ese caso eliminarlas de la base
                    boolean esta=false;
@@ -240,9 +201,11 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
                                 sePudo = true;
                             }
                         }
+                    
+                    
                    
                 }
-                
+                */
             }    
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -265,6 +228,27 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         }        
         
         return sePudo;
+    }
+
+   public ArrayList<modelo.alertas.Alerta> getAlertasFromDB(){
+        ArrayList<modelo.alertas.Alerta> alertas = new ArrayList();        
+        try {
+            ResultSet rs = getStatement().executeQuery("SELECT * FROM Alertas");
+            while (rs.next()) {                
+                modelo.alertas.Alerta alerta = new modelo.alertas.Alerta();
+                // Get the data from the row using the column name
+                alerta.setId(rs.getInt("id"));
+                alerta.setEstado(rs.getBoolean("estado"));
+                alerta.setTitulo(rs.getString("titulo"));
+                alerta.setMensaje(rs.getString("mensaje"));
+                alerta.setFlagsAcciones(rs.getInt("flagsAcciones"));
+                // Queda pendiente cargar sus Condiciones ----------
+                alertas.add(alerta);
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }        
+        return alertas;
     }
     
 }
