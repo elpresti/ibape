@@ -117,6 +117,7 @@ public class OperacionesBasicas {
 //        getInstance().grabarImagen(imgProcesada);
         //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20
         imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+        imgProcesada = filtros.dilate(imgProcesada);
 //        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
 //        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
@@ -132,6 +133,7 @@ public class OperacionesBasicas {
        // ArrayList<Integer> fondo = buscaFondo(imgProcesada);
         int fondo[] = new int[967];
         fondo = buscaFondo(imgProcesada);
+        getInstance().grabarImagen(dibujaFondo(imgProcesada, fondo));
         //buscaMarcas(fondo)
 
 
@@ -175,14 +177,12 @@ public class OperacionesBasicas {
 
                 while((contAlto>0) && (noencontrofondo==true)) {
 
-                    Object e = col.obtieneColor(img.getRGB(contAncho, contAlto));
+                    int e = col.obtieneColor(img.getRGB(contAncho, contAlto));
 
-   //               Object color = col.getColoresMap().get(col.obtieneColor(img.getRGB(contAncho, contAlto)));
-
-   //               if (col.getColoresMap().get(e).equals("Blanco")) {
-                    if ((col.getColoresMap().get(e).equals("Negro"))){
-                    //System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
-                            if (((contAncho==1) || ((Math.abs(contAlto-promedio(fondo))) <5))) {
+ 
+                     if ((col.getColoresMap().get(e).equals("Negro"))){
+               
+                            if (((contAncho==1) || ((Math.abs(contAlto-fondo[contAncho-1]))) <5)) {
                                 noencontrofondo=false;
                              }
                     }
@@ -197,10 +197,6 @@ public class OperacionesBasicas {
                 }
             contAncho++;
             }
-
-            
-        
-
 //				if(col.obtieneColor(valorRGB)!=negro){
 //					if(col.obtieneColor(imagen.getRGB(contAncho,contAlto))!=marron){
 
@@ -214,11 +210,26 @@ public class OperacionesBasicas {
                 //1:No haber encontrado el borde (Vble booleana)
                 //2: y <= imagen.getAlto()
          //Esto  lo repetimos hasta llegar a x = imagen.getAncho() incluido
-        //Ahora tenemos en el Vector la posicion del fondo de toda la imagen
-        
-
-
+        //Ahora tenemos en el Vector la posicion del fondo de toda la imagen          
         return fondo;
+    }
+
+    public ArrayList<Integer> buscaFondoSegunRango (BufferedImage img) {
+        ArrayList<Integer> fondo = new ArrayList();
+        //--- metodo pendiente ---
+        return fondo;
+    }
+    
+    
+    
+    public boolean estaEnRangoDelAnterior(BufferedImage img, int pixelY,int valorAcomparar ){
+        boolean estaEnElMedio=false;
+        int limiteSuperior = (int) (valorAcomparar + (img.getHeight() * 0.01)); // usamos como rango un 1% del alto de la imagen
+        int limiteInferior = (int) (valorAcomparar - (img.getHeight() * 0.01)); //estan al revez xq se lee de arriba hacia abajo
+        if ((pixelY>limiteInferior) && (pixelY<limiteSuperior)){
+            estaEnElMedio=true;
+        }
+        return estaEnElMedio;
     }
 //
 //      public boolean compara(String color, BufferedImage img){
@@ -246,7 +257,17 @@ public class OperacionesBasicas {
      return promedio;
     }
 
-
+    public BufferedImage dibujaFondo (BufferedImage img, int[] fondo){
+         int cont = 0;      // contador
+         int colorRojo = new Color (255,0,0).getRGB();
+        
+         while (cont < fondo.length ) {
+            img.setRGB(cont, fondo[cont],colorRojo  );
+            cont++;
+        }
+        
+        return img;
+    }
 
 
     public ArrayList<modelo.dataManager.Marca> buscaMarcas(ArrayList<Integer> fondo){
