@@ -21,6 +21,7 @@ public class PanelSelector extends javax.swing.JPanel {
     /** Creates new form PanelSelector */
     private PanelSelector() {
         initComponents();
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -333,6 +334,14 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
         elFrame.setVisible(true);
     }
 */
+
+    private void inicializador() {
+        mostrarBtnPanelNavegacion(false);
+    }
+
+    public void mostrarBtnPanelNavegacion(boolean b) {
+        taskPaneNavegacion.setVisible(b);
+    }
     
     
 }

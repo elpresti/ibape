@@ -35,8 +35,9 @@ public class ControllerCampania {
             campania.setEstado(0);
             campania.setDescripcion(descripcion);
             if (modelo.dataManager.AdministraCampanias.getInstance().agregarCampania(campania)) {
-                sePudo=true;
+                gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(true);                
                 gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
+                sePudo=true;
             }
         }
         return sePudo;
@@ -71,6 +72,7 @@ public class ControllerCampania {
         boolean sePudo = false;
         if (modelo.dataManager.AdministraCampanias.getInstance().finalizarCampaniaEnCurso()){
             gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
+            gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(false);
             sePudo=true;
         }        
         return sePudo;

@@ -5,6 +5,7 @@
 package modelo.dataCapture;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +13,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import persistencia.Logueador;
 
@@ -77,35 +81,32 @@ public class LanSonda extends java.util.Observable implements Runnable {
     }
     
     
-    public String[] hayArchivosNuevos() {
+    public ArrayList<String> hayArchivosNuevos() {
+        ArrayList<String> archivosNuevos = new ArrayList();
         //verifica si existen archivos nuevos, si hay devuelve sus filename en el vector,
         //sino devuelve el vector con archivosNuevos.size()=0
         File dirLocal = new File(getCarpetaHistoricoLocal());
         String[] archivosL = dirLocal.list();
         File dirRemoto = new File(getCarpetaHistoricoRemoto());
-        String[] archivosR = dirRemoto.list();
-        String[] archivosNuevos = {""};
-        int i = 0;        
+        String[] archivosR = dirRemoto.list();      
 
         if (archivosR == null) {
             System.out.println("No hay ficheros en el directorio especificado");
         } else {
             if (archivosL.length>0){
-                Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length - 1]);
+                Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length]);
                 for (int x = 0; x <= archivosR.length - 1; x++) {
                     Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto() + "\\" + archivosR[x].toString());
                     if (fechaUltimoRemoto.compareTo(fechaUltimoLocal) > 0) {
                         //System.out.println(archivosR[x]); //archivo remoto que no esta en local (fechaR>ultimo(fechaL))
-                        archivosNuevos[i] = archivosR[x];
-                        i++;
+                        archivosNuevos.add(archivosR[x]);
                     }
                 }
             }
             else{
                 for (int x = 0; x <= archivosR.length - 1; x++) {
                     //System.out.println(archivosR[x]); //archivo remoto que no esta en local (fechaR>ultimo(fechaL))
-                    archivosNuevos[i] = archivosR[x];
-                    i++;
+                    archivosNuevos.add(archivosR[x]);
                 }
             }
         }
@@ -116,22 +117,22 @@ public class LanSonda extends java.util.Observable implements Runnable {
         setEstadoConexion(0);
     }
 
-    private boolean copiarArchivosRemotos(String[] archivos) {
+    private boolean copiarArchivosRemotos(ArrayList<File> archivos) {
         boolean sePudo = false;
         //intenta listar archivos de la rutaIP especificada y si lo logra hace setHistoricoRemoto(rutaSondaImgs),
         //si no hay exception --> salida=true;
         int x = 0;
-        while (x <= archivos.length - 1) {
+        while (x <= archivos.size() - 1) {
             try {
-                String from = getCarpetaHistoricoRemoto() + "\\" + archivos[x];
-                String to = getCarpetaHistoricoLocal() + "\\" + archivos[x];
+                String from = getCarpetaHistoricoRemoto() + "\\" + archivos.get(x).getName();
+                String to = getCarpetaHistoricoLocal() + "\\" + archivos.get(x).getName();
                 copy(from, to);
             } catch (IOException ex) {
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
             x++;
         }
-        if (x == archivos.length - 1) {
+        if (x == archivos.size() - 1) {
             sePudo = true;
         }
         return sePudo;
@@ -166,6 +167,41 @@ public class LanSonda extends java.util.Observable implements Runnable {
                 out.close();
             }
         }
+    }
+
+    public ArrayList<File> getArchivosNuevos(){
+        String rutaCarpeta = getCarpetaHistoricoRemoto();
+        //Date fechaDeModificacion = getFyhUltimaLecturaRemota();
+        //primero: obtengo la fecha de modificacion del archivo mas reciente en el directorio local
+        File[] archivosLocales = getArchivosOrdenadosPorFechaModificacion(getCarpetaHistoricoLocal(),true);
+        Date fYhArchivoLocalMasNuevo = null;
+        if ((archivosLocales != null) && (archivosLocales.length>0)) {
+            fYhArchivoLocalMasNuevo = new Date( archivosLocales[0].lastModified() );
+        }
+        //segundo: obtengo los archivos del directorio remoto, ordenados por fecha de modificacion
+        ArrayList<File> archivos = new ArrayList();       
+        File[] filesInDirectory = getArchivosOrdenadosPorFechaModificacion(rutaCarpeta,true);
+        // Ponemos en el vector de archivos nuevos los que tengan fecha de modificación mayor a la especificada
+        if (filesInDirectory.length>0){
+            boolean archivosViejos=false;
+            int i =0;
+            //como en filesInDirectory los tengo ordenados por fecha de modificacion descendente, 
+            // guardo solo los nuevos y termino cuando encuentre los viejos
+            while (i<filesInDirectory.length && (!(archivosViejos))){
+                File file = filesInDirectory[i];
+                if (fYhArchivoLocalMasNuevo != null){
+                    if ((file.lastModified() - fYhArchivoLocalMasNuevo.getTime()) > 0){
+                        archivos.add(file);
+                    }
+                    else
+                    { archivosViejos = true; }                    
+                }
+                else
+                  { archivos.add(file); }
+                i++;
+            }
+        }
+        return archivos;
     }
 
     /**
@@ -224,9 +260,15 @@ public class LanSonda extends java.util.Observable implements Runnable {
      */
     public void setFyhUltimaLecturaRemota(java.util.Date fyhUltimaLecturaRemota) {
         this.fyhUltimaLecturaRemota = fyhUltimaLecturaRemota;
-        System.out.println("Ultima vez que se leyo la carpeta remota: "+fyhUltimaLecturaRemota.toString());
+        //System.out.println("Ultima vez que se leyo la carpeta remota: "+fyhUltimaLecturaRemota.toString());
         setChanged();
         notifyObservers();        
+    }
+    
+    public boolean guardaSondaSets(String rutaCsv){
+        boolean sePudo = false;
+        // --- metodo pendiente --- 
+        return sePudo;
     }
 
     public void run(){
@@ -237,12 +279,17 @@ public class LanSonda extends java.util.Observable implements Runnable {
             while ((lanThread == esteThread) && (getEstadoConexion()==2)){    
                 try{
                     if (verificaConexionAequipo()){
-                        String[] archivosNuevos = hayArchivosNuevos();
+                        ArrayList<File> archivosNuevos = getArchivosNuevos();
                         setFyhUltimaLecturaRemota(Calendar.getInstance().getTime());
-                        if (archivosNuevos.length>0){
-                            copiarArchivosRemotos(archivosNuevos);                            
+                        if (archivosNuevos.size()>0){
+                            copiarArchivosRemotos(archivosNuevos);
+                            /*
+                            if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
+                                persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
+                            }
+                             */
                         }
-                        Thread.sleep(10000); //dispara la rutina de chequeo cada 10seg
+                        Thread.sleep(30000); //dispara la rutina de chequeo cada 10seg
                     }
                     else { setEstadoConexion(0); }                    
                 }
@@ -294,5 +341,44 @@ public class LanSonda extends java.util.Observable implements Runnable {
         }    
         return sePudo;
     }    
+
+    private File[] getArchivosOrdenadosPorFechaModificacion(String rutaCarpeta, boolean ascendente) {
+        // FileFilter that accepts all files except directories
+        FileFilter noDirectories = new FileFilter() {
+            public boolean accept(File f) {
+                return !f.isDirectory();
+            }
+        };
+        // Comparator for modification date in descending order
+        Comparator<File> descendingOnModificationDate =
+            new Comparator<File>() {
+                public int compare(File f1, File f2) {
+                    long diff = f1.lastModified() - f2.lastModified();
+                    int returnValue;
+                    if (diff < 0L) {
+                        returnValue = -1;
+                    } else if (diff > 0L) {
+                        returnValue = +1;
+                    } else {
+                        assert diff == 0L;
+                        returnValue = 0;
+                    }
+                    /*
+                    if (ascendente){
+                        return +returnValue; // +returnValue for ascending order
+                    }
+                    else { return -returnValue; } // -returnValue for descending order
+                    */ 
+                    return -returnValue;
+                }
+            };
+        // Directory to list (here: user's home directory)
+        File directory = new File(rutaCarpeta);
+        // Obtain non-directory files in the directory
+        File[] filesInDirectory = directory.listFiles(noDirectories);
+        // Sort the list on modification date in descending order
+        Arrays.sort(filesInDirectory, descendingOnModificationDate);
+        return filesInDirectory;
+    }
     
 }
