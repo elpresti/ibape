@@ -7,6 +7,8 @@ package persistencia;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import modelo.dataCapture.Csv;
 import modelo.dataManager.SondaSetHistorico;
 
 /**
@@ -292,6 +294,38 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
      */
     public void setPsDelete(PreparedStatement psDelete) {
         this.psDelete = psDelete;
+    }
+
+    public boolean actualizaSondaSetsActual(String rutaCsv) {
+        boolean sePudo = false;
+        try{
+            ArrayList<SondaSetHistorico> ssh = Csv.getInstance().getSondaSetsFromCsv(rutaCsv);
+            if (ssh.size()>0){
+                SondaSetHistorico ultimoSsh;
+                if (ssh.size()>1){
+                    ultimoSsh = ssh.get(ssh.size()-1);
+                }
+                else{
+                    ultimoSsh = ssh.get(0);
+                }
+                modelo.dataManager.SondaSet.getInstance().setEscala(ultimoSsh.getEscala());
+                modelo.dataManager.SondaSet.getInstance().setExpander(ultimoSsh.getExpander());
+                modelo.dataManager.SondaSet.getInstance().setFrecuencia(ultimoSsh.getFrecuencia());
+                modelo.dataManager.SondaSet.getInstance().setGanancia(ultimoSsh.getGanancia());
+                modelo.dataManager.SondaSet.getInstance().setLineaBlanca(ultimoSsh.getLineaBlanca());
+                modelo.dataManager.SondaSet.getInstance().setShift(ultimoSsh.getShift());
+                modelo.dataManager.SondaSet.getInstance().setStc(ultimoSsh.getStc());
+                modelo.dataManager.SondaSet.getInstance().setUnidadDeEscala(ultimoSsh.getUnidadDeEscala());
+                modelo.dataManager.SondaSet.getInstance().setUsadoDesde(ultimoSsh.getUsadoDesde());
+                modelo.dataManager.SondaSet.getInstance().setUsadoHasta(ultimoSsh.getUsadoHasta());
+                modelo.dataManager.SondaSet.getInstance().setVelPantalla(ultimoSsh.getVelPantalla());
+            } 
+            sePudo=true;
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
     }
     
 }

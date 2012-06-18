@@ -116,6 +116,9 @@ public class ControllerCampania {
         }
         else
           { JOptionPane.showMessageDialog(null, "Para iniciar el alojamiento de historico deben guardarse los datos leidos por el GPS"); }
+        modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal(
+                persistencia.BrokerHistoricoSondaSet.getInstance().getFolderNameHistorico()+ "\\" +
+                AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico());
     }
 
     public void detenerLogueoHistorico() {

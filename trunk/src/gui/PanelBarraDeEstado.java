@@ -265,6 +265,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         LanEstado.setToolTipText("Conectado");                
         lblLanEstado.setForeground(Color.black);
     }
+
+    public void setLanLeyendo() {
+        LanEstado.setBackground(Color.blue);
+        LanEstado.setToolTipText("Leyendo");
+        lblLanEstado.setForeground(Color.white);
+    }    
     
     public void mostrarMensaje(String msg){
         if ((msg.contains("gnu."))|| 
@@ -326,7 +332,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     /**
      * @param lblMensaje the lblMensaje to set
      */
-    public void setLblMensaje(String lblMensaje) {
+    private void setLblMensaje(String lblMensaje) {
         String nroPrioridad=String.valueOf(lblMensaje.charAt(0));
         int prioridad=Integer.valueOf(nroPrioridad);
         String salida=lblMensaje.substring(1);

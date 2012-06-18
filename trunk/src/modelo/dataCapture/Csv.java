@@ -23,6 +23,7 @@ import persistencia.Logueador;
 public class Csv {
     private static Csv unicaInstancia;
     private String ultimoCsvLeido;
+    private String csvFileName;
     private static final byte NRO_COL_FRECUENCIA=0;
     private static final byte NRO_COL_GANANCIA=1;
     private static final byte NRO_COL_STC=2;
@@ -46,7 +47,7 @@ public class Csv {
     private static final byte NRO_COL_TEMPERATURA=19;    
     
     private Csv(){
-        
+        inicializador();
     }
     
     public static Csv getInstance(){
@@ -160,5 +161,23 @@ public class Csv {
         //sePudo = sePudo;
     }
 */
+
+    /**
+     * @return the csvFileName
+     */
+    public String getCsvFileName() {
+        return csvFileName;
+    }
+
+    /**
+     * @param csvFileName the csvFileName to set
+     */
+    public void setCsvFileName(String csvFileName) {
+        this.csvFileName = csvFileName;
+    }
+
+    private void inicializador() {
+        setCsvFileName("valores.txt");
+    }
     
 }
