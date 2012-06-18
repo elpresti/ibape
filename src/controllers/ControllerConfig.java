@@ -76,16 +76,24 @@ public class ControllerConfig  implements java.util.Observer {
         if (nroEstado==0){
             gui.PanelOpcConfiguracion.getInstance().setLanDesconectado();
             gui.PanelBarraDeEstado.getInstance().setLanDesconectado();
-            gui.PanelOpcConfiguracion.getInstance().habilitaBtnConectaLan();
-        }
+            gui.PanelOpcConfiguracion.getInstance().controlaBtnLan(true);
+        } 
         else if (nroEstado==1){
             gui.PanelOpcConfiguracion.getInstance().setLanConectando();
             gui.PanelBarraDeEstado.getInstance().setLanConectando();
+            gui.PanelOpcConfiguracion.getInstance().controlaBtnLan(false);
         }
         else if (nroEstado == 2){
             gui.PanelOpcConfiguracion.getInstance().setLanConectado();
             gui.PanelBarraDeEstado.getInstance().setLanConectado();
-        }                
+        }
+        else if (nroEstado == 3){
+            gui.PanelBarraDeEstado.getInstance().setLanLeyendo();
+        }
+        else if (nroEstado == 4){
+            gui.PanelBarraDeEstado.getInstance().mostrarMensaje("No se pudo conectar al host remoto. Revise la ruta de conexión especificada",1);
+            gui.PanelOpcConfiguracion.getInstance().mostrarMsgSinConexionAhost();
+        }
     }
     
 
@@ -126,23 +134,29 @@ public class ControllerConfig  implements java.util.Observer {
               setEstadoSonda(sonda.getEstadoConexion());
           }
           else 
-              if (o == puertosSerie){
-                  if (puertosSerie.isErrorLeyendo())
-                    { errorAlLeerPuertosSerieDelSO(); }
-                  else
-                    { if (puertosSerie.isLeyendoPuertos()) {
-                          setEstadoLeyendoPuertosSerieSO();
-                        }
-                      else
-                        { setCombosPuertosSerieDelSO(puertosSerie.getPuertosSerie()); }                        
-                    }                    
+              if (o == lanSonda){
+                  setEstadoLan(lanSonda.getEstadoConexion());
               }
+              else
+                if (o == puertosSerie){
+                    if (puertosSerie.isErrorLeyendo())
+                        { errorAlLeerPuertosSerieDelSO(); }
+                    else
+                        { if (puertosSerie.isLeyendoPuertos()) {
+                            setEstadoLeyendoPuertosSerieSO();
+                            }
+                        else
+                            { setCombosPuertosSerieDelSO(puertosSerie.getPuertosSerie()); }                        
+                        }                    
+                }
     }
 
     public void setParametrosLan() {
         String ruta=gui.PanelOpcConfiguracion.getInstance().getCampoRutaHistorico().getText();
         modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoRemoto(ruta);
-        modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal("Historico\\camp34");
+        if (modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal() == null){
+            modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal("\\Historico");
+        }        
     }
 
     public boolean detenerLecturaLan() {

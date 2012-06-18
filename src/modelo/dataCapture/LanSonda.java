@@ -18,6 +18,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import modelo.dataManager.SondaSetHistorico;
+import persistencia.BrokerHistoricoSondaSet;
 import persistencia.Logueador;
 
 /**
@@ -263,13 +265,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
         //System.out.println("Ultima vez que se leyo la carpeta remota: "+fyhUltimaLecturaRemota.toString());
         setChanged();
         notifyObservers();        
-    }
-    
-    public boolean guardaSondaSets(String rutaCsv){
-        boolean sePudo = false;
-        // --- metodo pendiente --- 
-        return sePudo;
-    }
+    }    
 
     public void run(){
         setEstadoConexion(1);
@@ -279,26 +275,39 @@ public class LanSonda extends java.util.Observable implements Runnable {
             while ((lanThread == esteThread) && (getEstadoConexion()==2)){    
                 try{
                     if (verificaConexionAequipo()){
+                        setEstadoConexion(3);
                         ArrayList<File> archivosNuevos = getArchivosNuevos();
                         setFyhUltimaLecturaRemota(Calendar.getInstance().getTime());
                         if (archivosNuevos.size()>0){
                             copiarArchivosRemotos(archivosNuevos);
+                            if (hayArchivoCsv(archivosNuevos)){
+                                persistencia.BrokerHistoricoSondaSet.getInstance().actualizaSondaSetsActual(getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getCsvFileName());
+                                if (persistencia.BrokerHistoricoSondaSet.getInstance().isGuardaDatosSondaSets()){
+                                    if (!(guardaSondaSets(getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getCsvFileName()))){
+                                        Logueador.getInstance().agregaAlLog("No se pudieron guardar los últimos Presets leidos de la Sonda");
+                                    }
+                                }
+                            }
                             /*
                             if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
                                 persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
                             }
                              */
                         }
-                        Thread.sleep(30000); //dispara la rutina de chequeo cada 10seg
+                        setEstadoConexion(2);
+                        Thread.sleep(30000); //dispara la rutina de chequeo cada XX segundos
                     }
-                    else { setEstadoConexion(0); }                    
+                    else { setEstadoConexion(0); 
+                           setEstadoConexion(4);
+                        }
                 }
                 catch (Exception e)
                 { persistencia.Logueador.getInstance().agregaAlLog(e.toString()); }
             }            
         }
         else
-            { setEstadoConexion(0); }
+            {   setEstadoConexion(0);
+                setEstadoConexion(4); }
         lanThread=null;
     }
             
@@ -337,6 +346,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
         boolean sePudo=false;
         if (lanThread != null) {
             lanThread=null;
+            setEstadoConexion(0);
             sePudo = true;
         }    
         return sePudo;
@@ -379,6 +389,33 @@ public class LanSonda extends java.util.Observable implements Runnable {
         // Sort the list on modification date in descending order
         Arrays.sort(filesInDirectory, descendingOnModificationDate);
         return filesInDirectory;
+    }
+    
+    public boolean guardaSondaSets(String rutaCsv){
+        boolean sePudo = false;
+        try{
+            ArrayList<SondaSetHistorico> sondaSetsLeidos = Csv.getInstance().getSondaSetsFromCsv(rutaCsv);
+            for (int i = 0; i<sondaSetsLeidos.size();i++){
+                BrokerHistoricoSondaSet.getInstance().insertSondaSet(sondaSetsLeidos.get(i));
+            }
+            sePudo=true;
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }    
+
+    private boolean hayArchivoCsv(ArrayList<File> archivosNuevos) {
+        boolean hayCsv = false; 
+        int i = 0;
+        while ((i<archivosNuevos.size()) && (!(hayCsv))){
+            if (archivosNuevos.get(i).getName().equals(Csv.getInstance().getCsvFileName())){
+                hayCsv=true;
+            }
+            i++;    
+        }
+        return hayCsv;
     }
     
 }

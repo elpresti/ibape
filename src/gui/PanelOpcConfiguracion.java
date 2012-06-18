@@ -1572,11 +1572,11 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         setPanelConfigSonda(true);
     }
     
-    public void habilitaBtnConectaLan() {
-        btnConectaLan.setVisible(true);
-        btnDesconectaLan.setVisible(false);
-        chkEstadoLan.setEnabled(true);
-        setPanelConfigLan(true);
+    public void controlaBtnLan(boolean conectar) {
+        btnConectaLan.setVisible(conectar);
+        btnDesconectaLan.setVisible(!(conectar));
+        chkEstadoLan.setEnabled(conectar);
+        setPanelConfigLan(conectar);
     }    
 
     public void setContenidoComboCOMgps(ArrayList<String> elementos){
@@ -1611,6 +1611,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             btnEscaneaPuertos.setToolTipText("Busca todos los puertos serie de esta computadora");
             btnEscaneaPuertos.setEnabled(true);            
         }
+    }
+
+    public void mostrarMsgSinConexionAhost() {
+        JOptionPane.showMessageDialog(null, 
+                "No se pudo conectar por LAN a la sonda. Revise la ruta de conexión especificada",
+                "Error de conexión LAN",
+                JOptionPane.WARNING_MESSAGE); 
     }
 
 
