@@ -68,7 +68,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblTitulo.setText("Finalizar lance");
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
         panelSuperior.add(lblTitulo);
 
         add(panelSuperior, java.awt.BorderLayout.NORTH);
@@ -89,7 +89,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelTituloTabla.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
         lblTituloTabla.setText("Cajones recogidos en el lance:");
-        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelTituloTabla.add(lblTituloTabla);
 
         panelCajones.add(panelTituloTabla, java.awt.BorderLayout.NORTH);
@@ -169,10 +169,10 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelCantCajones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblCantCajones.setText("Cant. Cajones");
-        lblCantCajones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblCantCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelCantCajones.add(lblCantCajones);
 
-        campoCajones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
         campoCajones.setMaximumSize(new java.awt.Dimension(40, 20));
         campoCajones.setMinimumSize(new java.awt.Dimension(40, 20));
         campoCajones.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -185,10 +185,10 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelComboEspecie.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblEspecie.setText("Especie");
-        lblEspecie.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblEspecie.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComboEspecie.add(lblEspecie);
 
-        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12));
         comboEspecies.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abadejo", "Anchoita", "Merluza", "Calamar" }));
         comboEspecies.setMaximumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setMinimumSize(new java.awt.Dimension(200, 20));
@@ -202,7 +202,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(80, 50));
         panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jButton1.setText("Agregar");
         panelBtnAgregar.add(jButton1);
 
@@ -218,10 +218,10 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelSuceso.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 15));
 
         lblSuceso.setText("Suceso ocurrido");
-        lblSuceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblSuceso.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelSuceso.add(lblSuceso);
 
-        comboSuceso.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboSuceso.setFont(new java.awt.Font("Tahoma", 0, 12));
         comboSuceso.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Lista categorias POI" }));
         comboSuceso.setMaximumSize(new java.awt.Dimension(200, 20));
         comboSuceso.setMinimumSize(new java.awt.Dimension(200, 20));
@@ -236,14 +236,14 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelComentarios.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         lblComentarios.setText("Comentarios del lance:");
-        lblComentarios.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblComentarios.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComentarios.add(lblComentarios);
 
-        jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 12));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 70));
 
         txtComentarios.setColumns(20);
-        txtComentarios.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        txtComentarios.setFont(new java.awt.Font("Arial", 0, 13));
         txtComentarios.setRows(5);
         jScrollPane2.setViewportView(txtComentarios);
 
@@ -258,7 +258,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
         panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnGuardarLance.setText("Guardar lance");
         panelInferior.add(btnGuardarLance);
 

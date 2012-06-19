@@ -116,5 +116,9 @@ public class POI {
         this.id = id;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
 
 }

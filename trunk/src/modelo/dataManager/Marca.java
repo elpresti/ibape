@@ -11,7 +11,9 @@ package modelo.dataManager;
 public class Marca {
     private double profundidad;
     private String areaImagen;
+    private String areaFisica;
     private int id;
+    private int idPois;
     
     public Marca(){        
     }
@@ -56,5 +58,19 @@ public class Marca {
 
     public int getId() {
         return this.id;
+    }
+
+    /**
+     * @return the idPois
+     */
+    public int getIdPois() {
+        return idPois;
+    }
+
+    /**
+     * @param idPois the idPois to set
+     */
+    public void setIdPois(int idPois) {
+        this.idPois = idPois;
     }
 }
