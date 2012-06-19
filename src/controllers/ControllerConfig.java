@@ -155,15 +155,16 @@ public class ControllerConfig  implements java.util.Observer {
         String ruta=gui.PanelOpcConfiguracion.getInstance().getCampoRutaHistorico().getText();
         modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoRemoto(ruta);
         if (modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal() == null){
-            modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal("\\Historico");
+            modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal("Historico");
         }        
     }
 
     public boolean detenerLecturaLan() {
         boolean sePudo = false;
         try{
-            lanSonda.detieneLectura();
-            sePudo=true;
+            if (lanSonda.detieneLectura()){
+                sePudo=true;  
+            }            
         }
         catch (Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());

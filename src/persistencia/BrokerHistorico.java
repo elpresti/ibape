@@ -66,6 +66,9 @@ public abstract class BrokerHistorico implements Runnable{
             if (!(yaTeniaHistorico)) { creaTodasLasTablas(); }
             //getStatement().close();
             //getConexion().close();
+            modelo.dataCapture.LanSonda.getInstance().setCarpetaHistoricoLocal(
+                    persistencia.BrokerHistoricoSondaSet.getInstance().getFolderNameHistorico() + "\\"
+                    + AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico());
             sePudo = true;
         } catch (Exception e) {
             System.out.println(e);
@@ -122,8 +125,8 @@ public abstract class BrokerHistorico implements Runnable{
     
     public boolean disparaEjecucion(){
         boolean sePudo = false;
-        if (dbHthread == null) {
-            inicializaBrokerHistorico();
+        if (dbHthread == null) { 
+            setCampania(AdministraCampanias.getInstance().getCampaniaEnCurso());
             dbHthread = new Thread(this);
             dbHthread.setPriority(Thread.MIN_PRIORITY);
             dbHthread.start();
