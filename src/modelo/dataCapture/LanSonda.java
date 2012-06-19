@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.SondaSetHistorico;
 import persistencia.BrokerHistoricoSondaSet;
 import persistencia.Logueador;
@@ -176,6 +177,9 @@ public class LanSonda extends java.util.Observable implements Runnable {
         //Date fechaDeModificacion = getFyhUltimaLecturaRemota();
         //primero: obtengo la fecha de modificacion del archivo mas reciente en el directorio local
         File[] archivosLocales = getArchivosOrdenadosPorFechaModificacion(getCarpetaHistoricoLocal(),true);
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
+            archivosLocales = excluirDBhistorico(archivosLocales);
+        }        
         Date fYhArchivoLocalMasNuevo = null;
         if ((archivosLocales != null) && (archivosLocales.length>0)) {
             fYhArchivoLocalMasNuevo = new Date( archivosLocales[0].lastModified() );
@@ -296,11 +300,11 @@ public class LanSonda extends java.util.Observable implements Runnable {
                         }
                         setEstadoConexion(2);
                         Thread.sleep(30000); //dispara la rutina de chequeo cada XX segundos
-                    }
+                    } 
                     else { setEstadoConexion(0); 
                            setEstadoConexion(4);
                         }
-                }
+                } 
                 catch (Exception e)
                 { persistencia.Logueador.getInstance().agregaAlLog(e.toString()); }
             }            
@@ -309,6 +313,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
             {   setEstadoConexion(0);
                 setEstadoConexion(4); }
         lanThread=null;
+        setEstadoConexion(0);
     }
             
     public void start(){
@@ -386,8 +391,10 @@ public class LanSonda extends java.util.Observable implements Runnable {
         File directory = new File(rutaCarpeta);
         // Obtain non-directory files in the directory
         File[] filesInDirectory = directory.listFiles(noDirectories);
-        // Sort the list on modification date in descending order
-        Arrays.sort(filesInDirectory, descendingOnModificationDate);
+        if (filesInDirectory != null){           
+            // Sort the list on modification date in descending order
+            Arrays.sort(filesInDirectory, descendingOnModificationDate);            
+        }
         return filesInDirectory;
     }
     
@@ -416,6 +423,22 @@ public class LanSonda extends java.util.Observable implements Runnable {
             i++;    
         }
         return hayCsv;
+    }
+
+    private File[] excluirDBhistorico(File[] archivosLocales) {
+        File[] listadoSinDBhistorico = null; 
+        if (archivosLocales != null){ 
+            ArrayList<File> lista = new ArrayList<File>(Arrays.asList(archivosLocales)); 
+            String rutaDBhistorico = 
+                    persistencia.BrokerHistoricoPunto.getInstance().getFolderNameHistorico()+"\\"+
+                    AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico()+"\\"+
+                    persistencia.BrokerHistoricoPunto.getInstance().getDbFileName();
+            lista.remove(new File(rutaDBhistorico)); 
+            if (lista.size()>0){
+                listadoSinDBhistorico = lista.toArray(new File[lista.size()]);                        
+            }
+        }
+        return listadoSinDBhistorico;
     }
     
 }
