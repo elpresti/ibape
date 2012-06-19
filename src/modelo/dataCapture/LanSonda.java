@@ -318,7 +318,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
             lanThread.start();
         }
     }    
-
+/*
     public static void main(String[] args) {
         //tests        
             //LanSonda.getInstance().setCarpetaHistoricoLocal("C:\\Users\\Necrophagist\\Desktop\\Tesis\\asd");
@@ -332,7 +332,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
         getInstance().setCarpetaHistoricoRemoto("\\\\192.168.0.102\\2011");
         getInstance().start();
     }
-
+*/
     public boolean disparaLectura() {
         boolean sePudo=false;
         if ((getCarpetaHistoricoLocal().length()>1) && (getCarpetaHistoricoRemoto().length()>1)) {
