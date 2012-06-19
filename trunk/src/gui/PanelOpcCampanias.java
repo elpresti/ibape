@@ -495,7 +495,7 @@ private void btnComenzarCampaniaActionPerformed(java.awt.event.ActionEvent evt) 
         if (validaCampos()) {
             if (controllers.ControllerCampania.getInstance().nuevaCampania(campoNombreCampania.getText(), campoCapitanCampania.getText(), campoBarcoCampania.getText())){
                 setGuiCampaniaIniciada();
-                controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso();
+                //controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso();
                 btnIniciarLogueoHistoricoActionPerformed(null);
             }
             else

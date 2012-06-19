@@ -84,7 +84,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     
     public boolean insertPunto(Punto pto) {
         boolean sePudo = false;
-        if ((Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 10000) { //10000=10seg. 
+        if ((Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 15000) { //10000=10seg. 
             try {
                 if (pto.getFechaYhora() != null){ 
                     getPsInsert().setLong(1, pto.getFechaYhora().getTime());
