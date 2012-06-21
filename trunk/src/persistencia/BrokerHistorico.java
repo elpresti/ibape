@@ -306,8 +306,8 @@ public abstract class BrokerHistorico implements Runnable{
             + "  /* Foreign keys */ "
             + "  FOREIGN KEY (idSondaSets)"
             + "    REFERENCES SondaSets(id)"
-            + ");";            
-  
+            + ");";
+
             getStatement().executeUpdate(codigoCreacion);
             sePudo=true;
         }
@@ -315,9 +315,8 @@ public abstract class BrokerHistorico implements Runnable{
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
-    }         
+    }
 
-    
     public boolean crearTablaSondaSets() {
 //frec,gain,stc,lw,gs, escala,shift,Eexp,unidad de medida,unidad,hora,lat,e/o,long,n/s,Velocidad,rumbo,fecha,velocidad promedio,profundidad ,c
 // 0,   30,  30,  22,  1,   7000,0,   2,   40,  0,   201035, 4156.9628S, W, 06139.5662W, S, 010., 111., 100511, 10,  6207,  18,
@@ -328,29 +327,29 @@ public abstract class BrokerHistorico implements Runnable{
             String codigoCreacion = "CREATE TABLE SondaSets ("
             + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
             + "  usadoDesde         TIMESTAMP," //LOW/MID/HIGH
-            + "  usadoHasta         TIMESTAMP," //LOW/MID/HIGH        
+            + "  usadoHasta         TIMESTAMP," //LOW/MID/HIGH
             + "  frecuencia         integer," //LOW/MID/HIGH
             + "  ganancia           integer,"
             + "  stc                integer," //STC (Valor de Ganancia variable)
-            + "  lineaBlanca        integer," //WL (White Line)                    
-            + "  velPantalla        integer," //GS (G.SPEEP: Velocidad Pantalla)                    
+            + "  lineaBlanca        integer," //WL (White Line)
+            + "  velPantalla        integer," //GS (G.SPEEP: Velocidad Pantalla)
             + "  escala             integer," //Escala (Unit) [centimetros]
             + "  shift              integer," //Desplazamiento [centimetros]
             + "  expander           integer," //Tamaño de expander del fondo [centimetros]
             + "  unidad             integer" //0= metros ,1= brasas, y 2= pies, para calcular la escala
-            + ");";            
+            + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo=true;
         }
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        return sePudo;        
-    }        
-  
+        return sePudo;
+    }
+
     public boolean crearTriggersIdSondaSets() {
         boolean sePudo=true;
-        try {                                                
+        try {
             //---------------- triggers de la FK idSondaSets -----------------------
             
             /*TRIGGER ON INSERT, si la clave primaria SI permite nulos */
@@ -364,7 +363,7 @@ public abstract class BrokerHistorico implements Runnable{
             + "          ((SELECT id FROM SondaSets WHERE id = NEW.idSondaSets) IS NULL)) THEN "
             + "     RAISE(ABORT, 'insert on table \"puntos\" violates foreign key constraint \"fki_punto_idSondaSets\"') "
             + "  END; "
-            + " END; ";            
+            + " END; ";
             
             if (!(getStatement().executeUpdate(codigoCreacion)==0)) { sePudo=sePudo && false; }
 

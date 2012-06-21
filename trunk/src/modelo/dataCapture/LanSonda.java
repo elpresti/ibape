@@ -36,6 +36,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
     private String carpetaHistoricoLocal;
     private String carpetaHistoricoRemoto;
     private java.util.Date fyhUltimaLecturaRemota;
+    private java.util.Date fYhArchivoRemotoMasRecientementeModificado;
 
     private LanSonda() {
         inicializar();
@@ -97,7 +98,8 @@ public class LanSonda extends java.util.Observable implements Runnable {
             System.out.println("No hay ficheros en el directorio especificado");
         } else {
             if (archivosL.length>0){
-                Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length]);
+                //Date fechaUltimoLocal = verFecha(getCarpetaHistoricoLocal() + "\\" + archivosL[archivosL.length]);
+                Date fechaUltimoLocal = getfYhArchivoRemotoMasRecientementeModificado();
                 for (int x = 0; x <= archivosR.length - 1; x++) {
                     Date fechaUltimoRemoto = verFecha(getCarpetaHistoricoRemoto() + "\\" + archivosR[x].toString());
                     if (fechaUltimoRemoto.compareTo(fechaUltimoLocal) > 0) {
@@ -125,7 +127,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
         //intenta listar archivos de la rutaIP especificada y si lo logra hace setHistoricoRemoto(rutaSondaImgs),
         //si no hay exception --> salida=true;
         int x = 0;
-        while (x <= archivos.size() - 1) {
+        while (x < archivos.size()) {
             try {
                 String from = getCarpetaHistoricoRemoto() + "\\" + archivos.get(x).getName();
                 String to = getCarpetaHistoricoLocal() + "\\" + archivos.get(x).getName();
@@ -135,7 +137,8 @@ public class LanSonda extends java.util.Observable implements Runnable {
             }
             x++;
         }
-        if (x == archivos.size() - 1) {
+        if (archivos.size()>0) {
+            setfYhArchivoRemotoMasRecientementeModificado(new Date(archivos.get(0).lastModified()));
             sePudo = true;
         }
         return sePudo;
@@ -182,7 +185,13 @@ public class LanSonda extends java.util.Observable implements Runnable {
         }        
         Date fYhArchivoLocalMasNuevo = null;
         if ((archivosLocales != null) && (archivosLocales.length>0)) {
-            fYhArchivoLocalMasNuevo = new Date( archivosLocales[0].lastModified() );
+            if (getfYhArchivoRemotoMasRecientementeModificado() != null){
+                fYhArchivoLocalMasNuevo = getfYhArchivoRemotoMasRecientementeModificado() ;
+            }
+            else{
+                fYhArchivoLocalMasNuevo = new Date( archivosLocales[0].lastModified() );
+            }
+            
         }
         //segundo: obtengo los archivos del directorio remoto, ordenados por fecha de modificacion
         ArrayList<File> archivos = new ArrayList();       
@@ -439,6 +448,20 @@ public class LanSonda extends java.util.Observable implements Runnable {
             }
         }
         return listadoSinDBhistorico;
+    }
+
+    /**
+     * @return the fYhArchivoRemotoMasRecientementeModificado
+     */
+    public java.util.Date getfYhArchivoRemotoMasRecientementeModificado() {
+        return fYhArchivoRemotoMasRecientementeModificado;
+    }
+
+    /**
+     * @param fYhArchivoRemotoMasRecientementeModificado the fYhArchivoRemotoMasRecientementeModificado to set
+     */
+    public void setfYhArchivoRemotoMasRecientementeModificado(java.util.Date fYhArchivoRemotoMasRecientementeModificado) {
+        this.fYhArchivoRemotoMasRecientementeModificado = fYhArchivoRemotoMasRecientementeModificado;
     }
     
 }
