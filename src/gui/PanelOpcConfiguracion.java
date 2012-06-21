@@ -12,6 +12,7 @@ package gui;
 
 import controllers.ControllerConfig;
 import java.awt.Color;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -19,6 +20,7 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -57,29 +59,30 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         panelOpcionesGrales = new org.jdesktop.swingx.JXPanel();
         panelGeneralidades = new org.jdesktop.swingx.JXPanel();
-        panelIdioma = new org.jdesktop.swingx.JXPanel();
-        panelTxtIdioma = new org.jdesktop.swingx.JXPanel();
-        panelComboIdioma = new org.jdesktop.swingx.JXPanel();
+        panelBtnEscanearPuertos = new org.jdesktop.swingx.JXPanel();
+        btnEscaneaPuertos = new javax.swing.JButton();
         panelDispositivos = new org.jdesktop.swingx.JXPanel();
         panelTxtDispositivos = new org.jdesktop.swingx.JXPanel();
         lblDispositivos = new org.jdesktop.swingx.JXLabel();
-        panelBtnEscanearPuertos = new org.jdesktop.swingx.JXPanel();
-        btnEscaneaPuertos = new javax.swing.JButton();
         panelGps = new org.jdesktop.swingx.JXPanel();
+        panelBasicoGps = new org.jdesktop.swingx.JXPanel();
         chkEstadoGps = new javax.swing.JCheckBox();
-        panelConfigGps = new org.jdesktop.swingx.JXPanel();
-        panelTituloConfigGps = new org.jdesktop.swingx.JXPanel();
-        lblTxtConfigGps = new org.jdesktop.swingx.JXLabel();
-        panelPuertoComGps = new org.jdesktop.swingx.JXPanel();
-        panelTituloPuertoGps = new org.jdesktop.swingx.JXPanel();
-        lblPuertoGps = new org.jdesktop.swingx.JXLabel();
-        panelComboPuertoGps = new org.jdesktop.swingx.JXPanel();
-        comboPuertoGps = new javax.swing.JComboBox();
         panelGpsStatus = new javax.swing.JPanel();
         panelGPSconexionColor = new javax.swing.JPanel();
         GpsEstado = new javax.swing.JPanel();
         panelGPSconexionTxt = new javax.swing.JPanel();
         lblGpsEstado = new java.awt.Label();
+        panelBtnConectaGps = new org.jdesktop.swingx.JXPanel();
+        btnConectaGps = new javax.swing.JButton();
+        btnDesconectaGps = new javax.swing.JButton();
+        taskPaneContainerGPS = new org.jdesktop.swingx.JXTaskPaneContainer();
+        panelConfigGps = new org.jdesktop.swingx.JXTaskPane();
+        componentesConfigGps = new org.jdesktop.swingx.JXPanel();
+        panelPuertoComGps = new org.jdesktop.swingx.JXPanel();
+        panelTituloPuertoGps = new org.jdesktop.swingx.JXPanel();
+        lblPuertoGps = new org.jdesktop.swingx.JXLabel();
+        panelComboPuertoGps = new org.jdesktop.swingx.JXPanel();
+        comboPuertoGps = new javax.swing.JComboBox();
         panelVelocidadGps = new org.jdesktop.swingx.JXPanel();
         panelTituloVelocidadGps = new org.jdesktop.swingx.JXPanel();
         lblVelocidadGps = new org.jdesktop.swingx.JXLabel();
@@ -90,29 +93,31 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         lblBitsDatosGps = new org.jdesktop.swingx.JXLabel();
         panelComboBitsDatosGps = new org.jdesktop.swingx.JXPanel();
         comboBitsDatosGps = new javax.swing.JComboBox();
-        panelBtnConectaGps = new org.jdesktop.swingx.JXPanel();
-        btnConectaGps = new javax.swing.JButton();
-        btnDesconectaGps = new javax.swing.JButton();
         panelParidadGps = new org.jdesktop.swingx.JXPanel();
         panelTituloParidadGps = new org.jdesktop.swingx.JXPanel();
         lblParidadGps = new org.jdesktop.swingx.JXLabel();
         panelComboParidadGps = new org.jdesktop.swingx.JXPanel();
         comboParidadGps = new javax.swing.JComboBox();
+        chkAutoConectaGps = new javax.swing.JCheckBox();
         panelSonda = new org.jdesktop.swingx.JXPanel();
+        panelBasicoSonda = new org.jdesktop.swingx.JXPanel();
         chkEstadoSonda = new javax.swing.JCheckBox();
-        panelConfigSonda = new org.jdesktop.swingx.JXPanel();
-        panelTituloConfigSonda = new org.jdesktop.swingx.JXPanel();
-        lblTxtConfigSonda = new org.jdesktop.swingx.JXLabel();
-        panelPuertoComSonda = new org.jdesktop.swingx.JXPanel();
-        panelTituloPuertoSonda = new org.jdesktop.swingx.JXPanel();
-        lblPuertoSonda = new org.jdesktop.swingx.JXLabel();
-        panelComboPuertoSonda = new org.jdesktop.swingx.JXPanel();
-        comboPuertoSonda = new javax.swing.JComboBox();
         panelSondaStatus = new javax.swing.JPanel();
         panelSondaConexionColor = new javax.swing.JPanel();
         SondaEstado = new javax.swing.JPanel();
         panelSondaConexionTxt = new javax.swing.JPanel();
         lblSondaEstado = new java.awt.Label();
+        panelBtnConectaSonda = new org.jdesktop.swingx.JXPanel();
+        btnConectaSonda = new javax.swing.JButton();
+        btnDesconectaSonda = new javax.swing.JButton();
+        taskPaneContainerSonda = new org.jdesktop.swingx.JXTaskPaneContainer();
+        panelConfigSonda = new org.jdesktop.swingx.JXTaskPane();
+        componentesConfigSonda = new org.jdesktop.swingx.JXPanel();
+        panelPuertoComSonda = new org.jdesktop.swingx.JXPanel();
+        panelTituloPuertoSonda = new org.jdesktop.swingx.JXPanel();
+        lblPuertoSonda = new org.jdesktop.swingx.JXLabel();
+        panelComboPuertoSonda = new org.jdesktop.swingx.JXPanel();
+        comboPuertoSonda = new javax.swing.JComboBox();
         panelVelocidadSonda = new org.jdesktop.swingx.JXPanel();
         panelTituloVelocidadSonda = new org.jdesktop.swingx.JXPanel();
         lblVelocidadSonda = new org.jdesktop.swingx.JXLabel();
@@ -123,14 +128,12 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         lblBitsDatosSonda = new org.jdesktop.swingx.JXLabel();
         panelComboBitsDatosSonda = new org.jdesktop.swingx.JXPanel();
         comboBitsDatosSonda = new javax.swing.JComboBox();
-        panelBtnConectaSonda = new org.jdesktop.swingx.JXPanel();
-        btnConectaSonda = new javax.swing.JButton();
-        btnDesconectaSonda = new javax.swing.JButton();
         panelParidadSonda = new org.jdesktop.swingx.JXPanel();
         panelTituloParidadSonda = new org.jdesktop.swingx.JXPanel();
         lblParidadSonda = new org.jdesktop.swingx.JXLabel();
         panelComboParidadSonda = new org.jdesktop.swingx.JXPanel();
         comboParidadSonda = new javax.swing.JComboBox();
+        chkAutoConectaSonda = new javax.swing.JCheckBox();
         panelPeces = new org.jdesktop.swingx.JXPanel();
         chkEstadoLan = new javax.swing.JCheckBox();
         panelConfigHistorico = new org.jdesktop.swingx.JXPanel();
@@ -197,44 +200,26 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelOpcionesGrales.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelGeneralidades.setMaximumSize(new java.awt.Dimension(450, 50));
-        panelGeneralidades.setMinimumSize(new java.awt.Dimension(450, 50));
-        panelGeneralidades.setPreferredSize(new java.awt.Dimension(450, 50));
+        panelGeneralidades.setMinimumSize(new java.awt.Dimension(450, 30));
+        panelGeneralidades.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelGeneralidades.setLayout(new java.awt.GridLayout());
 
-        panelIdioma.setMaximumSize(new java.awt.Dimension(500, 37));
-        panelIdioma.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        panelBtnEscanearPuertos.setMaximumSize(new java.awt.Dimension(450, 30));
+        panelBtnEscanearPuertos.setMinimumSize(new java.awt.Dimension(450, 30));
+        panelBtnEscanearPuertos.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelBtnEscanearPuertos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        panelTxtIdioma.setMaximumSize(new java.awt.Dimension(100, 37));
-        panelTxtIdioma.setMinimumSize(new java.awt.Dimension(100, 37));
-        panelTxtIdioma.setPreferredSize(new java.awt.Dimension(100, 37));
-        panelTxtIdioma.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
-        panelIdioma.add(panelTxtIdioma);
+        btnEscaneaPuertos.setActionCommand("Actualizar puertos COM");
+        btnEscaneaPuertos.setLabel("Actualizar puertos COM");
+        btnEscaneaPuertos.setPreferredSize(new java.awt.Dimension(145, 20));
+        btnEscaneaPuertos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEscaneaPuertosActionPerformed(evt);
+            }
+        });
+        panelBtnEscanearPuertos.add(btnEscaneaPuertos);
 
-        panelComboIdioma.setMaximumSize(new java.awt.Dimension(350, 37));
-        panelComboIdioma.setMinimumSize(new java.awt.Dimension(350, 37));
-        panelComboIdioma.setPreferredSize(new java.awt.Dimension(350, 37));
-        panelComboIdioma.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-        panelIdioma.add(panelComboIdioma);
-
-        javax.swing.GroupLayout panelGeneralidadesLayout = new javax.swing.GroupLayout(panelGeneralidades);
-        panelGeneralidades.setLayout(panelGeneralidadesLayout);
-        panelGeneralidadesLayout.setHorizontalGroup(
-            panelGeneralidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-            .addGroup(panelGeneralidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralidadesLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(panelIdioma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        panelGeneralidadesLayout.setVerticalGroup(
-            panelGeneralidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
-            .addGroup(panelGeneralidadesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGeneralidadesLayout.createSequentialGroup()
-                    .addGap(0, 6, Short.MAX_VALUE)
-                    .addComponent(panelIdioma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 7, Short.MAX_VALUE)))
-        );
+        panelGeneralidades.add(panelBtnEscanearPuertos);
 
         panelOpcionesGrales.add(panelGeneralidades);
 
@@ -252,76 +237,23 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         lblDispositivos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtDispositivos.add(lblDispositivos);
 
-        panelBtnEscanearPuertos.setMaximumSize(new java.awt.Dimension(300, 25));
-        panelBtnEscanearPuertos.setMinimumSize(new java.awt.Dimension(300, 25));
-        panelBtnEscanearPuertos.setPreferredSize(new java.awt.Dimension(300, 25));
-        panelBtnEscanearPuertos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 0));
-
-        btnEscaneaPuertos.setActionCommand("Actualizar puertos COM");
-        btnEscaneaPuertos.setLabel("Actualizar puertos COM");
-        btnEscaneaPuertos.setPreferredSize(new java.awt.Dimension(145, 20));
-        btnEscaneaPuertos.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEscaneaPuertosActionPerformed(evt);
-            }
-        });
-        panelBtnEscanearPuertos.add(btnEscaneaPuertos);
-
-        panelTxtDispositivos.add(panelBtnEscanearPuertos);
-
         panelDispositivos.add(panelTxtDispositivos);
 
+        panelGps.setMinimumSize(new java.awt.Dimension(500, 70));
+        panelGps.setPreferredSize(new java.awt.Dimension(500, 226));
         panelGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelBasicoGps.setPreferredSize(new java.awt.Dimension(500, 30));
+        panelBasicoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 3));
+
+        chkEstadoGps.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         chkEstadoGps.setLabel("GPS");
         chkEstadoGps.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkEstadoGpsActionPerformed(evt);
             }
         });
-        panelGps.add(chkEstadoGps);
-
-        panelConfigGps.setMaximumSize(new java.awt.Dimension(500, 170));
-        panelConfigGps.setMinimumSize(new java.awt.Dimension(500, 170));
-        panelConfigGps.setPreferredSize(new java.awt.Dimension(500, 170));
-        panelConfigGps.setLayout(new java.awt.GridLayout(5, 1));
-
-        panelTituloConfigGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 10));
-
-        lblTxtConfigGps.setText("Configuración de conexion al GPS:");
-        lblTxtConfigGps.setEnabled(false);
-        lblTxtConfigGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloConfigGps.add(lblTxtConfigGps);
-
-        panelConfigGps.add(panelTituloConfigGps);
-
-        panelPuertoComGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
-
-        panelTituloPuertoGps.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloPuertoGps.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloPuertoGps.setPreferredSize(new java.awt.Dimension(150, 100));
-        panelTituloPuertoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        lblPuertoGps.setText("Puerto");
-        lblPuertoGps.setEnabled(false);
-        lblPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloPuertoGps.add(lblPuertoGps);
-
-        panelPuertoComGps.add(panelTituloPuertoGps);
-
-        panelComboPuertoGps.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboPuertoGps.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboPuertoGps.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboPuertoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-
-        comboPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboPuertoGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
-        comboPuertoGps.setEnabled(false);
-        comboPuertoGps.setMaximumSize(new java.awt.Dimension(120, 20));
-        comboPuertoGps.setMinimumSize(new java.awt.Dimension(120, 20));
-        comboPuertoGps.setPreferredSize(new java.awt.Dimension(120, 20));
-        panelComboPuertoGps.add(comboPuertoGps);
+        panelBasicoGps.add(chkEstadoGps);
 
         panelGpsStatus.setMaximumSize(new java.awt.Dimension(200, 30));
         panelGpsStatus.setMinimumSize(new java.awt.Dimension(133, 30));
@@ -366,71 +298,10 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelGpsStatus.add(panelGPSconexionTxt);
 
-        panelComboPuertoGps.add(panelGpsStatus);
-
-        panelPuertoComGps.add(panelComboPuertoGps);
-
-        panelConfigGps.add(panelPuertoComGps);
-
-        panelVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
-
-        panelTituloVelocidadGps.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloVelocidadGps.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloVelocidadGps.setPreferredSize(new java.awt.Dimension(150, 100));
-        panelTituloVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        lblVelocidadGps.setText("Velocidad (bps)");
-        lblVelocidadGps.setEnabled(false);
-        lblVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloVelocidadGps.add(lblVelocidadGps);
-
-        panelVelocidadGps.add(panelTituloVelocidadGps);
-
-        panelComboVelocidadGps.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboVelocidadGps.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboVelocidadGps.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-
-        comboVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboVelocidadGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1200", "2400", "4800", "9600", "19200", "38400" }));
-        comboVelocidadGps.setEnabled(false);
-        comboVelocidadGps.setMaximumSize(new java.awt.Dimension(120, 20));
-        comboVelocidadGps.setMinimumSize(new java.awt.Dimension(120, 20));
-        comboVelocidadGps.setPreferredSize(new java.awt.Dimension(120, 20));
-        panelComboVelocidadGps.add(comboVelocidadGps);
-
-        panelVelocidadGps.add(panelComboVelocidadGps);
-
-        panelConfigGps.add(panelVelocidadGps);
-
-        panelBitsDeDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
-
-        panelTituloBitsDatosGps.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloBitsDatosGps.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloBitsDatosGps.setPreferredSize(new java.awt.Dimension(150, 100));
-        panelTituloBitsDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        lblBitsDatosGps.setText("Bits de Datos");
-        lblBitsDatosGps.setEnabled(false);
-        lblBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloBitsDatosGps.add(lblBitsDatosGps);
-
-        panelBitsDeDatosGps.add(panelTituloBitsDatosGps);
-
-        panelComboBitsDatosGps.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboBitsDatosGps.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboBitsDatosGps.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboBitsDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-
-        comboBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboBitsDatosGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
-        comboBitsDatosGps.setEnabled(false);
-        comboBitsDatosGps.setMaximumSize(new java.awt.Dimension(120, 20));
-        comboBitsDatosGps.setMinimumSize(new java.awt.Dimension(120, 20));
-        comboBitsDatosGps.setPreferredSize(new java.awt.Dimension(120, 20));
-        panelComboBitsDatosGps.add(comboBitsDatosGps);
+        panelBasicoGps.add(panelGpsStatus);
 
         panelBtnConectaGps.setPreferredSize(new java.awt.Dimension(200, 30));
+        panelBtnConectaGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 3));
 
         btnConectaGps.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnConectaGps.setText("Conectar");
@@ -451,17 +322,130 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         });
         panelBtnConectaGps.add(btnDesconectaGps);
 
-        panelComboBitsDatosGps.add(panelBtnConectaGps);
+        panelBasicoGps.add(panelBtnConectaGps);
+
+        panelGps.add(panelBasicoGps);
+
+        taskPaneContainerGPS.setBackground(new java.awt.Color(240, 240, 240));
+        taskPaneContainerGPS.setMinimumSize(new java.awt.Dimension(472, 26));
+        taskPaneContainerGPS.setPreferredSize(new java.awt.Dimension(472, 206));
+        taskPaneContainerGPS.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+
+        panelConfigGps.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        panelConfigGps.setTitle("Configuración de conexión al GPS:");
+        panelConfigGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+
+        componentesConfigGps.setMaximumSize(new java.awt.Dimension(450, 150));
+        componentesConfigGps.setMinimumSize(new java.awt.Dimension(410, 10));
+        componentesConfigGps.setPreferredSize(new java.awt.Dimension(410, 150));
+        componentesConfigGps.setLayout(new java.awt.GridLayout(5, 1));
+
+        panelPuertoComGps.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelPuertoComGps.setPreferredSize(new java.awt.Dimension(400, 50));
+        panelPuertoComGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+
+        panelTituloPuertoGps.setMaximumSize(new java.awt.Dimension(150, 100));
+        panelTituloPuertoGps.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloPuertoGps.setPreferredSize(new java.awt.Dimension(150, 50));
+        panelTituloPuertoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        lblPuertoGps.setText("Puerto");
+        lblPuertoGps.setEnabled(false);
+        lblPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloPuertoGps.add(lblPuertoGps);
+
+        panelPuertoComGps.add(panelTituloPuertoGps);
+
+        panelComboPuertoGps.setMaximumSize(new java.awt.Dimension(350, 100));
+        panelComboPuertoGps.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboPuertoGps.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboPuertoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        comboPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboPuertoGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
+        comboPuertoGps.setEnabled(false);
+        comboPuertoGps.setMaximumSize(new java.awt.Dimension(120, 20));
+        comboPuertoGps.setMinimumSize(new java.awt.Dimension(120, 20));
+        comboPuertoGps.setPreferredSize(new java.awt.Dimension(120, 20));
+        panelComboPuertoGps.add(comboPuertoGps);
+
+        panelPuertoComGps.add(panelComboPuertoGps);
+
+        componentesConfigGps.add(panelPuertoComGps);
+
+        panelVelocidadGps.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelVelocidadGps.setPreferredSize(new java.awt.Dimension(400, 50));
+        panelVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+
+        panelTituloVelocidadGps.setMaximumSize(new java.awt.Dimension(150, 100));
+        panelTituloVelocidadGps.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloVelocidadGps.setPreferredSize(new java.awt.Dimension(150, 50));
+        panelTituloVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        lblVelocidadGps.setText("Velocidad (bps)");
+        lblVelocidadGps.setEnabled(false);
+        lblVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloVelocidadGps.add(lblVelocidadGps);
+
+        panelVelocidadGps.add(panelTituloVelocidadGps);
+
+        panelComboVelocidadGps.setMaximumSize(new java.awt.Dimension(350, 100));
+        panelComboVelocidadGps.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboVelocidadGps.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboVelocidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        comboVelocidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboVelocidadGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1200", "2400", "4800", "9600", "19200", "38400" }));
+        comboVelocidadGps.setEnabled(false);
+        comboVelocidadGps.setMaximumSize(new java.awt.Dimension(120, 20));
+        comboVelocidadGps.setMinimumSize(new java.awt.Dimension(120, 20));
+        comboVelocidadGps.setPreferredSize(new java.awt.Dimension(120, 20));
+        panelComboVelocidadGps.add(comboVelocidadGps);
+
+        panelVelocidadGps.add(panelComboVelocidadGps);
+
+        componentesConfigGps.add(panelVelocidadGps);
+
+        panelBitsDeDatosGps.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelBitsDeDatosGps.setPreferredSize(new java.awt.Dimension(400, 50));
+        panelBitsDeDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+
+        panelTituloBitsDatosGps.setMaximumSize(new java.awt.Dimension(150, 100));
+        panelTituloBitsDatosGps.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloBitsDatosGps.setPreferredSize(new java.awt.Dimension(150, 50));
+        panelTituloBitsDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        lblBitsDatosGps.setText("Bits de Datos");
+        lblBitsDatosGps.setEnabled(false);
+        lblBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloBitsDatosGps.add(lblBitsDatosGps);
+
+        panelBitsDeDatosGps.add(panelTituloBitsDatosGps);
+
+        panelComboBitsDatosGps.setMaximumSize(new java.awt.Dimension(350, 100));
+        panelComboBitsDatosGps.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboBitsDatosGps.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboBitsDatosGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        comboBitsDatosGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboBitsDatosGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
+        comboBitsDatosGps.setEnabled(false);
+        comboBitsDatosGps.setMaximumSize(new java.awt.Dimension(120, 20));
+        comboBitsDatosGps.setMinimumSize(new java.awt.Dimension(120, 20));
+        comboBitsDatosGps.setPreferredSize(new java.awt.Dimension(120, 20));
+        panelComboBitsDatosGps.add(comboBitsDatosGps);
 
         panelBitsDeDatosGps.add(panelComboBitsDatosGps);
 
-        panelConfigGps.add(panelBitsDeDatosGps);
+        componentesConfigGps.add(panelBitsDeDatosGps);
 
+        panelParidadGps.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelParidadGps.setPreferredSize(new java.awt.Dimension(400, 50));
         panelParidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
 
         panelTituloParidadGps.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloParidadGps.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloParidadGps.setPreferredSize(new java.awt.Dimension(150, 100));
+        panelTituloParidadGps.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloParidadGps.setPreferredSize(new java.awt.Dimension(150, 50));
         panelTituloParidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblParidadGps.setText("Paridad");
@@ -472,8 +456,8 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelParidadGps.add(panelTituloParidadGps);
 
         panelComboParidadGps.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboParidadGps.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboParidadGps.setPreferredSize(new java.awt.Dimension(350, 100));
+        panelComboParidadGps.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboParidadGps.setPreferredSize(new java.awt.Dimension(250, 50));
         panelComboParidadGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         comboParidadGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -486,15 +470,29 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelParidadGps.add(panelComboParidadGps);
 
-        panelConfigGps.add(panelParidadGps);
+        componentesConfigGps.add(panelParidadGps);
 
-        panelGps.add(panelConfigGps);
+        chkAutoConectaGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkAutoConectaGps.setSelected(true);
+        chkAutoConectaGps.setText("Autoconectar al inicio");
+        chkAutoConectaGps.setEnabled(false);
+        chkAutoConectaGps.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        componentesConfigGps.add(chkAutoConectaGps);
+
+        panelConfigGps.add(componentesConfigGps);
+
+        taskPaneContainerGPS.add(panelConfigGps);
+
+        panelGps.add(taskPaneContainerGPS);
 
         panelDispositivos.add(panelGps);
 
         panelSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelBasicoSonda.setPreferredSize(new java.awt.Dimension(593, 30));
+        panelBasicoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 3));
+
+        chkEstadoSonda.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         chkEstadoSonda.setText("SONDA");
         chkEstadoSonda.setEnabled(false);
         chkEstadoSonda.addActionListener(new java.awt.event.ActionListener() {
@@ -502,53 +500,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
                 chkEstadoSondaActionPerformed(evt);
             }
         });
-        panelSonda.add(chkEstadoSonda);
-
-        panelConfigSonda.setMaximumSize(new java.awt.Dimension(500, 170));
-        panelConfigSonda.setMinimumSize(new java.awt.Dimension(500, 170));
-        panelConfigSonda.setPreferredSize(new java.awt.Dimension(500, 170));
-        panelConfigSonda.setLayout(new java.awt.GridLayout(5, 1));
-
-        panelTituloConfigSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
-
-        lblTxtConfigSonda.setText("Configuración de conexion a la Sonda:");
-        lblTxtConfigSonda.setEnabled(false);
-        lblTxtConfigSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloConfigSonda.add(lblTxtConfigSonda);
-
-        panelConfigSonda.add(panelTituloConfigSonda);
-
-        panelPuertoComSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
-
-        panelTituloPuertoSonda.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloPuertoSonda.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloPuertoSonda.setPreferredSize(new java.awt.Dimension(150, 100));
-        panelTituloPuertoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        lblPuertoSonda.setText("Puerto");
-        lblPuertoSonda.setEnabled(false);
-        lblPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloPuertoSonda.add(lblPuertoSonda);
-
-        panelPuertoComSonda.add(panelTituloPuertoSonda);
-
-        panelComboPuertoSonda.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboPuertoSonda.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboPuertoSonda.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboPuertoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-
-        comboPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboPuertoSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
-        comboPuertoSonda.setEnabled(false);
-        comboPuertoSonda.setMaximumSize(new java.awt.Dimension(120, 20));
-        comboPuertoSonda.setMinimumSize(new java.awt.Dimension(120, 20));
-        comboPuertoSonda.setPreferredSize(new java.awt.Dimension(120, 20));
-        comboPuertoSonda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboPuertoSondaActionPerformed(evt);
-            }
-        });
-        panelComboPuertoSonda.add(comboPuertoSonda);
+        panelBasicoSonda.add(chkEstadoSonda);
 
         panelSondaStatus.setMaximumSize(new java.awt.Dimension(200, 30));
         panelSondaStatus.setMinimumSize(new java.awt.Dimension(133, 30));
@@ -593,71 +545,10 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelSondaStatus.add(panelSondaConexionTxt);
 
-        panelComboPuertoSonda.add(panelSondaStatus);
-
-        panelPuertoComSonda.add(panelComboPuertoSonda);
-
-        panelConfigSonda.add(panelPuertoComSonda);
-
-        panelVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
-
-        panelTituloVelocidadSonda.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloVelocidadSonda.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloVelocidadSonda.setPreferredSize(new java.awt.Dimension(150, 100));
-        panelTituloVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        lblVelocidadSonda.setText("Velocidad (bps)");
-        lblVelocidadSonda.setEnabled(false);
-        lblVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloVelocidadSonda.add(lblVelocidadSonda);
-
-        panelVelocidadSonda.add(panelTituloVelocidadSonda);
-
-        panelComboVelocidadSonda.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboVelocidadSonda.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboVelocidadSonda.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
-
-        comboVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboVelocidadSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1200", "2400", "4800", "9600", "19200", "38400" }));
-        comboVelocidadSonda.setEnabled(false);
-        comboVelocidadSonda.setMaximumSize(new java.awt.Dimension(120, 20));
-        comboVelocidadSonda.setMinimumSize(new java.awt.Dimension(120, 20));
-        comboVelocidadSonda.setPreferredSize(new java.awt.Dimension(120, 20));
-        panelComboVelocidadSonda.add(comboVelocidadSonda);
-
-        panelVelocidadSonda.add(panelComboVelocidadSonda);
-
-        panelConfigSonda.add(panelVelocidadSonda);
-
-        panelBitsDeDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
-
-        panelTituloBitsDatosSonda.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloBitsDatosSonda.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloBitsDatosSonda.setPreferredSize(new java.awt.Dimension(150, 100));
-        panelTituloBitsDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        lblBitsDatosSonda.setText("Bits de Datos");
-        lblBitsDatosSonda.setEnabled(false);
-        lblBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelTituloBitsDatosSonda.add(lblBitsDatosSonda);
-
-        panelBitsDeDatosSonda.add(panelTituloBitsDatosSonda);
-
-        panelComboBitsDatosSonda.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboBitsDatosSonda.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboBitsDatosSonda.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboBitsDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-
-        comboBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboBitsDatosSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
-        comboBitsDatosSonda.setEnabled(false);
-        comboBitsDatosSonda.setMaximumSize(new java.awt.Dimension(120, 20));
-        comboBitsDatosSonda.setMinimumSize(new java.awt.Dimension(120, 20));
-        comboBitsDatosSonda.setPreferredSize(new java.awt.Dimension(120, 20));
-        panelComboBitsDatosSonda.add(comboBitsDatosSonda);
+        panelBasicoSonda.add(panelSondaStatus);
 
         panelBtnConectaSonda.setPreferredSize(new java.awt.Dimension(200, 30));
+        panelBtnConectaSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         btnConectaSonda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnConectaSonda.setText("Conectar");
@@ -678,17 +569,135 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         });
         panelBtnConectaSonda.add(btnDesconectaSonda);
 
-        panelComboBitsDatosSonda.add(panelBtnConectaSonda);
+        panelBasicoSonda.add(panelBtnConectaSonda);
+
+        panelSonda.add(panelBasicoSonda);
+
+        taskPaneContainerSonda.setBackground(new java.awt.Color(240, 240, 240));
+        taskPaneContainerSonda.setMinimumSize(new java.awt.Dimension(472, 26));
+        taskPaneContainerSonda.setPreferredSize(new java.awt.Dimension(472, 206));
+        taskPaneContainerSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+
+        panelConfigSonda.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        panelConfigSonda.setTitle("Configuración de conexión a la Sonda:");
+        panelConfigSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        componentesConfigSonda.setMaximumSize(new java.awt.Dimension(450, 150));
+        componentesConfigSonda.setMinimumSize(new java.awt.Dimension(410, 10));
+        componentesConfigSonda.setPreferredSize(new java.awt.Dimension(410, 150));
+        componentesConfigSonda.setLayout(new java.awt.GridLayout(5, 1));
+
+        panelPuertoComSonda.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelPuertoComSonda.setPreferredSize(new java.awt.Dimension(400, 50));
+        panelPuertoComSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+
+        panelTituloPuertoSonda.setMaximumSize(new java.awt.Dimension(150, 100));
+        panelTituloPuertoSonda.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloPuertoSonda.setPreferredSize(new java.awt.Dimension(150, 50));
+        panelTituloPuertoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        lblPuertoSonda.setText("Puerto");
+        lblPuertoSonda.setEnabled(false);
+        lblPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloPuertoSonda.add(lblPuertoSonda);
+
+        panelPuertoComSonda.add(panelTituloPuertoSonda);
+
+        panelComboPuertoSonda.setMaximumSize(new java.awt.Dimension(350, 100));
+        panelComboPuertoSonda.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboPuertoSonda.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboPuertoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 4));
+
+        comboPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboPuertoSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
+        comboPuertoSonda.setEnabled(false);
+        comboPuertoSonda.setMaximumSize(new java.awt.Dimension(120, 20));
+        comboPuertoSonda.setMinimumSize(new java.awt.Dimension(120, 20));
+        comboPuertoSonda.setPreferredSize(new java.awt.Dimension(120, 20));
+        comboPuertoSonda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPuertoSondaActionPerformed(evt);
+            }
+        });
+        panelComboPuertoSonda.add(comboPuertoSonda);
+
+        panelPuertoComSonda.add(panelComboPuertoSonda);
+
+        componentesConfigSonda.add(panelPuertoComSonda);
+
+        panelVelocidadSonda.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelVelocidadSonda.setPreferredSize(new java.awt.Dimension(400, 50));
+        panelVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+
+        panelTituloVelocidadSonda.setMaximumSize(new java.awt.Dimension(150, 100));
+        panelTituloVelocidadSonda.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloVelocidadSonda.setPreferredSize(new java.awt.Dimension(150, 50));
+        panelTituloVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        lblVelocidadSonda.setText("Velocidad (bps)");
+        lblVelocidadSonda.setEnabled(false);
+        lblVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloVelocidadSonda.add(lblVelocidadSonda);
+
+        panelVelocidadSonda.add(panelTituloVelocidadSonda);
+
+        panelComboVelocidadSonda.setMaximumSize(new java.awt.Dimension(350, 100));
+        panelComboVelocidadSonda.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboVelocidadSonda.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboVelocidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 4));
+
+        comboVelocidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboVelocidadSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1200", "2400", "4800", "9600", "19200", "38400" }));
+        comboVelocidadSonda.setEnabled(false);
+        comboVelocidadSonda.setMaximumSize(new java.awt.Dimension(120, 20));
+        comboVelocidadSonda.setMinimumSize(new java.awt.Dimension(120, 20));
+        comboVelocidadSonda.setPreferredSize(new java.awt.Dimension(120, 20));
+        panelComboVelocidadSonda.add(comboVelocidadSonda);
+
+        panelVelocidadSonda.add(panelComboVelocidadSonda);
+
+        componentesConfigSonda.add(panelVelocidadSonda);
+
+        panelBitsDeDatosSonda.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelBitsDeDatosSonda.setPreferredSize(new java.awt.Dimension(400, 50));
+        panelBitsDeDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
+
+        panelTituloBitsDatosSonda.setMaximumSize(new java.awt.Dimension(150, 100));
+        panelTituloBitsDatosSonda.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloBitsDatosSonda.setPreferredSize(new java.awt.Dimension(150, 50));
+        panelTituloBitsDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        lblBitsDatosSonda.setText("Bits de Datos");
+        lblBitsDatosSonda.setEnabled(false);
+        lblBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloBitsDatosSonda.add(lblBitsDatosSonda);
+
+        panelBitsDeDatosSonda.add(panelTituloBitsDatosSonda);
+
+        panelComboBitsDatosSonda.setMaximumSize(new java.awt.Dimension(350, 100));
+        panelComboBitsDatosSonda.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboBitsDatosSonda.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboBitsDatosSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 4));
+
+        comboBitsDatosSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboBitsDatosSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "6", "7", "8" }));
+        comboBitsDatosSonda.setEnabled(false);
+        comboBitsDatosSonda.setMaximumSize(new java.awt.Dimension(120, 20));
+        comboBitsDatosSonda.setMinimumSize(new java.awt.Dimension(120, 20));
+        comboBitsDatosSonda.setPreferredSize(new java.awt.Dimension(120, 20));
+        panelComboBitsDatosSonda.add(comboBitsDatosSonda);
 
         panelBitsDeDatosSonda.add(panelComboBitsDatosSonda);
 
-        panelConfigSonda.add(panelBitsDeDatosSonda);
+        componentesConfigSonda.add(panelBitsDeDatosSonda);
 
+        panelParidadSonda.setMinimumSize(new java.awt.Dimension(400, 50));
+        panelParidadSonda.setPreferredSize(new java.awt.Dimension(400, 50));
         panelParidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
 
         panelTituloParidadSonda.setMaximumSize(new java.awt.Dimension(150, 100));
-        panelTituloParidadSonda.setMinimumSize(new java.awt.Dimension(150, 100));
-        panelTituloParidadSonda.setPreferredSize(new java.awt.Dimension(150, 100));
+        panelTituloParidadSonda.setMinimumSize(new java.awt.Dimension(150, 50));
+        panelTituloParidadSonda.setPreferredSize(new java.awt.Dimension(150, 50));
         panelTituloParidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblParidadSonda.setText("Paridad");
@@ -699,9 +708,9 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelParidadSonda.add(panelTituloParidadSonda);
 
         panelComboParidadSonda.setMaximumSize(new java.awt.Dimension(350, 100));
-        panelComboParidadSonda.setMinimumSize(new java.awt.Dimension(350, 100));
-        panelComboParidadSonda.setPreferredSize(new java.awt.Dimension(350, 100));
-        panelComboParidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        panelComboParidadSonda.setMinimumSize(new java.awt.Dimension(250, 50));
+        panelComboParidadSonda.setPreferredSize(new java.awt.Dimension(250, 50));
+        panelComboParidadSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 4));
 
         comboParidadSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboParidadSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ninguno", "Par", "Impar" }));
@@ -713,15 +722,26 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelParidadSonda.add(panelComboParidadSonda);
 
-        panelConfigSonda.add(panelParidadSonda);
+        componentesConfigSonda.add(panelParidadSonda);
 
-        panelSonda.add(panelConfigSonda);
+        chkAutoConectaSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkAutoConectaSonda.setSelected(true);
+        chkAutoConectaSonda.setText("Auto conectar al inicio");
+        chkAutoConectaSonda.setEnabled(false);
+        chkAutoConectaSonda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        componentesConfigSonda.add(chkAutoConectaSonda);
+
+        panelConfigSonda.add(componentesConfigSonda);
+
+        taskPaneContainerSonda.add(panelConfigSonda);
+
+        panelSonda.add(taskPaneContainerSonda);
 
         panelDispositivos.add(panelSonda);
 
         panelPeces.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        chkEstadoLan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkEstadoLan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         chkEstadoLan.setText("Detección de Peces");
         chkEstadoLan.setEnabled(false);
         chkEstadoLan.addActionListener(new java.awt.event.ActionListener() {
@@ -762,6 +782,11 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         btnExaminarRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnExaminarRutaHistorico.setText("Examinar");
         btnExaminarRutaHistorico.setEnabled(false);
+        btnExaminarRutaHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExaminarRutaHistoricoActionPerformed(evt);
+            }
+        });
         panelCampoRutaHistorico.add(btnExaminarRutaHistorico);
 
         panelConfigHistorico.add(panelCampoRutaHistorico);
@@ -1080,6 +1105,16 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         }
     }//GEN-LAST:event_btnDesconectaLanActionPerformed
 
+    private void btnExaminarRutaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExaminarRutaHistoricoActionPerformed
+        JFileChooser fc = new JFileChooser();
+        int resp = fc.showOpenDialog(this);
+
+        if(resp == JFileChooser.APPROVE_OPTION){
+            File archivo = fc.getSelectedFile();
+            campoRutaHistorico.setText(archivo.getAbsolutePath());
+        }
+    }//GEN-LAST:event_btnExaminarRutaHistoricoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GpsEstado;
     private javax.swing.JPanel LanEstado;
@@ -1094,6 +1129,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JButton btnExaminarRutaHistorico;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JTextField campoRutaHistorico;
+    private javax.swing.JCheckBox chkAutoConectaGps;
+    private javax.swing.JCheckBox chkAutoConectaSonda;
     private javax.swing.JCheckBox chkEstadoGps;
     private javax.swing.JCheckBox chkEstadoLan;
     private javax.swing.JCheckBox chkEstadoSonda;
@@ -1108,6 +1145,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JComboBox comboVelocidad;
     private javax.swing.JComboBox comboVelocidadGps;
     private javax.swing.JComboBox comboVelocidadSonda;
+    private org.jdesktop.swingx.JXPanel componentesConfigGps;
+    private org.jdesktop.swingx.JXPanel componentesConfigSonda;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXLabel lblBitsDatosGps;
     private org.jdesktop.swingx.JXLabel lblBitsDatosSonda;
@@ -1122,13 +1161,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private java.awt.Label lblSondaEstado;
     private org.jdesktop.swingx.JXLabel lblTemp;
     private org.jdesktop.swingx.JXLabel lblTitulo;
-    private org.jdesktop.swingx.JXLabel lblTxtConfigGps;
-    private org.jdesktop.swingx.JXLabel lblTxtConfigSonda;
     private org.jdesktop.swingx.JXLabel lblTxtRutaHistorico;
     private org.jdesktop.swingx.JXLabel lblUnidades;
     private org.jdesktop.swingx.JXLabel lblVelocidad;
     private org.jdesktop.swingx.JXLabel lblVelocidadGps;
     private org.jdesktop.swingx.JXLabel lblVelocidadSonda;
+    private org.jdesktop.swingx.JXPanel panelBasicoGps;
+    private org.jdesktop.swingx.JXPanel panelBasicoSonda;
     private org.jdesktop.swingx.JXPanel panelBitsDeDatosGps;
     private org.jdesktop.swingx.JXPanel panelBitsDeDatosSonda;
     private org.jdesktop.swingx.JXPanel panelBotonGuardar;
@@ -1140,7 +1179,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelComboBitsDatosGps;
     private org.jdesktop.swingx.JXPanel panelComboBitsDatosSonda;
     private org.jdesktop.swingx.JXPanel panelComboDistancia;
-    private org.jdesktop.swingx.JXPanel panelComboIdioma;
     private org.jdesktop.swingx.JXPanel panelComboParidadGps;
     private org.jdesktop.swingx.JXPanel panelComboParidadSonda;
     private org.jdesktop.swingx.JXPanel panelComboPuertoGps;
@@ -1149,9 +1187,9 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelComboVelocidad;
     private org.jdesktop.swingx.JXPanel panelComboVelocidadGps;
     private org.jdesktop.swingx.JXPanel panelComboVelocidadSonda;
-    private org.jdesktop.swingx.JXPanel panelConfigGps;
+    private org.jdesktop.swingx.JXTaskPane panelConfigGps;
     private org.jdesktop.swingx.JXPanel panelConfigHistorico;
-    private org.jdesktop.swingx.JXPanel panelConfigSonda;
+    private org.jdesktop.swingx.JXTaskPane panelConfigSonda;
     private org.jdesktop.swingx.JXPanel panelDispositivos;
     private org.jdesktop.swingx.JXPanel panelDistancia;
     private javax.swing.JPanel panelGPSconexionColor;
@@ -1159,7 +1197,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelGeneralidades;
     private org.jdesktop.swingx.JXPanel panelGps;
     private javax.swing.JPanel panelGpsStatus;
-    private org.jdesktop.swingx.JXPanel panelIdioma;
     private javax.swing.JPanel panelLANconexionColor;
     private org.jdesktop.swingx.JXPanel panelLANconexionTxt;
     private javax.swing.JPanel panelLanStatus;
@@ -1177,8 +1214,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelTitulo;
     private org.jdesktop.swingx.JXPanel panelTituloBitsDatosGps;
     private org.jdesktop.swingx.JXPanel panelTituloBitsDatosSonda;
-    private org.jdesktop.swingx.JXPanel panelTituloConfigGps;
-    private org.jdesktop.swingx.JXPanel panelTituloConfigSonda;
     private org.jdesktop.swingx.JXPanel panelTituloParidadGps;
     private org.jdesktop.swingx.JXPanel panelTituloParidadSonda;
     private org.jdesktop.swingx.JXPanel panelTituloPuertoGps;
@@ -1190,13 +1225,14 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelTodoLanStatus;
     private org.jdesktop.swingx.JXPanel panelTxtDispositivos;
     private org.jdesktop.swingx.JXPanel panelTxtDistancia;
-    private org.jdesktop.swingx.JXPanel panelTxtIdioma;
     private org.jdesktop.swingx.JXPanel panelTxtTemp;
     private org.jdesktop.swingx.JXPanel panelTxtVelocidad;
     private org.jdesktop.swingx.JXPanel panelUnidades;
     private org.jdesktop.swingx.JXPanel panelVelocidad;
     private org.jdesktop.swingx.JXPanel panelVelocidadGps;
     private org.jdesktop.swingx.JXPanel panelVelocidadSonda;
+    private org.jdesktop.swingx.JXTaskPaneContainer taskPaneContainerGPS;
+    private org.jdesktop.swingx.JXTaskPaneContainer taskPaneContainerSonda;
     // End of variables declaration//GEN-END:variables
 
     public JTextField getCampoRutaHistorico() {
@@ -1406,7 +1442,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     
     public void setPanelConfigGps(boolean estado) {
         //Activo el panel de configuración del GPS
-        lblTxtConfigGps.setEnabled(estado);
+        taskPaneContainerGPS.setEnabled(estado);
+        panelConfigGps.setEnabled(estado);
         lblPuertoGps.setEnabled(estado);
         comboPuertoGps.setEnabled(estado);
         lblBitsDatosGps.setEnabled(estado);
@@ -1418,11 +1455,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         btnConectaGps.setEnabled(estado);
         GpsEstado.setEnabled(estado);
         lblGpsEstado.setEnabled(estado);
+        chkAutoConectaGps.setEnabled(estado);
     }
     
     public void setPanelConfigSonda(boolean estado) {
         //Activo el panel de configuración de la Sonda
-        lblTxtConfigSonda.setEnabled(estado);
+        taskPaneContainerSonda.setEnabled(estado);
+        panelConfigSonda.setEnabled(estado);
         lblPuertoSonda.setEnabled(estado);
         comboPuertoSonda.setEnabled(estado);
         lblBitsDatosSonda.setEnabled(estado);
@@ -1433,7 +1472,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         comboParidadSonda.setEnabled(estado);         
         btnConectaSonda.setEnabled(estado);
         SondaEstado.setEnabled(estado);
-        lblSondaEstado.setEnabled(estado);        
+        lblSondaEstado.setEnabled(estado);
+        chkAutoConectaSonda.setEnabled(estado);
     }
     
     private void setPanelConfigLan(boolean estado) {
