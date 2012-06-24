@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
@@ -157,6 +159,19 @@ public void sentenceRead(SentenceEvent event) {
 
     public void run() {        
         try {
+            if ( (modelo.dataCapture.Gps.getInstance().getEstadoConexion() == 1) || 
+                 (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 1) ){
+                    setEstadoConexion(1);
+                    ps.sleep(40000); // como vemos que ya hay algun dispositivo intentando conectarse, esperamos 40 segundos a que 
+                    // termine ese intento de conexión para proceder con este y evitar posibles excepciones de la DLL
+            }
+            else{
+                if (modelo.dataCapture.PuertosSerieDelSO.getInstance().isLeyendoPuertos()) {
+                    setEstadoConexion(1);
+                    ps.sleep(100000); // como vemos que hay un escaneo de puertos del SO en curso, aguardamos a q termine para comenzar
+                    // este intento de conexión y evitar posibles excepciones de la DLL
+                }
+            }
             SerialPort sp = abrirPuertoSerie();
             if (sp != null) {
                 InputStream is = sp.getInputStream();
@@ -169,7 +184,7 @@ public void sentenceRead(SentenceEvent event) {
             { setEstadoConexion(0); 
               ps = null;
             }
-        } catch (IOException e) {            
+        } catch (Exception e) {            
             System.out.println(e);            
             Logueador.getInstance().agregaAlLog(e.toString());
             //setTxtCuadro(e.toString());  //e.printStackTrace();
@@ -222,7 +237,7 @@ public void sentenceRead(SentenceEvent event) {
           if( id.getPortType() == CommPortIdentifier.PORT_SERIAL ) {
     //        if( idPuerto.getName().equals("/dev/term/a") ) {  // UNIX
             try {
-                Logueador.getInstance().agregaAlLog(id.getName());
+                //Logueador.getInstance().agregaAlLog(id.getName());
                 // Vamos guardando los puertos que se encontraron
                 puertos[i] = id.getName();
                 i++;

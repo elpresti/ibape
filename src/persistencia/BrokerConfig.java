@@ -26,8 +26,7 @@ public class BrokerConfig {
     
     private BrokerConfig() {
         
-    }
-    
+    }    
     
     public FileInputStream abreArchivoConfig() throws JDOMException{
                 //Intentamos abrir el archivo, y si no existe lo creamos
@@ -122,7 +121,7 @@ public class BrokerConfig {
                 // Obtenemos el nombre y su contenido de tipo texto  
                 String nombre = parametro.getName();  
                 String texto = parametro.getValue();       
-                System.out.println("\n Etiqueta: "+nombre+". Texto: "+texto);
+                System.out.println("\n Archivo de configuración leido");
                 //getModeloListaCcf().addElement(nombre+id+descripcion);
                 //getDocBrokerConfig().addElement(elemCcfDto);                
              }   
@@ -174,7 +173,7 @@ public class BrokerConfig {
         
         Element alertas =  new Element("PanelAlertas");
         alertas.setAttribute("Estado","true");
-        elemConfig.addContent(alertas);                        
+        elemConfig.addContent(alertas);
 
         return elemConfig;
     }
@@ -191,6 +190,7 @@ public class BrokerConfig {
         gpsConfig.setAttribute("ComboVelocidad",i.getComboVelocidadGps().getSelectedItem().toString());
         gpsConfig.setAttribute("ComboBitsDatos",i.getComboBitsDatosGps().getSelectedItem().toString());
         gpsConfig.setAttribute("ComboParidad",i.getComboParidadGps().getSelectedItem().toString());
+        gpsConfig.setAttribute("Autoconexion",String.valueOf(i.getChkAutoConectaGps().isSelected()));
         elemConfig.addContent(gpsConfig);
                 
         Element sondaConfig =  new Element("PanelConfiguracion-Sonda");
@@ -199,6 +199,7 @@ public class BrokerConfig {
         sondaConfig.setAttribute("ComboVelocidad",i.getComboVelocidadSonda().getSelectedItem().toString());
         sondaConfig.setAttribute("ComboBitsDatos",i.getComboBitsDatosSonda().getSelectedItem().toString());
         sondaConfig.setAttribute("ComboParidad",i.getComboParidadSonda().getSelectedItem().toString());
+        sondaConfig.setAttribute("Autoconexion",String.valueOf(i.getChkAutoConectaSonda().isSelected()));
         elemConfig.addContent(sondaConfig);
         
         Element lanConfig =  new Element("PanelConfiguracion-LAN");
@@ -227,17 +228,20 @@ public class BrokerConfig {
     }
     
     public boolean actualizaDatosPanelConfig_Gps(String estado, String comboPuerto, 
-            String comboVelocidad, String comboBitsDatos,String comboParidad){
+            String comboVelocidad, String comboBitsDatos,String comboParidad,String autoconexion){
         boolean sePudo=false;
         //-- Actualiza los campos que corresponden del Document
         try {
             Element raizConfiguracionIbape= getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
             parametros.getChild("PanelConfiguracion-GPS").setAttribute("Estado",estado);
-            parametros.getChild("PanelConfiguracion-GPS").setAttribute("ComboPuerto",comboPuerto);
+            if (comboPuerto.length()<8){ //para no guardar el estado de lectura de puertos
+                parametros.getChild("PanelConfiguracion-GPS").setAttribute("ComboPuerto",comboPuerto);
+            }
             parametros.getChild("PanelConfiguracion-GPS").setAttribute("ComboVelocidad",comboVelocidad);
             parametros.getChild("PanelConfiguracion-GPS").setAttribute("ComboBitsDatos",comboBitsDatos);
-            parametros.getChild("PanelConfiguracion-GPS").setAttribute("ComboParidad",comboParidad);        
+            parametros.getChild("PanelConfiguracion-GPS").setAttribute("ComboParidad",comboParidad);
+            parametros.getChild("PanelConfiguracion-GPS").setAttribute("Autoconexion",autoconexion);
             sePudo=true;
             }
         catch (Exception e) 
@@ -246,17 +250,20 @@ public class BrokerConfig {
     }
     
     public boolean actualizaDatosPanelConfig_Sonda(String estado, String comboPuerto, 
-            String comboVelocidad, String comboBitsDatos,String comboParidad){
+            String comboVelocidad, String comboBitsDatos,String comboParidad,String autoconexion){
         boolean sePudo=false;
         //-- Actualiza los campos que corresponden del Document
         try {
             Element raizConfiguracionIbape= getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
             parametros.getChild("PanelConfiguracion-Sonda").setAttribute("Estado",estado);
-            parametros.getChild("PanelConfiguracion-Sonda").setAttribute("ComboPuerto",comboPuerto);
+            if (comboPuerto.length()<8){ //para no guardar el estado de lectura de puertos
+                parametros.getChild("PanelConfiguracion-Sonda").setAttribute("ComboPuerto",comboPuerto);
+            }
             parametros.getChild("PanelConfiguracion-Sonda").setAttribute("ComboVelocidad",comboVelocidad);
             parametros.getChild("PanelConfiguracion-Sonda").setAttribute("ComboBitsDatos",comboBitsDatos);
             parametros.getChild("PanelConfiguracion-Sonda").setAttribute("ComboParidad",comboParidad);        
+            parametros.getChild("PanelConfiguracion-Sonda").setAttribute("Autoconexion",autoconexion);        
             sePudo=true;
             }
         catch (Exception e) 

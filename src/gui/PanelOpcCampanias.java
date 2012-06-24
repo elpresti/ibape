@@ -405,6 +405,11 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         chkHistoricoSonda.setSelected(true);
         chkHistoricoSonda.setText("Guardar datos de la SONDA");
         chkHistoricoSonda.setEnabled(false);
+        chkHistoricoSonda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkHistoricoSondaActionPerformed(evt);
+            }
+        });
         panelHistorico.add(chkHistoricoSonda);
 
         chkHistoricoPeces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -583,6 +588,10 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         controllers.ControllerCampania.getInstance().detenerLogueoHistorico();
         setGuiHistoricoLogueando(false);
     }//GEN-LAST:event_btnDetenerLogueoHistoricoActionPerformed
+
+    private void chkHistoricoSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoSondaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkHistoricoSondaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComenzarCampania;

@@ -25,8 +25,7 @@ public class ControllerPpal {
     }
     
     public void accionesAlIniciar(){
-        ControllerConfig.getInstance().obtienePuertosComExistentes();            
-        gui.PanelOpcConfiguracion.getInstance().btnEscanearPuertosPresionado(true);
+        controllers.ControllerConfig.getInstance().inicializaConexiones();        
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
     }
@@ -46,13 +45,15 @@ public class ControllerPpal {
                 p.getComboPuertoGps().getSelectedItem().toString(), 
                 p.getComboVelocidadGps().getSelectedItem().toString(), 
                 p.getComboBitsDatosGps().getSelectedItem().toString(), 
-                p.getComboParidadGps().getSelectedItem().toString());
+                p.getComboParidadGps().getSelectedItem().toString(),
+                String.valueOf(p.getChkAutoConectaGps().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Sonda(
                 String.valueOf(p.getChkEstadoSonda().isSelected()), 
                 p.getComboPuertoSonda().getSelectedItem().toString(),
                 p.getComboVelocidadSonda().getSelectedItem().toString(), 
                 p.getComboBitsDatosSonda().getSelectedItem().toString(), 
-                p.getComboParidadSonda().getSelectedItem().toString());
+                p.getComboParidadSonda().getSelectedItem().toString(),
+                String.valueOf(p.getChkAutoConectaSonda().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Lan(
                 String.valueOf(p.getChkEstadoDetectaPeces().isSelected()), 
                 p.getCampoRutaHistorico().getText());

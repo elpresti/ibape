@@ -700,6 +700,9 @@
                             <Property name="text" type="java.lang.String" value="Guardar datos de la SONDA"/>
                             <Property name="enabled" type="boolean" value="false"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkHistoricoSondaActionPerformed"/>
+                          </Events>
                         </Component>
                         <Component class="javax.swing.JCheckBox" name="chkHistoricoPeces">
                           <Properties>

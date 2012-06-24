@@ -13,7 +13,7 @@ import persistencia.Logueador;
  *
  * @author Sebastian
  */
-public class PuertosSerieDelSO extends java.util.Observable implements Runnable{    
+public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -31,8 +31,13 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
     private PuertosSerieDelSO(){
     }
 
-    public void run() {        
-        try {            
+    public void run() {
+        try {       
+            if ( (modelo.dataCapture.Gps.getInstance().getEstadoConexion() == 1) ||
+                 (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 1)   
+                    ){
+                ps.sleep(40000); //detengo durante 40 segundos xq hay un intento de conexion en curso
+            }
             if (!(getPuertosSerieExistentes())) {
                 setErrorLeyendo(true);                
             }   
@@ -50,8 +55,8 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
         if (ps == null) {
             ps = new Thread(this);
             ps.setPriority(Thread.MIN_PRIORITY);
-            ps.start();  //primer Thread          
-        }        
+            ps.start();  //primer Thread
+        }
     }
     
     private boolean getPuertosSerieExistentes() {
@@ -70,9 +75,11 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
                     Logueador.getInstance().agregaAlLog(id.getName());
                     // Vamos guardando los puertos que se encontraron
                     fullPortName=id.getName();
+                    /*  si quisiera anexarle al nombre del puerto el nombre de la aplicacion q lo esta usando, pero por ahora no conviene
                     if (!(id.getCurrentOwner() == null)){
                         fullPortName=fullPortName+": "+id.getCurrentOwner();
                     }
+                    */ 
                     puertos.add(fullPortName);
                     i++;
                 }
