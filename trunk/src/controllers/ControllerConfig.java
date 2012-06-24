@@ -34,11 +34,13 @@ public class ControllerConfig  implements java.util.Observer {
         sonda.addObserver(this);
         puertosSerie.addObserver(this);
         lanSonda.addObserver(this);
+        gui.PanelOpcConfiguracion.getInstance();
     }
     
-    public void obtienePuertosComExistentes(){        
+    public void obtienePuertosComExistentes(){
+        gui.PanelOpcConfiguracion.getInstance().btnEscanearPuertosPresionado(true);
         puertosSerie.start();
-    }        
+    }
     
     public void setEstadoGps(int nroEstado){
         if (nroEstado==0){
@@ -116,10 +118,14 @@ public class ControllerConfig  implements java.util.Observer {
 
     private void setCombosPuertosSerieDelSO(ArrayList<String> puertosSerie) {
         gui.PanelOpcConfiguracion.getInstance().btnEscanearPuertosPresionado(false);
-        gui.PanelOpcConfiguracion.getInstance().getChkEstadoGps().setEnabled(true);
-        gui.PanelOpcConfiguracion.getInstance().setPanelConfigGps(true);
-        gui.PanelOpcConfiguracion.getInstance().setPanelConfigSonda(true);
+        if (modelo.dataCapture.Gps.getInstance().getEstadoConexion() == 0){
+            gui.PanelOpcConfiguracion.getInstance().getChkEstadoGps().setEnabled(true);
+            gui.PanelOpcConfiguracion.getInstance().setPanelConfigGps(true);
+        }
         gui.PanelOpcConfiguracion.getInstance().setContenidoComboCOMgps(puertosSerie);
+        if (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 0){
+            gui.PanelOpcConfiguracion.getInstance().setPanelConfigSonda(true);
+        }
         gui.PanelOpcConfiguracion.getInstance().setContenidoComboCOMsonda(puertosSerie);
     }    
     
@@ -183,5 +189,37 @@ public class ControllerConfig  implements java.util.Observer {
         }
         return sePudo;
     }
+    
+    public boolean autoConectaGps(){
+        boolean sePudo=false;
+        if (gui.PanelOpcConfiguracion.getInstance().getChkAutoConectaGps().isSelected() && 
+                gui.PanelOpcConfiguracion.getInstance().getChkEstadoGps().isSelected() &&
+                (modelo.dataCapture.Gps.getInstance().getEstadoConexion()==0) ) {
+            gui.PanelOpcConfiguracion.getInstance().presionarBtnConectaGps();
+            sePudo=true;
+        }
+        return sePudo;
+    }
+    
+    public boolean autoConectaSonda(){
+        boolean sePudo=false;
+        String comboGps = gui.PanelOpcConfiguracion.getInstance().getComboPuertoGps().getSelectedItem().toString();
+        String comboSonda = gui.PanelOpcConfiguracion.getInstance().getComboPuertoSonda().getSelectedItem().toString();
+        if (gui.PanelOpcConfiguracion.getInstance().getChkAutoConectaSonda().isSelected() && 
+                gui.PanelOpcConfiguracion.getInstance().getChkEstadoSonda().isSelected() &&
+                (modelo.dataCapture.Sonda.getInstance().getEstadoConexion()==0) &&
+                (comboGps != null  &&  comboSonda != null  &&  !comboGps.equals(comboSonda))
+                ) {
+            gui.PanelOpcConfiguracion.getInstance().presionarBtnConectaSonda();
+            sePudo=true;
+        }
+        return sePudo;
+    }
 
+    public void inicializaConexiones() {
+        autoConectaGps();
+        autoConectaSonda();
+        obtienePuertosComExistentes();        
+    }    
+    
 }

@@ -10,7 +10,7 @@
  */
 package gui;
 
-import controllers.ControllerConfig;
+import controllers.ControllerConfig; 
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +35,8 @@ import persistencia.Logueador;
  */
 public class PanelOpcConfiguracion extends javax.swing.JPanel {
     static PanelOpcConfiguracion unicaInstancia;
+    String comGpsElegido;
+    String comSondaElegido;
 
     /** Creates new form PanelOpcConfiguracion */
     private PanelOpcConfiguracion() {
@@ -192,9 +194,9 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         jScrollPane1.setMinimumSize(new java.awt.Dimension(480, 410));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(480, 410));
 
-        panelOpcionesGrales.setMaximumSize(new java.awt.Dimension(460, 950));
+        panelOpcionesGrales.setMaximumSize(new java.awt.Dimension(460, 1050));
         panelOpcionesGrales.setMinimumSize(new java.awt.Dimension(460, 950));
-        panelOpcionesGrales.setPreferredSize(new java.awt.Dimension(460, 950));
+        panelOpcionesGrales.setPreferredSize(new java.awt.Dimension(460, 1050));
         panelOpcionesGrales.setScrollableTracksViewportHeight(false);
         panelOpcionesGrales.setScrollableTracksViewportWidth(false);
         panelOpcionesGrales.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
@@ -202,7 +204,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelGeneralidades.setMaximumSize(new java.awt.Dimension(450, 50));
         panelGeneralidades.setMinimumSize(new java.awt.Dimension(450, 30));
         panelGeneralidades.setPreferredSize(new java.awt.Dimension(450, 30));
-        panelGeneralidades.setLayout(new java.awt.GridLayout());
+        panelGeneralidades.setLayout(new java.awt.GridLayout(1, 0));
 
         panelBtnEscanearPuertos.setMaximumSize(new java.awt.Dimension(450, 30));
         panelBtnEscanearPuertos.setMinimumSize(new java.awt.Dimension(450, 30));
@@ -331,6 +333,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         taskPaneContainerGPS.setPreferredSize(new java.awt.Dimension(472, 206));
         taskPaneContainerGPS.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
+        panelConfigGps.setCollapsed(true);
         panelConfigGps.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         panelConfigGps.setTitle("Configuración de conexión al GPS:");
         panelConfigGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
@@ -362,11 +365,16 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboPuertoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         comboPuertoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboPuertoGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
+        comboPuertoGps.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 6", "COM 7", "COM 8", "COM 9", "COM 10", "COM 11", "COM 12", "COM 13", "COM 14", "COM 15", "COM 16", "COM 17" }));
         comboPuertoGps.setEnabled(false);
         comboPuertoGps.setMaximumSize(new java.awt.Dimension(120, 20));
         comboPuertoGps.setMinimumSize(new java.awt.Dimension(120, 20));
         comboPuertoGps.setPreferredSize(new java.awt.Dimension(120, 20));
+        comboPuertoGps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboPuertoGpsActionPerformed(evt);
+            }
+        });
         panelComboPuertoGps.add(comboPuertoGps);
 
         panelPuertoComGps.add(panelComboPuertoGps);
@@ -578,6 +586,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         taskPaneContainerSonda.setPreferredSize(new java.awt.Dimension(472, 206));
         taskPaneContainerSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
+        panelConfigSonda.setCollapsed(true);
         panelConfigSonda.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         panelConfigSonda.setTitle("Configuración de conexión a la Sonda:");
         panelConfigSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
@@ -609,7 +618,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboPuertoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 4));
 
         comboPuertoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        comboPuertoSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 14", "COM 15", "COM 16", "COM 17" }));
+        comboPuertoSonda.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "COM 1", "COM 2", "COM 3", "COM 4", "COM 5", "COM 6", "COM 7", "COM 8", "COM 9", "COM 10", "COM 11", "COM 12", "COM 13", "COM 14", "COM 15", "COM 16", "COM 17" }));
         comboPuertoSonda.setEnabled(false);
         comboPuertoSonda.setMaximumSize(new java.awt.Dimension(120, 20));
         comboPuertoSonda.setMinimumSize(new java.awt.Dimension(120, 20));
@@ -739,6 +748,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelDispositivos.add(panelSonda);
 
+        panelPeces.setPreferredSize(new java.awt.Dimension(1107, 110));
         panelPeces.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         chkEstadoLan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -1017,6 +1027,14 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     else { JOptionPane.showMessageDialog(this, "Hubo un error y no se guardaron los cambios"); }
 }//GEN-LAST:event_btnGuardarActionPerformed
 
+public void presionarBtnConectaGps(){
+    btnConectaGpsActionPerformed(null);
+}
+
+public void presionarBtnConectaSonda(){
+    btnConectaSondaActionPerformed(null);
+}
+
 private void btnConectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectaGpsActionPerformed
     if (!(controllers.ControllerPpal.getInstance().conectaYleeDelGps())) {
         //JOptionPane.showMessageDialog(this, "Hubo un error en la conexión al GPS y no se inició");
@@ -1025,7 +1043,7 @@ private void btnConectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     else
         { btnConectaGps.setVisible(false);
           btnDesconectaGps.setVisible(true);
-          chkEstadoGps.setEnabled(false);
+            getChkEstadoGps().setEnabled(false);
           setPanelConfigGps(false);
         }    
 }//GEN-LAST:event_btnConectaGpsActionPerformed
@@ -1043,17 +1061,20 @@ private void btnDesconectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//
 }//GEN-LAST:event_btnDesconectaGpsActionPerformed
 
 private void btnConectaSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectaSondaActionPerformed
+    boolean sePudoConectar = false;
     if (!(controllers.ControllerPpal.getInstance().conectaYleeDeLaSonda())) {
         //JOptionPane.showMessageDialog(this, "Hubo un error en la conexión a la Sonda y no se inició");
-        PanelBarraDeEstado.getInstance().mostrarMensaje("Hubo un error en la conexión a la Sonda y no se inició",1);        
+        PanelBarraDeEstado.getInstance().mostrarMensaje("Hubo un error en la conexión a la Sonda y no se inició", 1);
+    } else {
+        sePudoConectar = true;
     }
-    else
-        {
-            btnConectaSonda.setVisible(false);
-            btnDesconectaSonda.setVisible(true);
-            chkEstadoSonda.setEnabled(false);
-            setPanelConfigSonda(false);
-        }
+
+    if (sePudoConectar) {
+        btnConectaSonda.setVisible(false);
+        btnDesconectaSonda.setVisible(true);
+        getChkEstadoSonda().setEnabled(false);
+        setPanelConfigSonda(false);
+    }
 }//GEN-LAST:event_btnConectaSondaActionPerformed
 
 private void btnDesconectaSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesconectaSondaActionPerformed
@@ -1063,20 +1084,24 @@ private void btnDesconectaSondaActionPerformed(java.awt.event.ActionEvent evt) {
     else
         { btnConectaSonda.setVisible(true);
           btnDesconectaSonda.setVisible(false);
-          chkEstadoSonda.setEnabled(true);
+            getChkEstadoSonda().setEnabled(true);
           setPanelConfigSonda(true);
         }
 }//GEN-LAST:event_btnDesconectaSondaActionPerformed
 
 private void comboPuertoSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPuertoSondaActionPerformed
-    if (((String)getComboPuertoGps().getSelectedItem()).equals((String)getComboPuertoSonda().getSelectedItem()))
-      {
-        setPanelConfigSonda(false);
-        if (chkEstadoSonda.isSelected() && (!(modelo.dataCapture.PuertosSerieDelSO.getInstance().isLeyendoPuertos()))) 
-            { getComboPuertoSonda().setEnabled(true); }
-      }
-    else
-        { setPanelConfigSonda(true); }
+    if (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 0){
+        if  (   (getComboPuertoGps().getSelectedItem() != null)  && 
+                (((String)getComboPuertoGps().getSelectedItem()).equals((String)getComboPuertoSonda().getSelectedItem()))
+            )
+        {
+            setPanelConfigSonda(false);
+            if (getChkEstadoSonda().isSelected() && (!(modelo.dataCapture.PuertosSerieDelSO.getInstance().isLeyendoPuertos()))) 
+                { getComboPuertoSonda().setEnabled(true); }
+        }
+        else
+            { setPanelConfigSonda(true); }
+    }
 }//GEN-LAST:event_comboPuertoSondaActionPerformed
 
 private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscaneaPuertosActionPerformed
@@ -1100,7 +1125,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     else
         { btnConectaLan.setVisible(true);
           btnDesconectaLan.setVisible(false);
-          chkEstadoLan.setEnabled(true);
+            getChkEstadoLan().setEnabled(true);
           setPanelConfigSonda(true);
         }
     }//GEN-LAST:event_btnDesconectaLanActionPerformed
@@ -1114,6 +1139,10 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             campoRutaHistorico.setText(archivo.getAbsolutePath());
         }
     }//GEN-LAST:event_btnExaminarRutaHistoricoActionPerformed
+
+    private void comboPuertoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPuertoGpsActionPerformed
+        comboPuertoSondaActionPerformed(evt);
+    }//GEN-LAST:event_comboPuertoGpsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GpsEstado;
@@ -1244,7 +1273,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }
 
     public JCheckBox getChkEstadoDetectaPeces() {
-        return chkEstadoLan;
+        return getChkEstadoLan();
     }
 
     public void setChkEstadoDetectaPeces(JCheckBox chkEstadoDetectaPeces) {
@@ -1366,10 +1395,12 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             if (getChkEstadoGps().isSelected()){
                 clickEnChkEstadoGps();
             }
+            getComboPuertoGps().addItem(parametros.getChild("PanelConfiguracion-GPS").getAttributeValue("ComboPuerto"));
             getComboPuertoGps().setSelectedItem(parametros.getChild("PanelConfiguracion-GPS").getAttributeValue("ComboPuerto"));
             getComboVelocidadGps().setSelectedItem(parametros.getChild("PanelConfiguracion-GPS").getAttributeValue("ComboVelocidad"));
             getComboBitsDatosGps().setSelectedItem(parametros.getChild("PanelConfiguracion-GPS").getAttributeValue("ComboBitsDatos"));
             getComboParidadGps().setSelectedItem(parametros.getChild("PanelConfiguracion-GPS").getAttributeValue("ComboParidad"));
+            getChkAutoConectaGps().setSelected(parametros.getChild("PanelConfiguracion-GPS").getAttribute("Autoconexion").getBooleanValue());
             sePudo=true;
             }
         catch (Exception e) 
@@ -1387,10 +1418,12 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             if (getChkEstadoSonda().isSelected()){
                 clickEnChkEstadoSonda();
             }
+            getComboPuertoSonda().addItem(parametros.getChild("PanelConfiguracion-Sonda").getAttributeValue("ComboPuerto"));
             getComboPuertoSonda().setSelectedItem(parametros.getChild("PanelConfiguracion-Sonda").getAttributeValue("ComboPuerto"));
             getComboVelocidadSonda().setSelectedItem(parametros.getChild("PanelConfiguracion-Sonda").getAttributeValue("ComboVelocidad"));
             getComboBitsDatosSonda().setSelectedItem(parametros.getChild("PanelConfiguracion-Sonda").getAttributeValue("ComboBitsDatos"));
             getComboParidadSonda().setSelectedItem(parametros.getChild("PanelConfiguracion-Sonda").getAttributeValue("ComboParidad"));
+            getChkAutoConectaSonda().setSelected(parametros.getChild("PanelConfiguracion-Sonda").getAttribute("Autoconexion").getBooleanValue());
             sePudo=true;
             }
         catch (Exception e) 
@@ -1455,7 +1488,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         btnConectaGps.setEnabled(estado);
         GpsEstado.setEnabled(estado);
         lblGpsEstado.setEnabled(estado);
-        chkAutoConectaGps.setEnabled(estado);
+        getChkAutoConectaGps().setEnabled(estado);
     }
     
     public void setPanelConfigSonda(boolean estado) {
@@ -1473,7 +1506,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         btnConectaSonda.setEnabled(estado);
         SondaEstado.setEnabled(estado);
         lblSondaEstado.setEnabled(estado);
-        chkAutoConectaSonda.setEnabled(estado);
+        getChkAutoConectaSonda().setEnabled(estado);
     }
     
     private void setPanelConfigLan(boolean estado) {
@@ -1495,54 +1528,54 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }
 
     public void clickEnChkEstadoGps() {
-        if (chkEstadoGps.isSelected()) {
-            chkEstadoGps.setSelected(true);
-            setPanelConfigGps(true);//Desactivo el panel de configuración del GPS        
-            chkEstadoSonda.setEnabled(true);   
+        if (getChkEstadoGps().isSelected()) {
+            getChkEstadoGps().setSelected(true);
+            setPanelConfigGps(true);//Desactivo el panel de configuración del GPS
+            getChkEstadoSonda().setEnabled(true);
         }
         else
-        {   
-            chkEstadoGps.setSelected(false);
-            setPanelConfigGps(false);//Desactivo el panel de configuración del GPS        
-            chkEstadoSonda.setEnabled(false);
-            chkEstadoSonda.setSelected(false);
-            setPanelConfigSonda(false);//Desactivo el panel de configuración del GPS        
-            chkEstadoLan.setEnabled(false);
-            chkEstadoLan.setSelected(false);
-            setPanelConfigLan(false);//Desactivo el panel de configuración del GPS        
-        }        
+        {
+            getChkEstadoGps().setSelected(false);
+            setPanelConfigGps(false);//Desactivo el panel de configuración del GPS
+            getChkEstadoSonda().setEnabled(false);
+            getChkEstadoSonda().setSelected(false);
+            setPanelConfigSonda(false);//Desactivo el panel de configuración del GPS
+            getChkEstadoLan().setEnabled(false);
+            getChkEstadoLan().setSelected(false);
+            setPanelConfigLan(false);//Desactivo el panel de configuración del GPS
+        }
     }
-    
-    
+
+
     public void clickEnChkEstadoSonda() {
-        if (chkEstadoSonda.isSelected()) {
-            chkEstadoSonda.setSelected(true);
-            setPanelConfigSonda(true);//Desactivo el panel de configuración de la Sonda        
-            chkEstadoLan.setEnabled(true);
+        if (getChkEstadoSonda().isSelected()) {
+            getChkEstadoSonda().setSelected(true);
+            setPanelConfigSonda(true);//Desactivo el panel de configuración de la Sonda
+            getChkEstadoLan().setEnabled(true);
             comboPuertoSondaActionPerformed(null);
         }
         else
         {
-            chkEstadoSonda.setSelected(false);
-            setPanelConfigSonda(false);//Desactivo el panel de configuración de la Sonda        
-            chkEstadoLan.setEnabled(false);
-            chkEstadoLan.setSelected(false);
+            getChkEstadoSonda().setSelected(false);
+            setPanelConfigSonda(false);//Desactivo el panel de configuración de la Sonda
+            getChkEstadoLan().setEnabled(false);
+            getChkEstadoLan().setSelected(false);
             setPanelConfigLan(false);//Desactivo el panel de configuración de LAN
-        }           
+        }
     }
     
     public void clickEnChkEstadoDetectaPeces(){
-        if (chkEstadoLan.isSelected()) {
-            chkEstadoLan.setSelected(true);
+        if (getChkEstadoLan().isSelected()) {
+            getChkEstadoLan().setSelected(true);
             setPanelConfigLan(true);//Desactivo el panel de configuración de la Sonda
         }
         else
         {           
-            chkEstadoLan.setSelected(false);
+            getChkEstadoLan().setSelected(false);
             setPanelConfigLan(false);//Desactivo el panel de configuración Lan        
-        }        
+        }
     }
-            
+
     public void setGpsDesconectado(){
         GpsEstado.setBackground(Color.red);
         lblGpsEstado.setText("Desconectado");
@@ -1601,25 +1634,26 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     public void habilitaBtnConectaGps() {
         btnConectaGps.setVisible(true);
         btnDesconectaGps.setVisible(false);
-        chkEstadoGps.setEnabled(true);
+        getChkEstadoGps().setEnabled(true);
         setPanelConfigGps(true);
     }
 
     public void habilitaBtnConectaSonda() {
         btnConectaSonda.setVisible(true);
         btnDesconectaSonda.setVisible(false);
-        chkEstadoSonda.setEnabled(true);
+        getChkEstadoSonda().setEnabled(true);
         setPanelConfigSonda(true);
     }
     
     public void controlaBtnLan(boolean conectar) {
         btnConectaLan.setVisible(conectar);
         btnDesconectaLan.setVisible(!(conectar));
-        chkEstadoLan.setEnabled(conectar);
+        getChkEstadoLan().setEnabled(conectar);
         setPanelConfigLan(conectar);
     }    
 
     public void setContenidoComboCOMgps(ArrayList<String> elementos){
+        guardaComGpsElegido();
         comboPuertoGps.removeAllItems();
         int i=0;
         if (elementos.size()==1) { comboPuertoGps.setToolTipText(elementos.get(i)); }
@@ -1627,17 +1661,19 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             comboPuertoGps.addItem(elementos.get(i));
             i++;
         }
-        
+        eligeComGpsQueEstaba();
     }
     
     public void setContenidoComboCOMsonda(ArrayList<String> elementos){
+        guardaComSondaElegido();
         comboPuertoSonda.removeAllItems();
         int i=0;
         if (elementos.size()==1) { comboPuertoSonda.setToolTipText(elementos.get(i)); }
         while (i<elementos.size()){
             comboPuertoSonda.addItem(elementos.get(i));
             i++;
-        }        
+        }
+        eligeComSondaQueEstaba();
     }
 
     public void btnEscanearPuertosPresionado(boolean presionado) {
@@ -1660,6 +1696,49 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
                 JOptionPane.WARNING_MESSAGE); 
     }
 
+    /**
+     * @return the chkAutoConectaGps
+     */
+    public javax.swing.JCheckBox getChkAutoConectaGps() {
+        return chkAutoConectaGps;
+    }
 
+    /**
+     * @return the chkAutoConectaSonda
+     */
+    public javax.swing.JCheckBox getChkAutoConectaSonda() {
+        return chkAutoConectaSonda;
+    }
+
+    /**
+     * @return the chkEstadoLan
+     */
+    public javax.swing.JCheckBox getChkEstadoLan() {
+        return chkEstadoLan;
+    }
+
+    private void guardaComGpsElegido() {
+        if ((comboPuertoGps.getItemCount()>0) && comboPuertoGps.getSelectedItem().toString().length()<10){
+            comGpsElegido = comboPuertoGps.getSelectedItem().toString().trim();
+        }
+    }
+    
+    private void guardaComSondaElegido() {
+        if ((comboPuertoSonda.getItemCount()>0) && comboPuertoSonda.getSelectedItem().toString().length()<10){
+            comSondaElegido = comboPuertoSonda.getSelectedItem().toString().trim();
+        }
+    }    
+
+    private void eligeComGpsQueEstaba() {
+        if (comGpsElegido.length()>1){
+            comboPuertoGps.setSelectedItem(comGpsElegido);
+        }
+    }
+    
+    private void eligeComSondaQueEstaba() {
+        if (comSondaElegido.length()>1){
+            comboPuertoSonda.setSelectedItem(comSondaElegido);
+        }
+    }    
 
 }
