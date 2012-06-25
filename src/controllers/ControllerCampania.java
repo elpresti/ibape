@@ -92,11 +92,10 @@ public class ControllerCampania {
         try {
             Element raizConfiguracionIbape= BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
-            gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosGps").getBooleanValue());
-            if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected()){
-                gui.PanelOpcCampanias.getInstance().clickEnChkHistoricoGps();
+            gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosGpsSonda").getBooleanValue());
+            if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected()){
+                gui.PanelOpcCampanias.getInstance().clickEnChkHistoricoGpsSonda();
             }
-            gui.PanelOpcCampanias.getInstance().getChkHistoricoSonda().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosSonda").getBooleanValue());
             gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosProcImg").getBooleanValue());
             gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().setSelected(parametros.getChild("PanelConfiguracion-Historico").getAttribute("GuardarDatosConfigSonda").getBooleanValue());
             sePudo=true;
@@ -107,15 +106,11 @@ public class ControllerCampania {
     }    
 
     public void iniciarLogueoHistorico() {
-        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosGps(gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected());
-        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosSonda(gui.PanelOpcCampanias.getInstance().getChkHistoricoSonda().isSelected());
+        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosGps(gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected());
+        persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosSonda(gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected());
         persistencia.BrokerHistoricoPunto.getInstance().setGuardaDatosPeces(gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().isSelected());
         persistencia.BrokerHistoricoSondaSet.getInstance().setGuardaDatosSondaSets(gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().isSelected());     
-        if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGps().isSelected()){
-            persistencia.BrokerHistoricoSondaSet.getInstance().disparaEjecucion(); 
-        }
-        else
-          { JOptionPane.showMessageDialog(null, "Para iniciar el alojamiento de historico deben guardarse los datos leidos por el GPS"); }
+        persistencia.BrokerHistoricoSondaSet.getInstance().disparaEjecucion(); 
     }
 
     public void detenerLogueoHistorico() {

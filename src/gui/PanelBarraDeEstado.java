@@ -275,7 +275,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     public void mostrarMensaje(String msg){
         if ((msg.contains("gnu."))|| 
             (msg.contains("java."))){
-            mostrarMensaje(msg, 1);
+            mostrarMensaje(msg, 1); 
         }
         else { mostrarMensaje(msg, 2); }
     }
