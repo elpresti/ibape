@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package modelo.alertas;
+import controllers.ControllerAlertas;
 import java.util.List;
 import persistencia.Logueador;
 /**
@@ -12,17 +13,36 @@ import persistencia.Logueador;
 public class AdministraAlertas {
     private static List<Alerta> alertas;
     private static AdministraAlertas unicaInstancia;
+    private static boolean estadoAlertas;
 
     /**
      * @return the alertas
      */
+    
+    private AdministraAlertas(){
+        leerAlertasDeLaDB();     
+    }
     
     public static AdministraAlertas getInstance() {
        if (unicaInstancia == null) {
           unicaInstancia = new AdministraAlertas();          
        }       
        return unicaInstancia;
-    }    
+    }
+
+    /**
+     * @return the estadoAlertas
+     */
+    public static boolean isEstadoAlertas() {
+        return estadoAlertas;
+    }
+
+    /**
+     * @param aEstadoAlertas the estadoAlertas to set
+     */
+    public static void setEstadoAlertas(boolean aEstadoAlertas) {
+        estadoAlertas = aEstadoAlertas;
+    }
     
     public List<Alerta> getAlertas() {
         return alertas;
@@ -84,16 +104,12 @@ public class AdministraAlertas {
         return sePudo;
     }
     
-    
-    public boolean estadoServicio(){
-        return true;
-    }
 
         public boolean leerAlertasDeLaDB() {
         boolean sePudo=false;
         try {
             setAlertas(persistencia.BrokerAlertas.getInstance().getAlertasFromDB());
-            
+            sePudo=true;
         }
         catch (Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
@@ -113,7 +129,7 @@ public class AdministraAlertas {
         return alerta;
     }    
         
-      /*
+   /*   
     public static void main(String args[]){
         AdministraAlertas alertas=new AdministraAlertas();
     }

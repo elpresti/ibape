@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerAlertas;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
+import modelo.alertas.AdministraAlertas;
 
 /**
  *
@@ -41,6 +43,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
     private PanelOpcAlertas() {
         initComponents();        
         add(panelAgregaEdita);
+        inicializador();
         panelAgregaEdita.setVisible(false);
     }
 
@@ -243,7 +246,8 @@ private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_btnEliminarActionPerformed
 
 private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAlertasActionPerformed
-    
+        ControllerAlertas cAlertas=ControllerAlertas.getInstance();
+        cAlertas.setEstadoAlertas(this.getChkAlertas().isSelected());
 }//GEN-LAST:event_chkAlertasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -276,7 +280,7 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     public static PanelOpcAlertas getInstance() {
        if (unicaInstancia == null) {
-          unicaInstancia = new PanelOpcAlertas();          
+          unicaInstancia = new PanelOpcAlertas();
        }
        return unicaInstancia;
     }
@@ -385,7 +389,8 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         modeloTabla = (DefaultTableModel) tablaAlertas.getModel();
         tablaAlertas.setModel(modeloTabla);
         cargaIconosDeBotones();
-        cargaGrillaAlertas();  
+        cargaGrillaAlertas();        
+        
         controlaPanelAccionesAlerta();
         // Se crea el JScrollPane, el JTable y se pone la cabecera...
          //JScrollPane scroll = new JScrollPane();
@@ -524,7 +529,15 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
         btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
     }
-
+    
+    public void habilitaTablaAlertas(){
+        tablaAlertas.enable();
+    }
+    
+    public void deshabilitaTablaAlertas(){
+        tablaAlertas.disable();
+    }
+    
     /*
  //codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase    
      public static void main(String[] args) {
@@ -534,7 +547,9 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         elFrame.add(elPanel); 
         elFrame.setVisible(true);
     }
- */
+     * */
+     
+ 
 
     
 }

@@ -128,8 +128,13 @@ public class PanelHistorico extends javax.swing.JPanel {
         chkRecorrido.setText("Recorrido");
         panelSuperior.add(chkRecorrido);
 
-        chkPois.setFont(new java.awt.Font("Tahoma", 0, 12));
+        chkPois.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkPois.setText("Puntos de Interes (POI)");
+        chkPois.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPoisActionPerformed(evt);
+            }
+        });
         panelSuperior.add(chkPois);
 
         lblTxtTabla.setAlignment(java.awt.Label.CENTER);
@@ -193,6 +198,11 @@ public class PanelHistorico extends javax.swing.JPanel {
 
         add(panelBtnGraficar);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void chkPoisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkPoisActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGraficar;
     private javax.swing.JCheckBox chkPois;
