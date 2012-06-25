@@ -118,7 +118,92 @@ public class BrokerAlertas extends BrokerPpal{
         }
         return sePudo;
     }
+   
+   public boolean insertaVariables(){
+        boolean sePudo = false;
+        String sqlQuery="";
+        try {                                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(1,'Profundidad','mts')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(2,'Distancia','mts')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(3,'Cantidad de Marcas','marcas')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            }catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        return sePudo;
+    }
+   
+   public boolean insertaRelaciones(){
+        boolean sePudo = false;
+        String sqlQuery="";
+        try {                                
+            sqlQuery = "INSERT INTO Relaciones"
+            + "(id,descripcion,cantValores)"
+            + "VALUES"
+            +"(1,'igual a',1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Relaciones"
+            + "(id,descripcion,cantValores)"
+            + "VALUES"
+            +"(2,'mayor o igual que',1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Relaciones"
+            + "(id,descripcion,cantValores)"
+            + "VALUES"
+            +"(3,'menor o igual que',1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Relaciones"
+            + "(id,descripcion,cantValores)"
+            + "VALUES"
+            +"(4,'entre',2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            }catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        return sePudo;
+    }
     
+   
+   
 public boolean updateAlerta(modelo.alertas.Alerta alerta){
         List<Integer> deleteList=null;
         boolean sePudo = false;

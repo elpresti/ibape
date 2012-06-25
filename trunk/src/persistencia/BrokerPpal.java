@@ -140,8 +140,11 @@ public abstract class BrokerPpal {
             sePudo = sePudo && crearTablaMarcas();
             sePudo = sePudo && crearTablaCategoriasPoi();
             sePudo = sePudo && crearTablaVariables();
-            sePudo = sePudo && crearTablaCondiciones();
             sePudo = sePudo && crearTablaAlertas();
+            sePudo = sePudo && crearTablaRelaciones();
+            sePudo = sePudo && crearTablaCondiciones();
+            sePudo = sePudo && crearTablaRelacionesXVariables();
+
 
             //Creacion de Triggers
 
@@ -153,6 +156,11 @@ public abstract class BrokerPpal {
 
             //Analizar si es necesario crear triggers para las FK restantes, por ahora, considero que no.
 
+            //Inserción de datos estáticos en la BD
+            
+            sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelaciones();
+            sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaVariables();
+            
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
@@ -183,15 +191,16 @@ public abstract class BrokerPpal {
                     + "  id          integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     + "  valor1      float(50) NOT NULL,"
                     + "  valor2      float(50) NOT NULL,"
-                    + "  relacion    nvarchar(50) NOT NULL,"
-                    + "  descripcion    nvarchar(50) NOT NULL,"
                     + "  idVariable  integer NOT NULL,"
-                    + "  idAlerta  integer NOT NULL,"
+                    + "  idAlerta    integer NOT NULL,"
+                    + "  idRelacion  integer NOT NULL,"
                     + "  /* Foreign keys */ "
                     + "  FOREIGN KEY (idVariable)"
                     + "    REFERENCES Variables(id)"
                     + "  FOREIGN KEY (idAlerta)"
                     + "    REFERENCES Alertas(id)"
+                    + "  FOREIGN KEY (idRelacion)"
+                    + "    REFERENCES Relaciones(id)"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
 
@@ -487,8 +496,7 @@ public abstract class BrokerPpal {
             String codigoCreacion = "CREATE TABLE Variables ("
                     + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     + "  nombre             nvarchar(100) NOT NULL,"
-                    + "  opcionesCombo      nvarchar(100) NOT NULL,"
-                    + "  cantValores        int NOT NULL"
+                    + "  unidad             nvarchar(100) NOT NULL"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo = true;
@@ -778,6 +786,43 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
+        }
+        return sePudo;
+    }
+
+    private boolean crearTablaRelaciones() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE Relaciones ("
+                    + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    + "  descripcion        nvarchar(100) NOT NULL,"
+                    + "  cantValores        nvarchar(100) NOT NULL"
+                    + ");";
+            getStatement().executeUpdate(codigoCreacion);
+            sePudo = true;
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+
+    private boolean crearTablaRelacionesXVariables() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE RelacionesXVariables ("
+                    + "  idVariable         integer NOT NULL,"
+                    + "  idRelacion         integer NOT NULL,"
+                    + "  PRIMARY KEY        (idVariable,idRelacion)"
+                    + "  /* Foreign keys */ "
+                    + "  FOREIGN KEY (idVariable)"
+                    + "    REFERENCES Variables(id)"
+                    + "  FOREIGN KEY (idRelacion)"
+                    + "    REFERENCES Relaciones(id)"
+                    + ");";
+            getStatement().executeUpdate(codigoCreacion);
+            sePudo = true;
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }

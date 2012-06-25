@@ -144,7 +144,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoNombre.setPreferredSize(new java.awt.Dimension(400, 33));
         panelCampoNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        campoNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        campoNombre.setFont(new java.awt.Font("Tahoma", 0, 14));
         campoNombre.setText("Ingrese aqui el nombre de la alerta");
         campoNombre.setMaximumSize(new java.awt.Dimension(300, 23));
         campoNombre.setMinimumSize(new java.awt.Dimension(300, 23));
@@ -189,7 +189,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelTxtCondiciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblCondiciones.setText("Condiciones que deben cumplirse para que ocurra la alerta:");
-        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTxtCondiciones.add(lblCondiciones);
 
         panelDatosAlerta.add(panelTxtCondiciones);
@@ -239,7 +239,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
 
         lblAccionesCondicion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesCondicion.setText("Acciones sobre la alerta elegida:");
-        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelAccionesCampElegida.add(lblAccionesCondicion);
 
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
@@ -296,11 +296,16 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelComboVariable.setPreferredSize(new java.awt.Dimension(350, 34));
         panelComboVariable.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Profundidad", "Latitud", "Longitud", "Fecha actual", "Hora actual", "Temperatura" }));
         jComboBox1.setMaximumSize(new java.awt.Dimension(200, 23));
         jComboBox1.setMinimumSize(new java.awt.Dimension(200, 23));
         jComboBox1.setPreferredSize(new java.awt.Dimension(200, 23));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
         panelComboVariable.add(jComboBox1);
 
         panelVariable.add(panelComboVariable);
@@ -325,7 +330,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelComboRelacion.setPreferredSize(new java.awt.Dimension(350, 34));
         panelComboRelacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Igual a", "Mayor a", "Menor a", "Entre" }));
         jComboBox2.setMaximumSize(new java.awt.Dimension(150, 23));
         jComboBox2.setMinimumSize(new java.awt.Dimension(150, 23));
@@ -435,6 +440,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
 
 private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
 // TODO add your handling code here:
+    
 }//GEN-LAST:event_btnAgregarActionPerformed
 
 private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -456,6 +462,10 @@ private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         controlaPanelAccionesCondicion();
     }
 }//GEN-LAST:event_btnEliminarActionPerformed
+
+private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    // TODO add your handling code here:
+}//GEN-LAST:event_jComboBox1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;

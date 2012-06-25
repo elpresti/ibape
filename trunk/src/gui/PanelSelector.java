@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerAlertas;
 import javax.swing.JOptionPane;
 
 /**
@@ -260,6 +261,8 @@ private void lnkConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//
 
 private void lnkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkAlertasActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());
+    ControllerAlertas cAlertas=ControllerAlertas.getInstance();
+    cAlertas.leeDocYseteaPanelOpcAlertas();
 }//GEN-LAST:event_lnkAlertasActionPerformed
 
 private void lnkCampaniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkCampaniasActionPerformed

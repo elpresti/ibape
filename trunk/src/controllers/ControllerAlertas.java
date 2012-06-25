@@ -10,6 +10,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.alertas.AdministraAlertas;
 import modelo.alertas.Condicion;
+import org.jdom.Element;
+import persistencia.BrokerConfig;
+import persistencia.Logueador;
 
 /**
  *
@@ -75,5 +78,32 @@ public class ControllerAlertas {
         return sePudo;
     }
     
+    public boolean leeDocYseteaPanelOpcAlertas(){
+        boolean sePudo=false;
+        //-- Actualiza los campos que corresponden del Document        
+        try {
+            Element raizConfiguracionIbape= BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
+            Element parametros=raizConfiguracionIbape.getChild("Parametros");        
+            gui.PanelOpcAlertas.getInstance().getChkAlertas().setSelected(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
+            modelo.alertas.AdministraAlertas.setEstadoAlertas(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
+            sePudo=true;
+            }
+        catch (Exception e) 
+            {  Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }    
 
+    public void setEstadoAlertas(boolean estado) {
+        if (estado){
+            persistencia.BrokerConfig.getInstance().actualizaDatosPanelAlertas("true");
+            gui.PanelOpcAlertas.getInstance().habilitaTablaAlertas();
+            
+        }else {
+            persistencia.BrokerConfig.getInstance().actualizaDatosPanelAlertas("false");
+            gui.PanelOpcAlertas.getInstance().deshabilitaTablaAlertas();
+        }
+        persistencia.BrokerConfig.getInstance().guardaConfiguracion();
+        modelo.alertas.AdministraAlertas.setEstadoAlertas(estado);               
+    }
+    
 }
