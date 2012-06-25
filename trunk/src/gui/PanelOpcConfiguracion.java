@@ -495,6 +495,8 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelDispositivos.add(panelGps);
 
+        panelSonda.setMinimumSize(new java.awt.Dimension(500, 226));
+        panelSonda.setPreferredSize(new java.awt.Dimension(500, 226));
         panelSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         panelBasicoSonda.setPreferredSize(new java.awt.Dimension(593, 30));

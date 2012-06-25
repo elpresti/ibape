@@ -62,8 +62,7 @@ public class ControllerPpal {
                 p.getComboVelocidad().getSelectedItem().toString(), 
                 p.getComboTemp().getSelectedItem().toString());
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Historico(
-                String.valueOf(c.getChkHistoricoGps().isSelected()), 
-                String.valueOf(c.getChkHistoricoSonda().isSelected()), 
+                String.valueOf(c.getChkHistoricoGpsSonda().isSelected()), 
                 String.valueOf(c.getChkHistoricoPeces().isSelected()), 
                 String.valueOf(c.getChkHistoricoSondaSets().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().guardaConfiguracion();

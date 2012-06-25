@@ -142,7 +142,8 @@ public class BrokerConfig {
         gpsConfig.setAttribute("ComboPuerto","COM 2");
         gpsConfig.setAttribute("ComboVelocidad","4800");
         gpsConfig.setAttribute("ComboBitsDatos","8");
-        gpsConfig.setAttribute("ComboParidad","Ninguno");        
+        gpsConfig.setAttribute("ComboParidad","Ninguno");
+        gpsConfig.setAttribute("Autoconexion","true");
         elemConfig.addContent(gpsConfig);
                 
         Element sondaConfig =  new Element("PanelConfiguracion-Sonda");
@@ -150,7 +151,8 @@ public class BrokerConfig {
         sondaConfig.setAttribute("ComboPuerto","COM 3");
         sondaConfig.setAttribute("ComboVelocidad","9600");
         sondaConfig.setAttribute("ComboBitsDatos","7");
-        sondaConfig.setAttribute("ComboParidad","Ninguno");        
+        sondaConfig.setAttribute("ComboParidad","Ninguno");
+        sondaConfig.setAttribute("Autoconexion","true");
         elemConfig.addContent(sondaConfig);
         
         Element lanConfig =  new Element("PanelConfiguracion-LAN");
@@ -165,8 +167,7 @@ public class BrokerConfig {
         elemConfig.addContent(unidades);
 
         Element historico =  new Element("PanelConfiguracion-Historico");
-        historico.setAttribute("GuardarDatosGps","true");
-        historico.setAttribute("GuardarDatosSonda","false");
+        historico.setAttribute("GuardarDatosGpsSonda","true");
         historico.setAttribute("GuardarDatosProcImg","false");        
         historico.setAttribute("GuardarDatosConfigSonda","true");        
         elemConfig.addContent(historico);
@@ -214,8 +215,7 @@ public class BrokerConfig {
         elemConfig.addContent(unidades);
 
         Element historico =  new Element("PanelConfiguracion-Historico");
-        historico.setAttribute("GuardarDatosGps",String.valueOf(c.getChkHistoricoGps().isSelected()));
-        historico.setAttribute("GuardarDatosSonda",String.valueOf(c.getChkHistoricoSonda().isSelected()));
+        historico.setAttribute("GuardarDatosGpsSonda",String.valueOf(c.getChkHistoricoGpsSonda().isSelected()));
         historico.setAttribute("GuardarDatosProcImg",String.valueOf(c.getChkHistoricoPeces().isSelected()));
         historico.setAttribute("GuardarDatosConfigSonda",String.valueOf(c.getChkHistoricoSondaSets().isSelected()));
         elemConfig.addContent(historico);
@@ -303,15 +303,14 @@ public class BrokerConfig {
         return sePudo;
     }    
 
-    public boolean actualizaDatosPanelConfig_Historico(String guardarDatosGps,
-            String guardarDatosSonda,String guardarDatosProcImg, String guardarDatosConfigSonda){
+    public boolean actualizaDatosPanelConfig_Historico(String guardarDatosGpsSonda,
+            String guardarDatosProcImg, String guardarDatosConfigSonda){
         boolean sePudo=false;
         //-- Actualiza los campos que corresponden del Document
         try {
             Element raizConfiguracionIbape= getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
-            parametros.getChild("PanelConfiguracion-Historico").setAttribute("GuardarDatosGps",guardarDatosGps);
-            parametros.getChild("PanelConfiguracion-Historico").setAttribute("GuardarDatosSonda",guardarDatosSonda);
+            parametros.getChild("PanelConfiguracion-Historico").setAttribute("GuardarDatosGpsSonda",guardarDatosGpsSonda);
             parametros.getChild("PanelConfiguracion-Historico").setAttribute("GuardarDatosProcImg",guardarDatosProcImg);
             parametros.getChild("PanelConfiguracion-Historico").setAttribute("GuardarDatosConfigSonda",guardarDatosConfigSonda);
             sePudo=true;

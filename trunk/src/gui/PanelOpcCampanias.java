@@ -105,8 +105,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         jXTaskPaneContainer1 = new org.jdesktop.swingx.JXTaskPaneContainer();
         historicoDeCampania = new org.jdesktop.swingx.JXTaskPane();
         panelHistorico = new org.jdesktop.swingx.JXPanel();
-        chkHistoricoGps = new javax.swing.JCheckBox();
-        chkHistoricoSonda = new javax.swing.JCheckBox();
+        chkHistoricoGpsSonda = new javax.swing.JCheckBox();
         chkHistoricoPeces = new javax.swing.JCheckBox();
         chkHistoricoSondaSets = new javax.swing.JCheckBox();
         panelLogueoHistorico = new org.jdesktop.swingx.JXPanel();
@@ -391,26 +390,15 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelHistorico.setPreferredSize(new java.awt.Dimension(450, 150));
         panelHistorico.setLayout(new java.awt.GridLayout(5, 1));
 
-        chkHistoricoGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        chkHistoricoGps.setSelected(true);
-        chkHistoricoGps.setText("Guardar datos del GPS");
-        chkHistoricoGps.addActionListener(new java.awt.event.ActionListener() {
+        chkHistoricoGpsSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkHistoricoGpsSonda.setSelected(true);
+        chkHistoricoGpsSonda.setText("Guardar datos del GPS y la Sonda");
+        chkHistoricoGpsSonda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkHistoricoGpsActionPerformed(evt);
+                chkHistoricoGpsSondaActionPerformed(evt);
             }
         });
-        panelHistorico.add(chkHistoricoGps);
-
-        chkHistoricoSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        chkHistoricoSonda.setSelected(true);
-        chkHistoricoSonda.setText("Guardar datos de la SONDA");
-        chkHistoricoSonda.setEnabled(false);
-        chkHistoricoSonda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkHistoricoSondaActionPerformed(evt);
-            }
-        });
-        panelHistorico.add(chkHistoricoSonda);
+        panelHistorico.add(chkHistoricoGpsSonda);
 
         chkHistoricoPeces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkHistoricoPeces.setSelected(true);
@@ -571,27 +559,27 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void chkHistoricoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoGpsActionPerformed
-        clickEnChkHistoricoGps();
-    }//GEN-LAST:event_chkHistoricoGpsActionPerformed
+    private void chkHistoricoGpsSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoGpsSondaActionPerformed
+        clickEnChkHistoricoGpsSonda();
+    }//GEN-LAST:event_chkHistoricoGpsSondaActionPerformed
 
     private void chkHistoricoSondaSetsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoSondaSetsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_chkHistoricoSondaSetsActionPerformed
 
     private void btnIniciarLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarLogueoHistoricoActionPerformed
-        controllers.ControllerCampania.getInstance().iniciarLogueoHistorico();
-        setGuiHistoricoLogueando(true);
+        if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected()){
+            controllers.ControllerCampania.getInstance().iniciarLogueoHistorico();
+            setGuiHistoricoLogueando(true);
+        }
+        else
+          { JOptionPane.showMessageDialog(null, "Para iniciar el alojamiento de historico deben guardarse los datos leidos por el GPS"); }                        
     }//GEN-LAST:event_btnIniciarLogueoHistoricoActionPerformed
 
     private void btnDetenerLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerLogueoHistoricoActionPerformed
         controllers.ControllerCampania.getInstance().detenerLogueoHistorico();
         setGuiHistoricoLogueando(false);
     }//GEN-LAST:event_btnDetenerLogueoHistoricoActionPerformed
-
-    private void chkHistoricoSondaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkHistoricoSondaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkHistoricoSondaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComenzarCampania;
@@ -605,9 +593,8 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JTextField campoBarcoCampania;
     private javax.swing.JTextField campoCapitanCampania;
     private javax.swing.JTextField campoNombreCampania;
-    private javax.swing.JCheckBox chkHistoricoGps;
+    private javax.swing.JCheckBox chkHistoricoGpsSonda;
     private javax.swing.JCheckBox chkHistoricoPeces;
-    private javax.swing.JCheckBox chkHistoricoSonda;
     private javax.swing.JCheckBox chkHistoricoSondaSets;
     private org.jdesktop.swingx.JXTaskPane historicoDeCampania;
     private javax.swing.JScrollPane jScrollPane1;
@@ -1040,12 +1027,12 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
     }
     
-    public JCheckBox getChkHistoricoGps() {
-        return chkHistoricoGps;
+    public JCheckBox getChkHistoricoGpsSonda() {
+        return chkHistoricoGpsSonda;
     }
 
-    public void setChkHistoricoGps(JCheckBox chkHistoricoGps) {
-        this.chkHistoricoGps = chkHistoricoGps;
+    public void setChkHistoricoGpsSonda(JCheckBox chkHistoricoGps) {
+        this.chkHistoricoGpsSonda = chkHistoricoGps;
     }
 
     public JCheckBox getChkHistoricoPeces() {
@@ -1056,14 +1043,6 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         this.chkHistoricoPeces = chkHistoricoPeces;
     }
 
-    public JCheckBox getChkHistoricoSonda() {
-        return chkHistoricoSonda;
-    }
-
-    public void setChkHistoricoSonda(JCheckBox chkHistoricoSonda) {
-        this.chkHistoricoSonda = chkHistoricoSonda;
-    }
-
     public JCheckBox getChkHistoricoSondaSets() {
         return chkHistoricoSondaSets;
     }
@@ -1072,17 +1051,15 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         this.chkHistoricoSondaSets = chkHistoricoSondaSets;
     }    
     
-    public void clickEnChkHistoricoGps(){
-        if (chkHistoricoGps.isSelected()) {
-            chkHistoricoGps.setSelected(true);
-            chkHistoricoSonda.setEnabled(true);
+    public void clickEnChkHistoricoGpsSonda(){
+        if (chkHistoricoGpsSonda.isSelected()) {
+            chkHistoricoGpsSonda.setSelected(true);
             chkHistoricoSondaSets.setEnabled(true);
             chkHistoricoPeces.setEnabled(true);
         }
         else
         {   
-            chkHistoricoGps.setSelected(false);
-            chkHistoricoSonda.setEnabled(false);
+            chkHistoricoGpsSonda.setSelected(false);
             chkHistoricoSondaSets.setEnabled(false);
             chkHistoricoPeces.setEnabled(false);        
         }        
@@ -1091,9 +1068,8 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void setGuiHistoricoLogueando(boolean estado) {
         btnDetenerLogueoHistorico.setVisible(estado);
         btnIniciarLogueoHistorico.setVisible(!(estado));
-        chkHistoricoGps.setEnabled(!(estado));
+        chkHistoricoGpsSonda.setEnabled(!(estado));
         chkHistoricoPeces.setEnabled(!(estado));
-        chkHistoricoSonda.setEnabled(!(estado));
         chkHistoricoSondaSets.setEnabled(!(estado));
     }
     
