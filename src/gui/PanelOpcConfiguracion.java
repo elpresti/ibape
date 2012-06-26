@@ -10,7 +10,7 @@
  */
 package gui;
 
-import controllers.ControllerConfig; 
+import controllers.ControllerConfig;  
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -59,14 +59,12 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelTitulo = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        panelOpcionesGrales = new org.jdesktop.swingx.JXPanel();
+        jXTaskPaneContainer1 = new org.jdesktop.swingx.JXTaskPaneContainer();
         panelGeneralidades = new org.jdesktop.swingx.JXPanel();
         panelBtnEscanearPuertos = new org.jdesktop.swingx.JXPanel();
         btnEscaneaPuertos = new javax.swing.JButton();
-        panelDispositivos = new org.jdesktop.swingx.JXPanel();
         panelTxtDispositivos = new org.jdesktop.swingx.JXPanel();
         lblDispositivos = new org.jdesktop.swingx.JXLabel();
-        panelGps = new org.jdesktop.swingx.JXPanel();
         panelBasicoGps = new org.jdesktop.swingx.JXPanel();
         chkEstadoGps = new javax.swing.JCheckBox();
         panelGpsStatus = new javax.swing.JPanel();
@@ -77,7 +75,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelBtnConectaGps = new org.jdesktop.swingx.JXPanel();
         btnConectaGps = new javax.swing.JButton();
         btnDesconectaGps = new javax.swing.JButton();
-        taskPaneContainerGPS = new org.jdesktop.swingx.JXTaskPaneContainer();
         panelConfigGps = new org.jdesktop.swingx.JXTaskPane();
         componentesConfigGps = new org.jdesktop.swingx.JXPanel();
         panelPuertoComGps = new org.jdesktop.swingx.JXPanel();
@@ -101,7 +98,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboParidadGps = new org.jdesktop.swingx.JXPanel();
         comboParidadGps = new javax.swing.JComboBox();
         chkAutoConectaGps = new javax.swing.JCheckBox();
-        panelSonda = new org.jdesktop.swingx.JXPanel();
+        panelRellenoGps = new org.jdesktop.swingx.JXPanel();
         panelBasicoSonda = new org.jdesktop.swingx.JXPanel();
         chkEstadoSonda = new javax.swing.JCheckBox();
         panelSondaStatus = new javax.swing.JPanel();
@@ -112,7 +109,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelBtnConectaSonda = new org.jdesktop.swingx.JXPanel();
         btnConectaSonda = new javax.swing.JButton();
         btnDesconectaSonda = new javax.swing.JButton();
-        taskPaneContainerSonda = new org.jdesktop.swingx.JXTaskPaneContainer();
         panelConfigSonda = new org.jdesktop.swingx.JXTaskPane();
         componentesConfigSonda = new org.jdesktop.swingx.JXPanel();
         panelPuertoComSonda = new org.jdesktop.swingx.JXPanel();
@@ -136,23 +132,26 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelComboParidadSonda = new org.jdesktop.swingx.JXPanel();
         comboParidadSonda = new javax.swing.JComboBox();
         chkAutoConectaSonda = new javax.swing.JCheckBox();
-        panelPeces = new org.jdesktop.swingx.JXPanel();
+        panelRellenoSonda = new org.jdesktop.swingx.JXPanel();
+        panelBasicoLan = new org.jdesktop.swingx.JXPanel();
         chkEstadoLan = new javax.swing.JCheckBox();
+        panelLanStatus = new javax.swing.JPanel();
+        panelLANconexionColor = new javax.swing.JPanel();
+        LanEstado = new javax.swing.JPanel();
+        panelLANconexionTxt = new org.jdesktop.swingx.JXPanel();
+        lblLanEstado = new org.jdesktop.swingx.JXLabel();
+        panelBtnConecta = new org.jdesktop.swingx.JXPanel();
+        btnConectaLan = new javax.swing.JButton();
+        btnDesconectaLan = new javax.swing.JButton();
+        panelConfigLan = new org.jdesktop.swingx.JXTaskPane();
         panelConfigHistorico = new org.jdesktop.swingx.JXPanel();
         panelTituloRutaHistorico = new org.jdesktop.swingx.JXPanel();
         lblTxtRutaHistorico = new org.jdesktop.swingx.JXLabel();
         panelCampoRutaHistorico = new org.jdesktop.swingx.JXPanel();
         campoRutaHistorico = new javax.swing.JTextField();
         btnExaminarRutaHistorico = new javax.swing.JButton();
-        panelLanStatus = new javax.swing.JPanel();
-        panelTodoLanStatus = new org.jdesktop.swingx.JXPanel();
-        panelBtnConecta = new org.jdesktop.swingx.JXPanel();
-        btnConectaLan = new javax.swing.JButton();
-        btnDesconectaLan = new javax.swing.JButton();
-        panelLANconexionColor = new javax.swing.JPanel();
-        LanEstado = new javax.swing.JPanel();
-        panelLANconexionTxt = new org.jdesktop.swingx.JXPanel();
-        lblLanEstado = new org.jdesktop.swingx.JXLabel();
+        chkAutoConectaLan = new javax.swing.JCheckBox();
+        panelRellenoLAN = new org.jdesktop.swingx.JXPanel();
         panelUnidades = new org.jdesktop.swingx.JXPanel();
         panelTituloUnidades = new org.jdesktop.swingx.JXPanel();
         lblUnidades = new org.jdesktop.swingx.JXLabel();
@@ -190,16 +189,12 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         add(panelTitulo, java.awt.BorderLayout.NORTH);
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(480, 410));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(480, 410));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(480, 410));
 
-        panelOpcionesGrales.setMaximumSize(new java.awt.Dimension(460, 1050));
-        panelOpcionesGrales.setMinimumSize(new java.awt.Dimension(460, 950));
-        panelOpcionesGrales.setPreferredSize(new java.awt.Dimension(460, 1050));
-        panelOpcionesGrales.setScrollableTracksViewportHeight(false);
-        panelOpcionesGrales.setScrollableTracksViewportWidth(false);
-        panelOpcionesGrales.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        jXTaskPaneContainer1.setBackground(new java.awt.Color(240, 240, 240));
+        jXTaskPaneContainer1.setMinimumSize(new java.awt.Dimension(460, 1050));
+        jXTaskPaneContainer1.setPreferredSize(new java.awt.Dimension(460, 1050));
+        jXTaskPaneContainer1.setLayout(new java.awt.FlowLayout());
 
         panelGeneralidades.setMaximumSize(new java.awt.Dimension(450, 50));
         panelGeneralidades.setMinimumSize(new java.awt.Dimension(450, 30));
@@ -223,29 +218,21 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelGeneralidades.add(panelBtnEscanearPuertos);
 
-        panelOpcionesGrales.add(panelGeneralidades);
-
-        panelDispositivos.setMaximumSize(new java.awt.Dimension(450, 600));
-        panelDispositivos.setMinimumSize(new java.awt.Dimension(450, 600));
-        panelDispositivos.setPreferredSize(new java.awt.Dimension(450, 600));
-        panelDispositivos.setLayout(new javax.swing.BoxLayout(panelDispositivos, javax.swing.BoxLayout.PAGE_AXIS));
+        jXTaskPaneContainer1.add(panelGeneralidades);
 
         panelTxtDispositivos.setMaximumSize(new java.awt.Dimension(500, 25));
-        panelTxtDispositivos.setMinimumSize(new java.awt.Dimension(500, 25));
-        panelTxtDispositivos.setPreferredSize(new java.awt.Dimension(500, 25));
-        panelTxtDispositivos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        panelTxtDispositivos.setMinimumSize(new java.awt.Dimension(450, 25));
+        panelTxtDispositivos.setPreferredSize(new java.awt.Dimension(450, 25));
+        panelTxtDispositivos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 5));
 
         lblDispositivos.setText("Dispositivos a utilizar:");
         lblDispositivos.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtDispositivos.add(lblDispositivos);
 
-        panelDispositivos.add(panelTxtDispositivos);
+        jXTaskPaneContainer1.add(panelTxtDispositivos);
 
-        panelGps.setMinimumSize(new java.awt.Dimension(500, 70));
-        panelGps.setPreferredSize(new java.awt.Dimension(500, 226));
-        panelGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
-
-        panelBasicoGps.setPreferredSize(new java.awt.Dimension(500, 30));
+        panelBasicoGps.setMinimumSize(new java.awt.Dimension(480, 30));
+        panelBasicoGps.setPreferredSize(new java.awt.Dimension(480, 30));
         panelBasicoGps.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 3));
 
         chkEstadoGps.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -326,12 +313,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelBasicoGps.add(panelBtnConectaGps);
 
-        panelGps.add(panelBasicoGps);
-
-        taskPaneContainerGPS.setBackground(new java.awt.Color(240, 240, 240));
-        taskPaneContainerGPS.setMinimumSize(new java.awt.Dimension(472, 26));
-        taskPaneContainerGPS.setPreferredSize(new java.awt.Dimension(472, 206));
-        taskPaneContainerGPS.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        jXTaskPaneContainer1.add(panelBasicoGps);
 
         panelConfigGps.setCollapsed(true);
         panelConfigGps.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -489,17 +471,25 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelConfigGps.add(componentesConfigGps);
 
-        taskPaneContainerGPS.add(panelConfigGps);
+        jXTaskPaneContainer1.add(panelConfigGps);
 
-        panelGps.add(taskPaneContainerGPS);
+        panelRellenoGps.setPreferredSize(new java.awt.Dimension(450, 30));
 
-        panelDispositivos.add(panelGps);
+        javax.swing.GroupLayout panelRellenoGpsLayout = new javax.swing.GroupLayout(panelRellenoGps);
+        panelRellenoGps.setLayout(panelRellenoGpsLayout);
+        panelRellenoGpsLayout.setHorizontalGroup(
+            panelRellenoGpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 450, Short.MAX_VALUE)
+        );
+        panelRellenoGpsLayout.setVerticalGroup(
+            panelRellenoGpsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+        );
 
-        panelSonda.setMinimumSize(new java.awt.Dimension(500, 226));
-        panelSonda.setPreferredSize(new java.awt.Dimension(500, 226));
-        panelSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        jXTaskPaneContainer1.add(panelRellenoGps);
 
-        panelBasicoSonda.setPreferredSize(new java.awt.Dimension(593, 30));
+        panelBasicoSonda.setMinimumSize(new java.awt.Dimension(480, 30));
+        panelBasicoSonda.setPreferredSize(new java.awt.Dimension(480, 30));
         panelBasicoSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 3));
 
         chkEstadoSonda.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -514,12 +504,12 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelSondaStatus.setMaximumSize(new java.awt.Dimension(200, 30));
         panelSondaStatus.setMinimumSize(new java.awt.Dimension(133, 30));
-        panelSondaStatus.setPreferredSize(new java.awt.Dimension(200, 30));
+        panelSondaStatus.setPreferredSize(new java.awt.Dimension(180, 30));
         panelSondaStatus.setLayout(new javax.swing.BoxLayout(panelSondaStatus, javax.swing.BoxLayout.LINE_AXIS));
 
         panelSondaConexionColor.setMaximumSize(new java.awt.Dimension(60, 30));
-        panelSondaConexionColor.setMinimumSize(new java.awt.Dimension(60, 30));
-        panelSondaConexionColor.setPreferredSize(new java.awt.Dimension(60, 30));
+        panelSondaConexionColor.setMinimumSize(new java.awt.Dimension(40, 30));
+        panelSondaConexionColor.setPreferredSize(new java.awt.Dimension(40, 30));
         panelSondaConexionColor.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         SondaEstado.setBackground(new java.awt.Color(204, 0, 0));
@@ -543,9 +533,9 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelSondaStatus.add(panelSondaConexionColor);
 
-        panelSondaConexionTxt.setMaximumSize(new java.awt.Dimension(110, 30));
+        panelSondaConexionTxt.setMaximumSize(new java.awt.Dimension(120, 30));
         panelSondaConexionTxt.setMinimumSize(new java.awt.Dimension(93, 30));
-        panelSondaConexionTxt.setPreferredSize(new java.awt.Dimension(110, 30));
+        panelSondaConexionTxt.setPreferredSize(new java.awt.Dimension(120, 30));
         panelSondaConexionTxt.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblSondaEstado.setEnabled(false);
@@ -581,12 +571,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelBasicoSonda.add(panelBtnConectaSonda);
 
-        panelSonda.add(panelBasicoSonda);
-
-        taskPaneContainerSonda.setBackground(new java.awt.Color(240, 240, 240));
-        taskPaneContainerSonda.setMinimumSize(new java.awt.Dimension(472, 26));
-        taskPaneContainerSonda.setPreferredSize(new java.awt.Dimension(472, 206));
-        taskPaneContainerSonda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        jXTaskPaneContainer1.add(panelBasicoSonda);
 
         panelConfigSonda.setCollapsed(true);
         panelConfigSonda.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
@@ -744,14 +729,26 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelConfigSonda.add(componentesConfigSonda);
 
-        taskPaneContainerSonda.add(panelConfigSonda);
+        jXTaskPaneContainer1.add(panelConfigSonda);
 
-        panelSonda.add(taskPaneContainerSonda);
+        panelRellenoSonda.setPreferredSize(new java.awt.Dimension(450, 30));
 
-        panelDispositivos.add(panelSonda);
+        javax.swing.GroupLayout panelRellenoSondaLayout = new javax.swing.GroupLayout(panelRellenoSonda);
+        panelRellenoSonda.setLayout(panelRellenoSondaLayout);
+        panelRellenoSondaLayout.setHorizontalGroup(
+            panelRellenoSondaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 450, Short.MAX_VALUE)
+        );
+        panelRellenoSondaLayout.setVerticalGroup(
+            panelRellenoSondaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
+        );
 
-        panelPeces.setPreferredSize(new java.awt.Dimension(1107, 110));
-        panelPeces.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        jXTaskPaneContainer1.add(panelRellenoSonda);
+
+        panelBasicoLan.setMinimumSize(new java.awt.Dimension(480, 30));
+        panelBasicoLan.setPreferredSize(new java.awt.Dimension(480, 30));
+        panelBasicoLan.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         chkEstadoLan.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         chkEstadoLan.setText("Detección de Peces");
@@ -761,15 +758,93 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
                 chkEstadoLanActionPerformed(evt);
             }
         });
-        panelPeces.add(chkEstadoLan);
+        panelBasicoLan.add(chkEstadoLan);
 
-        panelConfigHistorico.setMaximumSize(new java.awt.Dimension(500, 60));
-        panelConfigHistorico.setMinimumSize(new java.awt.Dimension(500, 60));
-        panelConfigHistorico.setPreferredSize(new java.awt.Dimension(500, 60));
-        panelConfigHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+        panelLanStatus.setMaximumSize(new java.awt.Dimension(200, 30));
+        panelLanStatus.setMinimumSize(new java.awt.Dimension(133, 30));
+        panelLanStatus.setPreferredSize(new java.awt.Dimension(180, 30));
+        panelLanStatus.setLayout(new javax.swing.BoxLayout(panelLanStatus, javax.swing.BoxLayout.LINE_AXIS));
+
+        panelLANconexionColor.setMaximumSize(new java.awt.Dimension(60, 30));
+        panelLANconexionColor.setMinimumSize(new java.awt.Dimension(40, 30));
+        panelLANconexionColor.setPreferredSize(new java.awt.Dimension(40, 30));
+        panelLANconexionColor.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
+
+        LanEstado.setBackground(new java.awt.Color(204, 0, 0));
+        LanEstado.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        LanEstado.setEnabled(false);
+        LanEstado.setMaximumSize(new java.awt.Dimension(30, 20));
+        LanEstado.setMinimumSize(new java.awt.Dimension(30, 20));
+
+        javax.swing.GroupLayout LanEstadoLayout = new javax.swing.GroupLayout(LanEstado);
+        LanEstado.setLayout(LanEstadoLayout);
+        LanEstadoLayout.setHorizontalGroup(
+            LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 24, Short.MAX_VALUE)
+        );
+        LanEstadoLayout.setVerticalGroup(
+            LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 14, Short.MAX_VALUE)
+        );
+
+        panelLANconexionColor.add(LanEstado);
+
+        panelLanStatus.add(panelLANconexionColor);
+
+        panelLANconexionTxt.setMaximumSize(new java.awt.Dimension(130, 30));
+        panelLANconexionTxt.setMinimumSize(new java.awt.Dimension(101, 30));
+        panelLANconexionTxt.setPreferredSize(new java.awt.Dimension(130, 30));
+        panelLANconexionTxt.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 7));
+
+        lblLanEstado.setText("Desconectado");
+        lblLanEstado.setEnabled(false);
+        lblLanEstado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        panelLANconexionTxt.add(lblLanEstado);
+
+        panelLanStatus.add(panelLANconexionTxt);
+
+        panelBasicoLan.add(panelLanStatus);
+
+        panelBtnConecta.setMaximumSize(new java.awt.Dimension(200, 30));
+        panelBtnConecta.setMinimumSize(new java.awt.Dimension(140, 29));
+        panelBtnConecta.setPreferredSize(new java.awt.Dimension(140, 30));
+        panelBtnConecta.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 3));
+
+        btnConectaLan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnConectaLan.setText("Conectar");
+        btnConectaLan.setEnabled(false);
+        btnConectaLan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConectaLanActionPerformed(evt);
+            }
+        });
+        panelBtnConecta.add(btnConectaLan);
+
+        btnDesconectaLan.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnDesconectaLan.setText("Desconectar");
+        btnDesconectaLan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDesconectaLanActionPerformed(evt);
+            }
+        });
+        panelBtnConecta.add(btnDesconectaLan);
+
+        panelBasicoLan.add(panelBtnConecta);
+
+        jXTaskPaneContainer1.add(panelBasicoLan);
+
+        panelConfigLan.setCollapsed(true);
+        panelConfigLan.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        panelConfigLan.setTitle("Configuración de conexión a la Sonda:");
+        panelConfigLan.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        panelConfigHistorico.setMaximumSize(new java.awt.Dimension(450, 150));
+        panelConfigHistorico.setMinimumSize(new java.awt.Dimension(410, 10));
+        panelConfigHistorico.setPreferredSize(new java.awt.Dimension(410, 100));
+        panelConfigHistorico.setLayout(new java.awt.GridLayout(3, 0));
 
         panelTituloRutaHistorico.setMaximumSize(new java.awt.Dimension(500, 85));
-        panelTituloRutaHistorico.setMinimumSize(new java.awt.Dimension(500, 85));
+        panelTituloRutaHistorico.setMinimumSize(new java.awt.Dimension(450, 85));
         panelTituloRutaHistorico.setLayout(new java.awt.BorderLayout(10, 0));
 
         lblTxtRutaHistorico.setText(" Ruta al Historico Remoto (sonda):");
@@ -780,7 +855,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelConfigHistorico.add(panelTituloRutaHistorico);
 
         panelCampoRutaHistorico.setMaximumSize(new java.awt.Dimension(500, 85));
-        panelCampoRutaHistorico.setMinimumSize(new java.awt.Dimension(500, 85));
+        panelCampoRutaHistorico.setMinimumSize(new java.awt.Dimension(354, 35));
         panelCampoRutaHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         campoRutaHistorico.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -803,84 +878,31 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelConfigHistorico.add(panelCampoRutaHistorico);
 
-        panelPeces.add(panelConfigHistorico);
+        chkAutoConectaLan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkAutoConectaLan.setSelected(true);
+        chkAutoConectaLan.setText("Auto conectar al inicio");
+        chkAutoConectaLan.setEnabled(false);
+        chkAutoConectaLan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        panelConfigHistorico.add(chkAutoConectaLan);
 
-        panelLanStatus.setMaximumSize(new java.awt.Dimension(450, 30));
-        panelLanStatus.setPreferredSize(new java.awt.Dimension(450, 30));
-        panelLanStatus.setLayout(new javax.swing.BoxLayout(panelLanStatus, javax.swing.BoxLayout.LINE_AXIS));
+        panelConfigLan.add(panelConfigHistorico);
 
-        panelTodoLanStatus.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
+        jXTaskPaneContainer1.add(panelConfigLan);
 
-        panelBtnConecta.setMaximumSize(new java.awt.Dimension(200, 30));
-        panelBtnConecta.setPreferredSize(new java.awt.Dimension(200, 30));
-        panelBtnConecta.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 3));
+        panelRellenoLAN.setPreferredSize(new java.awt.Dimension(450, 30));
 
-        btnConectaLan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnConectaLan.setText("Conectar");
-        btnConectaLan.setEnabled(false);
-        btnConectaLan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConectaLanActionPerformed(evt);
-            }
-        });
-        panelBtnConecta.add(btnConectaLan);
-
-        btnDesconectaLan.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnDesconectaLan.setText("Desconectar");
-        btnDesconectaLan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDesconectaLanActionPerformed(evt);
-            }
-        });
-        panelBtnConecta.add(btnDesconectaLan);
-
-        panelTodoLanStatus.add(panelBtnConecta);
-
-        panelLANconexionColor.setMaximumSize(new java.awt.Dimension(60, 30));
-        panelLANconexionColor.setMinimumSize(new java.awt.Dimension(60, 30));
-        panelLANconexionColor.setPreferredSize(new java.awt.Dimension(60, 30));
-        panelLANconexionColor.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
-
-        LanEstado.setBackground(new java.awt.Color(204, 0, 0));
-        LanEstado.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        LanEstado.setEnabled(false);
-        LanEstado.setMaximumSize(new java.awt.Dimension(30, 20));
-        LanEstado.setMinimumSize(new java.awt.Dimension(30, 20));
-
-        javax.swing.GroupLayout LanEstadoLayout = new javax.swing.GroupLayout(LanEstado);
-        LanEstado.setLayout(LanEstadoLayout);
-        LanEstadoLayout.setHorizontalGroup(
-            LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 24, Short.MAX_VALUE)
+        javax.swing.GroupLayout panelRellenoLANLayout = new javax.swing.GroupLayout(panelRellenoLAN);
+        panelRellenoLAN.setLayout(panelRellenoLANLayout);
+        panelRellenoLANLayout.setHorizontalGroup(
+            panelRellenoLANLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 450, Short.MAX_VALUE)
         );
-        LanEstadoLayout.setVerticalGroup(
-            LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 14, Short.MAX_VALUE)
+        panelRellenoLANLayout.setVerticalGroup(
+            panelRellenoLANLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 30, Short.MAX_VALUE)
         );
 
-        panelLANconexionColor.add(LanEstado);
-
-        panelTodoLanStatus.add(panelLANconexionColor);
-
-        panelLANconexionTxt.setMaximumSize(new java.awt.Dimension(130, 30));
-        panelLANconexionTxt.setMinimumSize(new java.awt.Dimension(101, 30));
-        panelLANconexionTxt.setPreferredSize(new java.awt.Dimension(130, 30));
-        panelLANconexionTxt.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 7));
-
-        lblLanEstado.setText("Desconectado");
-        lblLanEstado.setEnabled(false);
-        lblLanEstado.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        panelLANconexionTxt.add(lblLanEstado);
-
-        panelTodoLanStatus.add(panelLANconexionTxt);
-
-        panelLanStatus.add(panelTodoLanStatus);
-
-        panelPeces.add(panelLanStatus);
-
-        panelDispositivos.add(panelPeces);
-
-        panelOpcionesGrales.add(panelDispositivos);
+        jXTaskPaneContainer1.add(panelRellenoLAN);
 
         panelUnidades.setMaximumSize(new java.awt.Dimension(450, 150));
         panelUnidades.setMinimumSize(new java.awt.Dimension(450, 150));
@@ -984,9 +1006,9 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
 
         panelUnidades.add(panelTemperatura);
 
-        panelOpcionesGrales.add(panelUnidades);
+        jXTaskPaneContainer1.add(panelUnidades);
 
-        jScrollPane1.setViewportView(panelOpcionesGrales);
+        jScrollPane1.setViewportView(jXTaskPaneContainer1);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -1132,6 +1154,10 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         }
     }//GEN-LAST:event_btnDesconectaLanActionPerformed
 
+    private void comboPuertoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPuertoGpsActionPerformed
+        comboPuertoSondaActionPerformed(evt);
+    }//GEN-LAST:event_comboPuertoGpsActionPerformed
+
     private void btnExaminarRutaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExaminarRutaHistoricoActionPerformed
         JFileChooser fc = new JFileChooser();
         int resp = fc.showOpenDialog(this);
@@ -1141,10 +1167,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             campoRutaHistorico.setText(archivo.getAbsolutePath());
         }
     }//GEN-LAST:event_btnExaminarRutaHistoricoActionPerformed
-
-    private void comboPuertoGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboPuertoGpsActionPerformed
-        comboPuertoSondaActionPerformed(evt);
-    }//GEN-LAST:event_comboPuertoGpsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GpsEstado;
@@ -1161,6 +1183,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private javax.swing.JButton btnGuardar;
     private javax.swing.JTextField campoRutaHistorico;
     private javax.swing.JCheckBox chkAutoConectaGps;
+    private javax.swing.JCheckBox chkAutoConectaLan;
     private javax.swing.JCheckBox chkAutoConectaSonda;
     private javax.swing.JCheckBox chkEstadoGps;
     private javax.swing.JCheckBox chkEstadoLan;
@@ -1179,6 +1202,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel componentesConfigGps;
     private org.jdesktop.swingx.JXPanel componentesConfigSonda;
     private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer1;
     private org.jdesktop.swingx.JXLabel lblBitsDatosGps;
     private org.jdesktop.swingx.JXLabel lblBitsDatosSonda;
     private org.jdesktop.swingx.JXLabel lblDispositivos;
@@ -1198,6 +1222,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXLabel lblVelocidadGps;
     private org.jdesktop.swingx.JXLabel lblVelocidadSonda;
     private org.jdesktop.swingx.JXPanel panelBasicoGps;
+    private org.jdesktop.swingx.JXPanel panelBasicoLan;
     private org.jdesktop.swingx.JXPanel panelBasicoSonda;
     private org.jdesktop.swingx.JXPanel panelBitsDeDatosGps;
     private org.jdesktop.swingx.JXPanel panelBitsDeDatosSonda;
@@ -1220,24 +1245,23 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelComboVelocidadSonda;
     private org.jdesktop.swingx.JXTaskPane panelConfigGps;
     private org.jdesktop.swingx.JXPanel panelConfigHistorico;
+    private org.jdesktop.swingx.JXTaskPane panelConfigLan;
     private org.jdesktop.swingx.JXTaskPane panelConfigSonda;
-    private org.jdesktop.swingx.JXPanel panelDispositivos;
     private org.jdesktop.swingx.JXPanel panelDistancia;
     private javax.swing.JPanel panelGPSconexionColor;
     private javax.swing.JPanel panelGPSconexionTxt;
     private org.jdesktop.swingx.JXPanel panelGeneralidades;
-    private org.jdesktop.swingx.JXPanel panelGps;
     private javax.swing.JPanel panelGpsStatus;
     private javax.swing.JPanel panelLANconexionColor;
     private org.jdesktop.swingx.JXPanel panelLANconexionTxt;
     private javax.swing.JPanel panelLanStatus;
-    private org.jdesktop.swingx.JXPanel panelOpcionesGrales;
     private org.jdesktop.swingx.JXPanel panelParidadGps;
     private org.jdesktop.swingx.JXPanel panelParidadSonda;
-    private org.jdesktop.swingx.JXPanel panelPeces;
     private org.jdesktop.swingx.JXPanel panelPuertoComGps;
     private org.jdesktop.swingx.JXPanel panelPuertoComSonda;
-    private org.jdesktop.swingx.JXPanel panelSonda;
+    private org.jdesktop.swingx.JXPanel panelRellenoGps;
+    private org.jdesktop.swingx.JXPanel panelRellenoLAN;
+    private org.jdesktop.swingx.JXPanel panelRellenoSonda;
     private javax.swing.JPanel panelSondaConexionColor;
     private javax.swing.JPanel panelSondaConexionTxt;
     private javax.swing.JPanel panelSondaStatus;
@@ -1253,7 +1277,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelTituloUnidades;
     private org.jdesktop.swingx.JXPanel panelTituloVelocidadGps;
     private org.jdesktop.swingx.JXPanel panelTituloVelocidadSonda;
-    private org.jdesktop.swingx.JXPanel panelTodoLanStatus;
     private org.jdesktop.swingx.JXPanel panelTxtDispositivos;
     private org.jdesktop.swingx.JXPanel panelTxtDistancia;
     private org.jdesktop.swingx.JXPanel panelTxtTemp;
@@ -1262,8 +1285,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     private org.jdesktop.swingx.JXPanel panelVelocidad;
     private org.jdesktop.swingx.JXPanel panelVelocidadGps;
     private org.jdesktop.swingx.JXPanel panelVelocidadSonda;
-    private org.jdesktop.swingx.JXTaskPaneContainer taskPaneContainerGPS;
-    private org.jdesktop.swingx.JXTaskPaneContainer taskPaneContainerSonda;
     // End of variables declaration//GEN-END:variables
 
     public JTextField getCampoRutaHistorico() {
@@ -1477,7 +1498,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     
     public void setPanelConfigGps(boolean estado) {
         //Activo el panel de configuración del GPS
-        taskPaneContainerGPS.setEnabled(estado);
         panelConfigGps.setEnabled(estado);
         lblPuertoGps.setEnabled(estado);
         comboPuertoGps.setEnabled(estado);
@@ -1495,7 +1515,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     
     public void setPanelConfigSonda(boolean estado) {
         //Activo el panel de configuración de la Sonda
-        taskPaneContainerSonda.setEnabled(estado);
         panelConfigSonda.setEnabled(estado);
         lblPuertoSonda.setEnabled(estado);
         comboPuertoSonda.setEnabled(estado);
