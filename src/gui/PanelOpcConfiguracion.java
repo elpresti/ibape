@@ -463,7 +463,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         componentesConfigGps.add(panelParidadGps);
 
         chkAutoConectaGps.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        chkAutoConectaGps.setSelected(true);
         chkAutoConectaGps.setText("Autoconectar al inicio");
         chkAutoConectaGps.setEnabled(false);
         chkAutoConectaGps.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -721,7 +720,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         componentesConfigSonda.add(panelParidadSonda);
 
         chkAutoConectaSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        chkAutoConectaSonda.setSelected(true);
         chkAutoConectaSonda.setText("Auto conectar al inicio");
         chkAutoConectaSonda.setEnabled(false);
         chkAutoConectaSonda.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -879,7 +877,6 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelConfigHistorico.add(panelCampoRutaHistorico);
 
         chkAutoConectaLan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        chkAutoConectaLan.setSelected(true);
         chkAutoConectaLan.setText("Auto conectar al inicio");
         chkAutoConectaLan.setEnabled(false);
         chkAutoConectaLan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1052,11 +1049,21 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 }//GEN-LAST:event_btnGuardarActionPerformed
 
 public void presionarBtnConectaGps(){
-    btnConectaGpsActionPerformed(null);
+    if (btnConectaGps.isEnabled()){    
+        btnConectaGpsActionPerformed(null);
+    }
 }
 
 public void presionarBtnConectaSonda(){
-    btnConectaSondaActionPerformed(null);
+    if (btnConectaSonda.isEnabled()){
+       btnConectaSondaActionPerformed(null);
+    }
+}
+
+public void presionarBtnConectaLan(){
+    if (btnConectaLan.isEnabled()){
+       btnConectaLanActionPerformed(null);
+    }
 }
 
 private void btnConectaGpsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConectaGpsActionPerformed
@@ -1138,7 +1145,7 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             controllers.ControllerConfig.getInstance().setParametrosLan();
             controllers.ControllerConfig.getInstance().disparaLecturaLan();
         }else{
-            JOptionPane.showMessageDialog(null, "Ingrese una ruta valida");
+            JOptionPane.showMessageDialog(null, "Ingrese una ruta valida en la conexión LAN de la sonda");
         }
     }//GEN-LAST:event_btnConectaLanActionPerformed
 
@@ -1293,14 +1300,6 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
 
     public void setCampoRutaHistorico(JTextField campoRutaHistorico) {
         this.campoRutaHistorico = campoRutaHistorico;
-    }
-
-    public JCheckBox getChkEstadoDetectaPeces() {
-        return getChkEstadoLan();
-    }
-
-    public void setChkEstadoDetectaPeces(JCheckBox chkEstadoDetectaPeces) {
-        this.chkEstadoLan = chkEstadoDetectaPeces;
     }
 
     public JCheckBox getChkEstadoGps() {
@@ -1460,11 +1459,12 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
         try {
             Element raizConfiguracionIbape = BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
-            getChkEstadoDetectaPeces().setSelected(parametros.getChild("PanelConfiguracion-LAN").getAttribute("Estado").getBooleanValue());
-            if (getChkEstadoDetectaPeces().isSelected()){
+            getChkEstadoLan().setSelected(parametros.getChild("PanelConfiguracion-LAN").getAttribute("Estado").getBooleanValue());
+            if (getChkEstadoLan().isSelected()){
                 clickEnChkEstadoDetectaPeces();
             }
             getCampoRutaHistorico().setText(parametros.getChild("PanelConfiguracion-LAN").getAttributeValue("ruta"));
+            getChkAutoConectaLan().setSelected(parametros.getChild("PanelConfiguracion-LAN").getAttribute("Autoconexion").getBooleanValue());
             sePudo=true;
             }
         catch (Exception e) 
@@ -1531,11 +1531,12 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }
     
     private void setPanelConfigLan(boolean estado) {
-        //Activo el panel de configuración LAN de la Sonda
+        //Activo y desactivo el panel de configuración LAN de la Sonda
         lblTxtRutaHistorico.setEnabled(estado);
         campoRutaHistorico.setEnabled(estado);
         btnExaminarRutaHistorico.setEnabled(estado);
         btnConectaLan.setEnabled(estado);
+        chkAutoConectaLan.setEnabled(estado);
         LanEstado.setEnabled(estado);
         lblLanEstado.setEnabled(estado);        
     }
@@ -1761,5 +1762,12 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
             comboPuertoSonda.setSelectedItem(comSondaElegido);
         }
     }    
+
+    /**
+     * @return the chkAutoConectaLan
+     */
+    public javax.swing.JCheckBox getChkAutoConectaLan() {
+        return chkAutoConectaLan;
+    }
 
 }
