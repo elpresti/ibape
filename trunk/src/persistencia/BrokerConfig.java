@@ -152,12 +152,13 @@ public class BrokerConfig {
         sondaConfig.setAttribute("ComboVelocidad","9600");
         sondaConfig.setAttribute("ComboBitsDatos","7");
         sondaConfig.setAttribute("ComboParidad","Ninguno");
-        sondaConfig.setAttribute("Autoconexion","true");
+        sondaConfig.setAttribute("Autoconexion","false");
         elemConfig.addContent(sondaConfig);
         
         Element lanConfig =  new Element("PanelConfiguracion-LAN");
         lanConfig.setAttribute("Estado","false");
         lanConfig.setAttribute("ruta","Complete este campo con la ruta...");
+        lanConfig.setAttribute("Autoconexion","false");
         elemConfig.addContent(lanConfig);
 
         Element unidades =  new Element("PanelConfiguracion-Unidades");
@@ -204,8 +205,9 @@ public class BrokerConfig {
         elemConfig.addContent(sondaConfig);
         
         Element lanConfig =  new Element("PanelConfiguracion-LAN");
-        lanConfig.setAttribute("Estado",String.valueOf(i.getChkEstadoDetectaPeces().isSelected()));
+        lanConfig.setAttribute("Estado",String.valueOf(i.getChkEstadoLan().isSelected()));
         lanConfig.setAttribute("ruta",i.getCampoRutaHistorico().getText());
+        gpsConfig.setAttribute("Autoconexion",String.valueOf(i.getChkAutoConectaLan().isSelected()));
         elemConfig.addContent(lanConfig);
 
         Element unidades =  new Element("PanelConfiguracion-Unidades");
@@ -271,7 +273,7 @@ public class BrokerConfig {
         return sePudo;
     }
     
-    public boolean actualizaDatosPanelConfig_Lan(String estado, String ruta){
+    public boolean actualizaDatosPanelConfig_Lan(String estado, String ruta,String autoconexion){
         boolean sePudo=false;
         //-- Actualiza los campos que corresponden del Document
         try {
@@ -279,6 +281,7 @@ public class BrokerConfig {
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
             parametros.getChild("PanelConfiguracion-LAN").setAttribute("Estado",estado);
             parametros.getChild("PanelConfiguracion-LAN").setAttribute("ruta",ruta);
+            parametros.getChild("PanelConfiguracion-LAN").setAttribute("Autoconexion",autoconexion);
             sePudo=true;
             }
         catch (Exception e) 

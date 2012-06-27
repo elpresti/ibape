@@ -32,15 +32,26 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
     }
 
     public void run() {
-        try {       
-            if ( (modelo.dataCapture.Gps.getInstance().getEstadoConexion() == 1) ||
-                 (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 1)   
-                    ){
-                ps.sleep(40000); //detengo durante 40 segundos xq hay un intento de conexion en curso
+        try { 
+            setLeyendoPuertos(true);
+            setErrorLeyendo(false);            
+            int intentosDeConexion=1;
+            boolean hayConexionEnCurso=(modelo.dataCapture.Gps.getInstance().getEstadoConexion() == 1) ||
+                 (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 1);
+            while ( (hayConexionEnCurso) && (intentosDeConexion<4) ){
+                ps.sleep(15000); //detengo durante 20 segundos xq hay un intento de conexion en curso
+                hayConexionEnCurso=(modelo.dataCapture.Gps.getInstance().getEstadoConexion() == 1) ||
+                                    (modelo.dataCapture.Sonda.getInstance().getEstadoConexion() == 1);
+                intentosDeConexion++;
             }
-            if (!(getPuertosSerieExistentes())) {
-                setErrorLeyendo(true);                
-            }   
+            if (!(hayConexionEnCurso)){
+                if (!(getPuertosSerieExistentes())) {
+                    setErrorLeyendo(true);
+                }   
+            }
+            else { 
+                setErrorLeyendo(true); 
+            }
             ps = null;
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
@@ -50,8 +61,6 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
     }
 
     public void start() {
-        setLeyendoPuertos(true);
-        setErrorLeyendo(false);
         if (ps == null) {
             ps = new Thread(this);
             ps.setPriority(Thread.MIN_PRIORITY);

@@ -55,8 +55,9 @@ public class ControllerPpal {
                 p.getComboParidadSonda().getSelectedItem().toString(),
                 String.valueOf(p.getChkAutoConectaSonda().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Lan(
-                String.valueOf(p.getChkEstadoDetectaPeces().isSelected()), 
-                p.getCampoRutaHistorico().getText());
+                String.valueOf(p.getChkEstadoLan().isSelected()), 
+                p.getCampoRutaHistorico().getText(),
+                String.valueOf(p.getChkAutoConectaLan().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Unidades(
                 p.getComboDistancia().getSelectedItem().toString(), 
                 p.getComboVelocidad().getSelectedItem().toString(), 

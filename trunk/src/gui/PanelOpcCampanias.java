@@ -775,31 +775,6 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     private void inicializador() {
-        //String[] columnas = new String[cantColumnas];
-        //columnas[NRO_COL_ID_CAMP]="ID";
-        //columnas[NRO_COL_ACCIONES]="Acciones";
-        //columnas[NRO_COL_BARCO]="Barco";
-        //columnas[NRO_COL_CAPITAN]="Capitan";
-        //columnas[NRO_COL_DURACION]="Duracion";
-        //columnas[NRO_COL_FECHA_FIN]="Fecha Fin";
-        //columnas[NRO_COL_FECHA_INI]="Fecha Inicio";
-        //columnas[NRO_COL_NOMBRE_CAMP]="Nombre campaña";        
-        //modeloTabla = new javax.swing.table.TableModel(new Object[][]{},columnas);        
-        //tablaCampanias.setModel(modeloTabla);
-                                       
-        //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
-        //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
-/*
-        TableColumn columnaAcciones = new TableColumn();
-        columnaAcciones.setHeaderValue("Acciones!");
-        columnaAcciones.setMinWidth(100);
-        columnaAcciones.setPreferredWidth(100);
-        columnaAcciones.setCellEditor(new PanelOpcCampaniasAcciones());
-        columnaAcciones.setCellRenderer(new PanelOpcCampaniasAcciones());        
-        tablaCampanias.addColumn(columnaAcciones);        
-        tablaCampanias.setEditingColumn(6);
-        //tablaCampanias.setEditingRow(0);
-*/       
         estadoCampania=0; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada   
         modificandoCampania=false;
         NRO_COL_ID_CAMP=0;
@@ -820,77 +795,6 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         cargaGrillaCampanias();
         setGuiCampaniaFinalizada();    
         controlaPanelAccionesCampania();
-        // Se crea el JScrollPane, el JTable y se pone la cabecera...
-         //JScrollPane scroll = new JScrollPane();
-         //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
-         //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
-         //scroll.setViewportView(tablaCampanias);
-         //scroll.setColumnHeaderView (tablaCampanias.getTableHeader());        
-        //tablaCampanias.setVisibleRowCount(6);
-        
-/* si queremos que algun campo sea editable, capturar el evento y demas... 
-        TableColumn column = tablaCampanias.getColumnModel().getColumn(NRO_COL_ACCIONES);
-        JXHyperlink btnGuardar = new JXHyperlink(); btnGuardar.setText("guardar");
-        JXHyperlink btnModificar = new JXHyperlink(); btnModificar.setText("modif");
-        JXHyperlink btnEliminar = new JXHyperlink(); btnEliminar.setText("Eliminar");
-        
-        
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlinkBtnGuardarActionPerformed(evt);
-            }
-        });
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jXHyperlinkBtnModificarActionPerformed(evt);
-                System.out.println("no hace nada xq falta codificar el método");
-            }
-        });
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jXHyperlinkBtnEliminarActionPerformed(evt);
-                System.out.println("no hace nada xq falta codificar el método");
-            }
-        });
-        
-        //Indicamos el CellEditor column
-        column.setCellEditor(new DefaultCellEditor(btnEliminar));
-
-        //Metodo para controlar el texto ingresado en el JTextField.
-
-    }
-
-    private void jXHyperlinkBtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            //String tmp = this.fieldPago.getText();
-            //Double Pago = Double.parseDouble(tmp);
-            //Obtenemos el numero de fila donde estamos ubicamos en este momento.
-            int fila = tablaCampanias.getSelectedRow();
-
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "No se selecciono ninguna fila", "Mensaje", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            int id = (int)tablaCampanias.getValueAt(fila, 0);
-            Double Deuda = Double.parseDouble(tmp);
-            tmp = String.valueOf(tablaCampanias.getValueAt(fila, 5));
-            Double Saldo = Double.parseDouble(tmp);
-            if (Pago < 0) {
-                JOptionPane.showMessageDialog(this, "El pago no puede ser negativo", "Mensaje", JOptionPane.WARNING_MESSAGE);
-                tablaCampanias.setValueAt(0.0, fila, 4);
-                return;
-            }
-
-            //Actualizamos otra columna con los valores, esta columna debe ser editable
-            tablaCampanias.setValueAt(Pago, fila, 5);
-            tablaCampanias.repaint();
-            modeloTabla.fireTableDataChanged();
-            JOptionPane.showMessageDialog(this, "Presionaste Enter pago de " + Pago, "Mensaje", JOptionPane.WARNING_MESSAGE);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-*/
     }
     
     public int getIdDeCampaniaSeleccionada(){

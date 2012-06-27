@@ -216,9 +216,23 @@ public class ControllerConfig  implements java.util.Observer {
         return sePudo;
     }
 
+    public boolean autoConectaLan(){
+        boolean sePudo=false;        
+        if (gui.PanelOpcConfiguracion.getInstance().getChkAutoConectaLan().isSelected() && 
+                gui.PanelOpcConfiguracion.getInstance().getChkEstadoLan().isSelected() &&
+                (modelo.dataCapture.LanSonda.getInstance().getEstadoConexion()==0)
+                ) {
+            gui.PanelOpcConfiguracion.getInstance().presionarBtnConectaLan();
+            sePudo=true;
+        }
+        return sePudo;
+    }    
+    
+    
     public void inicializaConexiones() {
         autoConectaGps();
         autoConectaSonda();
+        autoConectaLan();
         obtienePuertosComExistentes();        
     }    
     
