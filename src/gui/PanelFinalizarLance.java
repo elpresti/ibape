@@ -10,15 +10,26 @@
  */
 package gui;
 
+import java.util.ArrayList;
+import javax.swing.ComboBoxModel;
+import javax.swing.table.DefaultTableModel;
+import modelo.dataManager.Cajon;
+import modelo.dataManager.Especie;
+import persistencia.BrokerEspecie;
+import persistencia.Logueador;
+
 /**
  *
  * @author Sebastian
  */
 public class PanelFinalizarLance extends javax.swing.JPanel {
+
     static PanelFinalizarLance unicaInstancia;
+
     /** Creates new form PanelFinalizarLance */
     private PanelFinalizarLance() {
         initComponents();
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -188,11 +199,16 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         lblEspecie.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComboEspecie.add(lblEspecie);
 
-        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12));
+        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         comboEspecies.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abadejo", "Anchoita", "Merluza", "Calamar" }));
         comboEspecies.setMaximumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setMinimumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setPreferredSize(new java.awt.Dimension(200, 20));
+        comboEspecies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboEspeciesActionPerformed(evt);
+            }
+        });
         panelComboEspecie.add(comboEspecies);
 
         panelEspecie.add(panelComboEspecie);
@@ -258,12 +274,27 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
         panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnGuardarLance.setText("Guardar lance");
+        btnGuardarLance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarLanceActionPerformed(evt);
+            }
+        });
         panelInferior.add(btnGuardarLance);
 
         add(panelInferior, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void comboEspeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEspeciesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboEspeciesActionPerformed
+
+    private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
+        // TODO add your handling code here:
+        controllers.ControllerLance.getInstance().guardaLance();
+    }//GEN-LAST:event_btnGuardarLanceActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLance;
     private javax.swing.JTextField campoCajones;
@@ -294,12 +325,54 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private javax.swing.JTextArea txtComentarios;
     // End of variables declaration//GEN-END:variables
 
-
     public static PanelFinalizarLance getInstance() {
-       if (unicaInstancia == null) {
-          unicaInstancia = new PanelFinalizarLance();          
-       }
-       return unicaInstancia;
+        if (unicaInstancia == null) {
+            unicaInstancia = new PanelFinalizarLance();
+        }
+        return unicaInstancia;
     }
 
+    public void cargaComboEspecies(ArrayList<String> arr){
+        
+    }
+    
+    //main de prueba
+    public static void main(String[] args) {
+        javax.swing.JFrame elFrame = new javax.swing.JFrame();
+        elFrame.setSize(500, 500);
+        PanelFinalizarLance a= new PanelFinalizarLance();
+        //cargaEspecies();
+        elFrame.add(a); 
+        elFrame.setVisible(true);
+        
+    }
+
+    private void inicializador() {
+        cargaEspecies();
+        controllers.ControllerLance.getInstance();
+    }
+
+    private void cargaEspecies() {
+        try {
+             BrokerEspecie.getInstance().creaConexionNueva(); //sacar
+            comboEspecies.removeAllItems();
+            for (Especie i : BrokerEspecie.getInstance().getEspeciesFromDB()) {
+                comboEspecies.addItem(i.getNombre());
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+    }
+    
+    public ArrayList<Cajon> getCajones(){
+        ArrayList<Cajon> listaCajones = null;
+        Cajon unCajon= new Cajon();
+        for (int i = 0; i < tablaCajones.getRowCount(); i++) {
+            unCajon.setIdLance(0);
+            unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
+            unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
+            listaCajones.add(unCajon);
+        }
+        return listaCajones;
+    }
 }

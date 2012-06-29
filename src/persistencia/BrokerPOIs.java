@@ -44,6 +44,7 @@ public class BrokerPOIs extends BrokerPpal {
                 poi.setPathImg(rs.getString("pathImg"));
 
                 poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                //ver if null
                 poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
 
                 POIs.add(poi);

@@ -48,6 +48,24 @@ public class BrokerCajon extends BrokerPpal {
         return cajones;
     }
 
+        public ArrayList<modelo.dataManager.Cajon> getCajonesLanceFromDB(int idLance) {
+        ArrayList<modelo.dataManager.Cajon> cajones = new ArrayList();
+        try {
+            ResultSet rs = getStatement().executeQuery("SELECT * FROM Cajones WHERE idLance = " + idLance);
+            while (rs.next()) {
+                modelo.dataManager.Cajon cajon = new modelo.dataManager.Cajon();
+                // Get the data from the row using the column name
+                cajon.setIdLance(rs.getInt("idLance"));
+                cajon.setIdEspecie(rs.getInt("idEspecie"));
+                cajon.setCantidad(rs.getInt("cantidad"));
+                cajones.add(cajon);
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        return cajones;
+    }
+    
     public modelo.dataManager.Cajon getCajonFromDB(int id) {
         modelo.dataManager.Cajon cajon = null;
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
