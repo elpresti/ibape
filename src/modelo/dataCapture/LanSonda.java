@@ -84,7 +84,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
         return sePudo;
     }
     
-    
+/*    
     public ArrayList<String> hayArchivosNuevos() {
         ArrayList<String> archivosNuevos = new ArrayList();
         //verifica si existen archivos nuevos, si hay devuelve sus filename en el vector,
@@ -117,7 +117,8 @@ public class LanSonda extends java.util.Observable implements Runnable {
         }
         return archivosNuevos;
     }
-
+*/
+    
     private void inicializar() {
         setEstadoConexion(0);
     }
@@ -204,15 +205,20 @@ public class LanSonda extends java.util.Observable implements Runnable {
             // guardo solo los nuevos y termino cuando encuentre los viejos
             while (i<filesInDirectory.length && (!(archivosViejos))){
                 File file = filesInDirectory[i];
-                if (fYhArchivoLocalMasNuevo != null){
-                    if ((file.lastModified() - fYhArchivoLocalMasNuevo.getTime()) > 0){
-                        archivos.add(file);
+                    if (fYhArchivoLocalMasNuevo != null){
+                        if ((file.lastModified() - fYhArchivoLocalMasNuevo.getTime()) > 0){
+                            if (esArchivoDeHistorico(file)){
+                                archivos.add(file);                                
+                            }
+                        }
+                        else
+                        { archivosViejos = true; }                    
                     }
                     else
-                    { archivosViejos = true; }                    
-                }
-                else
-                  { archivos.add(file); }
+                    {   if (esArchivoDeHistorico(file)){
+                            archivos.add(file); 
+                        }
+                    }
                 i++;
             }
         }
@@ -462,6 +468,17 @@ public class LanSonda extends java.util.Observable implements Runnable {
      */
     public void setfYhArchivoRemotoMasRecientementeModificado(java.util.Date fYhArchivoRemotoMasRecientementeModificado) {
         this.fYhArchivoRemotoMasRecientementeModificado = fYhArchivoRemotoMasRecientementeModificado;
+    }
+
+    private boolean esArchivoDeHistorico(File file) {
+        boolean esArchivoDeHistorico=false;
+        if ( file.getName().toLowerCase().contains(".dat") || 
+             file.getName().toLowerCase().contains(".jpg") ||
+             file.getName().toLowerCase().contains(".txt")
+           ){
+            esArchivoDeHistorico = true;
+        }         
+        return esArchivoDeHistorico;
     }
     
 }
