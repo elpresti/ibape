@@ -163,23 +163,4 @@ public class Lance {
     public void setEstadoLance(int estadoLance) {
         this.estadoLance = estadoLance;
     }
-
-    public void iniciaLance() {
-        this.setEstadoLance(1); //se controla en el gui o aca?
-        modelo.dataManager.Punto p = modelo.dataManager.Punto.getInstance();
-        this.setIdCampania(BrokerCampania.getInstance().getIdUltimoInsert()); //id de la campania actual 
-        this.setPosIniLat(p.getLatitud());
-        this.setPosIniLon(p.getLongitud());
-        this.setfYHIni(p.getFechaYhora());
-    }
-
-    public void finLance() {
-        this.setEstadoLance(0);
-        modelo.dataManager.Punto p = modelo.dataManager.Punto.getInstance();        
-        this.setPosFinLat(p.getLatitud());
-        this.setPosFinLon(p.getLongitud());
-        this.setfYHFin(p.getFechaYhora());
-        this.setComentarios("obtener de panelfinalizalance");
-    }
-    
 }

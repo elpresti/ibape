@@ -138,8 +138,9 @@ public class BrokerCategoriasPOI extends BrokerPpal {
     /*
     //main de prueba
     public static void main(String[] args) {
-        //BrokerCategoriasPOI.getInstance().creaArchivoDb();
-        BrokerCategoriasPOI.getInstance().crearTablaCategoriasPoi();
+        BrokerCategoriasPOI.getInstance().creaArchivoDb();
+        BrokerCategoriasPOI.getInstance().crearTablaCajones();
+        BrokerCategoriasPOI.getInstance().crearTablaCategoriasPoi();         
         BrokerCategoriasPOI.getInstance().creaConexionNueva();    
          BrokerCategoriasPOI.getInstance().getCatPOISFromDB();   
         CategoriaPoi a=new CategoriaPoi();
