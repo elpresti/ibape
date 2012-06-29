@@ -180,4 +180,42 @@ public class Csv {
         setCsvFileName("valores.txt");
     }
     
+    public DatosPixelX getDatosDeUnPixelX(String rutaJpg,int pixelX){
+        //el procesador de imagenes le pasa a un método de la clase CSV los siguientes parametros:
+            // su fileName.jpg
+            // el Integer del pixel x del cual quiere saber la fecha y hora
+        // el método devuelve un objeto con todos los datos que hay en el pixel x solicitado, o null si no lo encuentra
+        DatosPixelX datosPixelx = null;
+        try{
+            
+            String rutaCsv = getRutaCsvFromJpg(rutaJpg);
+            if (rutaCsv != null){
+                CsvReader sondaSets = new CsvReader(rutaCsv);
+                //agregar las contantes de columna de las columnas que faltan
+                //crear un objeto de tipo DatosPixelX
+                //leer del CSV el X solicitado
+                //cargar esos datos en datosPixelX
+            }            
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return datosPixelx;
+    }
+
+    private String getRutaCsvFromJpg(String rutaJpg) {
+        String rutaAcsv= null;
+        try{
+            //crear una carpeta temporal con el ID del JPG recibido dentro
+            //poner en esta carpeta el EXE del conversor DATaCSV,
+            //poner el DAT que corresponda al JPG recivido
+            //ejecutar el conversor pasandole el ID del JPG
+            //esperar que genere valores.txt y corroborar que tenga contenido (ej: file.size()>50kb)
+            //poner en rutaAcsv la ruta a valores.txt
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return rutaAcsv;
+    }
 }

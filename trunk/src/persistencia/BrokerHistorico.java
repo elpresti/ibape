@@ -210,7 +210,7 @@ public abstract class BrokerHistorico implements Runnable{
             sePudo = sePudo && crearTablaSondaSets();
             
             //Creacion de Triggers           
-            sePudo = sePudo && crearTriggersIdSondaSets();
+            //sePudo = sePudo && crearTriggersIdSondaSets(); ya no xq 
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); 
@@ -301,13 +301,12 @@ public abstract class BrokerHistorico implements Runnable{
             + "  rumbo              REAL,"
             + "  profundidad        REAL,"
             + "  velocidadAgua      REAL,"
-            + "  tempAgua           REAL,"
-            + "  idSondaSets        integer NULL,"
-            + "  /* Foreign keys */ "
-            + "  FOREIGN KEY (idSondaSets)"
-            + "    REFERENCES SondaSets(id)"
+            + "  tempAgua           REAL"
+//            + ",  idSondaSets        integer NULL,"
+//          + "  /* Foreign keys */ "
+//          + "  FOREIGN KEY (idSondaSets)"
+//          + "    REFERENCES SondaSets(id)"            
             + ");";
-
             getStatement().executeUpdate(codigoCreacion);
             sePudo=true;
         }
