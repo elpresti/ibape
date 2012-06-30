@@ -185,37 +185,105 @@ public class Csv {
             // su fileName.jpg
             // el Integer del pixel x del cual quiere saber la fecha y hora
         // el método devuelve un objeto con todos los datos que hay en el pixel x solicitado, o null si no lo encuentra
-        DatosPixelX datosPixelx = null;
-        try{
-            
-            String rutaCsv = getRutaCsvFromJpg(rutaJpg);
+        DatosPixelX datosPixelX = null;
+        try{            
+            String rutaCsv = getCsvFromJpg(rutaJpg);
             if (rutaCsv != null){
-                CsvReader sondaSets = new CsvReader(rutaCsv);
+                CsvReader docCsv = new CsvReader(rutaCsv);
                 //agregar las contantes de columna de las columnas que faltan
-                //crear un objeto de tipo DatosPixelX
                 //leer del CSV el X solicitado
-                //cargar esos datos en datosPixelX
+                boolean encontroFila = false;
+                boolean pudoLeerFila = docCsv.readRecord();
+                while ( (pudoLeerFila) && (!encontroFila)){
+                    if (docCsv.getCurrentRecord() == pixelX){
+                        encontroFila = true;
+                        docCsv.readRecord();
+                    }
+                    else
+                      { pudoLeerFila = docCsv.skipLine(); }
+                }
+                if (docCsv.getColumnCount()>1) {
+                    //crear un objeto de tipo DatosPixelX                
+                    datosPixelX = new DatosPixelX();//creo el objeto
+                    //cargar esos datos en datosPixelX
+                    datosPixelX.setEo(docCsv.get(NRO_COL_EO).trim().charAt(0));
+                    datosPixelX.setEscala(Integer.parseInt(docCsv.get(NRO_COL_ESCALA).trim()));
+                    datosPixelX.setExpander(Integer.parseInt(docCsv.get(NRO_COL_EXPANDER).trim()));
+                    datosPixelX.setFrecuencia(Integer.parseInt(docCsv.get(NRO_COL_FRECUENCIA).trim()));
+                    datosPixelX.setGanacia(Integer.parseInt(docCsv.get(NRO_COL_GANANCIA).trim()));
+                    datosPixelX.setGs(Integer.parseInt(docCsv.get(NRO_COL_GS).trim()));
+                    datosPixelX.setLw(Integer.parseInt(docCsv.get(NRO_COL_LW).trim()));
+                    datosPixelX.setNs(docCsv.get(NRO_COL_NS).trim().charAt(0));
+                    datosPixelX.setProfundidad(Double.parseDouble(docCsv.get(NRO_COL_PROFUNDIDAD).trim()));
+                    datosPixelX.setRumbo(Double.parseDouble(docCsv.get(NRO_COL_RUMBO).trim()));
+                    datosPixelX.setShift(Integer.parseInt(docCsv.get(NRO_COL_SHIFT).trim()));
+                    datosPixelX.setStc(Integer.parseInt(docCsv.get(NRO_COL_STC).trim()));
+                    datosPixelX.setTempAgua(Double.parseDouble(docCsv.get(NRO_COL_TEMPERATURA).trim()));
+                    datosPixelX.setUnidad(Integer.parseInt(docCsv.get(NRO_COL_UNIDAD).trim()));
+                    datosPixelX.setVelocidad(Double.parseDouble(docCsv.get(NRO_COL_VELOCIDAD).trim()));
+                    datosPixelX.setVelocidadProm(Double.parseDouble(docCsv.get(NRO_COL_VELOCIDADPROM).trim()));
+                    datosPixelX.setFechaYhora(                    
+                                    armaDate(Integer.parseInt(docCsv.get(NRO_COL_FECHA).trim()),
+                                    Integer.parseInt(docCsv.get(NRO_COL_HORA).trim()))
+                            );
+                    String latitud = docCsv.get(NRO_COL_LATITUD).trim();
+                    if (latitud.length()>0){
+                        datosPixelX.setLatitud(Double.parseDouble(latitud.substring(0, latitud.length()-1)));
+                    }
+                    String longitud = docCsv.get(NRO_COL_LONGITUD).trim();
+                    if (longitud.length()>0){
+                        datosPixelX.setLongitud(Double.parseDouble(longitud.substring(0, longitud.length()-1)));
+                    }           
+                }                
             }            
         }
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        return datosPixelx;
+        return datosPixelX;
     }
 
-    private String getRutaCsvFromJpg(String rutaJpg) {
+    private String getCsvFromJpg(String rutaJpg) {
         String rutaAcsv= null;
         try{
-            //crear una carpeta temporal con el ID del JPG recibido dentro
-            //poner en esta carpeta el EXE del conversor DATaCSV,
-            //poner el DAT que corresponda al JPG recivido
-            //ejecutar el conversor pasandole el ID del JPG
-            //esperar que genere valores.txt y corroborar que tenga contenido (ej: file.size()>50kb)
-            //poner en rutaAcsv la ruta a valores.txt
+            String idJpg = getIdFromFileName(rutaJpg);
+            if (creaCarpetaTmpYcopiaArchivos(idJpg)){
+                if (disparaEjecucionConversor(idJpg)){
+                    if (modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal() != null){
+                        //poner en rutaAcsv la ruta a valores.txt
+                        rutaAcsv = modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal();
+                        rutaAcsv += "\\"+idJpg;                        
+                        rutaAcsv += "\\"+getCsvFileName();
+                    }
+                }
+            }
         }
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return rutaAcsv;
     }
+
+    private boolean creaCarpetaTmpYcopiaArchivos(String idJpg) {
+        boolean sePudo=false;
+        //crear una carpeta temporal con el ID del JPG recibido dentro
+        //poner en esta carpeta el EXE del conversor DATaCSV,
+        //poner el DAT que corresponda al JPG recivido
+        return sePudo;
+    }
+
+    private boolean disparaEjecucionConversor(String idJpg) {
+        boolean sePudo=false;
+        //ejecutar el conversor pasandole el ID del JPG
+        //esperar que genere valores.txt y corroborar que tenga contenido (ej: file.size()>50kb)
+        return sePudo;
+    }
+
+    private String getIdFromFileName(String rutaJpg) {
+        // obtengo el ID del filename del JPG
+        String idJpg = rutaJpg.substring(rutaJpg.indexOf("-")+1); // le saco el primer guion
+        idJpg = idJpg.substring(0, rutaJpg.indexOf("-")); //obtengo sus primeros 4 digitos q representan el ID
+        return idJpg;
+    }
+
 }
