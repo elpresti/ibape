@@ -4,54 +4,59 @@
  */
 package modelo.alertas;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Martin
  */
 public class Variable {
-    private static String nombre;
-    private static String opcionesCombo;
-    private static int cantValores;
+    private int id;
+    private String nombre;
+    private String unidad;
 
     /**
      * @return the nombre
      */
-    public static String getNombre() {
+
+    public  String getNombre() {
         return nombre;
     }
 
     /**
      * @param aNombre the nombre to set
      */
-    public static void setNombre(String aNombre) {
+    public void setNombre(String aNombre) {
         nombre = aNombre;
     }
 
+
+
     /**
-     * @return the opcionesCombo
+     * @return the id
      */
-    public static String getOpcionesCombo() {
-        return opcionesCombo;
+    public  int getId() {
+        return id;
     }
 
     /**
-     * @param aOpcionesCombo the opcionesCombo to set
+     * @param aId the id to set
      */
-    public static void setOpcionesCombo(String aOpcionesCombo) {
-        opcionesCombo = aOpcionesCombo;
+    public  void setId(int aId) {
+        id = aId;
     }
 
     /**
-     * @return the cantValores
+     * @return the unidad
      */
-    public static int getCantValores() {
-        return cantValores;
+    public String getUnidad() {
+        return unidad;
     }
 
     /**
-     * @param aCantValores the cantValores to set
+     * @param aUnidad the unidad to set
      */
-    public static void setCantValores(int aCantValores) {
-        cantValores = aCantValores;
+    public void setUnidad(String aUnidad) {
+        unidad = aUnidad;
     }
 }

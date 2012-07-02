@@ -290,6 +290,9 @@
                               <Dimension value="[130, 20]"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="comboCategoriasActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
