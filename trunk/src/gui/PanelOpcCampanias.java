@@ -36,7 +36,6 @@ import org.jdesktop.swingx.JXPanel;
 
 public class PanelOpcCampanias extends javax.swing.JPanel {
     static PanelOpcCampanias unicaInstancia;
-    private int estadoCampania; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada
     private Color colorOriginalBtnIniciar;
     private DefaultTableModel modeloTabla;
     private boolean modificandoCampania;
@@ -501,7 +500,7 @@ private void btnPausarReanudarCampaniaActionPerformed(java.awt.event.ActionEvent
         setGuiCampaniaPausada();
         if (persistencia.BrokerHistoricoPunto.getInstance().estaLogueando()){
             btnDetenerLogueoHistoricoActionPerformed(null);
-        }        
+        }
     }
     else
         { setGuiCampaniaReanudada(); 
@@ -569,8 +568,13 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     private void btnIniciarLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarLogueoHistoricoActionPerformed
         if (gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected()){
+            ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(1);
             controllers.ControllerCampania.getInstance().iniciarLogueoHistorico();
             setGuiHistoricoLogueando(true);
+            ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(2);
+            if (getEstadoCampania() == 2){
+                btnPausarReanudarCampaniaActionPerformed(null);
+            }
         }
         else
           { JOptionPane.showMessageDialog(null, "Para iniciar el alojamiento de historico deben guardarse los datos leidos por el GPS"); }                        
@@ -579,6 +583,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void btnDetenerLogueoHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerLogueoHistoricoActionPerformed
         controllers.ControllerCampania.getInstance().detenerLogueoHistorico();
         setGuiHistoricoLogueando(false);
+        ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(0);
     }//GEN-LAST:event_btnDetenerLogueoHistoricoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -743,14 +748,14 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
      * @return the estadoCampania
      */
     public int getEstadoCampania() {
-        return estadoCampania;
+        return controllers.ControllerCampania.getInstance().getEstadoCampaniaEnCurso();
     }
 
     /**
      * @param estadoCampania the estadoCampania to set
      */
     public void setEstadoCampania(int estadoCampania) {
-        this.estadoCampania = estadoCampania;
+        controllers.ControllerCampania.getInstance().setEstadoCampaniaEnCurso(estadoCampania);
         controlaPanelAccionesCampania();        
     }
 
@@ -775,7 +780,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     private void inicializador() {
-        estadoCampania=0; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada   
+        //estadoCampania=0; //0=no hay campaña, 1=campania en curso, 2=campaña Pausada   
         modificandoCampania=false;
         NRO_COL_ID_CAMP=0;
         NRO_COL_FECHA_INI=1;
@@ -877,11 +882,10 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
     }
 
-    private void cargarDatosDeCampaniaEnCurso() {
-        if (getEstadoCampania() == 1){
-            int idCampEnCurso = ControllerCampania.getInstance().getIdCampaniaEnCurso();
-            if (idCampEnCurso>=0){
-                modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso();
+    public void cargarDatosDeCampaniaEnCurso() {
+        if ((getEstadoCampania() == 1) || (getEstadoCampania() == 2)){ 
+            modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso();
+            if (campania != null){                
                 campoBarcoCampania.setText(campania.getBarco());
                 campoBarcoCampania.setEnabled(false);
                 campoCapitanCampania.setText(campania.getCapitan());

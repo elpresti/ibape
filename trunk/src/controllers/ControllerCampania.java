@@ -18,7 +18,12 @@ import persistencia.Logueador;
  */
 public class ControllerCampania {
     static ControllerCampania unicaInstancia;
+    private int estadoHistoricoDeCampEnCurso;
    
+    private ControllerCampania(){
+        inicializador();
+    }
+    
     public static ControllerCampania getInstance() {
        if (unicaInstancia == null)
           unicaInstancia = new ControllerCampania();
@@ -69,6 +74,8 @@ public class ControllerCampania {
     }
     
     public boolean finalizaCampaniaEnCurso() {
+        //tengo q marcar el estado de la campania en curso en la DB como finalizado
+        
         boolean sePudo = false;
         if (modelo.dataManager.AdministraCampanias.getInstance().finalizarCampaniaEnCurso()){
             gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
@@ -115,6 +122,57 @@ public class ControllerCampania {
 
     public void detenerLogueoHistorico() {
         persistencia.BrokerHistoricoSondaSet.getInstance().detieneEjecucion();
+    }
+
+    public int getEstadoCampaniaEnCurso() {
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
+            return AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado();
+        }
+        else
+            { return -1; }
+    }
+
+    public void setEstadoCampaniaEnCurso(int estadoCampania) {
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
+            AdministraCampanias.getInstance().getCampaniaEnCurso().setEstado(estadoCampania);
+        }
+    }
+    
+    public boolean cargarCampaniaPausada(){
+        boolean sePudo=false;
+        // ---
+        
+        return sePudo;
+    }    
+
+    /**
+     * @return the estadoHistoricoDeCampEnCurso
+     */
+    public int getEstadoHistoricoDeCampEnCurso() {
+        return estadoHistoricoDeCampEnCurso;
+    }
+
+    /**
+     * @param estadoHistoricoDeCampEnCurso the estadoHistoricoDeCampEnCurso to set
+     */
+    public void setEstadoHistoricoDeCampEnCurso(int estadoHistoricoCampCurso) {
+        this.estadoHistoricoDeCampEnCurso = estadoHistoricoCampCurso;
+        if (estadoHistoricoCampCurso==0){
+            gui.PanelBarraDeEstado.getInstance().setHistoricoDesactivado();
+        }
+        else if (estadoHistoricoCampCurso==1){
+            gui.PanelBarraDeEstado.getInstance().setHistoricoActivando();
+        }
+        else if (estadoHistoricoCampCurso == 2){
+            gui.PanelBarraDeEstado.getInstance().setHistoricoActivado();
+        }
+        else if (estadoHistoricoCampCurso == 3){
+            gui.PanelBarraDeEstado.getInstance().setHistoricoGuardando();
+        }
+    }
+
+    private void inicializador() {
+        setEstadoHistoricoDeCampEnCurso(0);
     }
     
 }

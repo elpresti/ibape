@@ -4,6 +4,7 @@
  */
 package persistencia;
 
+import controllers.ControllerCampania;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -83,9 +84,10 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     }
     
     public boolean insertPunto(Punto pto) {
-        boolean sePudo = false;
+        boolean sePudo = false;        
         if ((Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 15000) { //10000=10seg. 
             try {
+                ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(3);
                 if (pto.getFechaYhora() != null){ 
                     getPsInsert().setLong(1, pto.getFechaYhora().getTime());
                 }
@@ -99,13 +101,15 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 getPsInsert().setDouble(9,pto.getTempAgua());
                 System.out.println("Insert PH: "+getPsInsert().toString());
                 if (getPsInsert().executeUpdate() > 0) {
-                    setfYhUltimoInsert(Calendar.getInstance().getTime());
-                    sePudo = true;                    
+                    setfYhUltimoInsert(Calendar.getInstance().getTime());                    
+                    sePudo = true;
                 }
+                ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(2);
             } catch (SQLException ex) {
+                ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(0);
                 Logueador.getInstance().agregaAlLog(ex.toString());
-            }            
-        }       
+            }
+        }
         return sePudo;
     }
     
