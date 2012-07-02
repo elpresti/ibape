@@ -336,7 +336,8 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         
     }
     
-    //main de prueba
+    //main de prueba 
+    /*
     public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
@@ -346,7 +347,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         elFrame.setVisible(true);
         
     }
-
+*/
     private void inicializador() {
         cargaEspecies();
         controllers.ControllerLance.getInstance();
@@ -369,8 +370,8 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         Cajon unCajon= new Cajon();
         for (int i = 0; i < tablaCajones.getRowCount(); i++) {
             unCajon.setIdLance(0);
-            unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
-            unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
+          //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
+          //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
             listaCajones.add(unCajon);
         }
         return listaCajones;

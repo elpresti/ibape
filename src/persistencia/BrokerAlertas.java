@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 import modelo.alertas.Alerta;
 import modelo.alertas.Condicion;
+import modelo.alertas.Relacion;
+import modelo.alertas.Variable;
 import persistencia.BrokerPpal;
 
 /**
@@ -201,6 +203,124 @@ public class BrokerAlertas extends BrokerPpal{
         }
         return sePudo;
     }
+   
+      public boolean insertaRelacionesxVariables(){
+        boolean sePudo = false;
+        String sqlQuery="";
+        try {                                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+                            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(2,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(2,2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(2,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(2,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+
+              sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(3,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(3,2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(3,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(3,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            }catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        return sePudo;
+    }
     
    
    
@@ -334,6 +454,44 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
             Logueador.getInstance().agregaAlLog(ex.toString());
         }        
         return alertas;
+    }
+
+    public ArrayList<Variable> getVariablesFromDB() {
+        ArrayList<modelo.alertas.Variable> variables = new ArrayList();
+        
+        try {
+            ResultSet rs = getStatement().executeQuery("SELECT * FROM Variables");
+            while (rs.next()) {       
+                modelo.alertas.Variable variable = new modelo.alertas.Variable();
+                // Get the data from the row using the column name
+                variable.setId(rs.getInt("id"));
+                variable.setNombre(rs.getString("nombre"));
+                variable.setUnidad(rs.getString("unidad"));
+                variables.add(variable);
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }        
+        return variables;
+    }
+
+    public ArrayList<Relacion> getRelacionesFromDB(int index) {
+        ArrayList<modelo.alertas.Relacion> relaciones = new ArrayList();
+        
+        try {
+            ResultSet rs = getStatement().executeQuery("SELECT * FROM Relaciones r inner join RelacionesXVariables rv on r.id=rv.idRelacion WHERE rv.idVariable="+index+"");
+            while (rs.next()) {       
+                modelo.alertas.Relacion relacion= new modelo.alertas.Relacion();
+                // Get the data from the row using the column name
+                relacion.setId(rs.getInt("id"));
+                relacion.setDescripcion(rs.getString("descripcion"));
+                relacion.setCantValores(rs.getInt("cantValores"));
+                relaciones.add(relacion);
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }        
+        return relaciones;
     }
     
 }

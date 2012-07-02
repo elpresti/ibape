@@ -10,6 +10,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.alertas.AdministraAlertas;
 import modelo.alertas.Condicion;
+import modelo.alertas.Relacion;
+import modelo.alertas.Variable;
 import org.jdom.Element;
 import persistencia.BrokerConfig;
 import persistencia.Logueador;
@@ -20,11 +22,48 @@ import persistencia.Logueador;
  */
 public class ControllerAlertas {
     static ControllerAlertas unicaInstancia;
+    private static ArrayList<Variable> variables;
+    private static ArrayList<Relacion> relaciones;
    
     public static ControllerAlertas getInstance() {
        if (unicaInstancia == null)
           unicaInstancia = new ControllerAlertas();
        return unicaInstancia;
+    }
+
+    /**
+     * @return the variables
+     */
+    public static ArrayList<Variable> getVariables() {
+        return variables;
+    }
+
+    /**
+     * @return the relaciones
+     */
+    public static ArrayList<Relacion> getRelaciones() {
+        return relaciones;
+    }
+
+    /**
+     * @param aRelaciones the relaciones to set
+     */
+    public static void setRelaciones(ArrayList<Relacion> aRelaciones) {
+        relaciones = aRelaciones;
+    }
+
+    /**
+     * @param aVariables the variables to set
+     */
+    public boolean leeVariablesDB() {
+        boolean sePudo=false;
+        try{
+        variables=persistencia.BrokerAlertas.getInstance().getVariablesFromDB();
+        sePudo=true;
+        }catch (Exception e){
+            sePudo=false;
+        }
+        return sePudo;
     }
 
     public boolean nuevaAlerta(String nombre, String mensaje, String estado, List<modelo.alertas.Condicion> condiciones){
@@ -104,6 +143,17 @@ public class ControllerAlertas {
         }
         persistencia.BrokerConfig.getInstance().guardaConfiguracion();
         modelo.alertas.AdministraAlertas.setEstadoAlertas(estado);               
+    }
+
+    public boolean leeRelacionesDB(int index) {
+        boolean sePudo=false;
+        try{
+        relaciones=persistencia.BrokerAlertas.getInstance().getRelacionesFromDB(index);
+        sePudo=true;
+        }catch (Exception e){
+            sePudo=false;
+        }
+        return sePudo;
     }
     
 }

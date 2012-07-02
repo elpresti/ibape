@@ -161,11 +161,16 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblCategoria.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelCatNuevoPoi.add(lblCategoria);
 
-        comboCategorias.setFont(new java.awt.Font("Tahoma", 0, 12));
+        comboCategorias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         comboCategorias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Red rota", "Buen Abadejo", "Fondo rocoso" }));
         comboCategorias.setMaximumSize(new java.awt.Dimension(130, 20));
         comboCategorias.setMinimumSize(new java.awt.Dimension(130, 20));
         comboCategorias.setPreferredSize(new java.awt.Dimension(130, 20));
+        comboCategorias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboCategoriasActionPerformed(evt);
+            }
+        });
         panelCatNuevoPoi.add(comboCategorias);
 
         panelAgregaPoi.add(panelCatNuevoPoi, java.awt.BorderLayout.WEST);
@@ -314,6 +319,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
         add(jScrollPane3, java.awt.BorderLayout.LINE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void comboCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCategoriasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboCategoriasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregaCategoria;
     private javax.swing.JButton btnAgregaPoi;

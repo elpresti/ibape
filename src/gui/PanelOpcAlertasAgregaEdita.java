@@ -10,7 +10,9 @@
  */
 package gui;
 
+import controllers.ControllerAlertas;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -36,8 +38,8 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
     /** Creates new form PanelOpcAlertasAgregaEdita */
     private PanelOpcAlertasAgregaEdita() {
         initComponents();
-        cargaIconosDeBotones();
-    }
+        inicializador();
+cargaIconosDeBotones();    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -573,7 +575,8 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         modeloTabla = (DefaultTableModel) tablaCondiciones.getModel();
         tablaCondiciones.setModel(modeloTabla);
         cargaIconosDeBotones();
-        cargaGrillaCondiciones();  
+        cargaGrillaCondiciones();
+        cargaPanelConfigCondicion();
         controlaPanelAccionesCondicion();
         // Se crea el JScrollPane, el JTable y se pone la cabecera...
          //JScrollPane scroll = new JScrollPane();
@@ -616,7 +619,7 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     private void jXHyperlinkBtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
+        try {        cargaIconosDeBotones();
             //String tmp = this.fieldPago.getText();
             //Double Pago = Double.parseDouble(tmp);
             //Obtenemos el numero de fila donde estamos ubicamos en este momento.
@@ -662,6 +665,7 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     private void cargaGrillaCondiciones() {
         vaciaTabla();
+        if (!(getAlertaAct()==null)){
         List<modelo.alertas.Condicion> condiciones = getAlertaAct().getCondiciones();
         /*
         if ((condiciones == null) || (condiciones.isEmpty()) ) {
@@ -681,6 +685,7 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 i++;
             }
             
+        }
         }
     }
 
@@ -771,5 +776,33 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
            */
        }
     }
+
+    private void cargaPanelConfigCondicion() {
+        
+        //Obtengo todas las variables de la BD
+        
+        jComboBox1.removeAllItems();
+        ControllerAlertas.getInstance().leeVariablesDB();
+        ArrayList <modelo.alertas.Variable> variables = controllers.ControllerAlertas.getVariables();
+ 
+        if ((!(variables == null)) && (variables.size() > 0)) {
+            // while (), pongo cada objeto Campania en la grilla de campanias                    
+            int i = 0;
+            while (i < variables.size()) {
+                agregaUnItemVariable(
+                        variables.get(i).getId(),
+                        variables.get(i).getNombre());
+                i++;
+            }
+        }
+        
+        jComboBox1.addItem(alertaAct);
+    }
+
+    private void agregaUnItemVariable(int id, String nombre) {
+        jComboBox1.addItem(nombre);
+    }
+
+
 
 }

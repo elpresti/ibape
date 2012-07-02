@@ -160,6 +160,7 @@ public abstract class BrokerPpal {
             
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelaciones();
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaVariables();
+            sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelacionesxVariables();
             
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
@@ -194,6 +195,7 @@ public abstract class BrokerPpal {
                     + "  idVariable  integer NOT NULL,"
                     + "  idAlerta    integer NOT NULL,"
                     + "  idRelacion  integer NOT NULL,"
+                    + "  descripcion nvarchar(200) NOT NULL,"
                     + "  /* Foreign keys */ "
                     + "  FOREIGN KEY (idVariable)"
                     + "    REFERENCES Variables(id)"
