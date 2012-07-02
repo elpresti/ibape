@@ -205,6 +205,55 @@ public class BrokerCampania extends BrokerPpal{
         }        
         
         return sePudo;
-    }        
+    }
+    
+    public modelo.dataManager.Campania getCampaniaPausada(){
+        modelo.dataManager.Campania campania = null;                  
+        try {
+            String sqlQuery=
+                    "   SELECT * FROM Campanias "
+                    + " WHERE estado = 2 "
+                    + " ORDER BY id ASC "
+                    + " LIMIT 0,1 ";
+            System.out.println(sqlQuery);
+            ResultSet rs = getStatement().executeQuery(sqlQuery);
+            boolean hayPausada=false;
+            if (rs.next()){
+                hayPausada=true;
+            }
+            else{//busco si alguna campania quedó iniciada, y no se pudo marcar como pausada
+                sqlQuery="  SELECT * FROM Campanias "
+                        + " WHERE estado = 1 "
+                        + " ORDER BY id ASC "
+                        + " LIMIT 0,1 ";
+                System.out.println(sqlQuery);
+                rs = getStatement().executeQuery(sqlQuery);
+                if (rs.next()){
+                    //la considero como pausada, ya q por algun error no pudo marcarse asi
+                    hayPausada=true;
+                }
+            }
+            if (hayPausada) {
+                campania = new modelo.dataManager.Campania();
+                // Get the data from the row using the column name
+                campania.setId(rs.getInt("id"));
+                campania.setBarco(rs.getString("barco"));
+                campania.setCapitan(rs.getString("capitan"));
+                campania.setDescripcion(rs.getString("descripcion"));
+                campania.setEstado(rs.getInt("estado"));
+                if (rs.getTimestamp("fechafin") != null){
+                    campania.setFechaFin(new Date(rs.getTimestamp("fechafin").getTime()));
+                }                
+                campania.setFechaInicio(new Date(rs.getTimestamp("fechainicio").getTime()));
+                campania.setFolderHistorico(rs.getString("folderhistorico"));
+                //campania.setPois(null);
+                //campania.setUltimoPoiConImg(null);
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }        
+        return campania;
+    }
 
 }

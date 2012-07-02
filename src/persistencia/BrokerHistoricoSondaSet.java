@@ -4,6 +4,7 @@
  */
 package persistencia;
 
+import controllers.ControllerCampania;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,6 +51,7 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
     
     public boolean insertSondaSet(SondaSetHistorico sondaSetNuevo){
         boolean sePudo=false;
+        ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(1);
         try {
              if (sondaSetNuevo.getUsadoDesde() != null){
                  getPsInsert().setLong(1, sondaSetNuevo.getUsadoDesde().getTime());
@@ -68,9 +70,11 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
              getPsInsert().setInt(11,sondaSetNuevo.getUnidadDeEscala());
              System.out.println("Insert SSH: "+getPsInsert().toString());
              if (getPsInsert().executeUpdate() > 0) {
+                ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(2);
                 sePudo = true;
              }
         } catch (SQLException ex) {
+            ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(0);
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return sePudo;

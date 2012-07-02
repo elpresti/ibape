@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import modelo.dataManager.AdministraCampanias;
 import persistencia.BrokerConfig;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
@@ -22,12 +23,23 @@ public class ControllerPpal {
             modelo.gisModule.Browser.getInstance().cerrarBrowserPortable();            
         }
         controllers.ControllerPpal.getInstance().guardarConfigPanelConfig();
+        if ( (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) && 
+             (AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado() == 1) ){
+            controllers.ControllerCampania.getInstance().setEstadoCampaniaEnCurso(2); //si hay alguna campania en curso, la pauso
+        }
     }
     
     public void accionesAlIniciar(){
         controllers.ControllerConfig.getInstance().inicializaConexiones();        
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
+        controllers.ControllerCampania.getInstance();
+        if (AdministraCampanias.getInstance().cargaUltimaCampaniaPausada()){ 
+            gui.PanelOpcCampanias.getInstance().setGuiCampaniaIniciada();
+            gui.PanelOpcCampanias.getInstance().setGuiCampaniaPausada();
+            gui.PanelOpcCampanias.getInstance().cargarDatosDeCampaniaEnCurso();
+            gui.PanelOpcCampanias.getInstance().marcaCampaniaEnCurso();
+        }        
     }
     
     public static ControllerPpal getInstance() {

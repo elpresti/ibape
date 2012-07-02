@@ -102,12 +102,13 @@ public class AdministraCampanias {
     public boolean finalizarCampaniaEnCurso(){
         boolean sePudo=false;
         try {
-            //traigo de memoria el objeto que representa la campañas en curso
+            //traigo de memoria el objeto que representa la campaña en curso
             Campania campEnCurso = getCampaniaEnCurso();
             //lo quito de la lista de campañas en memoria
-            campanias.remove(campEnCurso);
+            quitaDeCampanias(campEnCurso.getId());
             //le grabo la fecha de finalización actual
             campEnCurso.setFechaFin(Calendar.getInstance().getTime());
+            campEnCurso.setEstado(0);
             //lo actualizo en la base de datos
             persistencia.BrokerCampania.getInstance().updateCampania(campEnCurso);
             //lo vuelvo a agregar actualizado a la lista de campañas en memoria
@@ -190,6 +191,33 @@ public class AdministraCampanias {
      */
     public void setCampaniaEnCurso(Campania campaniaEnCurso) {
         this.campaniaEnCurso = campaniaEnCurso;
+    }
+    
+    public boolean cargaUltimaCampaniaPausada(){
+        boolean hayCampPausada=false;
+        modelo.dataManager.Campania campPausada = persistencia.BrokerCampania.getInstance().getCampaniaPausada();
+        if (campPausada != null){
+            setCampaniaEnCurso(campPausada);
+            hayCampPausada=true;
+        }
+        return hayCampPausada;
+    }
+
+    private boolean quitaDeCampanias(int id) {
+        boolean encontro = false;
+        int i=0;
+        while (i<campanias.size() && !encontro){
+            if (campanias.get(i).getId() == id){
+                encontro = true;
+            }
+            else{
+                i++;
+            }
+        }
+        if (encontro){
+            campanias.remove(i);
+        }
+        return encontro;
     }
     
 }
