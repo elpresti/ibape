@@ -240,7 +240,7 @@ public class OperacionesBasicas {
 
         while (contAncho < ancho) {
             limSup=fondo[contAncho-1]-5;
-            limSup=fondo[contAncho-1]+5;
+            limInf=fondo[contAncho-1]+5;
             if (todoFondo(img, contAncho, fondo[contAncho-1],limSup, limInf,col)) {
                 fondo[contAncho] = limSup;
             } else {
@@ -279,7 +279,7 @@ public class OperacionesBasicas {
         }
         if (noencontrofondo==true) {
             return -1;
-        } else return alto;
+        } else return alto++;
     }
 
     public boolean hayNegroDondeEstoy(BufferedImage img, int ancho, int alto, Colores col){
@@ -301,7 +301,7 @@ public class OperacionesBasicas {
         }
         if (noencontrofondo==true) {
             return -1;
-        } else return alto;
+        } else return alto--;
     }
 
     public int hayBlancoArriba(BufferedImage img, int ancho, int alto, int limSup, int limInf, Colores col){
@@ -317,7 +317,7 @@ public class OperacionesBasicas {
         if (noencontrofondo == true) {
             return -1;
         } else {
-            return alto;
+            return alto++;
         }
     }
 
@@ -340,7 +340,7 @@ public class OperacionesBasicas {
         }
         if (noencontrofondo==true) {
             return -1;
-        } else return alto;
+        } else return alto--;
     }
 
     public boolean hayHueco(BufferedImage img, int ancho, int alto, int limSup, int limInf, Colores col){
