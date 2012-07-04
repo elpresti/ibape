@@ -11,13 +11,16 @@
 package gui;
 
 import javax.swing.table.DefaultTableModel;
+import modelo.dataManager.CategoriaPoi;
 
 /**
  *
  * @author Sebastian
  */
 public class PanelOpcPOIs extends javax.swing.JPanel {
+
     static PanelOpcPOIs unicaInstancia;
+
     /** Creates new form PanelOpcPOIs */
     private PanelOpcPOIs() {
         initComponents();
@@ -205,6 +208,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnAgregaPoi.setMaximumSize(new java.awt.Dimension(70, 23));
         btnAgregaPoi.setMinimumSize(new java.awt.Dimension(70, 23));
         btnAgregaPoi.setPreferredSize(new java.awt.Dimension(70, 23));
+        btnAgregaPoi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregaPoiActionPerformed(evt);
+            }
+        });
         panelBtnAgregaPoi.add(btnAgregaPoi);
 
         panelAgregaPoi.add(panelBtnAgregaPoi, java.awt.BorderLayout.EAST);
@@ -327,6 +335,12 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboCategoriasActionPerformed
 
+    private void btnAgregaPoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaPoiActionPerformed
+        // TODO add your handling code here:
+        CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
+        controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText());
+        cargaTablaPOI();
+    }//GEN-LAST:event_btnAgregaPoiActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregaCategoria;
     private javax.swing.JButton btnAgregaPoi;
@@ -361,30 +375,43 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXTable tablaPois;
     // End of variables declaration//GEN-END:variables
 
-
     public static PanelOpcPOIs getInstance() {
-       if (unicaInstancia == null) {
-          unicaInstancia = new PanelOpcPOIs();          
-       }
-       return unicaInstancia;
+        if (unicaInstancia == null) {
+            unicaInstancia = new PanelOpcPOIs();
+        }
+        return unicaInstancia;
     }
 
     private void inicializador() {
         try {
-            tablaPois.setModel(controllers.ControllerPois.getInstance().cargaGrillaPOIS());
-            tablaPois.repaint();
+            cargaTablaPOI();
+            //carga combo
+            comboCategorias.removeAllItems();
+            for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
+                comboCategorias.addItem(cP);
+            }
+            //obtengo ide del selected recuperando el objeto:
+            //CategoriaPoi s = (CategoriaPoi) comboCategorias.getSelectedItem();
+            //s.getId();
+
+
         } catch (Exception e) {
             System.out.println(e);
         }
     }
-        //main de prueba
+    //main de prueba
+
     public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
         PanelOpcPOIs a = new PanelOpcPOIs();
         //cargaEspecies();
         elFrame.add(a);
-        elFrame.setVisible(true);        
+        elFrame.setVisible(true);
     }
-    
+
+    private void cargaTablaPOI() {
+        //carga tabla
+        tablaPois.setModel(controllers.ControllerPois.getInstance().cargaGrillaPOIS());
+    }
 }

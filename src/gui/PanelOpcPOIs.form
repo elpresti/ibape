@@ -380,6 +380,9 @@
                               <Dimension value="[70, 23]"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregaPoiActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>

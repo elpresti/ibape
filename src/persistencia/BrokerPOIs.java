@@ -46,8 +46,10 @@ public class BrokerPOIs extends BrokerPpal {
                 poi.setLongitud(rs.getDouble("posLon"));
                 poi.setFechaHora(rs.getDate("fechaHora"));
                 poi.setPathImg(rs.getString("pathImg"));
+                poi.setIdCampania(rs.getInt("idCampania"));
 
-                poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                //poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
                 //ver if null
                 poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
 
@@ -73,8 +75,10 @@ public class BrokerPOIs extends BrokerPpal {
                 poi.setLongitud(rs.getDouble("posLon"));
                 poi.setFechaHora(rs.getDate("fechaHora"));
                 poi.setPathImg(rs.getString("pathImg"));
+                poi.setIdCampania(rs.getInt("idCampania"));
 
-                poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                //poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
                 poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
 
             }
@@ -89,17 +93,22 @@ public class BrokerPOIs extends BrokerPpal {
         String sqlQuery = "";
         ResultSet rs;
         try {
-            String PathImg = null;
+            String PathImg = "";
             if (poi.getPathImg() != null) {
                 PathImg = "'" + poi.getPathImg() + "'";
             }
 
-            sqlQuery = "INSERT INTO Pois"
-                    + "(latitud,longitud,fechaHora,pathImg,categoria)"
-                    + "VALUES"
-                    + "(" + poi.getLatitud() + "," + poi.getLongitud() + "," + poi.getFechaHora()
-                    + "," + PathImg + "," + poi.getCategoria().getId()
-                    + ")";
+            String fechaHora = null;
+            if (poi.getFechaHora() != null) {
+                fechaHora = ""+poi.getFechaHora().getTime()+"";
+            }
+            
+            sqlQuery = "INSERT INTO Pois "
+                    + "(posLat,posLon,fechaHora,pathImg,idCategoriaPOI,IdCampania)"
+                    + " VALUES "
+                    + "(" + poi.getLatitud() + "," + poi.getLongitud() + "," + fechaHora
+                    + "," + PathImg + "," + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/
+                    + "," + "-1" +")"; 
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;//sin las marcas
@@ -142,10 +151,10 @@ public class BrokerPOIs extends BrokerPpal {
 
             sqlQuery = "UPDATE Pois SET"
                     + "pathImg= " + PathImg + ", "
-                    + "categoria=" + poi.getCategoria().getId() + ", "
+                    + "categoria=" + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/ + ", "
                     + " WHERE "
                     + "id=" + poi.getId();
-            System.out.println("Insert: " + sqlQuery);
+            System.out.println("update: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
             } else {
@@ -170,45 +179,6 @@ public class BrokerPOIs extends BrokerPpal {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return sePudo;
-    }
-
-    public DefaultTableModel rsToTable(ResultSet rs) {
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo = null;
-        try {
-            //Para establecer el modelo al JTable
-
-            //this.jtQuery.setModel(modelo);
-            //Para conectarnos a nuestra base de datos
-            //DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            //Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/bdproductos", "usuario", "clave");
-            //Para ejecutar la consulta
-            //Statement s = conexion.createStatement();
-            //Ejecutamos la consulta que escribimos en la caja de texto
-            //y los datos lo almacenamos en un ResultSet
-            //ResultSet rs = s.executeQuery(txtQuery.getText());
-            //Obteniendo la informacion de las columnas que estan siendo consultadas
-            java.sql.ResultSetMetaData rsMd = rs.getMetaData();
-            //La cantidad de columnas que tiene la consulta
-            int cantidadColumnas = rsMd.getColumnCount();
-            //Establecer como cabezeras el nombre de las colimnas
-            for (int i = 1; i <= cantidadColumnas; i++) {
-                modelo.addColumn(rsMd.getColumnLabel(i));
-            }
-            //Creando las filas para el JTable
-            while (rs.next()) {
-                Object[] fila = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    fila[i] = rs.getObject(i + 1);
-                }
-                modelo.addRow(fila);
-            }
-            //rs.close();
-            //conexion.close();
-        } catch (Exception ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
-        }
-        return modelo;
     }
     
 }

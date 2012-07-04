@@ -11,15 +11,18 @@ import java.util.ArrayList;
  * @author Sebastian
  */
 public class POI {
+
+    private int id;
+    private int idCategoriaPOI;
+    private int idCampania;
     private double latitud;
     private double longitud;
-    private java.util.Date fechaHora;    
-    private CategoriaPoi categoria;
-    private ArrayList<Marca> marcas;
     private String pathImg;
-    private int id;
-    
-    public POI(){        
+    private java.util.Date fechaHora;
+    private ArrayList<Marca> marcas;
+    private String descripcion;
+
+    public POI() {
     }
 
     /**
@@ -76,7 +79,7 @@ public class POI {
      */
     public void setPathImg(String pathImg) {
         this.pathImg = pathImg;
-    }   
+    }
 
     /**
      * @return the marcas
@@ -90,24 +93,10 @@ public class POI {
      */
     public void setMarcas(ArrayList<Marca> marcas) {
         this.marcas = marcas;
-    }    
-
-    /**
-     * @return the categoria
-     */
-    public CategoriaPoi getCategoria() {
-        return categoria;
     }
 
-    /**
-     * @param categoria the categoria to set
-     */
-    public void setCategoria(CategoriaPoi categoria) {
-        this.categoria = categoria;
-    }
-
-    public double calculaProfPromMarcas(){
-        double profProm=0;
+    public double calculaProfPromMarcas() {
+        double profProm = 0;
         //---------- metodo pendiente --------
         return profProm;
     }
@@ -120,5 +109,42 @@ public class POI {
         return this.id;
     }
 
+    /**
+     * @return the idCategoriaPOI
+     */
+    public int getIdCategoriaPOI() {
+        return idCategoriaPOI;
+    }
 
+    /**
+     * @param idCategoriaPOI the idCategoriaPOI to set
+     */
+    public void setIdCategoriaPOI(int idCategoriaPOI) {
+        this.idCategoriaPOI = idCategoriaPOI;
+    }
+
+    public void setDescripcion(String desc) {
+        this.descripcion = desc;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @return the idCampania
+     */
+    public int getIdCampania() {
+        return idCampania;
+    }
+
+    /**
+     * @param idCampania the idCampania to set
+     */
+    public void setIdCampania(int idCampania) {
+        this.idCampania = idCampania;
+    }
 }

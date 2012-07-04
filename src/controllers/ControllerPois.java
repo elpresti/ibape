@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import modelo.dataManager.POI;
+import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerPOIs;
 
 /**
@@ -27,7 +28,7 @@ public class ControllerPois {
         return unicaInstancia;
     }
 
-    private Object[] agregaUnaFilaPOI(int id, String categoria, double latitud, double longitud, Date fechaHora) {
+    private Object[] agregaUnaFilaPOI(int id, Date fechaHora, String categoria, double latitud, double longitud) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Object[] fila = new Object[6]; //creamos la fila
 
@@ -45,7 +46,7 @@ public class ControllerPois {
     }
 
     public DefaultTableModel cargaGrillaPOIS() {
-      DefaultTableModel dm = new DefaultTableModel();
+        DefaultTableModel dm = new DefaultTableModel();
         //Cabecera
         String[] encabezado = new String[6];
         encabezado[0] = "id";
@@ -53,12 +54,32 @@ public class ControllerPois {
         encabezado[2] = "Categoria";
         encabezado[3] = "Coordenadas";
         encabezado[4] = "Descripcion";
-        encabezado[5] = "Acciones";       
-        dm.setColumnIdentifiers(encabezado);  
+        encabezado[5] = "Acciones";
+        dm.setColumnIdentifiers(encabezado);
         //Cuerpo
         for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-            dm.addRow(agregaUnaFilaPOI(p.getId(), p.getCategoria().getTitulo(), p.getLatitud(), p.getLongitud(), p.getFechaHora()));
+            dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getLatitud(), p.getLongitud()));
         }
-      return dm;
+        return dm;
+    }
+
+    public ArrayList<modelo.dataManager.CategoriaPoi> cargaCategoriasPOI() {
+        return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
+    }
+
+    public void agregaPOI(int idCategoriaPOI, String descripcion) {
+
+        modelo.dataManager.Punto punto = modelo.dataManager.Punto.getInstance();
+
+        modelo.dataManager.POI p = new POI();
+        p.setFechaHora(punto.getFechaYhora());
+        p.setIdCategoriaPOI(idCategoriaPOI);
+        p.setLatitud(punto.getLatitud());
+        p.setLongitud(punto.getLongitud());
+        p.setDescripcion(descripcion);
+        p.setMarcas(null);
+        p.setPathImg("c:\\");
+
+        BrokerPOIs.getInstance().insertPOI(p);
     }
 }
