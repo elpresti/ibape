@@ -385,16 +385,16 @@ public abstract class BrokerPpal {
         try {
             String codigoCreacion = "CREATE TABLE Pois ("
                     + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    + "  idcategoriapoi     integer NOT NULL,"
-                    + "  idcampania         integer NOT NULL,"
+                    + "  idCategoriaPoi     integer NOT NULL,"
+                    + "  idCampania         integer NOT NULL,"
                     + "  posLat             float(30) NOT NULL,"
                     + "  posLon             float(30) NOT NULL,"
                     + "  pathImg            nvarchar(100),"
-                    + "  fechahora          TIMESTAMP NOT NULL,"
+                    + "  fechaHora          TIMESTAMP NOT NULL,"
                     + "  /* Foreign keys */ "
-                    + "  FOREIGN KEY (idcampania)"
+                    + "  FOREIGN KEY (idCampania)"
                     + "    REFERENCES Campanias(id)"
-                    + "  FOREIGN KEY (idcategoriapoi)"
+                    + "  FOREIGN KEY (idCategoriaPoi)"
                     + "    REFERENCES CategoriasPoi(id)"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
