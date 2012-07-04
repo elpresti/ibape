@@ -10,6 +10,8 @@
  */
 package gui;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Sebastian
@@ -370,6 +372,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private void inicializador() {
         try {
             tablaPois.setModel(controllers.ControllerPois.getInstance().cargaGrillaPOIS());
+            tablaPois.repaint();
         } catch (Exception e) {
             System.out.println(e);
         }
