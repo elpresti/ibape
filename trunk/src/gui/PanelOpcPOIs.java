@@ -19,6 +19,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     /** Creates new form PanelOpcPOIs */
     private PanelOpcPOIs() {
         initComponents();
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -364,5 +365,23 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
           unicaInstancia = new PanelOpcPOIs();          
        }
        return unicaInstancia;
-    }        
+    }
+
+    private void inicializador() {
+        try {
+            tablaPois.setModel(controllers.ControllerPois.getInstance().cargaGrillaPOIS());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+        //main de prueba
+    public static void main(String[] args) {
+        javax.swing.JFrame elFrame = new javax.swing.JFrame();
+        elFrame.setSize(500, 500);
+        PanelOpcPOIs a = new PanelOpcPOIs();
+        //cargaEspecies();
+        elFrame.add(a);
+        elFrame.setVisible(true);        
+    }
+    
 }

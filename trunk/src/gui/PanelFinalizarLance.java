@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerLance;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +24,7 @@ import persistencia.Logueador;
  * @author Sebastian
  */
 public class PanelFinalizarLance extends javax.swing.JPanel {
-
+    
     static PanelFinalizarLance unicaInstancia;
 
     /** Creates new form PanelFinalizarLance */
@@ -199,7 +200,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         lblEspecie.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComboEspecie.add(lblEspecie);
 
-        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12));
         comboEspecies.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abadejo", "Anchoita", "Merluza", "Calamar" }));
         comboEspecies.setMaximumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setMinimumSize(new java.awt.Dimension(200, 20));
@@ -220,6 +221,11 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jButton1.setText("Agregar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         panelBtnAgregar.add(jButton1);
 
         panelEspecie.add(panelBtnAgregar);
@@ -289,12 +295,26 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private void comboEspeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEspeciesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboEspeciesActionPerformed
-
+    
     private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
         // TODO add your handling code here:
         controllers.ControllerLance.getInstance().guardaLance();
     }//GEN-LAST:event_btnGuardarLanceActionPerformed
-
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Cajon unCajon = new Cajon();
+        unCajon.setIdLance(0);//ver
+        unCajon.setIdEspecie(ControllerLance.getInstance().getIdxNombreEspecie(comboEspecies.getSelectedItem().toString()));
+        unCajon.setCantidad(strToInt(campoCajones.getText()));
+        ControllerLance.getInstance().addCajon(unCajon);
+        
+        Object fila[]=new Object[3];
+        fila[0]="1";//idespecie
+        fila[1]=campoCajones.getText();
+        fila[2]="";
+        tablaCajones.add(fila);
+    }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLance;
     private javax.swing.JTextField campoCajones;
@@ -331,19 +351,18 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         }
         return unicaInstancia;
     }
-
-    public void cargaComboEspecies(ArrayList<String> arr){
-        
-    }
     
+    public void cargaComboEspecies(ArrayList<String> arr) {
+    }
+
     //main de prueba 
     /*
     public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
-        PanelFinalizarLance a= new PanelFinalizarLance();
+        PanelFinalizarLance a = new PanelFinalizarLance();
         //cargaEspecies();
-        elFrame.add(a); 
+        elFrame.add(a);
         elFrame.setVisible(true);
         
     }
@@ -352,12 +371,12 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         cargaEspecies();
         controllers.ControllerLance.getInstance();
     }
-
+    
     private void cargaEspecies() {
         try {
-             BrokerEspecie.getInstance().creaConexionNueva(); //sacar
+            BrokerEspecie.getInstance().creaConexionNueva(); //sacar
             comboEspecies.removeAllItems();
-            for (Especie i : BrokerEspecie.getInstance().getEspeciesFromDB()) {
+            for (Especie i : controllers.ControllerLance.getInstance().getListadoEspecies()) {
                 comboEspecies.addItem(i.getNombre());
             }
         } catch (Exception e) {
@@ -365,15 +384,29 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         }
     }
     
-    public ArrayList<Cajon> getCajones(){
-        ArrayList<Cajon> listaCajones = null;
-        Cajon unCajon= new Cajon();
+    public ArrayList<Cajon> getCajones() {
+        //------------
         for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-            unCajon.setIdLance(0);
+            
+        }
+
+        //------------
+        ArrayList<Cajon> listaCajones = null;
+        Cajon unCajon = new Cajon();
+        for (int i = 0; i < tablaCajones.getRowCount(); i++) {
+            unCajon.setIdLance(0); //que lance?
           //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
           //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
             listaCajones.add(unCajon);
         }
         return listaCajones;
+    }
+    
+    public String getComentarios() {
+        if (!txtComentarios.getText().isEmpty()) {
+            return txtComentarios.getText();
+        } else {
+            return "";
+        }
     }
 }

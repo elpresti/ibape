@@ -4,9 +4,13 @@
  */
 package persistencia;
 
+import com.mysql.jdbc.ResultSetMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Marca;
 
 /**
@@ -39,7 +43,7 @@ public class BrokerPOIs extends BrokerPpal {
                 // Get the data from the row using the column name
                 poi.setId(rs.getInt("id"));
                 poi.setLatitud(rs.getDouble("posLat"));
-                poi.setLongitud(rs.getDouble("posLong"));
+                poi.setLongitud(rs.getDouble("posLon"));
                 poi.setFechaHora(rs.getDate("fechaHora"));
                 poi.setPathImg(rs.getString("pathImg"));
 
@@ -66,7 +70,7 @@ public class BrokerPOIs extends BrokerPpal {
                 // Get the data from the row using the column name
                 poi.setId(rs.getInt("id"));
                 poi.setLatitud(rs.getDouble("posLat"));
-                poi.setLongitud(rs.getDouble("posLong"));
+                poi.setLongitud(rs.getDouble("posLon"));
                 poi.setFechaHora(rs.getDate("fechaHora"));
                 poi.setPathImg(rs.getString("pathImg"));
 
@@ -167,4 +171,44 @@ public class BrokerPOIs extends BrokerPpal {
         }
         return sePudo;
     }
+
+    public DefaultTableModel rsToTable(ResultSet rs) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo = null;
+        try {
+            //Para establecer el modelo al JTable
+
+            //this.jtQuery.setModel(modelo);
+            //Para conectarnos a nuestra base de datos
+            //DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            //Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/bdproductos", "usuario", "clave");
+            //Para ejecutar la consulta
+            //Statement s = conexion.createStatement();
+            //Ejecutamos la consulta que escribimos en la caja de texto
+            //y los datos lo almacenamos en un ResultSet
+            //ResultSet rs = s.executeQuery(txtQuery.getText());
+            //Obteniendo la informacion de las columnas que estan siendo consultadas
+            java.sql.ResultSetMetaData rsMd = rs.getMetaData();
+            //La cantidad de columnas que tiene la consulta
+            int cantidadColumnas = rsMd.getColumnCount();
+            //Establecer como cabezeras el nombre de las colimnas
+            for (int i = 1; i <= cantidadColumnas; i++) {
+                modelo.addColumn(rsMd.getColumnLabel(i));
+            }
+            //Creando las filas para el JTable
+            while (rs.next()) {
+                Object[] fila = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    fila[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(fila);
+            }
+            //rs.close();
+            //conexion.close();
+        } catch (Exception ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        return modelo;
+    }
+    
 }
