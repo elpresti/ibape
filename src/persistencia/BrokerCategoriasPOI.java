@@ -7,6 +7,7 @@ package persistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import modelo.dataManager.CategoriaPoi;
 
 /**
  *
@@ -49,17 +50,16 @@ public class BrokerCategoriasPOI extends BrokerPpal {
     }
 
     public modelo.dataManager.CategoriaPoi getCatPOIFromDB(int id) {
-        modelo.dataManager.CategoriaPoi CatPOI = null;
+        modelo.dataManager.CategoriaPoi CatPOI = new CategoriaPoi();
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
         ResultSet rs;
         try {
             rs = getStatement().executeQuery("SELECT * FROM CategoriasPoi WHERE id = " + id);
-            if (rs != null) {
-                modelo.dataManager.CategoriaPoi catPoi = new modelo.dataManager.CategoriaPoi();
+            if (rs != null) {        
                 // Get the data from the row using the column name
-                catPoi.setId(rs.getInt("id"));
-                catPoi.setPathIcono(rs.getString("pathIcono"));
-                catPoi.setTitulo(rs.getString("titulo"));
+                CatPOI.setId(rs.getInt("id"));
+                CatPOI.setPathIcono(rs.getString("pathIcono"));
+                CatPOI.setTitulo(rs.getString("titulo"));
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
