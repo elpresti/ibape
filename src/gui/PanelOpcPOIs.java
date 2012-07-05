@@ -385,6 +385,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private void inicializador() {
         try {
             cargaTablaPOI();
+            cargaTablaCategoriasPOI();
             //carga combo
             comboCategorias.removeAllItems();
             for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
@@ -413,5 +414,10 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private void cargaTablaPOI() {
         //carga tabla
         tablaPois.setModel(controllers.ControllerPois.getInstance().cargaGrillaPOIS());
+    }
+
+    private void cargaTablaCategoriasPOI() {
+        //carga tablaCategoriasPOI
+        tablaCategorias.setModel(controllers.ControllerPois.getInstance().cargaGrillaCategoriaPOIS());
     }
 }
