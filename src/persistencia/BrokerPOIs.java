@@ -12,6 +12,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Marca;
+import modelo.dataManager.POI;
+import sun.text.normalizer.Trie.DataManipulate;
 
 /**
  *
@@ -47,6 +49,7 @@ public class BrokerPOIs extends BrokerPpal {
                 poi.setFechaHora(rs.getDate("fechaHora"));
                 poi.setPathImg(rs.getString("pathImg"));
                 poi.setIdCampania(rs.getInt("idCampania"));
+                poi.setDescripcion(rs.getString("descripcion"));
 
                 //poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
                 poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
@@ -62,7 +65,7 @@ public class BrokerPOIs extends BrokerPpal {
     }
 
     public modelo.dataManager.POI getPOIFromDB(int id) {
-        modelo.dataManager.POI poi = null;
+        modelo.dataManager.POI poi = new modelo.dataManager.POI();
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
         ResultSet rs;
         try {
@@ -76,7 +79,7 @@ public class BrokerPOIs extends BrokerPpal {
                 poi.setFechaHora(rs.getDate("fechaHora"));
                 poi.setPathImg(rs.getString("pathImg"));
                 poi.setIdCampania(rs.getInt("idCampania"));
-
+                poi.setDescripcion(rs.getString("descripcion"));
                 //poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
                 poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
                 poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
@@ -98,21 +101,26 @@ public class BrokerPOIs extends BrokerPpal {
                 PathImg = "'" + poi.getPathImg() + "'";
             }
 
+            String Desc = "";
+            if (poi.getDescripcion() != null) {
+                Desc = "'" + poi.getDescripcion() + "'";
+            }
+
             String fechaHora = null;
             if (poi.getFechaHora() != null) {
-                fechaHora = ""+poi.getFechaHora().getTime()+"";
+                fechaHora = "" + poi.getFechaHora().getTime() + "";
             }
-            
+
             sqlQuery = "INSERT INTO Pois "
-                    + "(posLat,posLon,fechaHora,pathImg,idCategoriaPOI,IdCampania)"
+                    + "(posLat,posLon,fechaHora,pathImg,idCategoriaPOI,IdCampania,descripcion)"
                     + " VALUES "
                     + "(" + poi.getLatitud() + "," + poi.getLongitud() + "," + fechaHora
                     + "," + PathImg + "," + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/
-                    + "," + "-1" +")"; 
+                    + "," + "-1" + "," + Desc + ")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;//sin las marcas
-                if (!poi.getMarcas().isEmpty()) {
+                if (poi.getMarcas() != null) {
                     //recuperar el id para insertar las marcas
                     sqlQuery = "SELECT max(id) from Pois";
                     System.out.println("Select: " + sqlQuery);
@@ -128,7 +136,7 @@ public class BrokerPOIs extends BrokerPpal {
                     }
                     sePudo = true;
                 } else {
-                    sePudo = false;
+                    sePudo = false; //marcas=null
                 }
             } else {
                 sePudo = false;
@@ -180,5 +188,4 @@ public class BrokerPOIs extends BrokerPpal {
         }
         return sePudo;
     }
-    
 }
