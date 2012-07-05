@@ -10,15 +10,51 @@
  */
 package gui;
 
+import controllers.ControllerCampania;
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import org.jdesktop.swingx.JXLabel;
+
+
+
+
+//clases y métodos para crear la tabla y sus componentes
+
 /**
  *
  * @author Sebastian
  */
 public class PanelHistorico extends javax.swing.JPanel {
     static PanelHistorico unicaInstancia;
+    private DefaultTableModel modeloTabla;
+    private ButtonGroup grupoElijeCampania;
+    private int idCampaniaElegida;
+    private int NRO_COL_ID_CAMP;
+    private int NRO_COL_ELEGIR;
+    private int NRO_COL_FECHA_INI;
+    private int NRO_COL_FECHA_FIN;
+    private int NRO_COL_BARCO;
+    private int NRO_COL_CAJONES;
+    private int NRO_COL_CAPITAN;
+    private int NRO_COL_NOMBRE_CAMP;
+    private int cantColumnas;
+    
+    
     /** Creates new form PanelHistorico */
     private PanelHistorico() {
         initComponents();
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -56,7 +92,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelTitulo.setMinimumSize(new java.awt.Dimension(500, 40));
         panelTitulo.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        lblTituloHistorico.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTituloHistorico.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblTituloHistorico.setText("Datos Historicos");
         panelTitulo.add(lblTituloHistorico);
 
@@ -68,25 +104,18 @@ public class PanelHistorico extends javax.swing.JPanel {
 
         tablaCampanias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"", null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Elegir", "Fecha", "Pesca [cajones]", "Resumen Campaña"
+                "Id", "Elegir", "Fecha Inicio", "Fecha Fin", "Pesca [cajones]", "Barco", "Capitan", "Nombre de Campaña"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.String.class
-            };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false
+                false, true, false, false, false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -96,15 +125,25 @@ public class PanelHistorico extends javax.swing.JPanel {
         tablaCampanias.setPreferredScrollableViewportSize(new java.awt.Dimension(500, 200));
         tablaCampanias.setPreferredSize(new java.awt.Dimension(500, 200));
         jScrollPane1.setViewportView(tablaCampanias);
-        tablaCampanias.getColumnModel().getColumn(0).setMinWidth(40);
-        tablaCampanias.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tablaCampanias.getColumnModel().getColumn(0).setMaxWidth(40);
-        tablaCampanias.getColumnModel().getColumn(1).setMinWidth(80);
-        tablaCampanias.getColumnModel().getColumn(1).setPreferredWidth(80);
-        tablaCampanias.getColumnModel().getColumn(1).setMaxWidth(80);
-        tablaCampanias.getColumnModel().getColumn(2).setMinWidth(50);
-        tablaCampanias.getColumnModel().getColumn(2).setPreferredWidth(50);
-        tablaCampanias.getColumnModel().getColumn(2).setMaxWidth(50);
+        tablaCampanias.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaCampanias.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaCampanias.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaCampanias.getColumnModel().getColumn(1).setMinWidth(30);
+        tablaCampanias.getColumnModel().getColumn(1).setPreferredWidth(30);
+        tablaCampanias.getColumnModel().getColumn(1).setMaxWidth(200);
+        tablaCampanias.getColumnModel().getColumn(2).setMinWidth(80);
+        tablaCampanias.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tablaCampanias.getColumnModel().getColumn(2).setMaxWidth(200);
+        tablaCampanias.getColumnModel().getColumn(3).setMinWidth(80);
+        tablaCampanias.getColumnModel().getColumn(3).setPreferredWidth(80);
+        tablaCampanias.getColumnModel().getColumn(3).setMaxWidth(200);
+        tablaCampanias.getColumnModel().getColumn(4).setMinWidth(20);
+        tablaCampanias.getColumnModel().getColumn(4).setPreferredWidth(20);
+        tablaCampanias.getColumnModel().getColumn(4).setMaxWidth(200);
+        tablaCampanias.getColumnModel().getColumn(5).setMinWidth(20);
+        tablaCampanias.getColumnModel().getColumn(5).setPreferredWidth(20);
+        tablaCampanias.getColumnModel().getColumn(6).setMinWidth(20);
+        tablaCampanias.getColumnModel().getColumn(6).setPreferredWidth(20);
 
         panelCampanias.add(jScrollPane1);
 
@@ -120,11 +159,11 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 100));
         panelSuperior.setLayout(new java.awt.GridLayout(4, 1));
 
-        lblTxtDatosMapa.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lblTxtDatosMapa.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblTxtDatosMapa.setText("Datos mostrados en el mapa:");
         panelSuperior.add(lblTxtDatosMapa);
 
-        chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12));
+        chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRecorrido.setText("Recorrido");
         panelSuperior.add(chkRecorrido);
 
@@ -138,7 +177,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelSuperior.add(chkPois);
 
         lblTxtTabla.setAlignment(java.awt.Label.CENTER);
-        lblTxtTabla.setFont(new java.awt.Font("Tahoma", 2, 11));
+        lblTxtTabla.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         lblTxtTabla.setText("Seleccione las categorias de POIs que desea ver en el mapa");
         panelSuperior.add(lblTxtTabla);
 
@@ -229,5 +268,116 @@ public class PanelHistorico extends javax.swing.JPanel {
        }
        return unicaInstancia;
     }
+    
+    public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan,
+            int estado, Date fechaInicio, Date fechaFin, int cantCajones) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Object[] fila = new Object[cantColumnas]; //creamos la fila
+        if (fechaInicio != null) { fila[NRO_COL_FECHA_INI]=sdf.format(fechaInicio); }
+        if (fechaFin != null){ fila[NRO_COL_FECHA_FIN]=sdf.format(fechaFin); }
+        fila[NRO_COL_CAPITAN]=capitan;
+        fila[NRO_COL_NOMBRE_CAMP]=nombre;
+        fila[NRO_COL_BARCO]=barco;
+        fila[NRO_COL_ID_CAMP]=id;
+        fila[NRO_COL_CAJONES]=cantCajones;        
+        JRadioButton radioBtnCampania = new JRadioButton();
+        grupoElijeCampania.add(radioBtnCampania);//lo agrego al grupo, lo cual me garantiza la selección simple
+        fila[NRO_COL_ELEGIR]= radioBtnCampania;
 
+        modeloTabla.addRow(fila);
+    }    
+
+    public void vaciaTabla() {                
+        modeloTabla.setRowCount(0);
+        setIdCampaniaElegida(-1);
+    }
+    
+    private void inicializador() {
+        NRO_COL_ID_CAMP=0;
+        NRO_COL_ELEGIR=1;
+        NRO_COL_FECHA_INI=2;
+        NRO_COL_FECHA_FIN=3;
+        NRO_COL_CAJONES=4;
+        NRO_COL_BARCO=5;
+        NRO_COL_CAPITAN=6;
+        NRO_COL_NOMBRE_CAMP=7;
+        cantColumnas=8;
+        modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
+        tablaCampanias.setModel(modeloTabla);        
+        idCampaniaElegida = -1;
+        //seteo los radiobotones de la tabla
+        grupoElijeCampania = new ButtonGroup();
+        tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer());
+        tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
+    }
+     
+    public void marcaCampaniaEnCurso(){    
+        boolean encontro=false;
+        //recorre las campañas de la tabla y cuando encuentre una que no tiene fecha de fin,
+        //será la campaña en curso, y en su fecha de fin le pondrá el texto que la distinga
+        int i = 0;
+        int idLeido;
+        while ((i<modeloTabla.getRowCount()) && (!(encontro))){
+            idLeido=(Integer)modeloTabla.getValueAt(i, NRO_COL_ID_CAMP);
+            if (idLeido == ControllerCampania.getInstance().getIdCampaniaEnCurso()){
+                encontro = true;
+            }
+            else
+            {   i++;  }
+        }
+        if (encontro) {
+            modeloTabla.setValueAt("EN CURSO", i, NRO_COL_FECHA_FIN);
+        }
+    }
+
+
+    /**
+     * @return the idCampaniaElegida
+     */
+    public int getIdCampaniaElegida() {
+        return idCampaniaElegida;
+    }
+
+    /**
+     * @param idCampaniaElegida the idCampaniaElegida to set
+     */
+    public void setIdCampaniaElegida(int idCampaniaElegida) {
+        if (idCampaniaElegida>=0){ 
+            this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());                        
+        }
+        else
+          { this.idCampaniaElegida = idCampaniaElegida; }
+    }
+    
+}
+
+
+// --- clases y metodos que cargan los componentes de la tabla ---
+class RadioButtonRenderer implements TableCellRenderer {
+  public Component getTableCellRendererComponent(JTable table, Object value,
+                   boolean isSelected, boolean hasFocus, int row, int column) {
+    if (value==null) return null;
+    return (Component)value;
+  }
+}
+ 
+class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
+  private JRadioButton button;
+  public RadioButtonEditor(JCheckBox checkBox) {
+    super(checkBox);
+  }
+  public Component getTableCellEditorComponent(JTable table,Object value,boolean isSelected,int row,int column) {
+    if (value==null) return null;
+    button = (JRadioButton)value;
+    button.addItemListener(this);
+    PanelHistorico.getInstance().setIdCampaniaElegida(row);
+    return (Component)value;
+  }
+  public Object getCellEditorValue() {
+    button.removeItemListener(this);
+    return button;
+  }
+  public void itemStateChanged(ItemEvent e) {    
+    super.fireEditingStopped();
+  }
 }

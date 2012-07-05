@@ -253,7 +253,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     }
     
     public void setGpsDesconectado(){
-        GpsEstado.setBackground(Color.red);
+        GpsEstado.setBackground(new Color(204,0,0));
         GpsEstado.setToolTipText("Desconectado");
         lblGpsEstado.setForeground(Color.white);
     }
@@ -271,7 +271,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     }
 
     public void setSondaDesconectado(){
-        SondaEstado.setBackground(Color.red);
+        SondaEstado.setBackground(new Color(204,0,0));
         SondaEstado.setToolTipText("Desconectado");
         lblSondaEstado.setForeground(Color.white);
     }    
@@ -289,7 +289,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     }
     
     public void setLanDesconectado() {
-        LanEstado.setBackground(Color.red);
+        LanEstado.setBackground(new Color(204,0,0));
         LanEstado.setToolTipText("Desconectado");
         lblLanEstado.setForeground(Color.white);
     }    
@@ -313,7 +313,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     }
 
     public void setHistoricoDesactivado() {
-        HistoricoEstado.setBackground(Color.red);
+        HistoricoEstado.setBackground(new Color(204,0,0));
         HistoricoEstado.setToolTipText("Desactivado");
         lblHistoricoEstado.setForeground(Color.white);
     }    

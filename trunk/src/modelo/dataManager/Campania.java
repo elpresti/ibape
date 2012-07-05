@@ -194,6 +194,11 @@ public class Campania {
         this.descripcion = descripcion;
     }
 
-
+    public int getCantTotalCajones(){
+        int cantTotal=0;
+        // metodo pendiente que debería obtener de la tabla Cajones todos los cajones 
+        // (no importa la especie) que correspondan al ID de esta campaña (JOIN con los lances q sean de esta campaña)
+        return cantTotal;
+    }
     
 }
