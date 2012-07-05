@@ -202,9 +202,9 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         tablaCampanias.getColumnModel().getColumn(7).setMinWidth(0);
         tablaCampanias.getColumnModel().getColumn(7).setPreferredWidth(0);
         tablaCampanias.getColumnModel().getColumn(7).setMaxWidth(0);
-        tablaCampanias.getColumnModel().getColumn(8).setMinWidth(30);
-        tablaCampanias.getColumnModel().getColumn(8).setPreferredWidth(30);
-        tablaCampanias.getColumnModel().getColumn(8).setMaxWidth(30);
+        tablaCampanias.getColumnModel().getColumn(8).setMinWidth(40);
+        tablaCampanias.getColumnModel().getColumn(8).setPreferredWidth(40);
+        tablaCampanias.getColumnModel().getColumn(8).setMaxWidth(40);
 
         panelTablaCampanias.add(jScrollPane1);
 
@@ -702,6 +702,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     public void setGuiCampaniaPausada() {
         btnPausarReanudarCampania.setText("Reanudar campaña");
+        gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(false);
         setEstadoCampania(2);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
@@ -709,6 +710,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     public void setGuiCampaniaReanudada() {
         btnPausarReanudarCampania.setText("Pausar campaña");
         setEstadoCampania(1);
+        gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(true);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
 
@@ -723,6 +725,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         btnPausarReanudarCampania.setText("Pausar campaña");
         setEstadoCampania(0);
         historicoDeCampania.setVisible(false);
+        gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(false);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
 
