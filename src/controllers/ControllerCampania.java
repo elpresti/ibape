@@ -52,8 +52,10 @@ public class ControllerCampania {
         boolean sePudo=false;
         if (AdministraCampanias.getInstance().eliminarCampania(AdministraCampanias.getInstance().getCampania(idCampania))){
             gui.PanelOpcCampanias.getInstance().cargaGrillaCampanias();
-            sePudo=true;
-        }        
+            sePudo=true; 
+        }
+        else
+          { JOptionPane.showMessageDialog(null, "No se pudo eliminar del disco el historico de la campaña y/o la campaña de la base de datos"); }
         return sePudo;
     }
 

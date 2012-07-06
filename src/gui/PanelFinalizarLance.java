@@ -305,15 +305,15 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         // TODO add your handling code here:
         Cajon unCajon = new Cajon();
         unCajon.setIdLance(0);//ver
-        unCajon.setIdEspecie(ControllerLance.getInstance().getIdxNombreEspecie(comboEspecies.getSelectedItem().toString()));
-        unCajon.setCantidad(strToInt(campoCajones.getText()));
+        // unCajon.setIdEspecie(ControllerLance.getInstance().getIdxNombreEspecie(comboEspecies.getSelectedItem().toString()));
+        // unCajon.setCantidad(strToInt(campoCajones.getText()));
         ControllerLance.getInstance().addCajon(unCajon);
         
         Object fila[]=new Object[3];
         fila[0]="1";//idespecie
         fila[1]=campoCajones.getText();
         fila[2]="";
-        tablaCajones.add(fila);
+        // tablaCajones.add(fila);
     }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLance;

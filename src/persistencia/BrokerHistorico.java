@@ -10,6 +10,8 @@ import modelo.dataManager.Campania;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.PuntoHistorico;
 import modelo.dataManager.SondaSetHistorico;
@@ -95,24 +97,19 @@ public abstract class BrokerHistorico implements Runnable{
         return sePudo;
     }    
     
-    private void close() {
-/*                
+    public void closeDbConnection() {   
         try {
-                if (getResultSet() != null) {
-                        getResultSet().close();
-                }
-
                 if (getStatement() != null) {
                         getStatement().close();
                 }
 
-                if (connect != null) {
-                        connect.close();
+                if (getConexion() != null) {
+                        getConexion().close();
                 }
         } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.getStackTrace().toString());
             System.out.println(e);
         }
-*/
     }
     
     public void run() {
@@ -157,9 +154,13 @@ public abstract class BrokerHistorico implements Runnable{
      * @return the conexion
      */
     public Connection getConexion() {
-        if (conexion == null){
-            creaConexionNueva();
-        }        
+        try {
+            if ((conexion == null) || (conexion != null && conexion.isClosed())){
+                creaConexionNueva();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(BrokerHistorico.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return conexion;
     }
 
@@ -269,19 +270,19 @@ public abstract class BrokerHistorico implements Runnable{
     }
     
     public boolean borrarDirectorio (File directorio){
-        boolean sePudo = false;
+        boolean sePudo = true;
         try{
              File[] ficheros = directorio.listFiles();
              for (int x=0;x<ficheros.length;x++){
                 if (ficheros[x].isDirectory()) {
                 borrarDirectorio(ficheros[x]);
                 }
-                ficheros[x].delete();                 
+                sePudo=sePudo && ficheros[x].delete();                 
              }
-             sePudo=true;
         }
         catch (Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
+            sePudo=false;
         }
         return sePudo;
     }
