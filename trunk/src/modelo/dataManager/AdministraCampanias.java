@@ -61,7 +61,7 @@ public class AdministraCampanias {
             //si encuentra le actualiza sus valores, sino exception            
             persistencia.BrokerCampania.getInstance().updateCampania(campModificada);
             //la buscamos en el ArrayList de campanias y la borramos para agregar la modificada
-            campanias.remove(getCampania(campModificada.getId()));
+            quitaDeCampanias(campModificada.getId());
             campanias.add(campModificada);                        
             sePudo=true;
         }
@@ -86,13 +86,19 @@ public class AdministraCampanias {
                  }
                  
               }
-              //borra el objeto con ID campAeliminar.getId() de la TablaCampanias
-              boolean borraCampDeTabla = persistencia.BrokerCampania.getInstance().deleteCampania(campAeliminar);            
-              //borra el objeto con ID campAeliminar.getId() del ArrayList campanias (osea, de memoria)
-              campanias.remove(campAeliminar);
-
-              Logueador.getInstance().agregaAlLog("Se borró de la Base de Datos la campaña especificada");
-              sePudo=borraCampDeTabla && borraHistorico;
+              if (borraHistorico){
+                //borra el objeto con ID campAeliminar.getId() de la TablaCampanias
+                boolean borraCampDeTabla = persistencia.BrokerCampania.getInstance().deleteCampania(campAeliminar);            
+                //borra el objeto con ID campAeliminar.getId() del ArrayList campanias (osea, de memoria)
+                if (borraCampDeTabla){
+                    quitaDeCampanias(campAeliminar.getId());
+                    Logueador.getInstance().agregaAlLog("Se borró de la Base de Datos la campaña especificada");
+                    sePudo=true;
+                }
+                else{
+                    Logueador.getInstance().agregaAlLog("No se pudo borrar de la Base de Datos la campaña especificada");
+                }                
+              }
         }
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); }
@@ -111,6 +117,10 @@ public class AdministraCampanias {
             campEnCurso.setEstado(0);
             //lo actualizo en la base de datos
             persistencia.BrokerCampania.getInstance().updateCampania(campEnCurso);
+            //si estaba logueando datos, cierro la conexion a su DB Historico
+            if (campEnCurso.getFolderHistorico().length()>1){
+                persistencia.BrokerHistoricoPunto.getInstance().closeDbConnection();
+            }
             //lo vuelvo a agregar actualizado a la lista de campañas en memoria
             campanias.add(campEnCurso);
             //dejo vacía la campaña en curso

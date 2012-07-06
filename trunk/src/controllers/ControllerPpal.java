@@ -21,8 +21,8 @@ public class ControllerPpal {
         if (BrokerDbMapa.getInstance().isUsarMapaNavegacion()){
             modelo.gisModule.WebServer.getInstance().cerrarWebServer();        
             modelo.gisModule.Browser.getInstance().cerrarBrowserPortable();            
-        }
-        controllers.ControllerPpal.getInstance().guardarConfigPanelConfig();
+        } 
+        controllers.ControllerPpal.getInstance().guardarConfigPanelConfig(); 
         if ( (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) && 
              (AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado() == 1) ){
             controllers.ControllerCampania.getInstance().setEstadoCampaniaEnCurso(2); //si hay alguna campania en curso, la pauso

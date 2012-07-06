@@ -866,22 +866,24 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     public void marcaCampaniaEnCurso() {
-        boolean encontro = false;
-        //recorre las campañas de la tabla y cuando encuentre una que no tiene fecha de fin,
-        //será la campaña en curso, y en su fecha de fin le pondrá el texto que la distinga
-        int i = 0;
-        int idLeido;
-        while ((i < modeloTabla.getRowCount()) && (!(encontro))) {
-            idLeido = (Integer) modeloTabla.getValueAt(i, NRO_COL_ID_CAMP);
-            if (idLeido == ControllerCampania.getInstance().getIdCampaniaEnCurso()) {
-                encontro = true;
-            } else {
-                i++;
+        if (modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
+            boolean encontro = false;
+            //recorre las campañas de la tabla y cuando encuentre una que no tiene fecha de fin,
+            //será la campaña en curso, y en su fecha de fin le pondrá el texto que la distinga
+            int i = 0;
+            int idLeido;
+            while ((i < modeloTabla.getRowCount()) && (!(encontro))) {
+                idLeido = (Integer) modeloTabla.getValueAt(i, NRO_COL_ID_CAMP);
+                if (idLeido == ControllerCampania.getInstance().getIdCampaniaEnCurso()) {
+                    encontro = true;
+                } else {
+                    i++;
+                }
             }
-        }
-        if (encontro) {
-            modeloTabla.setValueAt("EN CURSO", i, NRO_COL_FECHA_FIN);
-        }
+            if (encontro) {
+                modeloTabla.setValueAt("EN CURSO", i, NRO_COL_FECHA_FIN);
+            }
+        }   
     }
 
     public void cargarDatosDeCampaniaEnCurso() {
