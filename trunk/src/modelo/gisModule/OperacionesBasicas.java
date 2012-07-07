@@ -233,7 +233,7 @@ public class OperacionesBasicas {
                 }
                 contAlto--;
             }
-        fondo[contAncho] = contAlto + 1;
+        fondo[contAncho] = contAlto + 2;
         contAncho++;        
         int limSup=0;
         int limInf=0;
@@ -245,7 +245,7 @@ public class OperacionesBasicas {
                 fondo[contAncho] = limSup;
             } else {
                 if (hayHueco(img, contAncho, fondo[contAncho-1], limSup, limInf, col)) {
-                    fondo[contAncho] = fondo[contAncho - 1];
+                    fondo[contAncho] = limInf;
                 } else {
                     if (hayBlancoDondeEstoy(img, contAncho, fondo[contAncho-1],col)) {
                         if (hayNegroArriba(img, contAncho, fondo[contAncho-1], limSup, limInf, col) != -1) {
@@ -279,7 +279,10 @@ public class OperacionesBasicas {
         }
         if (noencontrofondo==true) {
             return -1;
-        } else return alto++;
+        } else{
+                alto=alto+2;
+                return alto;
+              }
     }
 
     public boolean hayNegroDondeEstoy(BufferedImage img, int ancho, int alto, Colores col){
@@ -301,7 +304,10 @@ public class OperacionesBasicas {
         }
         if (noencontrofondo==true) {
             return -1;
-        } else return alto--;
+        } else{
+                alto=alto-2;
+                return alto;
+              }
     }
 
     public int hayBlancoArriba(BufferedImage img, int ancho, int alto, int limSup, int limInf, Colores col){
@@ -317,7 +323,8 @@ public class OperacionesBasicas {
         if (noencontrofondo == true) {
             return -1;
         } else {
-            return alto++;
+                alto++;
+            return alto;
         }
     }
 
@@ -340,7 +347,9 @@ public class OperacionesBasicas {
         }
         if (noencontrofondo==true) {
             return -1;
-        } else return alto--;
+        } else { alto--;
+            return alto;
+        }
     }
 
     public boolean hayHueco(BufferedImage img, int ancho, int alto, int limSup, int limInf, Colores col){
