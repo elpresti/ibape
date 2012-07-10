@@ -12,10 +12,11 @@ package modelo.alertas;
 public class Condicion {
     private float valorMinimo;
     private float valorMaximo;
-    private String relacion;
     private String descripcion;
     private int id;
     private int idVariable;
+    private int idRelacion;
+    private int idAlerta;
 
     /**
      * @return the valorMinimo
@@ -23,7 +24,18 @@ public class Condicion {
     public float getValorMinimo() {
         return valorMinimo;
     }
-
+    
+    public Condicion(int id,int idVariable,int idRelacion,float valorMinimo,float valorMaximo,String descripcion){
+        
+        this.id=id;
+        this.idRelacion=idRelacion;
+        this.idVariable=idVariable;
+        this.valorMinimo=valorMinimo;
+        this.valorMaximo=valorMaximo;
+        this.descripcion=descripcion;
+ 
+    }
+    
     /**
      * @param aValorMinimo the valorMinimo to set
      */
@@ -45,19 +57,8 @@ public class Condicion {
         valorMaximo = aValorMaximo;
     }
 
-    /**
-     * @return the relacion
-     */
-    public String getRelacion() {
-        return relacion;
-    }
 
-    /**
-     * @param aRelacion the relacion to set
-     */
-    public void setRelacion(String aRelacion) {
-        relacion = aRelacion;
-    }
+
 
     /**
      * @return the id
@@ -85,5 +86,33 @@ public class Condicion {
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    /**
+     * @return the idRelacion
+     */
+    public int getIdRelacion() {
+        return idRelacion;
+    }
+
+    /**
+     * @param idRelacion the idRelacion to set
+     */
+    public void setIdRelacion(int idRelacion) {
+        this.idRelacion = idRelacion;
+    }
+
+    /**
+     * @return the idAlerta
+     */
+    public int getIdAlerta() {
+        return idAlerta;
+    }
+
+    /**
+     * @param idAlerta the idAlerta to set
+     */
+    public void setIdAlerta(int idAlerta) {
+        this.idAlerta = idAlerta;
     }
 }

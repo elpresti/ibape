@@ -126,7 +126,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelTitulo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
         lblTituloCampanias.setText("Campañas");
-        lblTituloCampanias.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTituloCampanias.setFont(new java.awt.Font("Arial", 0, 18));
         panelTitulo.add(lblTituloCampanias);
 
         add(panelTitulo, java.awt.BorderLayout.NORTH);
@@ -151,7 +151,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelTituloTabla.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblTituloTabla.setText("Listado de campañas en disco:");
-        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTituloTabla.add(lblTituloTabla);
 
         panelTablaCampanias.add(panelTituloTabla);
@@ -184,7 +184,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaCampanias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tablaCampanias.setFont(new java.awt.Font("Tahoma", 0, 12));
         tablaCampanias.setRowHeight(30);
         tablaCampanias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -217,7 +217,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
 
         lblAccionesCampania.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesCampania.setText("Acciones sobre la campaña elegida:");
-        lblAccionesCampania.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccionesCampania.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelAccionesCampElegida.add(lblAccionesCampania);
 
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
@@ -270,7 +270,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelTituloNuevaCampania.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
         lblNuevaCampania.setText("Nueva Campaña:");
-        lblNuevaCampania.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNuevaCampania.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTituloNuevaCampania.add(lblNuevaCampania);
 
         panelNuevaCampania.add(panelTituloNuevaCampania, java.awt.BorderLayout.NORTH);
@@ -291,7 +291,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelLblNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
 
         lblNombre.setText("Nombre");
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblNombre.add(lblNombre);
 
         panelNombreCamp.add(panelLblNombre);
@@ -301,7 +301,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelCampoNombre.setPreferredSize(new java.awt.Dimension(350, 43));
         panelCampoNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
-        campoNombreCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoNombreCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         campoNombreCampania.setMaximumSize(new java.awt.Dimension(200, 21));
         campoNombreCampania.setMinimumSize(new java.awt.Dimension(200, 21));
         campoNombreCampania.setPreferredSize(new java.awt.Dimension(200, 21));
@@ -322,7 +322,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelLbBarco.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
 
         lblBarco.setText("Barco");
-        lblBarco.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblBarco.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLbBarco.add(lblBarco);
 
         panelBarcoCamp.add(panelLbBarco);
@@ -332,7 +332,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelCampoBarco.setPreferredSize(new java.awt.Dimension(350, 43));
         panelCampoBarco.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
-        campoBarcoCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoBarcoCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         campoBarcoCampania.setMaximumSize(new java.awt.Dimension(200, 21));
         campoBarcoCampania.setMinimumSize(new java.awt.Dimension(200, 21));
         campoBarcoCampania.setPreferredSize(new java.awt.Dimension(200, 21));
@@ -353,7 +353,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelLblCapitan.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 10));
 
         lblCapitan.setText("Capitan");
-        lblCapitan.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCapitan.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblCapitan.add(lblCapitan);
 
         panelCapitanCamp.add(panelLblCapitan);
@@ -363,7 +363,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelCampoCapitan.setPreferredSize(new java.awt.Dimension(350, 43));
         panelCampoCapitan.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
-        campoCapitanCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoCapitanCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         campoCapitanCampania.setMaximumSize(new java.awt.Dimension(200, 21));
         campoCapitanCampania.setMinimumSize(new java.awt.Dimension(200, 21));
         campoCapitanCampania.setPreferredSize(new java.awt.Dimension(200, 21));
@@ -380,7 +380,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         jXTaskPaneContainer1.setBackground(new java.awt.Color(240, 240, 240));
         jXTaskPaneContainer1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        historicoDeCampania.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        historicoDeCampania.setFont(new java.awt.Font("Arial", 1, 14));
         historicoDeCampania.setTitle("Historico de campaña:");
         historicoDeCampania.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
@@ -389,7 +389,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelHistorico.setPreferredSize(new java.awt.Dimension(450, 150));
         panelHistorico.setLayout(new java.awt.GridLayout(5, 1));
 
-        chkHistoricoGpsSonda.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkHistoricoGpsSonda.setFont(new java.awt.Font("Tahoma", 0, 14));
         chkHistoricoGpsSonda.setSelected(true);
         chkHistoricoGpsSonda.setText("Guardar datos del GPS y la Sonda");
         chkHistoricoGpsSonda.addActionListener(new java.awt.event.ActionListener() {
@@ -399,13 +399,13 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelHistorico.add(chkHistoricoGpsSonda);
 
-        chkHistoricoPeces.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkHistoricoPeces.setFont(new java.awt.Font("Tahoma", 0, 14));
         chkHistoricoPeces.setSelected(true);
         chkHistoricoPeces.setText("Guardar datos obtenidos del procesamiento de imagen");
         chkHistoricoPeces.setEnabled(false);
         panelHistorico.add(chkHistoricoPeces);
 
-        chkHistoricoSondaSets.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkHistoricoSondaSets.setFont(new java.awt.Font("Tahoma", 0, 14));
         chkHistoricoSondaSets.setSelected(true);
         chkHistoricoSondaSets.setText("Guardar datos de configuración de la sonda");
         chkHistoricoSondaSets.setEnabled(false);
@@ -418,7 +418,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
 
         panelLogueoHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 3));
 
-        btnIniciarLogueoHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnIniciarLogueoHistorico.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnIniciarLogueoHistorico.setText("Iniciar Logueo");
         btnIniciarLogueoHistorico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -427,7 +427,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelLogueoHistorico.add(btnIniciarLogueoHistorico);
 
-        btnDetenerLogueoHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnDetenerLogueoHistorico.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnDetenerLogueoHistorico.setText("Detener Logueo");
         btnDetenerLogueoHistorico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -453,7 +453,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         panelBtnCampania.setPreferredSize(new java.awt.Dimension(500, 50));
         panelBtnCampania.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnComenzarCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnComenzarCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnComenzarCampania.setText("Iniciar campaña");
         btnComenzarCampania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -462,7 +462,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelBtnCampania.add(btnComenzarCampania);
 
-        btnPausarReanudarCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnPausarReanudarCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnPausarReanudarCampania.setText("Pausar campaña");
         btnPausarReanudarCampania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -471,7 +471,7 @@ public class PanelOpcCampanias extends javax.swing.JPanel {
         });
         panelBtnCampania.add(btnPausarReanudarCampania);
 
-        btnFinalizarCampania.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnFinalizarCampania.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnFinalizarCampania.setText("Finalizar campaña");
         btnFinalizarCampania.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
