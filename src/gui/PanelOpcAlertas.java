@@ -102,7 +102,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelOpcionesAlertas.setPreferredSize(new java.awt.Dimension(500, 60));
         panelOpcionesAlertas.setLayout(new java.awt.GridLayout(2, 1));
 
-        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14));
         chkAlertas.setLabel("Usar Alertas");
         chkAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -123,20 +123,20 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
 
         tablaAlertas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Activada", "Nombre", "Acciones", "Mensaje"
+                "Id_Alerta", "Activada", "Nombre", "Acciones", "Mensaje", "Flags"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, true
+                true, true, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -152,18 +152,19 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         tablaAlertas.setPreferredScrollableViewportSize(new java.awt.Dimension(480, 250));
         tablaAlertas.setPreferredSize(new java.awt.Dimension(480, 72));
         jScrollPane1.setViewportView(tablaAlertas);
-        tablaAlertas.getColumnModel().getColumn(0).setMinWidth(50);
-        tablaAlertas.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tablaAlertas.getColumnModel().getColumn(0).setMaxWidth(50);
         tablaAlertas.getColumnModel().getColumn(1).setMinWidth(50);
-        tablaAlertas.getColumnModel().getColumn(1).setPreferredWidth(100);
-        tablaAlertas.getColumnModel().getColumn(1).setMaxWidth(300);
-        tablaAlertas.getColumnModel().getColumn(2).setMinWidth(0);
-        tablaAlertas.getColumnModel().getColumn(2).setPreferredWidth(0);
-        tablaAlertas.getColumnModel().getColumn(2).setMaxWidth(0);
-        tablaAlertas.getColumnModel().getColumn(3).setMinWidth(100);
-        tablaAlertas.getColumnModel().getColumn(3).setPreferredWidth(200);
-        tablaAlertas.getColumnModel().getColumn(3).setMaxWidth(200);
+        tablaAlertas.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tablaAlertas.getColumnModel().getColumn(1).setMaxWidth(50);
+        tablaAlertas.getColumnModel().getColumn(2).setPreferredWidth(100);
+        tablaAlertas.getColumnModel().getColumn(3).setMinWidth(0);
+        tablaAlertas.getColumnModel().getColumn(3).setPreferredWidth(0);
+        tablaAlertas.getColumnModel().getColumn(3).setMaxWidth(0);
+        tablaAlertas.getColumnModel().getColumn(4).setMinWidth(100);
+        tablaAlertas.getColumnModel().getColumn(4).setPreferredWidth(200);
+        tablaAlertas.getColumnModel().getColumn(4).setMaxWidth(200);
+        tablaAlertas.getColumnModel().getColumn(5).setMinWidth(0);
+        tablaAlertas.getColumnModel().getColumn(5).setPreferredWidth(0);
+        tablaAlertas.getColumnModel().getColumn(5).setMaxWidth(0);
 
         panelTablaAlertas.add(jScrollPane1);
 
@@ -174,7 +175,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
 
         lblAccionesAlerta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesAlerta.setText("Acciones sobre la alerta elegida:");
-        lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelAccionesCampElegida.add(lblAccionesAlerta);
 
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
@@ -211,7 +212,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelBtnAgregar.setMinimumSize(new java.awt.Dimension(500, 40));
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 14));
         btnAgregar.setText("Agregar alerta");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

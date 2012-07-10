@@ -17,6 +17,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.alertas.Alerta;
+import modelo.alertas.Condicion;
+import modelo.alertas.Relacion;
+import modelo.alertas.Variable;
 
 /**
  *
@@ -30,16 +33,23 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
     private int NRO_COL_ACCIONES;
     private int cantColumnas;
     private boolean modificandoCondicion;
+    private boolean guardandoCondicion;
     private Color colorOriginalBtnIniciar;
     private DefaultTableModel modeloTabla;
     private Alerta alertaAct;
+    private ArrayList <modelo.alertas.Variable> variables;
+    private ArrayList <modelo.alertas.Relacion> relaciones;
+    private boolean configCombo1=false;
+    private boolean configCombo2=false;
+    private int idProvCondicion;
+    
     
 
     /** Creates new form PanelOpcAlertasAgregaEdita */
     private PanelOpcAlertasAgregaEdita() {
         initComponents();
         inicializador();
-cargaIconosDeBotones();    }
+        cargaIconosDeBotones();    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -76,7 +86,9 @@ cargaIconosDeBotones();    }
         panelAcciones = new org.jdesktop.swingx.JXPanel();
         btnModificar = new org.jdesktop.swingx.JXHyperlink();
         btnEliminar = new org.jdesktop.swingx.JXHyperlink();
+        btnInsertar = new org.jdesktop.swingx.JXHyperlink();
         panelRelleno = new org.jdesktop.swingx.JXPanel();
+        jLabel1 = new javax.swing.JLabel();
         panelNuevaCondicion = new org.jdesktop.swingx.JXPanel();
         panelDatosCondicion = new org.jdesktop.swingx.JXPanel();
         panelVariable = new org.jdesktop.swingx.JXPanel();
@@ -94,11 +106,13 @@ cargaIconosDeBotones();    }
         lblValMin = new org.jdesktop.swingx.JXLabel();
         panelCampoValMin = new org.jdesktop.swingx.JXPanel();
         jTextField1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         panelValMax = new org.jdesktop.swingx.JXPanel();
         panelLblValMax = new org.jdesktop.swingx.JXPanel();
         lblValMax = new org.jdesktop.swingx.JXLabel();
         panelCampoValMax = new org.jdesktop.swingx.JXPanel();
         jTextField2 = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         panelBtnAgrega = new org.jdesktop.swingx.JXPanel();
         btnAgregar = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
@@ -118,7 +132,7 @@ cargaIconosDeBotones();    }
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblAlertaNueva.setText("Alerta Nueva");
-        lblAlertaNueva.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblAlertaNueva.setFont(new java.awt.Font("Tahoma", 0, 18));
         panelSuperior.add(lblAlertaNueva);
 
         panelAgregaEdita.add(panelSuperior, java.awt.BorderLayout.NORTH);
@@ -144,7 +158,7 @@ cargaIconosDeBotones();    }
         panelLblNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblNombre.setText("Nombre");
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblNombre.add(lblNombre);
 
         panelNombre.add(panelLblNombre);
@@ -154,7 +168,7 @@ cargaIconosDeBotones();    }
         panelCampoNombre.setPreferredSize(new java.awt.Dimension(350, 33));
         panelCampoNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        campoNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        campoNombre.setFont(new java.awt.Font("Tahoma", 0, 14));
         campoNombre.setText("Ingrese aqui el nombre de la alerta");
         campoNombre.setMaximumSize(new java.awt.Dimension(300, 23));
         campoNombre.setMinimumSize(new java.awt.Dimension(300, 23));
@@ -173,7 +187,7 @@ cargaIconosDeBotones();    }
         panelLblEstado.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblEstado.setText("Estado");
-        lblEstado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblEstado.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblEstado.add(lblEstado);
 
         panelEstado.add(panelLblEstado);
@@ -183,7 +197,7 @@ cargaIconosDeBotones();    }
         panelComboEstado.setPreferredSize(new java.awt.Dimension(350, 33));
         panelComboEstado.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboEstado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        comboEstado.setFont(new java.awt.Font("Tahoma", 0, 14));
         comboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Desactivada", "Activada" }));
         comboEstado.setMaximumSize(new java.awt.Dimension(150, 23));
         comboEstado.setMinimumSize(new java.awt.Dimension(150, 23));
@@ -199,7 +213,7 @@ cargaIconosDeBotones();    }
         panelTxtCondiciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblCondiciones.setText("Condiciones que deben cumplirse para que ocurra la alerta:");
-        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelTxtCondiciones.add(lblCondiciones);
 
         panelDatosAlerta.add(panelTxtCondiciones);
@@ -214,17 +228,17 @@ cargaIconosDeBotones();    }
 
         tablaCondiciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Descripcion", "Accion"
+                "null", "Descripcion", "Accion"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true
+                true, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -232,13 +246,21 @@ cargaIconosDeBotones();    }
             }
         });
         tablaCondiciones.setPreferredSize(new java.awt.Dimension(400, 72));
+        tablaCondiciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaCondicionesMouseClicked(evt);
+            }
+        });
         scrollTablaCondiciones.setViewportView(tablaCondiciones);
-        tablaCondiciones.getColumnModel().getColumn(0).setMinWidth(400);
-        tablaCondiciones.getColumnModel().getColumn(0).setPreferredWidth(400);
-        tablaCondiciones.getColumnModel().getColumn(0).setMaxWidth(400);
-        tablaCondiciones.getColumnModel().getColumn(1).setMinWidth(0);
-        tablaCondiciones.getColumnModel().getColumn(1).setPreferredWidth(0);
-        tablaCondiciones.getColumnModel().getColumn(1).setMaxWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(1).setMinWidth(400);
+        tablaCondiciones.getColumnModel().getColumn(1).setPreferredWidth(400);
+        tablaCondiciones.getColumnModel().getColumn(1).setMaxWidth(400);
+        tablaCondiciones.getColumnModel().getColumn(2).setMinWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(2).setPreferredWidth(0);
+        tablaCondiciones.getColumnModel().getColumn(2).setMaxWidth(0);
 
         panelTablaCondiciones.add(scrollTablaCondiciones);
 
@@ -248,8 +270,8 @@ cargaIconosDeBotones();    }
         panelAccionesCampElegida.setLayout(new java.awt.GridLayout(1, 2));
 
         lblAccionesCondicion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblAccionesCondicion.setText("Acciones sobre la alerta elegida:");
-        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccionesCondicion.setText("Acciones condición seleccionada");
+        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelAccionesCampElegida.add(lblAccionesCondicion);
 
         panelAcciones.setMinimumSize(new java.awt.Dimension(62, 17));
@@ -276,6 +298,16 @@ cargaIconosDeBotones();    }
         });
         panelAcciones.add(btnEliminar);
 
+        btnInsertar.setText("");
+        btnInsertar.setToolTipText("Eliminar campaña");
+        btnInsertar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnInsertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnInsertar);
+
         panelAccionesCampElegida.add(panelAcciones);
 
         panelTablaCondiciones.add(panelAccionesCampElegida);
@@ -283,6 +315,10 @@ cargaIconosDeBotones();    }
         panelMedio.add(panelTablaCondiciones);
 
         panelRelleno.setPreferredSize(new java.awt.Dimension(450, 10));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18));
+        panelRelleno.add(jLabel1);
+
         panelMedio.add(panelRelleno);
 
         panelNuevaCondicion.setAlignmentY(3.0F);
@@ -303,7 +339,7 @@ cargaIconosDeBotones();    }
         panelLblVariable.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblVariable.setText("Variable a monitorear");
-        lblVariable.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblVariable.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblVariable.add(lblVariable);
 
         panelVariable.add(panelLblVariable);
@@ -313,14 +349,25 @@ cargaIconosDeBotones();    }
         panelComboVariable.setPreferredSize(new java.awt.Dimension(300, 34));
         panelComboVariable.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Profundidad", "Latitud", "Longitud", "Fecha actual", "Hora actual", "Temperatura" }));
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jComboBox1.setMaximumSize(new java.awt.Dimension(200, 23));
         jComboBox1.setMinimumSize(new java.awt.Dimension(200, 23));
         jComboBox1.setPreferredSize(new java.awt.Dimension(200, 23));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
+            }
+        });
+        jComboBox1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jComboBox1InputMethodTextChanged(evt);
             }
         });
         panelComboVariable.add(jComboBox1);
@@ -337,7 +384,7 @@ cargaIconosDeBotones();    }
         panelLblRelacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblRelacion.setText("Relacion de variable");
-        lblRelacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblRelacion.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblRelacion.add(lblRelacion);
 
         panelRelacion.add(panelLblRelacion);
@@ -347,11 +394,15 @@ cargaIconosDeBotones();    }
         panelComboRelacion.setPreferredSize(new java.awt.Dimension(300, 34));
         panelComboRelacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Igual a", "Mayor a", "Menor a", "Entre" }));
+        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14));
         jComboBox2.setMaximumSize(new java.awt.Dimension(150, 23));
         jComboBox2.setMinimumSize(new java.awt.Dimension(150, 23));
         jComboBox2.setPreferredSize(new java.awt.Dimension(150, 23));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
         panelComboRelacion.add(jComboBox2);
 
         panelRelacion.add(panelComboRelacion);
@@ -366,7 +417,7 @@ cargaIconosDeBotones();    }
         panelLblValMin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblValMin.setText("Valor mínimo");
-        lblValMin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblValMin.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblValMin.add(lblValMin);
 
         panelValMin.add(panelLblValMin);
@@ -376,11 +427,12 @@ cargaIconosDeBotones();    }
         panelCampoValMin.setPreferredSize(new java.awt.Dimension(300, 34));
         panelCampoValMin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14));
         jTextField1.setMaximumSize(new java.awt.Dimension(150, 23));
         jTextField1.setMinimumSize(new java.awt.Dimension(150, 23));
         jTextField1.setPreferredSize(new java.awt.Dimension(150, 23));
         panelCampoValMin.add(jTextField1);
+        panelCampoValMin.add(jLabel3);
 
         panelValMin.add(panelCampoValMin);
 
@@ -394,7 +446,7 @@ cargaIconosDeBotones();    }
         panelLblValMax.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblValMax.setText("Valor máximo");
-        lblValMax.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblValMax.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelLblValMax.add(lblValMax);
 
         panelValMax.add(panelLblValMax);
@@ -404,11 +456,12 @@ cargaIconosDeBotones();    }
         panelCampoValMax.setPreferredSize(new java.awt.Dimension(300, 34));
         panelCampoValMax.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14));
         jTextField2.setMaximumSize(new java.awt.Dimension(150, 23));
         jTextField2.setMinimumSize(new java.awt.Dimension(150, 23));
         jTextField2.setPreferredSize(new java.awt.Dimension(150, 23));
         panelCampoValMax.add(jTextField2);
+        panelCampoValMax.add(jLabel2);
 
         panelValMax.add(panelCampoValMax);
 
@@ -430,14 +483,14 @@ cargaIconosDeBotones();    }
 
         scrollPanelMedio.setViewportView(panelMedio);
 
-        panelAgregaEdita.add(scrollPanelMedio, java.awt.BorderLayout.CENTER);
+        panelAgregaEdita.add(scrollPanelMedio, java.awt.BorderLayout.LINE_END);
 
         panelInferior.setMaximumSize(new java.awt.Dimension(500, 50));
         panelInferior.setMinimumSize(new java.awt.Dimension(500, 50));
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
         panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        btnVolver.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnVolver.setFont(new java.awt.Font("Tahoma", 0, 14));
         btnVolver.setText("Volver");
         btnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -446,7 +499,7 @@ cargaIconosDeBotones();    }
         });
         panelInferior.add(btnVolver);
 
-        btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnGuardar.setFont(new java.awt.Font("Tahoma", 0, 14));
         btnGuardar.setText("Guardar");
         panelInferior.add(btnGuardar);
 
@@ -456,7 +509,13 @@ cargaIconosDeBotones();    }
     }// </editor-fold>//GEN-END:initComponents
 
 private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-// TODO add your handling code here:
+    agregaCondicionTabla();    
+    setModificandoCondicion(false);
+    setGuardandoCondicion(true);
+    controlaPanelNuevaCondicion(false);
+    controlaPanelAccionesCondicion();
+    setGuardandoCondicion(false);
+    
     
 }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -467,8 +526,8 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 }//GEN-LAST:event_btnVolverActionPerformed
 
 private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-    setGuiModificarFilaElegida();
     setModificandoCondicion(true);
+    setGuiModificarFilaElegida();    
     controlaPanelAccionesCondicion();
 }//GEN-LAST:event_btnModificarActionPerformed
 
@@ -481,19 +540,54 @@ private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 }//GEN-LAST:event_btnEliminarActionPerformed
 
 private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-    // TODO add your handling code here:
+if (!configCombo1) {
+        cambioVariableAct();
+        actualizaPanelValoresUnidades();
+    }
 }//GEN-LAST:event_jComboBox1ActionPerformed
+
+private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+    if (!configCombo1) {
+        cambioVariableAct();
+
+        actualizaPanelValoresUnidades();
+    }
+    
+}//GEN-LAST:event_jComboBox1ItemStateChanged
+
+private void jComboBox1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jComboBox1InputMethodTextChanged
+
+}//GEN-LAST:event_jComboBox1InputMethodTextChanged
+
+private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    if (!configCombo2) {
+        cambioRelacionAct();
+        actualizaPanelValoresUnidades();
+    }
+}//GEN-LAST:event_jComboBox2ActionPerformed
+
+private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
+    controlaPanelNuevaCondicion(true);
+}//GEN-LAST:event_btnInsertarActionPerformed
+
+private void tablaCondicionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaCondicionesMouseClicked
+    controlaPanelAccionesCondicion();
+}//GEN-LAST:event_tablaCondicionesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private org.jdesktop.swingx.JXHyperlink btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private org.jdesktop.swingx.JXHyperlink btnInsertar;
     private org.jdesktop.swingx.JXHyperlink btnModificar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JTextField campoNombre;
     private javax.swing.JComboBox comboEstado;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private org.jdesktop.swingx.JXLabel lblAccionesCondicion;
@@ -566,11 +660,13 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         tablaCampanias.addColumn(columnaAcciones);        
         tablaCampanias.setEditingColumn(6);
         //tablaCampanias.setEditingRow(0);
-*/        
+*/      
+        idProvCondicion=10000;
         modificandoCondicion=false;
         NRO_COL_ID_CONDICION=0;
         NRO_COL_DESCRIPCION=1;
-        NRO_COL_DESCRIPCION=2;
+        NRO_COL_ACCIONES=2;
+        controlaPanelNuevaCondicion(false);
         cantColumnas=3;        
         modeloTabla = (DefaultTableModel) tablaCondiciones.getModel();
         tablaCondiciones.setModel(modeloTabla);
@@ -654,6 +750,7 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         private void cargaIconosDeBotones() {
         btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
         btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
+        btnInsertar.setIcon(new javax.swing.ImageIcon("imgs//iconos//icono.png"));
     }
     
     public static PanelOpcAlertasAgregaEdita getInstance() {
@@ -663,7 +760,35 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
        return unicaInstancia;
     }
 
-    private void cargaGrillaCondiciones() {
+
+
+    public void vaciaTabla() {
+        modeloTabla.setRowCount(0);
+    }
+
+    /**
+     * @return the alertaAct
+     */
+    public Alerta getAlertaAct() {
+        return alertaAct;
+    }
+
+    /**
+     * @param alertaAct the alertaAct to set
+     */
+    public void setAlertaAct(Alerta alertaAct) {
+        this.alertaAct = alertaAct;
+    }
+
+    public void agregaUnaFilaCondicion(int id, String descripcion) {
+        Object[] fila = new Object[cantColumnas]; //creamos la fila
+        fila[NRO_COL_ACCIONES]=panelAcciones;
+        fila[NRO_COL_ID_CONDICION]=id;
+        fila[NRO_COL_DESCRIPCION]=descripcion;
+        modeloTabla.addRow(fila);
+    }
+
+            private void cargaGrillaCondiciones() {
         vaciaTabla();
         if (!(getAlertaAct()==null)){
         List<modelo.alertas.Condicion> condiciones = getAlertaAct().getCondiciones();
@@ -688,45 +813,21 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
         }
     }
-
-    private void vaciaTabla() {
-        modeloTabla.setRowCount(0);
-    }
-
-    /**
-     * @return the alertaAct
-     */
-    public Alerta getAlertaAct() {
-        return alertaAct;
-    }
-
-    /**
-     * @param alertaAct the alertaAct to set
-     */
-    public void setAlertaAct(Alerta alertaAct) {
-        this.alertaAct = alertaAct;
-    }
-
-    private void agregaUnaFilaCondicion(int id, String descripcion) {
-        Object[] fila = new Object[cantColumnas]; //creamos la fila
-        fila[NRO_COL_ACCIONES]=panelAcciones;
-        fila[NRO_COL_ID_CONDICION]=id;
-        fila[NRO_COL_DESCRIPCION]=descripcion;
-        modeloTabla.addRow(fila);
-    }
-
+    
     private void controlaPanelAccionesCondicion() {
         
         boolean estado;
         
-        if ((modeloTabla.getRowCount()>0) && (getIdDeCondicionSeleccionada()>=0)){
+        if ((modeloTabla.getRowCount()>0) && (getIdDeCondicionSeleccionada()>=0) ){
            estado = true;
         }
         else { estado = false; }
         lblAccionesCondicion.setEnabled(estado);
+
         btnEliminar.setEnabled(estado);
         btnModificar.setEnabled(estado);  
-        if (isModificandoCondicion()){          
+        if (isModificandoCondicion()){
+            btnInsertar.setVisible(false);
             btnModificar.setVisible(false);
             btnEliminar.setVisible(false);
             tablaCondiciones.setEnabled(false);
@@ -735,6 +836,7 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             { 
               btnModificar.setVisible(true);
               btnEliminar.setVisible(true);
+              btnInsertar.setVisible(true);
               tablaCondiciones.setEnabled(true);            
             }
     }
@@ -754,7 +856,8 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }
 
     private int getIdDeCondicionSeleccionada() {
-                int salida = -1;
+        
+        int salida = -1;
         int filaSeleccionada = tablaCondiciones.getSelectedRow();
         if (filaSeleccionada>=0){
             salida = (Integer) modeloTabla.getValueAt(filaSeleccionada, NRO_COL_ID_CONDICION);
@@ -767,26 +870,43 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
        if (filaSeleccionada>=0){
            //Pendiente: Mostrar panel para modificacion de Condicion elegida
            
-           /*
-           lblNuevaAlerta.setText("Modificar datos de alerta:");
-           controlaPanelNuevaCampania(true);
-           campoBarcoCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_BARCO));           
-           campoCapitanCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_CAPITAN));
-           campoNombreCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_NOMBRE_CAMP));       
-           */
+           btnAgregar.setText("Guardar");
+           jLabel1.setText("Modificar datos de condición");
+           controlaPanelNuevaCondicion(true);
+           int indexCondicion=(int) modeloTabla.getValueAt(filaSeleccionada,NRO_COL_ID_CONDICION);
+           
+           controllers.ControllerAlertas.getInstance().cambiaDatosActuales(indexCondicion);
+           cargaPanelConfigCondicion();
        }
     }
 
     private void cargaPanelConfigCondicion() {
         
-        //Obtengo todas las variables de la BD
+        configCombo1=true;
+        configCombo2=true;
+        cargaComboVariables();
+        cargaComboRelacion();
+        actualizaPanelValoresUnidades();
+        configCombo1=false;
+        configCombo2=false;
         
-        jComboBox1.removeAllItems();
+        
+    }
+
+    private void agregaUnItemVariable(int id, String nombre) {
+        jComboBox1.addItem(nombre);
+    }
+
+    private void cargaComboVariables() {
+        
+        //Obtengo todas las variables de la BD
+        //jComboBox1.removeAllItems();
+        if (!modificandoCondicion){
         ControllerAlertas.getInstance().leeVariablesDB();
-        ArrayList <modelo.alertas.Variable> variables = controllers.ControllerAlertas.getVariables();
+        variables = controllers.ControllerAlertas.getInstance().getVariables();
  
         if ((!(variables == null)) && (variables.size() > 0)) {
-            // while (), pongo cada objeto Campania en la grilla de campanias                    
+            // while (), pongo cada objeto Condicion en la grilla de condiciones                    
             int i = 0;
             while (i < variables.size()) {
                 agregaUnItemVariable(
@@ -795,14 +915,145 @@ private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 i++;
             }
         }
+        controllers.ControllerAlertas.getInstance().setVariableAct(variables.get(0));
+        }else{
+            jComboBox1.setSelectedIndex(controllers.ControllerAlertas.getInstance().getVariableAct().getId());
+        }
+    }
+
+    private void cargaComboRelacion() {
+                
+        //Obtengo todas las relaciones de la BD
+        if (!modificandoCondicion){
+        ControllerAlertas.getInstance().leeRelacionesDB(controllers.ControllerAlertas.getInstance().getVariableAct().getId());
+        relaciones = controllers.ControllerAlertas.getInstance().getRelaciones();
+ 
+        if ((!(relaciones == null)) && (relaciones.size() > 0)) {
+            // while (), pongo cada objeto Condicion en la grilla de condiciones                    
+            int i = 0;
+            while (i < relaciones.size()) {
+                agregaUnItemRelacion(
+                        relaciones.get(i).getId(),
+                        relaciones.get(i).getDescripcion(),
+                        relaciones.get(i).getCantValores());
+                i++;
+            }
+        }
+        controllers.ControllerAlertas.getInstance().setRelacionAct(relaciones.get(0));
+        }else{
+            jComboBox2.setSelectedIndex(controllers.ControllerAlertas.getInstance().getRelacionAct().getId());
         
-        jComboBox1.addItem(alertaAct);
+        }
     }
 
-    private void agregaUnItemVariable(int id, String nombre) {
-        jComboBox1.addItem(nombre);
+    private void agregaUnItemRelacion(int id, String descripcion, int cantValores) {
+        jComboBox2.addItem(descripcion);
+    }
+
+    private void actualizaPanelValoresUnidades() {
+        
+        if (controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores()==1){
+            panelValMax.disable();            
+            lblValMin.setText("Valor");
+            lblValMax.setText("");
+            jLabel2.setText("");           
+            jTextField2.hide();
+            Condicion condicionAct=controllers.ControllerAlertas.getInstance().getCondicionAct();
+            if (condicionAct!=null){
+            jTextField1.setText(Float.toString(condicionAct.getValorMinimo()));
+            }
+            
+        }else{
+            lblValMin.setText("Valor mínimo");
+            lblValMax.setText("Valor máximo");
+            panelValMax.enable();
+            jLabel2.show();
+            jTextField2.show();
+            Condicion condicionAct=controllers.ControllerAlertas.getInstance().getCondicionAct();
+            if (condicionAct!=null){
+                jTextField1.setText(Float.toString(condicionAct.getValorMinimo()));
+                jTextField2.setText(Float.toString(condicionAct.getValorMaximo()));                      
+            }
+            jLabel2.setText(controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad());
+            
+        }
+        jLabel3.setText(controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad());
+        
+    }
+
+    private void cambioVariableAct() {
+        controllers.ControllerAlertas.getInstance().setVariableAct(variables.get(jComboBox1.getSelectedIndex()));
+    }
+
+    private void cambioRelacionAct() {
+        controllers.ControllerAlertas.getInstance().setRelacionAct(relaciones.get(jComboBox2.getSelectedIndex()));
+    }
+
+    public void agregaCondicionTabla(){
+        
+        if (isModificandoCondicion()){
+                   
+            int filaSeleccionada = tablaCondiciones.getSelectedRow();
+            int backIdProvCondicion=idProvCondicion;
+            idProvCondicion=(int) modeloTabla.getValueAt(filaSeleccionada,NRO_COL_ID_CONDICION);
+            
+            int cantValores=controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores();
+            String descripcion="";
+            Float valorMin= new Float(jTextField1.getText());
+        
+            if (cantValores==1){
+            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();
+            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, -1, descripcion);    
+            }else{
+            Float valorMax= new Float(jTextField2.getText());
+            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad()+" y "+jTextField2.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();             
+            }
+            modeloTabla.setValueAt(descripcion,filaSeleccionada,NRO_COL_DESCRIPCION);
+            idProvCondicion=backIdProvCondicion+1;
+            
+                }else{
+            
+                    int cantValores=controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores();
+                    String descripcion="";
+                    Float valorMin= new Float(jTextField1.getText());
+
+                    if (cantValores==1){
+                        descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();
+                        controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, -1, descripcion);
+
+                    }else{
+                        Float valorMax= new Float(jTextField2.getText());
+                        descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad()+" y "+jTextField2.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();     
+                        controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(),valorMin, valorMax, descripcion);    
+                    }
+                    agregaUnaFilaCondicion(idProvCondicion,descripcion);
+        }
+        
+        
+    }
+
+    private void controlaPanelNuevaCondicion(boolean b) {
+        
+        panelDatosCondicion.setEnabled(b);
+    }
+
+    /**
+     * @return the guardandoCondicion
+     */
+    public boolean isGuardandoCondicion() {
+        return guardandoCondicion;
+    }
+
+    /**
+     * @param guardandoCondicion the guardandoCondicion to set
+     */
+    public void setGuardandoCondicion(boolean guardandoCondicion) {
+        this.guardandoCondicion = guardandoCondicion;
     }
 
 
 
+
+
+    
 }

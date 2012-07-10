@@ -77,9 +77,9 @@ public class BrokerAlertas extends BrokerPpal{
                for (Condicion c:alerta.getCondiciones()){
                    if (c.getId()==0){
                     sqlQuery = "INSERT INTO Condiciones"
-                        + "(idVariable,idAlerta,valor1,valor2,relacion,descripcion)"
+                        + "(idVariable,idAlerta,valor1,valor2,idRelacion,descripcion)"
                         + "VALUES"
-                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getRelacion()+","+c.getDescripcion()+")";
+                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getIdRelacion()+","+c.getDescripcion()+")";
                         System.out.println("Insert: "+sqlQuery);
                         if (getStatement().executeUpdate(sqlQuery) > 0) {
                             sePudo = true;
@@ -363,9 +363,9 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
                for (Condicion c:alerta.getCondiciones()){        
                         
                         sqlQuery = "INSERT INTO Condiciones"
-                        + "(idVariable,idAlerta,valor1,valor2,relacion,descripcion)"
+                        + "(idVariable,idAlerta,valor1,valor2,idRelacion,descripcion)"
                         + "VALUES"
-                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getRelacion()+","+c.getDescripcion()+")";
+                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getIdRelacion()+","+c.getDescripcion()+")";
                         System.out.println("Insert: "+sqlQuery);
                         if (getStatement().executeUpdate(sqlQuery) > 0) {
                             sePudo = true;

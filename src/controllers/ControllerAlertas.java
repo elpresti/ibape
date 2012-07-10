@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.alertas.AdministraAlertas;
+import modelo.alertas.Alerta;
 import modelo.alertas.Condicion;
 import modelo.alertas.Relacion;
 import modelo.alertas.Variable;
@@ -22,8 +23,13 @@ import persistencia.Logueador;
  */
 public class ControllerAlertas {
     static ControllerAlertas unicaInstancia;
-    private static ArrayList<Variable> variables;
-    private static ArrayList<Relacion> relaciones;
+    private ArrayList<Variable> variables;
+    private ArrayList<Relacion> relaciones;
+    private ArrayList<Condicion> condicionesAct=new ArrayList<Condicion>();
+    private Condicion condicionAct;
+    private Relacion relacionAct;
+    private Variable variableAct;
+    private Alerta alertaAct;
    
     public static ControllerAlertas getInstance() {
        if (unicaInstancia == null)
@@ -34,21 +40,21 @@ public class ControllerAlertas {
     /**
      * @return the variables
      */
-    public static ArrayList<Variable> getVariables() {
+    public ArrayList<Variable> getVariables() {
         return variables;
     }
 
     /**
      * @return the relaciones
      */
-    public static ArrayList<Relacion> getRelaciones() {
+    public ArrayList<Relacion> getRelaciones() {
         return relaciones;
     }
 
     /**
      * @param aRelaciones the relaciones to set
      */
-    public static void setRelaciones(ArrayList<Relacion> aRelaciones) {
+    public void setRelaciones(ArrayList<Relacion> aRelaciones) {
         relaciones = aRelaciones;
     }
 
@@ -154,6 +160,85 @@ public class ControllerAlertas {
             sePudo=false;
         }
         return sePudo;
+    }
+
+    public void agregaCondicionAct(int idProvCondicion,int idRelacion,int idVariable,float valMin, float valMax,String descripcion){
+            boolean sePudo=false;
+            
+            Condicion condicion=new Condicion(idProvCondicion,idRelacion,idVariable,valMin,valMax,descripcion);
+            sePudo=condicionesAct.add(condicion);
+
+    }
+
+    public void cambiaDatosActuales(int indexCondicion) {
+        boolean encontro=false;
+        int i=0;
+        while ((!encontro)&&(i<=condicionesAct.size()-1)){
+            if (indexCondicion==condicionesAct.get(i).getId()){
+                setCondicionAct(condicionesAct.get(i));
+                setRelacionAct(relaciones.get(getCondicionAct().getIdRelacion()));
+                setVariableAct(variables.get(getCondicionAct().getIdVariable()));               
+            }
+            i++;
+        }
+    }
+
+    /**
+     * @return the relacionAct
+     */
+    public Relacion getRelacionAct() {
+        return relacionAct;
+    }
+
+    /**
+     * @param relacionAct the relacionAct to set
+     */
+    public void setRelacionAct(Relacion relacionAct) {
+        this.relacionAct = relacionAct;
+    }
+
+    /**
+     * @return the variableAct
+     */
+    public Variable getVariableAct() {
+        return variableAct;
+    }
+
+    /**
+     * @param variableAct the variableAct to set
+     */
+    public void setVariableAct(Variable variableAct) {
+        this.variableAct = variableAct;
+    }
+    
+
+
+    /**
+     * @return the alertaAct
+     */
+    public Alerta getAlertaAct() {
+        return alertaAct;
+    }
+
+    /**
+     * @param alertaAct the alertaAct to set
+     */
+    public void setAlertaAct(Alerta alertaAct) {
+        this.alertaAct = alertaAct;
+    }
+
+    /**
+     * @return the condicionAct
+     */
+    public Condicion getCondicionAct() {
+        return condicionAct;
+    }
+
+    /**
+     * @param condicionAct the condicionAct to set
+     */
+    public void setCondicionAct(Condicion condicionAct) {
+        this.condicionAct = condicionAct;
     }
     
 }
