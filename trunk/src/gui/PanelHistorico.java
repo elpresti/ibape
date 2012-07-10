@@ -24,6 +24,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import org.jdesktop.swingx.JXLabel;
 
 
@@ -31,6 +33,9 @@ import org.jdesktop.swingx.JXLabel;
 
 //clases y métodos para crear la tabla y sus componentes
 
+
+
+// --- clases y metodos que cargan los componentes de la tabla ---
 /**
  *
  * @author Sebastian
@@ -75,11 +80,11 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelSuperior = new javax.swing.JPanel();
         lblTxtDatosMapa = new java.awt.Label();
         chkRecorrido = new javax.swing.JCheckBox();
-        chkPois = new javax.swing.JCheckBox();
-        lblTxtTabla = new java.awt.Label();
+        chkPoisTodos = new javax.swing.JCheckBox();
+        lblTxtTablaCatPois = new java.awt.Label();
         panelInferior = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jXTable1 = new org.jdesktop.swingx.JXTable();
+        tablaCatPois = new org.jdesktop.swingx.JXTable();
         panelBtnGraficar = new javax.swing.JPanel();
         btnGraficar = new javax.swing.JButton();
 
@@ -165,21 +170,26 @@ public class PanelHistorico extends javax.swing.JPanel {
 
         chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRecorrido.setText("Recorrido");
-        panelSuperior.add(chkRecorrido);
-
-        chkPois.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        chkPois.setText("Puntos de Interes (POI)");
-        chkPois.addActionListener(new java.awt.event.ActionListener() {
+        chkRecorrido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkPoisActionPerformed(evt);
+                chkRecorridoActionPerformed(evt);
             }
         });
-        panelSuperior.add(chkPois);
+        panelSuperior.add(chkRecorrido);
 
-        lblTxtTabla.setAlignment(java.awt.Label.CENTER);
-        lblTxtTabla.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        lblTxtTabla.setText("Seleccione las categorias de POIs que desea ver en el mapa");
-        panelSuperior.add(lblTxtTabla);
+        chkPoisTodos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkPoisTodos.setText("Puntos de Interes (POI) de todas las campañas");
+        chkPoisTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPoisTodosActionPerformed(evt);
+            }
+        });
+        panelSuperior.add(chkPoisTodos);
+
+        lblTxtTablaCatPois.setAlignment(java.awt.Label.CENTER);
+        lblTxtTablaCatPois.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblTxtTablaCatPois.setText("Seleccione las categorias de POIs que desea ver en el mapa");
+        panelSuperior.add(lblTxtTablaCatPois);
 
         panelInfoMapa.add(panelSuperior);
 
@@ -192,7 +202,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         jScrollPane2.setMinimumSize(new java.awt.Dimension(450, 120));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(450, 120));
 
-        jXTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaCatPois.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -215,11 +225,11 @@ public class PanelHistorico extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(jXTable1);
-        jXTable1.getColumnModel().getColumn(0).setMinWidth(40);
-        jXTable1.getColumnModel().getColumn(0).setPreferredWidth(40);
-        jXTable1.getColumnModel().getColumn(0).setMaxWidth(40);
-        jXTable1.getColumnModel().getColumn(1).setPreferredWidth(200);
+        jScrollPane2.setViewportView(tablaCatPois);
+        tablaCatPois.getColumnModel().getColumn(0).setMinWidth(40);
+        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(40);
+        tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(200);
 
         panelInferior.add(jScrollPane2);
 
@@ -238,20 +248,38 @@ public class PanelHistorico extends javax.swing.JPanel {
         add(panelBtnGraficar);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void chkPoisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chkPoisActionPerformed
+    private void chkPoisTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodosActionPerformed
+        if ((!chkPoisTodos.isSelected()) && (!chkRecorrido.isSelected())){
+            habilitaBtnGraficarDatos(false);
+        }
+        if (chkPoisTodos.isSelected()){
+            habilitaPanelTablaCatPois(true);
+        }
+        else{
+            habilitaPanelTablaCatPois(false);
+        }
+    }//GEN-LAST:event_chkPoisTodosActionPerformed
+
+    private void chkRecorridoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRecorridoActionPerformed
+        if (chkRecorrido.isSelected()){
+            habilitaBtnGraficarDatos(true);
+        }
+        else{
+            if (!chkPoisTodos.isSelected()){
+                habilitaBtnGraficarDatos(false);
+            }
+        }
+    }//GEN-LAST:event_chkRecorridoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGraficar;
-    private javax.swing.JCheckBox chkPois;
+    private javax.swing.JCheckBox chkPoisTodos;
     private javax.swing.JCheckBox chkRecorrido;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private org.jdesktop.swingx.JXTable jXTable1;
     private java.awt.Label lblTituloHistorico;
     private java.awt.Label lblTxtDatosMapa;
-    private java.awt.Label lblTxtTabla;
+    private java.awt.Label lblTxtTablaCatPois;
     private javax.swing.JPanel panelBtnGraficar;
     private javax.swing.JPanel panelCampanias;
     private javax.swing.JPanel panelInferior;
@@ -259,6 +287,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     private javax.swing.JPanel panelSuperior;
     private javax.swing.JPanel panelTitulo;
     private org.jdesktop.swingx.JXTable tablaCampanias;
+    private org.jdesktop.swingx.JXTable tablaCatPois;
     // End of variables declaration//GEN-END:variables
 
 
@@ -303,12 +332,12 @@ public class PanelHistorico extends javax.swing.JPanel {
         NRO_COL_NOMBRE_CAMP=7;
         cantColumnas=8;
         modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
-        tablaCampanias.setModel(modeloTabla);        
-        idCampaniaElegida = -1;
+        tablaCampanias.setModel(modeloTabla);                
         //seteo los radiobotones de la tabla
-        grupoElijeCampania = new ButtonGroup();
+        grupoElijeCampania = new ButtonGroup(); 
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
+        habilitaPanelTablaCatPois(false);
     }
      
     public void marcaCampaniaEnCurso(){
@@ -344,18 +373,80 @@ public class PanelHistorico extends javax.swing.JPanel {
      * @param idCampaniaElegida the idCampaniaElegida to set
      */
     public void setIdCampaniaElegida(int idCampaniaElegida) {
-        if (idCampaniaElegida>=0){ 
+        if (idCampaniaElegida>=0){
             this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());                        
+            habilitaChkRecorrido(true); 
         }
         else
-          { this.idCampaniaElegida = idCampaniaElegida; }
+          { this.idCampaniaElegida = idCampaniaElegida; 
+            habilitaChkRecorrido(false);
+          }
+    }
+
+    public void cargaTablaCategoriasPois() {
+        // --------------->>>>>>> en lugar de esto, debería hacer mi propio data model en el controller del panelhistorico
+        // reutilizando mucho codigo de ControllerPois.getInstance().cargaGrillaCategoriaPOIS()
+        
+        //DefaultTableModel dmCatPois = (DefaultTableModel)controllers.ControllerPois.getInstance().cargaGrillaCategoriaPOIS();
+        DefaultTableModel dmCatPois = (DefaultTableModel)controllers.ControllerHistorico.getInstance().cargaGrillaCategoriaPOIS();
+        //dmCatPois.addColumn("Elejir");
+
+        tablaCatPois.setModel(dmCatPois);
+        //escondo la columna ID 
+        tablaCatPois.getColumnModel().getColumn(0).setMinWidth(0); 
+        tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(0); 
+        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(0); 
+        tablaCatPois.getColumnModel().getColumn(0).setResizable(false);
+        //resize la columna Elejir
+        tablaCatPois.getColumnModel().getColumn(1).setMinWidth(30); 
+        tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(30); 
+        tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(30); 
+        tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
+        //escondo la columna Iconos
+        tablaCatPois.getColumnModel().getColumn(2).setMinWidth(40); 
+        tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(40); 
+        tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(40);
+        //seteo los checkboxes
+        //tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
+        //tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
+         
+        if (controllers.ControllerPois.getInstance().cargaGrillaCategoriaPOIS().getRowCount()==0){            
+            dmCatPois.addRow(new String[]{"","No se encontraron categorias de Pois en sistema...","",""});
+            habilitaChkTodosLosPois(false);
+            //habilitaPanelTablaCatPois(false);
+            //habilitaBtnGraficarDatos(false);
+        }
+        else{
+            habilitaChkTodosLosPois(true);
+            //habilitaPanelTablaCatPois(true);
+            //habilitaBtnGraficarDatos(true);
+        }
     }
     
+  public void habilitaPanelTablaCatPois(boolean estado){
+      lblTxtTablaCatPois.setEnabled(estado);
+      tablaCatPois.setEnabled(estado);
+  }
+  
+  public void habilitaChkTodosLosPois(boolean estado){
+      chkPoisTodos.setEnabled(estado);
+  }
+  
+  public void habilitaChkRecorrido(boolean estado){
+      chkRecorrido.setEnabled(estado);
+  }
+   
+  public void habilitaBtnGraficarDatos(boolean estado){
+      btnGraficar.setEnabled(estado);
+  }
+  
+  public void habilitaPanelTablaCampanias(boolean estado){
+      tablaCampanias.setEnabled(estado);
+  }
 }
 
-
-// --- clases y metodos que cargan los componentes de la tabla ---
 class RadioButtonRenderer implements TableCellRenderer {
+  //clases y metodos que cargan y controlan los radiobotones en la tabla de campañas
   public Component getTableCellRendererComponent(JTable table, Object value,
                    boolean isSelected, boolean hasFocus, int row, int column) {
     if (value==null) return null;
@@ -373,6 +464,37 @@ class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
     button = (JRadioButton)value;
     button.addItemListener(this);
     PanelHistorico.getInstance().setIdCampaniaElegida(row);
+    return (Component)value;
+  }
+  public Object getCellEditorValue() {
+    button.removeItemListener(this);
+    return button;
+  }
+  public void itemStateChanged(ItemEvent e) {    
+    super.fireEditingStopped();
+  }
+}
+
+
+class CheckBoxRenderer implements TableCellRenderer {
+  //clases y metodos que cargan y controlan los checkboxes de la tabla de categorias de pois
+  public Component getTableCellRendererComponent(JTable table, Object value,
+                   boolean isSelected, boolean hasFocus, int row, int column) {
+    if (value==null) return null;
+    return (Component)value;
+  }
+}
+ 
+class CheckBoxEditor extends DefaultCellEditor implements ItemListener {
+  private JCheckBox button;
+  public CheckBoxEditor(JCheckBox checkBox) {
+    super(checkBox);
+  }
+  public Component getTableCellEditorComponent(JTable table,Object value,boolean isSelected,int row,int column) {
+    if (value==null) return null;
+    button = (JCheckBox)value;
+    button.addItemListener(this);
+    //PanelHistorico.getInstance().setIdCampaniaElegida(row);
     return (Component)value;
   }
   public Object getCellEditorValue() {

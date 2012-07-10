@@ -21,6 +21,7 @@ public class POI {
     private java.util.Date fechaHora;
     private ArrayList<Marca> marcas;
     private String descripcion;
+    private CategoriaPoi categoria;
 
     public POI() {
     }
@@ -146,5 +147,19 @@ public class POI {
      */
     public void setIdCampania(int idCampania) {
         this.idCampania = idCampania;
+    }
+
+    /**
+     * @return the categoria
+     */
+    public CategoriaPoi getCategoria() {
+        return categoria;
+    }
+
+    /**
+     * @param categoria the categoria to set
+     */
+    public void setCategoria(CategoriaPoi categoria) {
+        this.categoria = categoria;
     }
 }
