@@ -148,4 +148,27 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         a.setTitulo("Test");
         BrokerCategoriasPOI.getInstance().insertCategoriaPOI(a);       
     }*/
+    
+    
+    public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampFromDB(int idDeCampania) {
+        ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
+        // --- metodo pendiente que debería devolver un arraylist de los POIs que pertenezcan a la campaña de ID especificado por parametro
+            // -> para saber si un POI pertenece a una campaña debo armar la consulta de SQL solicitando aquellos POIs cuya fecha
+            // se encuentre entre la fecha de inicio y fin de campaña
+            // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
+            // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
+            // -> validar el parametro de entrada y todo lo q pueda fallar
+        return poisDeEstaCampania;
+    }
+
+    public ArrayList<modelo.dataManager.CategoriaPoi> getCatPOISDeUnaCampFromDB(int idDeCampania) {
+        ArrayList<modelo.dataManager.CategoriaPoi> catPoisDeEstaCampania = new ArrayList();
+        // --- metodo pendiente que debería devolver un arraylist con las CATEGORIAS de los POIs que pertenezcan a la campaña de ID especificado por parametro
+            // -> probar usando JOINs, capaz sale mas facil que volver a llamar a getPOISDeUnaCampFromDB() para iterarlos y obtener su id de CatPoi
+            // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
+            // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
+            // -> validar el parametro de entrada y todo lo q pueda fallar
+        return catPoisDeEstaCampania;
+    }
+    
 }

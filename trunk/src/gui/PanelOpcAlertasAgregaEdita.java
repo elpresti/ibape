@@ -873,7 +873,7 @@ private void tablaCondicionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-
            btnAgregar.setText("Guardar");
            jLabel1.setText("Modificar datos de condición");
            controlaPanelNuevaCondicion(true);
-           int indexCondicion=(int) modeloTabla.getValueAt(filaSeleccionada,NRO_COL_ID_CONDICION);
+           int indexCondicion=Integer.valueOf(String.valueOf(modeloTabla.getValueAt(filaSeleccionada,NRO_COL_ID_CONDICION)));
            
            controllers.ControllerAlertas.getInstance().cambiaDatosActuales(indexCondicion);
            cargaPanelConfigCondicion();
@@ -995,7 +995,7 @@ private void tablaCondicionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-
                    
             int filaSeleccionada = tablaCondiciones.getSelectedRow();
             int backIdProvCondicion=idProvCondicion;
-            idProvCondicion=(int) modeloTabla.getValueAt(filaSeleccionada,NRO_COL_ID_CONDICION);
+            idProvCondicion=Integer.valueOf(String.valueOf(modeloTabla.getValueAt(filaSeleccionada,NRO_COL_ID_CONDICION)));
             
             int cantValores=controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores();
             String descripcion="";

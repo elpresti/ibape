@@ -15,10 +15,12 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +28,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import modelo.dataManager.CategoriaPoi;
 import org.jdesktop.swingx.JXLabel;
 
 
@@ -36,6 +39,8 @@ import org.jdesktop.swingx.JXLabel;
 
 
 // --- clases y metodos que cargan los componentes de la tabla ---
+
+
 /**
  *
  * @author Sebastian
@@ -44,6 +49,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     static PanelHistorico unicaInstancia;
     private DefaultTableModel modeloTabla;
     private ButtonGroup grupoElijeCampania;
+    private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
     private int idCampaniaElegida;
     private int NRO_COL_ID_CAMP;
     private int NRO_COL_ELEGIR;
@@ -249,11 +255,14 @@ public class PanelHistorico extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkPoisTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodosActionPerformed
-        if ((!chkPoisTodos.isSelected()) && (!chkRecorrido.isSelected())){
+        if ((chkPoisTodos.isSelected()) || (chkRecorrido.isSelected())){
+            habilitaBtnGraficarDatos(true);
+        }
+        else{
             habilitaBtnGraficarDatos(false);
         }
         if (chkPoisTodos.isSelected()){
-            habilitaPanelTablaCatPois(true);
+            habilitaPanelTablaCatPois(true);            
         }
         else{
             habilitaPanelTablaCatPois(false);
@@ -383,15 +392,9 @@ public class PanelHistorico extends javax.swing.JPanel {
           }
     }
 
-    public void cargaTablaCategoriasPois() {
-        // --------------->>>>>>> en lugar de esto, debería hacer mi propio data model en el controller del panelhistorico
-        // reutilizando mucho codigo de ControllerPois.getInstance().cargaGrillaCategoriaPOIS()
-        
-        //DefaultTableModel dmCatPois = (DefaultTableModel)controllers.ControllerPois.getInstance().cargaGrillaCategoriaPOIS();
-        DefaultTableModel dmCatPois = (DefaultTableModel)controllers.ControllerHistorico.getInstance().cargaGrillaCategoriaPOIS();
-        //dmCatPois.addColumn("Elejir");
-
-        tablaCatPois.setModel(dmCatPois);
+    public void inicializaTablaCategoriasPois() {        
+        TableModelCatPoisHistorico tableModelCatPois = (TableModelCatPoisHistorico)cargaGrillaCategoriaPOIS();        
+        tablaCatPois.setModel(tableModelCatPois);
         //escondo la columna ID 
         tablaCatPois.getColumnModel().getColumn(0).setMinWidth(0); 
         tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(0); 
@@ -407,11 +410,13 @@ public class PanelHistorico extends javax.swing.JPanel {
         tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(40); 
         tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(40);
         //seteo los checkboxes
-        //tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
-        //tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
-         
-        if (controllers.ControllerPois.getInstance().cargaGrillaCategoriaPOIS().getRowCount()==0){            
-            dmCatPois.addRow(new String[]{"","No se encontraron categorias de Pois en sistema...","",""});
+        tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
+        tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
+        habilitaBtnGraficarDatos(false); 
+        chkPoisTodos.setSelected(false);
+        chkRecorrido.setSelected(false);
+        if (tableModelCatPois.getRowCount()==0){            
+            tableModelCatPois.addRow(new String[]{"","No se encontraron categorias de Pois en sistema...","",""});            
             habilitaChkTodosLosPois(false);
             //habilitaPanelTablaCatPois(false);
             //habilitaBtnGraficarDatos(false);
@@ -421,7 +426,7 @@ public class PanelHistorico extends javax.swing.JPanel {
             //habilitaPanelTablaCatPois(true);
             //habilitaBtnGraficarDatos(true);
         }
-    }
+  }
     
   public void habilitaPanelTablaCatPois(boolean estado){
       lblTxtTablaCatPois.setEnabled(estado);
@@ -443,17 +448,60 @@ public class PanelHistorico extends javax.swing.JPanel {
   public void habilitaPanelTablaCampanias(boolean estado){
       tablaCampanias.setEnabled(estado);
   }
-}
+  
+    public TableModel cargaGrillaCategoriaPOIS() {
+        setCategoriasSeleccionadas(new ArrayList()); //inicializo en vacío el vector de categorias seleccionadas
+        TableModelCatPoisHistorico dm = new TableModelCatPoisHistorico();
+        //Cabecera
+        String[] encabezado = new String[4];
+        encabezado[0] = "Id";
+        encabezado[1] = "Elejir";        
+        encabezado[2] = "Icono";
+        encabezado[3] = "Nombre de la categoria";
+        dm.setColumnIdentifiers(encabezado);
+        //Cuerpo
+        for (CategoriaPoi cP : ControllerCampania.getInstance().getCatPOISFromDB()) {
+            Object[] fila = new Object[4]; //creamos la fila
+            fila[0]=cP.getId(); //en la columna 0 va el ID
+            fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
+            fila[2]=cP.getPathIcono();//en la columna 2 va el Icono
+            fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI
+            dm.addRow(fila);
+        }
+        return dm;
+    }
 
-class RadioButtonRenderer implements TableCellRenderer {
-  //clases y metodos que cargan y controlan los radiobotones en la tabla de campañas
+    /**
+     * @return the categoriasSeleccionadas
+     */
+    public ArrayList<Integer> getCategoriasSeleccionadas() {
+        return categoriasSeleccionadas;
+    }
+
+    /**
+     * @param categoriasSeleccionadas the categoriasSeleccionadas to set
+     */
+    public void setCategoriasSeleccionadas(ArrayList<Integer> categoriasSeleccionadas) {
+        this.categoriasSeleccionadas = categoriasSeleccionadas;
+    }
+
+    public Integer getIdCatPoiFromRow(int row) {
+        int idSeleccionado=-1;
+        if (row>=0){
+            idSeleccionado = Integer.parseInt(tablaCatPois.getModel().getValueAt(row, 0).toString());
+        }
+        return idSeleccionado;
+    }
+    
+}
+/*  - - -   clases y metodos que cargan y controlan los RADIOBUTTONS en la TABLA CAMPAÑAS   - - -  */
+class RadioButtonRenderer implements TableCellRenderer {  
   public Component getTableCellRendererComponent(JTable table, Object value,
                    boolean isSelected, boolean hasFocus, int row, int column) {
     if (value==null) return null;
     return (Component)value;
   }
-}
- 
+} 
 class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
   private JRadioButton button;
   public RadioButtonEditor(JCheckBox checkBox) {
@@ -476,15 +524,14 @@ class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
 }
 
 
-class CheckBoxRenderer implements TableCellRenderer {
-  //clases y metodos que cargan y controlan los checkboxes de la tabla de categorias de pois
+/*  clases y metodos que cargan y controlan los CHECKBOXES en la TABLA CATEGORIA DE POIS */
+class CheckBoxRenderer implements TableCellRenderer {  
   public Component getTableCellRendererComponent(JTable table, Object value,
                    boolean isSelected, boolean hasFocus, int row, int column) {
     if (value==null) return null;
     return (Component)value;
   }
-}
- 
+} 
 class CheckBoxEditor extends DefaultCellEditor implements ItemListener {
   private JCheckBox button;
   public CheckBoxEditor(JCheckBox checkBox) {
@@ -494,7 +541,12 @@ class CheckBoxEditor extends DefaultCellEditor implements ItemListener {
     if (value==null) return null;
     button = (JCheckBox)value;
     button.addItemListener(this);
-    //PanelHistorico.getInstance().setIdCampaniaElegida(row);
+    if (!button.isSelected()){ //trabaja con la lógica invertida, porque el evento lo captura antes de dejarlo seleccionado
+        PanelHistorico.getInstance().getCategoriasSeleccionadas().add(PanelHistorico.getInstance().getIdCatPoiFromRow(row));
+    }
+    else{
+        PanelHistorico.getInstance().getCategoriasSeleccionadas().remove(PanelHistorico.getInstance().getIdCatPoiFromRow(row));
+    }
     return (Component)value;
   }
   public Object getCellEditorValue() {
@@ -504,4 +556,22 @@ class CheckBoxEditor extends DefaultCellEditor implements ItemListener {
   public void itemStateChanged(ItemEvent e) {    
     super.fireEditingStopped();
   }
+}
+
+/* - - -   clases y métodos q configuran las COLUMNAS del TABLEMODEL de la tabla CATEGORIA DE POIS   - - -  */
+class TableModelCatPoisHistorico extends DefaultTableModel {        
+    @Override  
+      public Class getColumnClass(int col) {  
+        switch (col){
+            case 0: return Integer.class;//esta column accepts only Integer values
+            case 1: return Boolean.class;
+            default: return String.class;//other columns accept String values
+        }
+    }  
+    @Override  
+      public boolean isCellEditable(int row, int col) {
+        if (col == 1)       //la columna de los checkbox will be editable
+            return true;
+        else return false;
+      }
 }

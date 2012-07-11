@@ -254,7 +254,7 @@ private void lnkNavegacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN
 private void lnkHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkHistoricoActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelHistorico.getInstance());
     controllers.ControllerHistorico.getInstance().cargaGrillaCampanias();
-    PanelHistorico.getInstance().cargaTablaCategoriasPois();
+    PanelHistorico.getInstance().inicializaTablaCategoriasPois();
 }//GEN-LAST:event_lnkHistoricoActionPerformed
 
 private void lnkConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkConfiguracionActionPerformed

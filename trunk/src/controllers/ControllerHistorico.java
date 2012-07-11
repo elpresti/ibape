@@ -88,42 +88,4 @@ public class ControllerHistorico {
 
     }
        
-    public TableModel cargaGrillaCategoriaPOIS() {
-        TableModelCatPoisHistorico dm = new TableModelCatPoisHistorico();
-        //Cabecera
-        String[] encabezado = new String[4];
-        encabezado[0] = "Id";
-        encabezado[1] = "Elejir";        
-        encabezado[2] = "Icono";
-        encabezado[3] = "Nombre de la categoria";
-        dm.setColumnIdentifiers(encabezado);
-        //Cuerpo
-        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
-            Object[] fila = new Object[4]; //creamos la fila
-            fila[0]=cP.getId(); //en la columna 0 va el ID
-            fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
-            fila[2]=cP.getPathIcono();//en la columna 2 va el Icono
-            fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI
-            dm.addRow(fila);
-        }
-        return dm;
-    }
-    
 }
-
-class TableModelCatPoisHistorico extends DefaultTableModel {        
-    @Override  
-      public Class getColumnClass(int col) {  
-        switch (col){
-            case 0: return Integer.class;//esta column accepts only Integer values
-            case 1: return Boolean.class;
-            default: return String.class;//other columns accept String values
-        }
-    }  
-    @Override  
-      public boolean isCellEditable(int row, int col) {  
-        if (col == 1)       //la columna de los checkbox will be editable  
-            return true;
-        else return false;  
-      }  
-    }  
