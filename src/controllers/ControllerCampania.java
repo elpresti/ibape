@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.CategoriaPoi;
 import org.jdom.Element;
+import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerConfig;
 import persistencia.Logueador;
 
@@ -175,6 +177,10 @@ public class ControllerCampania {
 
     private void inicializador() {
         setEstadoHistoricoDeCampEnCurso(0);
+    }
+
+    public ArrayList<CategoriaPoi> getCatPOISFromDB() {
+        return  BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
     }
     
 }
