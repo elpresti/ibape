@@ -158,6 +158,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
             // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
             // -> validar el parametro de entrada y todo lo q pueda fallar
+            // -> hacer el SELECT usando el objeto PreparedStatement
         return poisDeEstaCampania;
     }
 
@@ -168,6 +169,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
             // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
             // -> validar el parametro de entrada y todo lo q pueda fallar
+            // -> hacer el SELECT usando el objeto PreparedStatement
         return catPoisDeEstaCampania;
     }
     
