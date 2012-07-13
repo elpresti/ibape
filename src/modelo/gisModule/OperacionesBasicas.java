@@ -438,4 +438,10 @@ public class OperacionesBasicas {
     public void setAlto(int alto) {
         this.alto = alto;
     }
+    
+    public ArrayList<Marca> getMarcas(BufferedImage imgSoloMarcas){
+        ArrayList<Marca> marcas = new ArrayList();
+        // -- metodo pendiente --
+        return marcas;
+    }
 }
