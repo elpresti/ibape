@@ -38,10 +38,10 @@ public class OperacionesBasicas {
         return unicaInstancia;
     }
 
-    public boolean grabarImagen (BufferedImage imagen){
+    public boolean grabarImagen (BufferedImage imagen, String donde){
         boolean sepudo = false;
         try {
-            ImageIO.write(imagen, "jpg", new File("imgs\\imagen.tmp"));
+            ImageIO.write(imagen, "jpg", new File(donde));
             sepudo = true;
         } catch (IOException ex) {
             Logger.getLogger(OperacionesBasicas.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,7 +121,7 @@ public class OperacionesBasicas {
 //        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
 //        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
-        getInstance().grabarImagen(imgProcesada);
+        getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
         //Obtenemos bordes de la imagen binarizada segmentacion.Bordes(imgProcesada)
 //        imgProcesada = segmentacion.Bordes(imgProcesada);
 //        getInstance().grabarImagen(imgProcesada);
@@ -133,86 +133,16 @@ public class OperacionesBasicas {
        // ArrayList<Integer> fondo = buscaFondo(imgProcesada);
         int fondo[] = new int[967];
         fondo = buscaFondoMejorado(imgProcesada);
-        getInstance().grabarImagen(dibujaFondo(imgProcesada, fondo));
+        BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
+        getInstance().grabarImagen(imgConFondo,"imgs\\imagenConFondo.tmp");
+        getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondo.tmp");
+        getInstance().grabarImagen(eliminaHoras(imgConFondo),"imgs\\imagenSinHoras.tmp");
         //buscaMarcas(fondo)
 
 
         return cantPeces;
     }
 
-    public int[] buscaFondo (BufferedImage img) {
-
-       // ArrayList<Integer> fondo = new ArrayList<Integer>();
-        
-        ancho = img.getWidth();
-		alto = img.getHeight();
-//        int valorRGB;
-//		int valoresRGB[] = new int[3];
-//		float valoresHSB[] = new float[3];
-		Colores col = new Colores();
-		int fondo[] = new int[967];
-//        int negro = col.obtieneNumeroColor("Negro");
-//		int marron = col.obtieneNumeroColor("Marron");
-//        int rgbs[];
-//	    float hsb[];
-//        rgbs = new int[3];
-//        int value = 0;
-//        hsb = new float[3];
-
-        boolean noencontrofondo = true;
-        int contAncho = 1;      //maximo 966
-        int contAlto = alto-2;    //maximo 635
-
-
-          
-
-            while (contAncho<ancho )  {
-
-//              Object e = col.obtieneColor(img.getRGB(contAncho, contAlto));
-//                if (!(col.getColoresMap().get(e).equals("Negro"))) {
-//                System.out.println(col.getColoresMap().get(e) + "ancho " + contAncho + "alto  " + contAlto);
-//
-                contAlto = alto-2;
-                noencontrofondo=true;
-
-                while((contAlto>0) && (noencontrofondo==true)) {
-
-                    int e = col.obtieneColor(img.getRGB(contAncho, contAlto));
-
- 
-                     if ((col.getColoresMap().get(e).equals("Negro"))){
-               
-                            if (((contAncho==1) || ((Math.abs(contAlto-fondo[contAncho-1]))) <5)) {
-                                noencontrofondo=false;
-                             }
-                    }
-                    contAlto--;
-                }
-                if (contAlto <5) {
-                   fondo[contAncho]=fondo[contAncho-1];
-
-                }
-                else {
-                   fondo[contAncho]=contAlto+1;
-                }
-            contAncho++;
-            }
-//				if(col.obtieneColor(valorRGB)!=negro){
-//					if(col.obtieneColor(imagen.getRGB(contAncho,contAlto))!=marron){
-
-        //Recorremos la imagen de abajo a arriba y de izquierda a derecha en busqueda del borde. Para esto haremos lo sigueinte:
-            //Creamos un Vector del tamanio de imagen.getAncho()
-   //     ArrayList<Integer> fondo = new ArrayList();
-            //Obtenemos el valor RGB del pixel que esta en x=0,y=0
-            //Si ese valor RGB es blanco, leo el valor RGB del pixel que esta en x=0,y=y+1
-            //Si ese valor RGB no es blanco, guardo el valor y en  Vector[x] (Altura del borde)
-            //Esto lo repetimos en un while de dos condiciones and:
-                //1:No haber encontrado el borde (Vble booleana)
-                //2: y <= imagen.getAlto()
-         //Esto  lo repetimos hasta llegar a x = imagen.getAncho() incluido
-        //Ahora tenemos en el Vector la posicion del fondo de toda la imagen          
-        return fondo;
-    }
 
     public int[] buscaFondoMejorado(BufferedImage img) {
 
@@ -422,6 +352,38 @@ public class OperacionesBasicas {
         return img;
     }
 
+    public BufferedImage eliminaFondo(BufferedImage img, int[] fondo){
+        int colorNegro = new Color (0,0,0).getRGB();
+        ancho = img.getWidth();
+        alto = img.getHeight();
+        int contAncho = 1;      //maximo 966
+        int contAlto = alto - 2;    //maximo 635
+        while (contAncho<=966){
+             contAlto = alto - 2;
+             while (contAlto >= fondo[contAncho] ) {
+                img.setRGB(contAncho, contAlto, colorNegro);
+                contAlto--;
+            }
+             contAncho++;
+        }
+        return img;
+    }
+
+        public BufferedImage eliminaHoras(BufferedImage img){
+        int colorNegro = new Color (0,0,0).getRGB();
+        alto = 1;
+        int contAncho = 1;      //maximo 966
+        int contAlto = alto;
+        while (contAncho<=966){
+             contAlto = alto;
+             while (contAlto <= 20 ) {
+                img.setRGB(contAncho, contAlto, colorNegro);
+                contAlto++;
+            }
+             contAncho++;
+        }
+        return img;
+    }
 
     public ArrayList<modelo.dataManager.Marca> buscaMarcas(ArrayList<Integer> fondo){
         ArrayList<modelo.dataManager.Marca> marcas = new ArrayList<modelo.dataManager.Marca>();
