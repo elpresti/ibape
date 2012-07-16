@@ -439,8 +439,8 @@ public class OperacionesBasicas {
         this.alto = alto;
     }
     
-    public ArrayList<Marca> getMarcas(BufferedImage imgSoloMarcas){
-        ArrayList<Marca> marcas = new ArrayList();
+    public ArrayList<modelo.dataManager.Marca> getMarcas(BufferedImage imgSoloMarcas){
+        ArrayList<modelo.dataManager.Marca> marcas = new ArrayList();
         // -- metodo pendiente --
         return marcas;
     }
