@@ -18,7 +18,7 @@ public class ControllerPpal {
     private ControllerConfig contConfig=ControllerConfig.getInstance();
     
     public void accionesAlSalir(){
-        if (BrokerDbMapa.getInstance().isUsarMapaNavegacion()){
+        if (BrokerDbMapa.getInstance().isUsarMapaNavegacion() || modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
             modelo.gisModule.WebServer.getInstance().cerrarWebServer();        
             modelo.gisModule.Browser.getInstance().cerrarBrowserPortable();            
         } 
@@ -90,15 +90,15 @@ public class ControllerPpal {
                         BrokerDbMapa.getInstance().disparaEjecucion()) {
                     BrokerDbMapa.getInstance().setUsarMapaNavegacion(true);
                     //do what you want to do before sleeping
-                    Thread.currentThread().sleep(2000);//sleep for 2000 ms
+                    //Thread.currentThread().sleep(2000);//sleep for 2000 ms --> ya se hace dentro del Broker
                     //do what you want to do after sleeptig
                     modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania();
-                    sePudo=true;                    
+                    sePudo=true;
                 }
             }
         }
         catch(Exception e){
-            //If this thread was intrrupted by nother thread 
+            //If this thread was intrrupted by nother thread
             persistencia.Logueador.getInstance().agregaAlLog(e.toString());
             }
         return sePudo;
@@ -221,5 +221,22 @@ public class ControllerPpal {
         return sePudo;
     }
 
+    public boolean abrirWebServer(){
+        boolean sePudo=false;
+        try{
+            if (!modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
+                if (modelo.gisModule.WebServer.getInstance().runWebServer()){
+                    sePudo=true;
+                }
+            }
+            else{
+                sePudo=true;
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }    
 
 }

@@ -36,6 +36,21 @@ public class Browser {
         }
         return sePudo;
     }
+
+    public boolean abrirPaginaEnPestania(String url) {
+        boolean sePudo=false;
+        BrowserLauncher browserLauncher;
+        try {            
+            browserLauncher = new BrowserLauncher();            
+            browserLauncher.openURLinBrowser(url);
+            sePudo=true;
+        } catch (BrowserLaunchingInitializingException ex) {
+            Logger.getLogger(Browser.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedOperatingSystemException ex) {
+            Logger.getLogger(Browser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sePudo;
+    }    
     
     /**
      * @return the nombre

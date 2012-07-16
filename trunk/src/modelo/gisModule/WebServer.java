@@ -11,6 +11,7 @@ package modelo.gisModule;
 public class WebServer {
     static WebServer unicaInstancia;
     private String pathActual;
+    private boolean webServerEncendido=false;
     private Process procesoWebServer;
         
     private WebServer(){
@@ -29,6 +30,7 @@ public class WebServer {
         Runtime aplicacion = Runtime.getRuntime();         
         try{
             setProcesoWebServer(aplicacion.exec(getPathActual()+"\\SoftExterno\\server2go\\Server2Go.exe"));
+            setWebServerEncendido(true);
             sePudo=true;
             return sePudo;
         }
@@ -48,6 +50,7 @@ public class WebServer {
             rutaCompleta = rutaCompleta.replace("\\", "/");
             Process procesoCierraWebServer = aplicacion.exec("cmd.exe /C "+rutaCompleta);
             //procesoCierraWebServer.destroy();
+            setWebServerEncendido(false);
             sePudo=true;
             return sePudo;
         }
@@ -63,7 +66,8 @@ public class WebServer {
         Runtime aplicacion = Runtime.getRuntime();         
         try{            
             Process procesoWebServer = aplicacion.exec("cmd.exe /C taskkill /F /T /IM Server2Go.exe");
-            //procesoCierraWebServer.destroy();            
+            //procesoCierraWebServer.destroy();
+            setWebServerEncendido(false);
             sePudo=true;
             return sePudo;
         }
@@ -99,5 +103,19 @@ public class WebServer {
      */
     public void setProcesoWebServer(Process procesoWebServer) {
         this.procesoWebServer = procesoWebServer;
+    }
+
+    /**
+     * @return the webServerEncendido
+     */
+    public boolean isWebServerEncendido() {
+        return webServerEncendido;
+    }
+
+    /**
+     * @param webServerEncendido the webServerEncendido to set
+     */
+    public void setWebServerEncendido(boolean webServerEncendido) {
+        this.webServerEncendido = webServerEncendido;
     }
 }
