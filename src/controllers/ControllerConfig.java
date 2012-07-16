@@ -233,7 +233,7 @@ public class ControllerConfig  implements java.util.Observer {
         autoConectaGps();
         autoConectaSonda();
         autoConectaLan();
-        obtienePuertosComExistentes();        
+        //obtienePuertosComExistentes();        
     }    
     
 }

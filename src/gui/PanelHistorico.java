@@ -31,16 +31,6 @@ import javax.swing.table.TableModel;
 import modelo.dataManager.CategoriaPoi;
 import org.jdesktop.swingx.JXLabel;
 
-
-
-
-//clases y métodos para crear la tabla y sus componentes
-
-
-
-// --- clases y metodos que cargan los componentes de la tabla ---
-
-
 /**
  *
  * @author Sebastian
@@ -85,14 +75,18 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelInfoMapa = new javax.swing.JPanel();
         panelSuperior = new javax.swing.JPanel();
         lblTxtDatosMapa = new java.awt.Label();
+        panelRecorrido = new org.jdesktop.swingx.JXPanel();
         chkRecorrido = new javax.swing.JCheckBox();
+        lblCantPuntosRecorrido = new org.jdesktop.swingx.JXLabel();
         chkPoisTodos = new javax.swing.JCheckBox();
         lblTxtTablaCatPois = new java.awt.Label();
         panelInferior = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaCatPois = new org.jdesktop.swingx.JXTable();
         panelBtnGraficar = new javax.swing.JPanel();
-        btnGraficar = new javax.swing.JButton();
+        btnGraficarDatos = new javax.swing.JButton();
+        btnIniciarMapaHistorico = new javax.swing.JButton();
+        btnDetenerMapaHistorico = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -174,6 +168,8 @@ public class PanelHistorico extends javax.swing.JPanel {
         lblTxtDatosMapa.setText("Datos mostrados en el mapa:");
         panelSuperior.add(lblTxtDatosMapa);
 
+        panelRecorrido.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+
         chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRecorrido.setText("Recorrido");
         chkRecorrido.addActionListener(new java.awt.event.ActionListener() {
@@ -181,7 +177,13 @@ public class PanelHistorico extends javax.swing.JPanel {
                 chkRecorridoActionPerformed(evt);
             }
         });
-        panelSuperior.add(chkRecorrido);
+        panelRecorrido.add(chkRecorrido);
+
+        lblCantPuntosRecorrido.setForeground(new java.awt.Color(0, 204, 51));
+        lblCantPuntosRecorrido.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        panelRecorrido.add(lblCantPuntosRecorrido);
+
+        panelSuperior.add(panelRecorrido);
 
         chkPoisTodos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkPoisTodos.setText("Puntos de Interes (POI) de todas las campañas");
@@ -248,8 +250,34 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelBtnGraficar.setPreferredSize(new java.awt.Dimension(500, 40));
         panelBtnGraficar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGraficar.setText("Graficar datos seleccionados");
-        panelBtnGraficar.add(btnGraficar);
+        btnGraficarDatos.setText("Graficar datos");
+        btnGraficarDatos.setMaximumSize(new java.awt.Dimension(130, 23));
+        btnGraficarDatos.setMinimumSize(new java.awt.Dimension(130, 23));
+        btnGraficarDatos.setPreferredSize(new java.awt.Dimension(130, 23));
+        btnGraficarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGraficarDatosActionPerformed(evt);
+            }
+        });
+        panelBtnGraficar.add(btnGraficarDatos);
+
+        btnIniciarMapaHistorico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnIniciarMapaHistorico.setLabel("Iniciar Mapa Historico");
+        btnIniciarMapaHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIniciarMapaHistoricoActionPerformed(evt);
+            }
+        });
+        panelBtnGraficar.add(btnIniciarMapaHistorico);
+
+        btnDetenerMapaHistorico.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnDetenerMapaHistorico.setLabel("Detener Mapa Historico");
+        btnDetenerMapaHistorico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetenerMapaHistoricoActionPerformed(evt);
+            }
+        });
+        panelBtnGraficar.add(btnDetenerMapaHistorico);
 
         add(panelBtnGraficar);
     }// </editor-fold>//GEN-END:initComponents
@@ -280,12 +308,45 @@ public class PanelHistorico extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_chkRecorridoActionPerformed
 
+    private void btnIniciarMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarMapaHistoricoActionPerformed
+        String txtOriginal = btnIniciarMapaHistorico.getText();
+        btnIniciarMapaHistorico.setText("Abriendo...");
+        btnIniciarMapaHistorico.setEnabled(false);
+        if (!(controllers.ControllerHistorico.getInstance().iniciaServerYabreBrowser())) {
+            JOptionPane.showMessageDialog(this,"Hubo un error al iniciar el Servidor Web ó el Navegador");
+        }
+        btnIniciarMapaHistorico.setText(txtOriginal);
+        btnIniciarMapaHistorico.setEnabled(true);
+        btnIniciarMapaHistorico.setVisible(false);
+        btnDetenerMapaHistorico.setVisible(true);
+    }//GEN-LAST:event_btnIniciarMapaHistoricoActionPerformed
+
+    private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGraficarDatosActionPerformed
+
+    private void btnDetenerMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerMapaHistoricoActionPerformed
+        String txtOriginal = btnDetenerMapaHistorico.getText();
+        btnDetenerMapaHistorico.setText("Cerrando...");
+        btnDetenerMapaHistorico.setEnabled(false);
+        if (!(controllers.ControllerPpal.getInstance().detieneServerYcierraBrowser())){
+            JOptionPane.showMessageDialog(this, "Hubo un error al detener el Servidor Web o el Navegador");
+        }
+        btnDetenerMapaHistorico.setText(txtOriginal);
+        btnDetenerMapaHistorico.setEnabled(true);
+        btnDetenerMapaHistorico.setVisible(false);
+        btnIniciarMapaHistorico.setVisible(true);
+    }//GEN-LAST:event_btnDetenerMapaHistoricoActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGraficar;
+    private javax.swing.JButton btnDetenerMapaHistorico;
+    private javax.swing.JButton btnGraficarDatos;
+    private javax.swing.JButton btnIniciarMapaHistorico;
     private javax.swing.JCheckBox chkPoisTodos;
     private javax.swing.JCheckBox chkRecorrido;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido;
     private java.awt.Label lblTituloHistorico;
     private java.awt.Label lblTxtDatosMapa;
     private java.awt.Label lblTxtTablaCatPois;
@@ -293,6 +354,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     private javax.swing.JPanel panelCampanias;
     private javax.swing.JPanel panelInferior;
     private javax.swing.JPanel panelInfoMapa;
+    private org.jdesktop.swingx.JXPanel panelRecorrido;
     private javax.swing.JPanel panelSuperior;
     private javax.swing.JPanel panelTitulo;
     private org.jdesktop.swingx.JXTable tablaCampanias;
@@ -384,11 +446,13 @@ public class PanelHistorico extends javax.swing.JPanel {
     public void setIdCampaniaElegida(int idCampaniaElegida) {
         if (idCampaniaElegida>=0){
             this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());                        
-            habilitaChkRecorrido(true); 
+            habilitaChkRecorrido(true);
+            setTxtCantidadDePuntosDeCampElegida(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(this.idCampaniaElegida));
         }
         else
           { this.idCampaniaElegida = idCampaniaElegida; 
             habilitaChkRecorrido(false);
+            setTxtCantidadDePuntosDeCampElegida(-1);
           }
     }
 
@@ -442,7 +506,7 @@ public class PanelHistorico extends javax.swing.JPanel {
   }
    
   public void habilitaBtnGraficarDatos(boolean estado){
-      btnGraficar.setEnabled(estado);
+      btnGraficarDatos.setEnabled(estado);
   }
   
   public void habilitaPanelTablaCampanias(boolean estado){
@@ -491,6 +555,15 @@ public class PanelHistorico extends javax.swing.JPanel {
             idSeleccionado = Integer.parseInt(tablaCatPois.getModel().getValueAt(row, 0).toString());
         }
         return idSeleccionado;
+    }
+
+    private void setTxtCantidadDePuntosDeCampElegida(int cantPuntosHistoricos) {
+        if (cantPuntosHistoricos>=0){
+            lblCantPuntosRecorrido.setText("Recorrido compuesto por "+cantPuntosHistoricos+" puntos");
+        }
+        else{
+            lblCantPuntosRecorrido.setText("");
+        }
     }
     
 }

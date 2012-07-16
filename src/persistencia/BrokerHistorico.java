@@ -24,7 +24,9 @@ public abstract class BrokerHistorico implements Runnable{
     private static Thread dbHthread;
     private static Campania campania;
     private static Connection conexion;
+    private static Connection readConection; //conexion exclusiva para lectura de Historico
     private static Statement statement;
+    private static Statement readStatement; //statement exclusivo para lectura de Historico
     private static String dbFileName;
     private static String folderNameHistorico;    
     
@@ -78,6 +80,32 @@ public abstract class BrokerHistorico implements Runnable{
         return sePudo;
     }
 
+    public boolean creaConexionParaLeerHistorico(int idCampania) {
+        boolean sePudo = false;
+        try {
+            //corroboro que la campaña especificada tenga historico
+            if (AdministraCampanias.getInstance().verificaSiTieneHistorico(idCampania)){
+                //si tiene, cierro las conexiones abiertas en caso de q esten abiertas
+                if ((getReadConection() != null) && (!getReadConection().isClosed())){
+                    getReadConection().close();
+                }
+                //if ((getReadStatement() != null) && (!getReadStatement().isClosed())){
+                if (getReadStatement() != null){
+                    getReadStatement().close();
+                }
+                Class.forName("org.sqlite.JDBC");
+                // Observar que el archivo .db es la base de datos del Historico y se crea en el directorio de Historico de la campania en curso
+                setReadConection(DriverManager.getConnection("jdbc:sqlite:" + getFolderNameHistorico()+"\\"+getCampaignFolderName(idCampania)+"\\"+ getDbFileName()));
+                setReadStatement(getReadConection().createStatement());
+                sePudo = true;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return sePudo;
+    }
+    
+    
     public boolean creaFoldersHistorico(){
         boolean sePudo=false;
         if (getCampania() != null){            
@@ -233,21 +261,7 @@ public abstract class BrokerHistorico implements Runnable{
      */
     public void setFolderNameHistorico(String folderHistorico) {
         this.folderNameHistorico = folderHistorico;
-    }
-    
-/*  public int getIdUltimoInsert(){
-        int salida = 0;
-        try {
-            ResultSet rs = getStatement().getGeneratedKeys();            
-            if (rs.next()) {
-                salida = rs.getInt(1);
-            }            
-        } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
-        }
-        return salida;
-    }
-*/
+    }    
 
     public boolean borraHistorico(int idCampaniaAborrar){
         boolean sePudo=false;
@@ -411,6 +425,35 @@ public abstract class BrokerHistorico implements Runnable{
         return sePudo;
     }    
 
+    /**
+     * @return the readConexion
+     */
+    public static Connection getReadConection() {
+        return readConection;
+    }
+
+    /**
+     * @param aReadConexion the readConexion to set
+     */
+    public static void setReadConection(Connection aReadConection) {
+        readConection = aReadConection;
+    }
+
+    /**
+     * @return the readStatement
+     */
+    public static Statement getReadStatement() {
+        return readStatement;
+    }
+
+    /**
+     * @param aReadStatement the readStatement to set
+     */
+    public static void setReadStatement(Statement aReadStatement) {
+        readStatement = aReadStatement;
+    }
+
+    
 /*    
     public static void main(String[] args) {
         "THEN": 

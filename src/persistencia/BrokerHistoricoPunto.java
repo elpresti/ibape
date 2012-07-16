@@ -335,4 +335,23 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
         this.fYhUltimoInsert = fYhUltimoInsert;
     }
     
+    public int cuantosPuntosTiene(int idCampania){
+        int cantPuntos = 0;
+        try{
+            if (creaConexionParaLeerHistorico(idCampania)){
+                String sql = "SELECT count() as Cantidad FROM Puntos";
+                PreparedStatement ps = getReadConection().prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()){
+                    cantPuntos = rs.getInt("Cantidad");
+                    ps.close();
+                    getReadConection().close();
+                }                
+            }
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.getStackTrace().toString());
+        }
+        return cantPuntos;
+    }
+    
 }

@@ -134,7 +134,7 @@ public class BrokerDbMapa implements Runnable{
         }
     }
     
-   private boolean dbLista(){
+   public boolean dbLista(){
       boolean salida=false;
       if (!(isConectado() && isDbExiste() && isTablaExiste())) {
          try {
@@ -224,7 +224,7 @@ public class BrokerDbMapa implements Runnable{
         catch (Exception e) {
             throw e;
         } finally {
-            close();
+            //close();
         }                        
         return (isConectado() && isDbExiste() && isTablaExiste());
     }
@@ -273,15 +273,20 @@ public class BrokerDbMapa implements Runnable{
         boolean sePudo = false;
         if (!(isUsarMapaNavegacion())) {
             if (BdbMap == null) {
-                inicializaBrokerDbMapa();
-                BdbMap = new Thread(this);
-                BdbMap.setPriority(Thread.MIN_PRIORITY);
-                BdbMap.start();
-                sePudo=true;
+                try {
+                    inicializaBrokerDbMapa();
+                    BdbMap = new Thread(this);
+                    BdbMap.setPriority(Thread.MIN_PRIORITY);
+                    BdbMap.sleep(3000); //
+                    BdbMap.start();
+                } catch (InterruptedException ex) {
+                    Logueador.getInstance().agregaAlLog(ex.toString());
+                }
             }
-        }    
+            sePudo=true;
+        }
         return sePudo;
-    }           
+    }
     
     public boolean detieneEjecucion(){
         boolean sePudo = false;
@@ -640,6 +645,13 @@ public class BrokerDbMapa implements Runnable{
      * @return the statement
      */
     public Statement getStatement() {
+        try {
+            if (statement.isClosed()){
+                setStatement(getConnection().createStatement());
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
         return statement;
     }
 

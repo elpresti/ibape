@@ -11,8 +11,10 @@ import javax.swing.table.TableModel;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import persistencia.BrokerCategoriasPOI;
+import persistencia.BrokerDbMapa;
 import persistencia.BrokerHistoricoPunto;
 import persistencia.BrokerHistoricoSondaSet;
+import persistencia.Logueador;
 
 /**
  *
@@ -35,7 +37,7 @@ public class ControllerHistorico {
 
     private void inicializador() {
         brokerHistoricoPunto = BrokerHistoricoPunto.getInstance();
-        brokerHistoricoSondaSet = BrokerHistoricoSondaSet.getInstance();        
+        brokerHistoricoSondaSet = BrokerHistoricoSondaSet.getInstance();
     }
 
     public void configuraBrokerHistorico() {
@@ -85,7 +87,30 @@ public class ControllerHistorico {
         if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
             gui.PanelHistorico.getInstance().marcaCampaniaEnCurso();
         }
-
     }
-       
+
+    public int getCantPuntosHistoricos(int idCamp){
+        return BrokerHistoricoPunto.getInstance().cuantosPuntosTiene(idCamp);
+    }        
+
+    public boolean iniciaServerYabreBrowser() {
+        boolean sePudo=false;
+        try{
+            if (ControllerPpal.getInstance().abrirWebServer()){
+                if (BrokerDbMapa.getInstance().disparaEjecucion()){
+                    if (persistencia.BrokerDbMapaHistorico.getInstance().disparaEjecucion()){                        
+                        //do what you want to do after sleeptig
+                        modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania(modelo.gisModule.Browser.getInstance().getUrl()+"/historico.php");
+                        sePudo=true;
+                    }
+                }
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+    
+    
 }
