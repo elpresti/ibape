@@ -132,7 +132,7 @@ public class OperacionesBasicas {
         //Armo el arreglo de la posicion del fondo en todo el ancho de la imagen.
        // ArrayList<Integer> fondo = buscaFondo(imgProcesada);
         int fondo[] = new int[967];
-        fondo = buscaFondoMejorado(imgProcesada);
+        fondo = buscaFondo(imgProcesada);
         BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
         getInstance().grabarImagen(imgConFondo,"imgs\\imagenConFondo.tmp");
         getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondo.tmp");
@@ -144,7 +144,7 @@ public class OperacionesBasicas {
     }
 
 
-    public int[] buscaFondoMejorado(BufferedImage img) {
+    public int[] buscaFondo(BufferedImage img) {
 
         ancho = img.getWidth();
         alto = img.getHeight();
@@ -171,11 +171,12 @@ public class OperacionesBasicas {
         while (contAncho < ancho) {
             limSup=fondo[contAncho-1]-5;
             limInf=fondo[contAncho-1]+5;
-            if (todoFondo(img, contAncho, fondo[contAncho-1],limSup, limInf,col)) {
-                fondo[contAncho] = limSup;
+            if (todoFondo(img, contAncho, fondo[contAncho-1],limSup, limInf,col)){
+                fondo[contAncho] = buscaNegroArriba(img,contAncho, fondo[contAncho-1],limSup, limInf,col);
             } else {
                 if (hayHueco(img, contAncho, fondo[contAncho-1], limSup, limInf, col)) {
-                    fondo[contAncho] = limInf;
+                    
+                    fondo[contAncho] = buscaBlancoAbajo(img,contAncho, fondo[contAncho-1],limSup, limInf,col);
                 } else {
                     if (hayBlancoDondeEstoy(img, contAncho, fondo[contAncho-1],col)) {
                         if (hayNegroArriba(img, contAncho, fondo[contAncho-1], limSup, limInf, col) != -1) {
@@ -298,6 +299,42 @@ public class OperacionesBasicas {
         return salida;
 
     }
+
+    public int buscaNegroArriba(BufferedImage img, int ancho, int alto, int limSup, int limInf, Colores col){
+        boolean noencontrofondo = true;
+        alto--;
+        while ((noencontrofondo == true)) {
+            int e = col.obtieneColor(img.getRGB(ancho, alto));
+            if ((col.getColoresMap().get(e).equals("Negro"))) {
+                noencontrofondo = false;
+            }
+            alto--;
+        }
+        if (noencontrofondo==true) {
+            return -1;
+        } else{
+                alto=alto+2;
+                return alto;
+              }
+    }
+
+      public int buscaBlancoAbajo(BufferedImage img, int ancho, int alto, int limSup, int limInf, Colores col){
+        boolean noencontrofondo = true;
+        alto++;
+        while ((alto<limInf) && (noencontrofondo == true)) {
+            int e = col.obtieneColor(img.getRGB(ancho, alto));
+            if ((col.getColoresMap().get(e).equals("Blanco"))) {
+                noencontrofondo = false;
+            }
+            alto++;
+        }
+        if (noencontrofondo==true) {
+            return limInf;
+        } else { alto--;
+            return alto;
+        }
+    }
+
 
     public ArrayList<Integer> buscaFondoSegunRango (BufferedImage img) {
         ArrayList<Integer> fondo = new ArrayList();
