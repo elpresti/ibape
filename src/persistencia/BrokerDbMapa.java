@@ -257,7 +257,8 @@ public class BrokerDbMapa implements Runnable{
     }
 
     public void run() {
-        try {            
+        try {         
+            BdbMap.sleep(3000);
             dbLista();
             //if (!(dbLista())) {
             //    JOptionPane.showMessageDialog(null, "No se pudo crear y conectar a la DB Mapa Navegacion");
@@ -277,9 +278,9 @@ public class BrokerDbMapa implements Runnable{
                     inicializaBrokerDbMapa();
                     BdbMap = new Thread(this);
                     BdbMap.setPriority(Thread.MIN_PRIORITY);
-                    BdbMap.sleep(3000); //
+                    //BdbMap.currentThread().sleep(3000); //
                     BdbMap.start();
-                } catch (InterruptedException ex) {
+                } catch (Exception ex) {
                     Logueador.getInstance().agregaAlLog(ex.toString());
                 }
             }

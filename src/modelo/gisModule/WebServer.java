@@ -4,79 +4,94 @@
  */
 package modelo.gisModule;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import persistencia.Logueador;
+
 /**
  *
  * @author Sebastian
  */
-public class WebServer {
+public class WebServer implements Runnable {
+
     static WebServer unicaInstancia;
     private String pathActual;
-    private boolean webServerEncendido=false;
+    private boolean webServerEncendido = false;
     private Process procesoWebServer;
-        
-    private WebServer(){
-    }
-    
-    public static WebServer getInstance() {
-       if (unicaInstancia == null) {
-          unicaInstancia = new WebServer();          
-       }
-       return unicaInstancia;
+    private Thread threadWebServer;
+
+    private WebServer() {
     }
 
-    public boolean runWebServer(){
-        boolean sePudo=false;            
-        setPathActual(System.getProperty("user.dir"));        
-        Runtime aplicacion = Runtime.getRuntime();         
-        try{
-            setProcesoWebServer(aplicacion.exec(getPathActual()+"\\SoftExterno\\server2go\\Server2Go.exe"));
-            setWebServerEncendido(true);
-            sePudo=true;
-            return sePudo;
+    public static WebServer getInstance() {
+        if (unicaInstancia == null) {
+            unicaInstancia = new WebServer();
         }
-        catch(Exception e){
+        return unicaInstancia;
+    }
+
+    public void run() {
+        runWebServer();
+    }
+
+    public void start() {
+        if (threadWebServer == null) {
+            threadWebServer = new Thread(this);
+            threadWebServer.setPriority(Thread.MIN_PRIORITY);
+            threadWebServer.start();
+        }
+    }
+
+    public boolean runWebServer() {
+        boolean sePudo = false;
+        setPathActual(System.getProperty("user.dir"));
+        Runtime aplicacion = Runtime.getRuntime();
+        try {
+            setProcesoWebServer(aplicacion.exec(getPathActual() + "\\SoftExterno\\server2go\\Server2Go.exe"));
+            setWebServerEncendido(true);
+            sePudo = true;
+            return sePudo;
+        } catch (Exception e) {
             System.out.println(e);
             return sePudo;
-        }        
+        }
     }
 
-    public boolean stopWebServer(){
-        boolean sePudo=false;            
+    public boolean stopWebServer() {
+        boolean sePudo = false;
         getProcesoWebServer().destroy();
-                
-        Runtime aplicacion = Runtime.getRuntime();         
-        try{
-            String rutaCompleta = getPathActual()+"\\SoftExterno\\server2go\\stop.bat";
+
+        Runtime aplicacion = Runtime.getRuntime();
+        try {
+            String rutaCompleta = getPathActual() + "\\SoftExterno\\server2go\\stop.bat";
             rutaCompleta = rutaCompleta.replace("\\", "/");
-            Process procesoCierraWebServer = aplicacion.exec("cmd.exe /C "+rutaCompleta);
+            Process procesoCierraWebServer = aplicacion.exec("cmd.exe /C " + rutaCompleta);
             //procesoCierraWebServer.destroy();
             setWebServerEncendido(false);
-            sePudo=true;
+            sePudo = true;
             return sePudo;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             return sePudo;
-        }        
+        }
     }
-    
-    public boolean cerrarWebServer() {
-        boolean sePudo=false;
 
-        Runtime aplicacion = Runtime.getRuntime();         
-        try{            
+    public boolean cerrarWebServer() {
+        boolean sePudo = false;
+
+        Runtime aplicacion = Runtime.getRuntime();
+        try {
             Process procesoWebServer = aplicacion.exec("cmd.exe /C taskkill /F /T /IM Server2Go.exe");
             //procesoCierraWebServer.destroy();
             setWebServerEncendido(false);
-            sePudo=true;
+            sePudo = true;
             return sePudo;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             return sePudo;
-        }                        
+        }
     }
-    
+
     /**
      * @return the pathActual
      */

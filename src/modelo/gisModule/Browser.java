@@ -9,33 +9,21 @@ import edu.stanford.ejalbert.exception.UnsupportedOperatingSystemException;
 import edu.stanford.ejalbert.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import persistencia.Logueador;
 import vista.VentanaPpal;
 
 /**
  *
  * @author Sebastian
  */
-public class Browser {
+public class Browser implements Runnable{
     private String nombre="Mapa";
     private String url="http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"+persistencia.BrokerDbMapa.getInstance().getPuertoWebServer();
     private static Browser unicaInstancia;
+    private String urlTemp;
+    private Thread threadBrowser;
         
     private Browser() {}
-
-    public boolean abrirPaginaEnPestania() {
-        boolean sePudo=false;
-        BrowserLauncher browserLauncher;
-        try {            
-            browserLauncher = new BrowserLauncher();            
-            browserLauncher.openURLinBrowser(getUrl());
-            sePudo=true;
-        } catch (BrowserLaunchingInitializingException ex) {
-            Logger.getLogger(Browser.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedOperatingSystemException ex) {
-            Logger.getLogger(Browser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return sePudo;
-    }
 
     public boolean abrirPaginaEnPestania(String url) {
         boolean sePudo=false;
@@ -117,4 +105,35 @@ public class Browser {
        return unicaInstancia;
     }
 
+    public void run(){ 
+        try {
+            //threadBrowser.sleep(3000);        
+            Thread.sleep(3000); 
+            abrirPaginaEnPestania(getUrlTemp());
+        } catch (Exception ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+    }
+    
+    public void start(){
+       if (threadBrowser == null) {
+            threadBrowser = new Thread(this);
+            threadBrowser.setPriority(Thread.MIN_PRIORITY);
+            threadBrowser.start();
+        }
+    }
+
+    /**
+     * @return the urlTemp
+     */
+    public String getUrlTemp() {
+        return urlTemp;
+    }
+
+    /**
+     * @param urlTemp the urlTemp to set
+     */
+    public void setUrlTemp(String urlTemp) {
+        this.urlTemp = urlTemp;
+    }
 }

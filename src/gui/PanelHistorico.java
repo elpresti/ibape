@@ -403,12 +403,13 @@ public class PanelHistorico extends javax.swing.JPanel {
         NRO_COL_NOMBRE_CAMP=7;
         cantColumnas=8;
         modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
-        tablaCampanias.setModel(modeloTabla);                
+        tablaCampanias.setModel(modeloTabla);
         //seteo los radiobotones de la tabla
         grupoElijeCampania = new ButtonGroup(); 
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
         habilitaPanelTablaCatPois(false);
+        seteaBotonesMapa();
     }
      
     public void marcaCampaniaEnCurso(){
@@ -563,6 +564,17 @@ public class PanelHistorico extends javax.swing.JPanel {
         }
         else{
             lblCantPuntosRecorrido.setText("");
+        }
+    }
+
+    public void seteaBotonesMapa() {
+        if (modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
+            btnDetenerMapaHistorico.setVisible(true);
+            btnIniciarMapaHistorico.setVisible(false);
+        }
+        else{
+            btnDetenerMapaHistorico.setVisible(false);
+            btnIniciarMapaHistorico.setVisible(true);            
         }
     }
     

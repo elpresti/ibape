@@ -5,6 +5,7 @@
 package controllers;
 
 import modelo.dataManager.AdministraCampanias;
+import modelo.gisModule.Browser;
 import persistencia.BrokerConfig;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
@@ -86,13 +87,14 @@ public class ControllerPpal {
         boolean sePudo=false;
         try{
             if (!(BrokerDbMapa.getInstance().isUsarMapaNavegacion())) {
-                if (modelo.gisModule.WebServer.getInstance().runWebServer() &&
-                        BrokerDbMapa.getInstance().disparaEjecucion()) {
+                modelo.gisModule.WebServer.getInstance().start();
+                if (BrokerDbMapa.getInstance().disparaEjecucion()) {
                     BrokerDbMapa.getInstance().setUsarMapaNavegacion(true);
                     //do what you want to do before sleeping
                     //Thread.currentThread().sleep(2000);//sleep for 2000 ms --> ya se hace dentro del Broker
                     //do what you want to do after sleeptig
-                    modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania();
+                    modelo.gisModule.Browser.getInstance().setUrlTemp(Browser.getInstance().getUrl());
+                    modelo.gisModule.Browser.getInstance().start();
                     sePudo=true;
                 }
             }
@@ -225,9 +227,8 @@ public class ControllerPpal {
         boolean sePudo=false;
         try{
             if (!modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
-                if (modelo.gisModule.WebServer.getInstance().runWebServer()){
-                    sePudo=true;
-                }
+                modelo.gisModule.WebServer.getInstance().start();
+                sePudo=true;
             }
             else{
                 sePudo=true;

@@ -100,7 +100,9 @@ public class ControllerHistorico {
                 if (BrokerDbMapa.getInstance().disparaEjecucion()){
                     if (persistencia.BrokerDbMapaHistorico.getInstance().disparaEjecucion()){                        
                         //do what you want to do after sleeptig
-                        modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania(modelo.gisModule.Browser.getInstance().getUrl()+"/historico.php");
+                        modelo.gisModule.Browser.getInstance().setUrlTemp(modelo.gisModule.Browser.getInstance().getUrl()+"/historico.php");
+                        modelo.gisModule.Browser.getInstance().start();
+                        //modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania(modelo.gisModule.Browser.getInstance().getUrlTemp());
                         sePudo=true;
                     }
                 }

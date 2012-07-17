@@ -127,24 +127,41 @@ public class BrokerDbMapaHistorico implements Runnable{
    }
 
     public void run() {
-        tablaLista();
+        try {
+            //BdbMap.currentThread().sleep(5000);//sleep for 2000 ms
+    /*      Thread esteThread = Thread.currentThread();
+            if (BdbMap == esteThread){    
+                try{
+                    Thread.sleep(4000);
+                }
+                catch (Exception e){
+                    persistencia.Logueador.getInstance().agregaAlLog(e.toString());
+                }
+            }        
+    */
+            Thread.sleep(4000);
+            tablaLista(); 
+        } catch (InterruptedException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
     }
 
     public boolean disparaEjecucion(){
         boolean sePudo = false;
-        if (BdbMap == null) {            
-            try {
+        if (BdbMap == null) {
+            try {                
                 inicializaBrokerDbMapaHistorico();
                 BdbMap = new Thread(this);
                 BdbMap.setPriority(Thread.MIN_PRIORITY);
-                //BdbMap.currentThread().sleep(5000);//sleep for 2000 ms
-                BdbMap.sleep(4000);//sleep for 5000 ms
-                BdbMap.start();
-                sePudo = true;
-            } catch (InterruptedException ex) {
+                BdbMap.start(); 
+                sePudo = true; 
+            } catch (Exception ex) { 
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
         }
+        else{
+            sePudo=true;
+        }            
         return sePudo;
     }           
     
