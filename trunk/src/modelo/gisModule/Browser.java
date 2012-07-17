@@ -110,6 +110,7 @@ public class Browser implements Runnable{
             //threadBrowser.sleep(3000);        
             Thread.sleep(3000); 
             abrirPaginaEnPestania(getUrlTemp());
+            controllers.ControllerHistorico.getInstance().restauraBtnIniciarMapa();
         } catch (Exception ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }

@@ -55,7 +55,7 @@ public class VentanaIbape extends JXFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IBaPE v1.0");
-        setMinimumSize(new java.awt.Dimension(520, 560));
+        setMinimumSize(new java.awt.Dimension(520, 660));
 
         splitPanePpal.setDividerSize(9);
         splitPanePpal.setPreferredSize(new java.awt.Dimension(700, 530));
