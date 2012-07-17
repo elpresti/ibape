@@ -249,12 +249,14 @@ public class PanelSelector extends javax.swing.JPanel {
 
 private void lnkNavegacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkNavegacionActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelNavegacion.getInstance());
+    PanelNavegacion.getInstance().seteaBotonesMapa();
 }//GEN-LAST:event_lnkNavegacionActionPerformed
 
 private void lnkHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkHistoricoActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelHistorico.getInstance());
     controllers.ControllerHistorico.getInstance().cargaGrillaCampanias();
     PanelHistorico.getInstance().inicializaTablaCategoriasPois();
+    PanelHistorico.getInstance().seteaBotonesMapa();
 }//GEN-LAST:event_lnkHistoricoActionPerformed
 
 private void lnkConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkConfiguracionActionPerformed

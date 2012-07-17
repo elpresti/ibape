@@ -30,7 +30,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
     /** Creates new form PanelNavegacion */
     private PanelNavegacion() {
         initComponents();
-        btnDetenerMapaNav.setVisible(false);
+        seteaBotonesMapa();
         chkConCamaraActionPerformed(null);
         punto.addObserver(this);
         try {
@@ -720,5 +720,16 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
           lblVelocidad.setText(String.valueOf(p.getVelocidad()));
       }
   }
+  
+    public void seteaBotonesMapa() {
+        if (modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
+            btnDetenerMapaNav.setVisible(true);
+            btnIniciarMapaNav.setVisible(false);
+        }
+        else{
+            btnDetenerMapaNav.setVisible(false);
+            btnIniciarMapaNav.setVisible(true);            
+        }
+    }
   
 }

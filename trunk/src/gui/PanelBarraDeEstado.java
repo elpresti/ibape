@@ -375,7 +375,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
             }
             catch (Exception e)
                { persistencia.Logueador.getInstance().agregaAlLog(e.toString()); }
-        }                
+        }
     }
             
     public void start(){
