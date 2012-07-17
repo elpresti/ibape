@@ -32,11 +32,23 @@ class Punto{
 			   }
 		}
 
+		function punto_historico_leido($id) {
+		       if($this->con->conectar()==true){
+			            return mysql_query("UPDATE PuntosHistoricos SET LEIDO=true WHERE ID=".$id);
+			   }
+		}
+		
         function mostrar_puntos(){
 				if($this->con->conectar()==true){				
 						return mysql_query("SELECT * FROM PUNTOS WHERE LEIDO=false ORDER BY ID DESC");
 				}
         }		
+
+        function mostrar_puntos_historicos(){
+				if($this->con->conectar()==true){				
+						return mysql_query("SELECT * FROM PuntosHistoricos WHERE LEIDO=false ORDER BY ID DESC");
+				}
+        }
 		
         function eliminar($id){
                 if($this->con->conectar()==true){
