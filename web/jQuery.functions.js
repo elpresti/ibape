@@ -32,6 +32,17 @@
                         }
                 });
         }
+		
+		function ConsultaDatosHistoricos(){
+                $.ajax({
+                        url: 'consultaHistorico.php',
+                        cache: false,
+                        type: "GET",
+                        success: function(datos){
+                                $("#tabla").html(datos);								
+                        }
+                });		
+		}
         
         function EliminarDato(punto_id){
                 var msg = confirm("Desea eliminar este dato?")
