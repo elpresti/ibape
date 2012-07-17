@@ -99,7 +99,7 @@ public class PanelSelector extends javax.swing.JPanel {
         taskPaneHistorico.setTitle("Historico");
         taskPaneHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        panelHistorico.setPreferredSize(new java.awt.Dimension(140, 30));
+        panelHistorico.setPreferredSize(new java.awt.Dimension(140, 35));
         panelHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lnkHistorico.setText("Historico");
@@ -194,7 +194,7 @@ public class PanelSelector extends javax.swing.JPanel {
         taskPaneAyuda.setTitle("Ayuda");
         taskPaneAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        panelAyuda.setPreferredSize(new java.awt.Dimension(140, 30));
+        panelAyuda.setPreferredSize(new java.awt.Dimension(140, 35));
         panelAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lnkAyuda.setText("Ayuda");
@@ -344,10 +344,23 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
 
     private void inicializador() {
         mostrarBtnPanelNavegacion(false);
+        cargaIconosAbotones();
     }
 
     public void mostrarBtnPanelNavegacion(boolean b) {
         taskPaneNavegacion.setVisible(b);
+    }
+
+    private void cargaIconosAbotones() {
+        lnkNavegacion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-navegacion.png"));
+        lnkAlertas.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-alertas.png"));
+        lnkAyuda.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-ayuda.png"));
+        lnkCampanias.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-campanias.png"));
+        lnkConfiguracion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-configuracion.png"));
+        lnkHistorico.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-historial.png"));
+        lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
+        lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
+        
     }
     
     

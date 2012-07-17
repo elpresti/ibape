@@ -40,6 +40,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     private DefaultTableModel modeloTabla;
     private ButtonGroup grupoElijeCampania;
     private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
+    private String txtBtnIniciaMapa;
     private int idCampaniaElegida;
     private int NRO_COL_ID_CAMP;
     private int NRO_COL_ELEGIR;
@@ -309,22 +310,25 @@ public class PanelHistorico extends javax.swing.JPanel {
     }//GEN-LAST:event_chkRecorridoActionPerformed
 
     private void btnIniciarMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarMapaHistoricoActionPerformed
-        String txtOriginal = btnIniciarMapaHistorico.getText();
+        setTxtBtnIniciaMapa(btnIniciarMapaHistorico.getText());
         btnIniciarMapaHistorico.setText("Abriendo...");
         btnIniciarMapaHistorico.setEnabled(false);
         if (!(controllers.ControllerHistorico.getInstance().iniciaServerYabreBrowser())) {
             JOptionPane.showMessageDialog(this,"Hubo un error al iniciar el Servidor Web ó el Navegador");
-        }
-        btnIniciarMapaHistorico.setText(txtOriginal);
-        btnIniciarMapaHistorico.setEnabled(true);
-        btnIniciarMapaHistorico.setVisible(false);
-        btnDetenerMapaHistorico.setVisible(true);
+        }        
     }//GEN-LAST:event_btnIniciarMapaHistoricoActionPerformed
 
     private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGraficarDatosActionPerformed
 
+    public void restauraBtnIniciarMapa(){
+        btnIniciarMapaHistorico.setText(getTxtBtnIniciaMapa());
+        btnIniciarMapaHistorico.setEnabled(true);
+        btnIniciarMapaHistorico.setVisible(false);
+        btnDetenerMapaHistorico.setVisible(true);        
+    }
+    
     private void btnDetenerMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerMapaHistoricoActionPerformed
         String txtOriginal = btnDetenerMapaHistorico.getText();
         btnDetenerMapaHistorico.setText("Cerrando...");
@@ -576,6 +580,20 @@ public class PanelHistorico extends javax.swing.JPanel {
             btnDetenerMapaHistorico.setVisible(false);
             btnIniciarMapaHistorico.setVisible(true);            
         }
+    }
+
+    /**
+     * @return the txtBtnIniciaMapa
+     */
+    public String getTxtBtnIniciaMapa() {
+        return txtBtnIniciaMapa;
+    }
+
+    /**
+     * @param txtBtnIniciaMapa the txtBtnIniciaMapa to set
+     */
+    public void setTxtBtnIniciaMapa(String txtBtnIniciaMapa) {
+        this.txtBtnIniciaMapa = txtBtnIniciaMapa;
     }
     
 }

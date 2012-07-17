@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import gui.PanelHistorico;
 import java.util.ArrayList;
 import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
@@ -104,15 +105,30 @@ public class ControllerHistorico {
                         modelo.gisModule.Browser.getInstance().start();
                         //modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania(modelo.gisModule.Browser.getInstance().getUrlTemp());
                         sePudo=true;
+                    
+                    }
+                    else{
+                        restauraBtnIniciarMapa();
                     }
                 }
+                else{
+                    restauraBtnIniciarMapa();
+                }
+            }
+            else{
+                restauraBtnIniciarMapa();
             }
         }
         catch(Exception e){
+            restauraBtnIniciarMapa();
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
     
+public void restauraBtnIniciarMapa(){
+    PanelHistorico.getInstance().restauraBtnIniciarMapa();
+    PanelHistorico.getInstance().seteaBotonesMapa();    
+}
     
 }

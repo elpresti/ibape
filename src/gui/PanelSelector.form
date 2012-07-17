@@ -116,7 +116,7 @@
                 <Container class="org.jdesktop.swingx.JXPanel" name="panelHistorico">
                   <Properties>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[140, 30]"/>
+                      <Dimension value="[140, 35]"/>
                     </Property>
                   </Properties>
 
@@ -276,7 +276,7 @@
                 <Container class="org.jdesktop.swingx.JXPanel" name="panelAyuda">
                   <Properties>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[140, 30]"/>
+                      <Dimension value="[140, 35]"/>
                     </Property>
                   </Properties>
 
