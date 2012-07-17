@@ -391,6 +391,7 @@ public abstract class BrokerPpal {
                     + "  posLon             float(30) NOT NULL,"
                     + "  pathImg            nvarchar(100),"
                     + "  fechaHora          TIMESTAMP NOT NULL,"
+                    + "  descripcion        nvarchar(500),"
                     + "  /* Foreign keys */ "
                     + "  FOREIGN KEY (idCampania)"
                     + "    REFERENCES Campanias(id)"

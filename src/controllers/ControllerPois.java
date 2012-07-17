@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import modelo.dataManager.CategoriaPoi;
@@ -47,24 +48,6 @@ public class ControllerPois {
         return fila;
     }
 
-    public DefaultTableModel cargaGrillaPOIS() {
-        DefaultTableModel dm = new DefaultTableModel();
-        //Cabecera
-        String[] encabezado = new String[6];
-        encabezado[0] = "id";
-        encabezado[1] = "Fecha y Hora";
-        encabezado[2] = "Categoria";
-        encabezado[3] = "Coordenadas";
-        encabezado[4] = "Descripcion";
-        encabezado[5] = "Acciones";
-        dm.setColumnIdentifiers(encabezado);
-        //Cuerpo
-        for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-            dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
-        }
-        return dm;
-    }
-
     public ArrayList<modelo.dataManager.CategoriaPoi> cargaCategoriasPOI() {
         return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
     }
@@ -82,37 +65,10 @@ public class ControllerPois {
         BrokerPOIs.getInstance().insertPOI(p);
     }
 
-    private Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Object[] fila = new Object[cantCols]; //creamos la fila
-        for (int i=0;i< unObjeto.size();i++){
-            if(unObjeto.get(i)!=null){
-                fila[i]= unObjeto.get(i);
-            }else{
-                fila[i]="";
-            }           
-        }
-        return fila;
-    }
-
-    public TableModel cargaGrillaCategoriaPOIS() {
-        DefaultTableModel dm = new DefaultTableModel();
-        //Cabecera
-        String[] encabezado = new String[4];
-        encabezado[0] = "id";
-        encabezado[1] = "Nombre de la categoria";
-        encabezado[2] = "Icono";
-        encabezado[3] = "Acciones";
-        dm.setColumnIdentifiers(encabezado);
-        //Cuerpo
-        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
-            ArrayList a= new ArrayList();
-            a.add(cP.getId());
-            a.add(cP.getTitulo());
-            a.add(cP.getPathIcono());
-            a.add("Acciones");
-            dm.addRow(agregaUnaFilaGenerica(4,a));
-        }
-        return dm;
+    public void agregaCategoriaPOI(String titulo) {
+        modelo.dataManager.CategoriaPoi cP = new CategoriaPoi();
+        cP.setTitulo(titulo);
+        cP.setPathIcono("ver null en el broker");
+        BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
     }
 }
