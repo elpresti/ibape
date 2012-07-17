@@ -10,8 +10,13 @@
  */
 package gui;
 
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.CategoriaPoi;
+import modelo.dataManager.POI;
+import persistencia.BrokerCategoriasPOI;
+import persistencia.BrokerPOIs;
+import persistencia.BrokerPpal;
 
 /**
  *
@@ -20,6 +25,8 @@ import modelo.dataManager.CategoriaPoi;
 public class PanelOpcPOIs extends javax.swing.JPanel {
 
     static PanelOpcPOIs unicaInstancia;
+    private DefaultTableModel modeloTablaPOIS;
+    private DefaultTableModel modeloTablaCategoriasPOI;
 
     /** Creates new form PanelOpcPOIs */
     private PanelOpcPOIs() {
@@ -167,7 +174,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblCategoria.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelCatNuevoPoi.add(lblCategoria);
 
-        comboCategorias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboCategorias.setFont(new java.awt.Font("Tahoma", 0, 12));
         comboCategorias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Red rota", "Buen Abadejo", "Fondo rocoso" }));
         comboCategorias.setMaximumSize(new java.awt.Dimension(130, 20));
         comboCategorias.setMinimumSize(new java.awt.Dimension(130, 20));
@@ -318,6 +325,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnAgregaCategoria.setMaximumSize(new java.awt.Dimension(120, 23));
         btnAgregaCategoria.setMinimumSize(new java.awt.Dimension(120, 23));
         btnAgregaCategoria.setPreferredSize(new java.awt.Dimension(120, 23));
+        btnAgregaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregaCategoriaActionPerformed(evt);
+            }
+        });
         panelBtnAgregaCategoria.add(btnAgregaCategoria);
 
         panelAgregaCategoria.add(panelBtnAgregaCategoria);
@@ -336,11 +348,18 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }//GEN-LAST:event_comboCategoriasActionPerformed
 
     private void btnAgregaPoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaPoiActionPerformed
-        // TODO add your handling code here:
+        // Agrega POI:
         CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
         controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText());
-        cargaTablaPOI();
+        cargaGrillaPOIS();
     }//GEN-LAST:event_btnAgregaPoiActionPerformed
+
+    private void btnAgregaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaCategoriaActionPerformed
+        // Agrega Categoria POI:
+        controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText());
+        cargaGrillaCategoriaPOIS();
+        cargaComboCategorias();
+    }//GEN-LAST:event_btnAgregaCategoriaActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregaCategoria;
     private javax.swing.JButton btnAgregaPoi;
@@ -384,18 +403,12 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void inicializador() {
         try {
-            cargaTablaPOI();
-            cargaTablaCategoriasPOI();
-            //carga combo
-            comboCategorias.removeAllItems();
-            for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
-                comboCategorias.addItem(cP);
-            }
+            cargaGrillaPOIS();
+            cargaGrillaCategoriaPOIS();
+            cargaComboCategorias();
             //obtengo ide del selected recuperando el objeto:
             //CategoriaPoi s = (CategoriaPoi) comboCategorias.getSelectedItem();
             //s.getId();
-
-
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -411,13 +424,101 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         elFrame.setVisible(true);
     }
 
-    private void cargaTablaPOI() {
-        //carga tabla
-        tablaPois.setModel(controllers.ControllerPois.getInstance().cargaGrillaPOIS());
+    private void cargaComboCategorias() {
+        //carga combo
+        comboCategorias.removeAllItems();
+        for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
+            comboCategorias.addItem(cP);
+        }
     }
 
-    private void cargaTablaCategoriasPOI() {
-        //carga tablaCategoriasPOI
-        tablaCategorias.setModel(controllers.ControllerPois.getInstance().cargaGrillaCategoriaPOIS());
+    private void vaciarJTable(DefaultTableModel dTM) {
+        /*while (dTM.getRowCount() > 0) {
+            dTM.removeRow(0);
+        }*/
+        dTM.setRowCount(0);
+    }
+
+    private Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Object[] fila = new Object[cantCols]; //creamos la fila
+        for (int i = 0; i < unObjeto.size(); i++) {
+            if (unObjeto.get(i) != null) {
+                fila[i] = String.valueOf(unObjeto.get(i));
+            } else {
+                fila[i] = "";
+            }
+        }
+        return fila;
+    }
+
+    private void cargaGrillaCategoriaPOIS() {
+        //DefaultTableModel dm = (DefaultTableModel) tablaCategorias.getModel(); 
+        modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
+        tablaCategorias.setModel(modeloTablaCategoriasPOI);
+        //vaciarJTable(dm);
+        //dm.setRowCount(0);
+        int cantCols = 4;
+        //Cabecera
+        /*String[] encabezado = new String[4];
+        encabezado[0] = "id";
+        encabezado[1] = "Nombre de la categoria";
+        encabezado[2] = "Icono";
+        encabezado[3] = "Acciones";
+        dm.setColumnIdentifiers(encabezado);*/
+        modeloTablaCategoriasPOI.addColumn("id");
+        modeloTablaCategoriasPOI.addColumn("Nombre de la categoria");
+        modeloTablaCategoriasPOI.addColumn("Icono");
+        modeloTablaCategoriasPOI.addColumn("Acciones");
+        //Cuerpo
+        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
+            ArrayList a = new ArrayList();
+            a.add(cP.getId());
+            a.add(cP.getTitulo());
+            a.add(cP.getPathIcono());
+            a.add("Acciones");
+            modeloTablaCategoriasPOI.addRow(agregaUnaFilaGenerica(cantCols, a));
+        }
+        //tablaCategorias.setModel(dm);
+    }
+
+    private void cargaGrillaPOIS() {
+        //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
+        modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
+        tablaPois.setModel(modeloTablaPOIS);
+        vaciarJTable(modeloTablaPOIS);
+        //dm.setRowCount(0);
+        int cantCols = 6;
+        //Cabecera
+        String[] encabezado = new String[6];
+        encabezado[0] = "id";
+        encabezado[1] = "Fecha y Hora";
+        encabezado[2] = "Categoria";
+        encabezado[3] = "Coordenadas";
+        encabezado[4] = "Descripcion";
+        encabezado[5] = "Acciones";
+        modeloTablaPOIS.setColumnIdentifiers(encabezado);
+        /* dm.addColumn("id");
+        dm.addColumn("Fecha y Hora");
+        dm.addColumn("Categoria");
+        dm.addColumn("Coordenadas");
+        dm.addColumn("Descripcion");
+        dm.addColumn("Acciones");*/
+        //Cuerpo
+        /*for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
+        dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
+        }*/
+        for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
+            ArrayList a = new ArrayList();
+            a.add(p.getId());
+            a.add(p.getFechaHora());
+            a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
+            String coordenadas = String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud());
+            a.add(coordenadas);
+            a.add(p.getDescripcion());
+            a.add("Acciones");
+            modeloTablaPOIS.addRow(agregaUnaFilaGenerica(cantCols, a));
+        }
+        //tablaPois.setModel(dm);
     }
 }
