@@ -11,6 +11,7 @@
 package gui;
 
 import java.util.ArrayList;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
@@ -25,8 +26,10 @@ import persistencia.BrokerPpal;
 public class PanelOpcPOIs extends javax.swing.JPanel {
 
     static PanelOpcPOIs unicaInstancia;
-    private DefaultTableModel modeloTablaPOIS;
-    private DefaultTableModel modeloTablaCategoriasPOI;
+    private DefaultTableModel modeloTablaPOIS = new DefaultTableModel();
+    private DefaultTableModel modeloTablaCategoriasPOI = new DefaultTableModel();
+
+    ;
 
     /** Creates new form PanelOpcPOIs */
     private PanelOpcPOIs() {
@@ -413,16 +416,16 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             System.out.println(e);
         }
     }
-    //main de prueba
-
+    /*    //main de prueba
+    
     public static void main(String[] args) {
-        javax.swing.JFrame elFrame = new javax.swing.JFrame();
-        elFrame.setSize(500, 500);
-        PanelOpcPOIs a = new PanelOpcPOIs();
-        //cargaEspecies();
-        elFrame.add(a);
-        elFrame.setVisible(true);
-    }
+    javax.swing.JFrame elFrame = new javax.swing.JFrame();
+    elFrame.setSize(500, 500);
+    PanelOpcPOIs a = new PanelOpcPOIs();
+    //cargaEspecies();
+    elFrame.add(a);
+    elFrame.setVisible(true);
+    }*/
 
     private void cargaComboCategorias() {
         //carga combo
@@ -433,10 +436,17 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }
 
     private void vaciarJTable(DefaultTableModel dTM) {
-        /*while (dTM.getRowCount() > 0) {
+        dTM.setColumnCount(0);
+        while (dTM.getRowCount() > 0) {
             dTM.removeRow(0);
-        }*/
-        dTM.setRowCount(0);
+        }
+        //dTM.setRowCount(0);
+    }
+
+    private void ocultarColJTable(JTable tabla,int indice) {
+        tabla.getColumnModel().getColumn(indice).setMaxWidth(0);
+        tabla.getColumnModel().getColumn(indice).setMinWidth(0);
+        tabla.getColumnModel().getColumn(indice).setPreferredWidth(0);
     }
 
     private Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
@@ -454,9 +464,9 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void cargaGrillaCategoriaPOIS() {
         //DefaultTableModel dm = (DefaultTableModel) tablaCategorias.getModel(); 
-        modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
-        tablaCategorias.setModel(modeloTablaCategoriasPOI);
-        //vaciarJTable(dm);
+        //modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
+        //tablaCategorias.setModel(modeloTablaCategoriasPOI);
+        vaciarJTable(modeloTablaCategoriasPOI);
         //dm.setRowCount(0);
         int cantCols = 4;
         //Cabecera
@@ -479,46 +489,55 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             a.add("Acciones");
             modeloTablaCategoriasPOI.addRow(agregaUnaFilaGenerica(cantCols, a));
         }
-        //tablaCategorias.setModel(dm);
+        tablaCategorias.setModel(modeloTablaCategoriasPOI);
+        //VER ocultar comluna id
+    
     }
 
     private void cargaGrillaPOIS() {
-        //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
-        modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
-        tablaPois.setModel(modeloTablaPOIS);
-        vaciarJTable(modeloTablaPOIS);
-        //dm.setRowCount(0);
-        int cantCols = 6;
-        //Cabecera
-        String[] encabezado = new String[6];
-        encabezado[0] = "id";
-        encabezado[1] = "Fecha y Hora";
-        encabezado[2] = "Categoria";
-        encabezado[3] = "Coordenadas";
-        encabezado[4] = "Descripcion";
-        encabezado[5] = "Acciones";
-        modeloTablaPOIS.setColumnIdentifiers(encabezado);
-        /* dm.addColumn("id");
-        dm.addColumn("Fecha y Hora");
-        dm.addColumn("Categoria");
-        dm.addColumn("Coordenadas");
-        dm.addColumn("Descripcion");
-        dm.addColumn("Acciones");*/
-        //Cuerpo
+        try {
+            //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
+            //modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
+            //tablaPois.setModel(modeloTablaPOIS);
+            vaciarJTable(modeloTablaPOIS);
+            //dm.setRowCount(0);
+            int cantCols = 6;
+            //Cabecera
+            /*String[] encabezado = new String[6];
+            encabezado[0] = "id";
+            encabezado[1] = "Fecha y Hora";
+            encabezado[2] = "Categoria";
+            encabezado[3] = "Coordenadas";
+            encabezado[4] = "Descripcion";
+            encabezado[5] = "Acciones";
+            modeloTablaPOIS.setColumnCount(cantCols-1);
+            modeloTablaPOIS.setColumnIdentifiers(encabezado);*/
+            // modeloTablaPOIS.setColumnCount(cantCols);
+            modeloTablaPOIS.addColumn("id");
+            modeloTablaPOIS.addColumn("Fecha y Hora");
+            modeloTablaPOIS.addColumn("Categoria");
+            modeloTablaPOIS.addColumn("Coordenadas");
+            modeloTablaPOIS.addColumn("Descripcion");
+            modeloTablaPOIS.addColumn("Acciones");
+            //Cuerpo
         /*for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-        dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
-        }*/
-        for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-            ArrayList a = new ArrayList();
-            a.add(p.getId());
-            a.add(p.getFechaHora());
-            a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
-            String coordenadas = String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud());
-            a.add(coordenadas);
-            a.add(p.getDescripcion());
-            a.add("Acciones");
-            modeloTablaPOIS.addRow(agregaUnaFilaGenerica(cantCols, a));
+            dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
+            }*/
+            for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
+                ArrayList a = new ArrayList();
+                a.add(p.getId());
+                a.add(p.getFechaHora());
+                a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
+                String coordenadas = String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud());
+                a.add(coordenadas);
+                a.add(p.getDescripcion());
+                a.add("Acciones");
+                modeloTablaPOIS.addRow(agregaUnaFilaGenerica(cantCols, a));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
-        //tablaPois.setModel(dm);
+        tablaPois.setModel(modeloTablaPOIS);
+        //VER ocultar comluna id
     }
 }

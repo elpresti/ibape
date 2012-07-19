@@ -120,7 +120,7 @@ public class BrokerPOIs extends BrokerPpal {
                     + " VALUES "
                     + "(" + poi.getLatitud() + "," + poi.getLongitud() + "," + fechaHora
                     + "," + PathImg + "," + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/
-                    + "," + "-1" + "," + Desc + ")";
+                    + "," + poi.getIdCampania()+ "," + Desc + ")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;//sin las marcas
@@ -210,7 +210,7 @@ public class BrokerPOIs extends BrokerPpal {
                 if (unaCamp.getEstado() == 1) {//campania finalizada
                     getPsSelectPoisXIdCampania().setDate(3, new java.sql.Date(unaCamp.getFechaFin().getTime()));
                 } else {
-                    getPsSelectPoisXIdCampania().setDate(3, Calendar.getInstance().getTime());
+                    getPsSelectPoisXIdCampania().setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
                 }
             }
             System.out.println("Select : "+getPsSelectPoisXIdCampania().toString());

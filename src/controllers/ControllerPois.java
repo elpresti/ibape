@@ -8,9 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
 import modelo.dataManager.Punto;
@@ -53,22 +55,26 @@ public class ControllerPois {
     }
 
     public void agregaPOI(int idCategoriaPOI, String descripcion) {
+       if(AdministraCampanias.getInstance().getCampaniaEnCurso()!=null){
         modelo.dataManager.POI p = new POI();
         p.setFechaHora(Punto.getInstance().getFechaYhora());
         p.setIdCategoriaPOI(idCategoriaPOI);
         p.setLatitud(Punto.getInstance().getLatitud());
         p.setLongitud(Punto.getInstance().getLongitud());
         p.setDescripcion(descripcion);
-        p.setMarcas(null);
-        p.setPathImg(null);
-
+        p.setMarcas(null);//ver
+        p.setPathImg("VER ruta a la imagen(ControllerPOIS.agregaPOI)");//ver
+        p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
         BrokerPOIs.getInstance().insertPOI(p);
+       }else{
+           JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
+       }
     }
 
     public void agregaCategoriaPOI(String titulo) {
         modelo.dataManager.CategoriaPoi cP = new CategoriaPoi();
         cP.setTitulo(titulo);
-        cP.setPathIcono("ver null en el broker");
+        cP.setPathIcono("VER null en el broker");
         BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
     }
 }
