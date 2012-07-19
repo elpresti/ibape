@@ -114,6 +114,7 @@ public class Browser implements Runnable{
         } catch (Exception ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        threadBrowser = null; 
     }
     
     public void start(){

@@ -70,20 +70,20 @@ public class BrokerCampania extends BrokerPpal{
             if (rs != null) {
                 campania = new modelo.dataManager.Campania();
                 // Get the data from the row using the column name
-                campania.setId(rs.getInt("id"));
-                campania.setBarco(rs.getString("barco"));
-                campania.setCapitan(rs.getString("capitan"));
-                campania.setDescripcion(rs.getString("descripcion"));
-                campania.setEstado(rs.getInt("estado"));
                 try {
+                    campania.setId(rs.getInt("id"));
+                    campania.setBarco(rs.getString("barco"));
+                    campania.setCapitan(rs.getString("capitan"));
+                    campania.setDescripcion(rs.getString("descripcion"));
                     campania.setFechaInicio(rs.getDate("fechainicio"));
                     campania.setFechaFin(rs.getDate("fechafin"));                    
+                    campania.setFolderHistorico(rs.getString("folderhistorico"));
+                    campania.setEstado(rs.getInt("estado"));
+                    // quedan pendiente cargar sus Pois ----------
                 }
                 catch (Exception e){
                     Logueador.getInstance().agregaAlLog(e.toString());
                 }
-                campania.setFolderHistorico(rs.getString("folderhistorico"));
-                // quedan pendiente cargar sus Pois ----------
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
