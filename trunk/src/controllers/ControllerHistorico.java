@@ -7,12 +7,14 @@ package controllers;
 import gui.PanelHistorico;
 import java.util.ArrayList;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerDbMapa;
+import persistencia.BrokerDbMapaHistorico;
 import persistencia.BrokerHistoricoPunto;
 import persistencia.BrokerHistoricoSondaSet;
 import persistencia.Logueador;
@@ -130,5 +132,11 @@ public void restauraBtnIniciarMapa(){
     PanelHistorico.getInstance().restauraBtnIniciarMapa();
     PanelHistorico.getInstance().seteaBotonesMapa();    
 }
+
+    public void cargaRecorridoEnMapa(int idCampaniaElegida) {
+        if (!BrokerDbMapaHistorico.getInstance().cargarRecorridoDeCamp(idCampaniaElegida)){
+            JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
+        }
+    }
     
 }

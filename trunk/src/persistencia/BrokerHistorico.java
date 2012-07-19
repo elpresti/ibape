@@ -203,6 +203,13 @@ public abstract class BrokerHistorico implements Runnable{
      * @return the statement
      */
     public Statement getStatement() {
+        if (statement == null){
+            try {
+                setStatement(getConexion().createStatement());
+            } catch (SQLException ex) {
+                Logueador.getInstance().agregaAlLog(ex.toString());
+            }
+        }
         return statement;
     }
 

@@ -47,9 +47,13 @@ public class BrokerDbMapaHistorico implements Runnable{
                     BrokerCampania.getInstance().getCampaniaFromDb(idCamp).getFechaInicio(), 
                     Calendar.getInstance().getTime());
             int i=0;
+            /*
             while (i<puntos.size() && sePudo){
                 sePudo = insert(puntos.get(i));
-            }            
+                i++;
+            }
+            */
+            sePudo = insertPuntos(puntos);
         }
         return sePudo;
     }
@@ -70,9 +74,9 @@ public class BrokerDbMapaHistorico implements Runnable{
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), String.valueOf(p.getTempAgua()));
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "PUNTO");
                 preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
-                //preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),p.getComentarios());
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), p.convierteAkml(false));
-                preparedStatement.executeUpdate();
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),p.getComentarios());
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), p.convierteAkml(true));
+                preparedStatement.executeUpdate(); 
                 sePudo=true;
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
              }
@@ -83,6 +87,37 @@ public class BrokerDbMapaHistorico implements Runnable{
             return sePudo;
         }
     }    
+
+    public boolean insertPuntos(ArrayList<modelo.dataManager.PuntoHistorico> puntos) {
+        boolean sePudo=false;
+        try {     
+             if (tablaLista() && puntos.size()>0){
+                PreparedStatement preparedStatement = getBmNavegacion().getConnection()
+                .prepareStatement("INSERT INTO "+getBmNavegacion().getDbName()+"."+getTableName()+
+                        " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                preparedStatement.setTimestamp(Integer.valueOf(getBmNavegacion().getCampoFECHApos()), 
+                        new Timestamp(puntos.get(0).getFechaYhora().getTime()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLATITUDpos()), String.valueOf(puntos.get(0).getLatitud()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLONGITUDpos()), String.valueOf(puntos.get(0).getLongitud()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoPROFUNDIDADpos()), String.valueOf(puntos.get(0).getProfundidad()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoVELOCIDADpos()), String.valueOf(puntos.get(0).getVelocidad()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), String.valueOf(puntos.get(0).getTempAgua()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "PUNTO Historico");
+                preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), BrokerDbMapaHistorico.getInstance().conviertePuntosAkml(true,puntos));
+                preparedStatement.executeUpdate(); 
+                sePudo=true;
+                setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+             }
+             return sePudo;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return sePudo;
+        }
+    }    
+    
     
     private void close() {
         try {
@@ -140,10 +175,12 @@ public class BrokerDbMapaHistorico implements Runnable{
             }        
     */
             Thread.sleep(4000);
-            tablaLista(); 
+            tablaLista();
+            
         } catch (InterruptedException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        BdbMap=null;
     }
 
     public boolean disparaEjecucion(){
@@ -252,4 +289,72 @@ public class BrokerDbMapaHistorico implements Runnable{
             }
     }
     
+    public String conviertePuntosAkml(boolean conCamara, ArrayList<modelo.dataManager.PuntoHistorico> puntos) {
+            String salida = "";        
+        if (puntos.size()>0){            
+            //Cosas pendientes de incluir:
+                // - Miniatura imagen de la sonda
+                // - Cantidad de marcas encontradas
+                // - Alertas (todas)
+
+            //Preset de camara 1 = vista aerea trasera:
+            //Longitud:getLonConNegativo()*1.00003  Latitud:getLatConNegativo()*1.00006  altitude:50  heading:35  tilt:75
+            //Preset de camara 2 = vista aerea lateral derecha:
+            //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
+            // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671); 
+            salida=
+            "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
+            +"<Document>"
+                +"<name>Codigo KML</name>"
+                +"<Style id=\"yellowLineGreenPoly\">"
+                   +"<LineStyle>"
+                     +"<color>7f00ffff</color>"
+                     +"<width>4</width>"
+                   +"</LineStyle>"
+                   +"<PolyStyle>"
+                   +   "<color>7f00ff00</color>"
+                   +"</PolyStyle>"
+                +"</Style>";
+                    
+            if (conCamara){
+            salida=salida
+                +"<Camera>"
+                +"<longitude>"+(puntos.get(puntos.size()-1).getLongitud()*0.99999)+"</longitude>"
+                +"<latitude>"+(puntos.get(puntos.size()-1).getLatitud()*1.00005)+"</latitude>"
+                +"<altitude>50</altitude>"
+                +"<heading>0</heading>"   //gira el ojo a la derecha (positivo) a la izquierda (negativo) 
+                +"<tilt>70</tilt>" //angulo de vision del ojo. 0= vista vertical a la tirra (desde arriba), 75=vista con 75° de inclinacion
+                +"</Camera>";        
+            }
+            java.sql.Timestamp fechaYhoraPrimero=new java.sql.Timestamp(puntos.get(0).getFechaYhora().getTime());
+            String strFechaYhoraPrimero = fechaYhoraPrimero.getYear()+"/"+fechaYhoraPrimero.getMonth()+"/"+fechaYhoraPrimero.getSeconds()+" "+fechaYhoraPrimero.getHours()+":"+fechaYhoraPrimero.getMinutes()+":"+fechaYhoraPrimero.getSeconds();
+            java.sql.Timestamp fechaYhoraUltimo=new java.sql.Timestamp(puntos.get(puntos.size()-1).getFechaYhora().getTime());
+            String strFechaYhoraUltimo = fechaYhoraUltimo.getYear()+"/"+fechaYhoraUltimo.getMonth()+"/"+fechaYhoraUltimo.getSeconds()+" "+fechaYhoraUltimo.getHours()+":"+fechaYhoraUltimo.getMinutes()+":"+fechaYhoraUltimo.getSeconds();
+            salida=salida
+            +"<Placemark>"// id=tramo+"+strFechaYhoraPrimero+" - "+strFechaYhoraUltimo+">"
+                +"<name>"+strFechaYhoraPrimero+"  -  "+strFechaYhoraUltimo+"</name>"
+                +"<visibility>1</visibility>"
+                +"<description>Recorrido entre "+strFechaYhoraPrimero+"  -  "+strFechaYhoraUltimo+"</description>"
+                +"<styleUrl>#yellowLineGreenPoly</styleUrl>"
+                +"<LineString>"
+                  +"<extrude>1</extrude>"
+                  +"<tessellate>1</tessellate>"
+                  +"<altitudeMode>absolute</altitudeMode>"                    
+                      +"<coordinates>";
+            int i=0;
+            while (i<puntos.size()){
+                salida+=puntos.get(i).getLongitud()+","+puntos.get(i).getLatitud()+","+puntos.get(i).getAltitud()+" ";
+                i++;
+            }
+            salida+=
+                       "</coordinates>"
+                  +"</LineString>"
+            +"</Placemark>"
+            +"</Document>"                
+
+            +"</kml>";    
+        }        
+        return salida;
+    }
+            
 }

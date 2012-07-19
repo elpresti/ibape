@@ -19,6 +19,7 @@ public class PuntoHistorico {
     private double profundidad;
     private double velocidadAgua;
     private double tempAgua;
+    private String comentarios;
 
     public PuntoHistorico(){        
     }
@@ -174,7 +175,7 @@ public class PuntoHistorico {
         //Preset de camara 2 = vista aerea lateral derecha:
         //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
         // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671);
-        String salida = "";
+        String salida = ""; 
         salida=
         "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
         +"<Document>";
@@ -188,7 +189,7 @@ public class PuntoHistorico {
               +"<tilt>70</tilt>" //angulo de vision del ojo. 0= vista vertical a la tirra (desde arriba), 75=vista con 75° de inclinacion
             +"</Camera>";        
         }
-        java.sql.Timestamp fechaYhoraActual=(java.sql.Timestamp) getFechaYhora();
+        java.sql.Timestamp fechaYhoraActual=new java.sql.Timestamp(getFechaYhora().getTime());
         salida=salida
           +"<Placemark>"
             +"<name>"+fechaYhoraActual.getHours()+":"+fechaYhoraActual.getMinutes()+":"+fechaYhoraActual.getSeconds()+"</name>"
@@ -214,5 +215,20 @@ public class PuntoHistorico {
         +"</kml>";    
         return salida;
     }
+
+    /**
+     * @return the comentarios
+     */
+    public String getComentarios() {
+        return comentarios;
+    }
+
+    /**
+     * @param comentarios the comentarios to set
+     */
+    public void setComentarios(String comentarios) {
+        this.comentarios = comentarios;
+    }
+
     
 }

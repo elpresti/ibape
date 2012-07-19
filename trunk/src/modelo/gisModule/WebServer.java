@@ -32,6 +32,7 @@ public class WebServer implements Runnable {
 
     public void run() {
         runWebServer();
+        threadWebServer = null;
     }
 
     public void start() {
@@ -84,6 +85,7 @@ public class WebServer implements Runnable {
             Process procesoWebServer = aplicacion.exec("cmd.exe /C taskkill /F /T /IM Server2Go.exe");
             //procesoCierraWebServer.destroy();
             setWebServerEncendido(false);
+            threadWebServer=null;
             sePudo = true;
             return sePudo;
         } catch (Exception e) {

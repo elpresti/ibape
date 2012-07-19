@@ -268,6 +268,7 @@ public class BrokerDbMapa implements Runnable{
             Logueador.getInstance().agregaAlLog(e.toString());
             //setTxtCuadro(e.toString());  //e.printStackTrace();
         }
+        BdbMap=null;
     }
 
     public boolean disparaEjecucion(){
@@ -293,8 +294,8 @@ public class BrokerDbMapa implements Runnable{
         boolean sePudo = false;
         if (!(BdbMap == null)) {
            BdbMap = null;
-           sePudo=true;
         }
+        sePudo=true;        
         return sePudo;
     }
 

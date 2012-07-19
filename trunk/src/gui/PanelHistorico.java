@@ -11,6 +11,7 @@
 package gui;
 
 import controllers.ControllerCampania;
+import controllers.ControllerHistorico;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -319,7 +320,9 @@ public class PanelHistorico extends javax.swing.JPanel {
     }//GEN-LAST:event_btnIniciarMapaHistoricoActionPerformed
 
     private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
-        // TODO add your handling code here:
+        if (getIdCampaniaElegida()>=0){
+            ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
+        }
     }//GEN-LAST:event_btnGraficarDatosActionPerformed
 
     public void restauraBtnIniciarMapa(){

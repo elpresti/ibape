@@ -1758,10 +1758,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     }
     
     private void eligeComSondaQueEstaba() {
-        if (comSondaElegido.length()>1){
+        if ((comSondaElegido != null) && comSondaElegido.length()>1){
             comboPuertoSonda.setSelectedItem(comSondaElegido);
         }
-    }    
+        else{
+            comboPuertoSonda.addItem("No hay puertos COM en este equipo");
+        }
+    }
 
     /**
      * @return the chkAutoConectaLan
