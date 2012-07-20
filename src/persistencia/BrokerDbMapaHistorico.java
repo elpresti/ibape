@@ -43,6 +43,7 @@ public class BrokerDbMapaHistorico implements Runnable{
     public boolean cargarRecorridoDeCamp(int idCamp){
         boolean sePudo=true;
         if (idCamp>=0){
+            vaciaMapaHistorico();
             ArrayList<PuntoHistorico> puntos = BrokerHistoricoPunto.getInstance().getPuntos(
                     BrokerCampania.getInstance().getCampaniaFromDb(idCamp).getFechaInicio(), 
                     Calendar.getInstance().getTime());
@@ -356,5 +357,35 @@ public class BrokerDbMapaHistorico implements Runnable{
         }        
         return salida;
     }
-            
+    
+    public boolean vaciaMapaHistorico(){    
+        boolean sePudo=false;
+        try {     
+             if (tablaLista()){
+                PreparedStatement preparedStatement = getBmNavegacion().getConnection()
+                .prepareStatement("INSERT INTO "+getBmNavegacion().getDbName()+"."+getTableName()+
+                        " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                preparedStatement.setTimestamp(Integer.valueOf(getBmNavegacion().getCampoFECHApos()), 
+                        new Timestamp(Calendar.getInstance().getTime().getTime()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLATITUDpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLONGITUDpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoPROFUNDIDADpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoVELOCIDADpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), "0");
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "vaciarMapa()");
+                preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),"");
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), "");
+                preparedStatement.executeUpdate();                 
+                setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                sePudo=true;
+             }             
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+    
 }
