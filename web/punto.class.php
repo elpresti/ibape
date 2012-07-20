@@ -46,7 +46,7 @@ class Punto{
 
         function mostrar_puntos_historicos(){
 				if($this->con->conectar()==true){				
-						return mysql_query("SELECT * FROM PuntosHistoricos WHERE LEIDO=false ORDER BY ID DESC LIMIT 0,1");
+						return mysql_query("SELECT * FROM PuntosHistoricos WHERE LEIDO=false ORDER BY ID ASC LIMIT 0,1");
 				}
         }
 		
