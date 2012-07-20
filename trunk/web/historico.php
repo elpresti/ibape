@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Mapa de prueba</title>
+<title>Mapa de historico</title>
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="jquery.functions.js" type="text/javascript"></script>
 
@@ -22,7 +22,7 @@
          ge.getWindow().setVisibility(true);         
       }
       function failureCB(errorCode) {
-          alert("Error"+errorCode+". No se pudo crear una instancia de GE");
+          alert("Error"+errorCode+". No se pudo crear una instancia de GE");		  
       }
       google.setOnLoadCallback(init);	  
 
@@ -35,7 +35,15 @@
 function consultaYmuestra() {
 	ConsultaDatosHistoricos();	
 	//pasaUltimoPuntoAmapa();
-	cargaUltimoKml();
+	var inputLastID = document.getElementById('campoLastID');
+	var inputLastObjeto = document.getElementById('campoLastObjeto');
+	if ((inputLastID != null) && (inputLastID.value >= 0)){
+		if ((inputLastObjeto != null) && (inputLastObjeto.value == "vaciarMapa()")){
+			vaciarMapa();
+		}
+		else{ cargaUltimoKml(); }
+		
+	}
 }
 
 function pasaUltimoPuntoAmapa() {
@@ -69,7 +77,7 @@ function cargaUltimoKml() {
 	  style.getIconStyle().setIcon(icon); //apply the icon to the style
 	  placemark.setStyleSelector(style); //apply the style to the placemark
 	}
-*/	
+*/		
 	var inputLastKML = document.getElementById('campoLastKML');
 	if (!(inputLastKML == null)) {
 		var kmlString = inputLastKML.value;
@@ -102,9 +110,17 @@ var kmlString2 = ''
 		ge.getFeatures().appendChild(kmlObject);
 		if (kmlObject.getAbstractView())
 		   ge.getView().setAbstractView(kmlObject.getAbstractView());		
-	}
+	}	
 }
 
+function vaciarMapa(){
+//remove all features from map
+  var features = ge.getFeatures();
+  while (features.getLastChild() != null)
+  {
+    features.removeChild(features.getLastChild());
+  }
+}
 
 function crearMarca(latitud,longitud,nroMarca) {
 	// Create the placemark.
