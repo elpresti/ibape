@@ -61,11 +61,27 @@ abstract class PuertoSerie  extends java.util.Observable implements SentenceList
             // Abrir directamente un puerto determinado= tiempo aproximado: 36seg  
             setEstadoConexion(1);
             Logueador.getInstance().agregaAlLog("Tratando de abrir el COM"+getNroCom());
-            CommPortIdentifier idCOMX = CommPortIdentifier.getPortIdentifier("COM"+getNroCom());
-            Logueador.getInstance().agregaAlLog("COM"+getNroCom()+" abierto!");
-            setSerialPort((SerialPort) idCOMX.open("SerialIBAPE", 30)); //este .open() [CommPort] genera el segundo thread
-            getSerialPort().setSerialPortParams(getVelocidadCom(), getBitsDeDatosCom(),getBitsParadaCom(), getBitsParidadCom());
+            CommPortIdentifier idCOMX = null;
+            try{
+                idCOMX = CommPortIdentifier.getPortIdentifier("COM"+getNroCom());
+            }
+            catch(UnsatisfiedLinkError e){
+                if (estanTodosLosArchivosNecesarios()){
+                    //error al intentar abrir el puerto serie especificado
+                }
+                else{
+                    if (copiarArchivosNecesarios()){
+                        idCOMX = CommPortIdentifier.getPortIdentifier("COM"+getNroCom()); //try again
+                    }                    
+                }
+            }           
+            if (idCOMX != null){
+                Logueador.getInstance().agregaAlLog("COM"+getNroCom()+" abierto!");
+                setSerialPort((SerialPort) idCOMX.open("SerialIBAPE", 30)); //este .open() [CommPort] genera el segundo thread
+                getSerialPort().setSerialPortParams(getVelocidadCom(), getBitsDeDatosCom(),getBitsParadaCom(), getBitsParidadCom());                
+            }
             return getSerialPort();
+            
         } catch (PortInUseException portInUseExc) {
               JOptionPane.showMessageDialog(null, "El COM"+getNroCom()+" especificado está en uso", "Error al abrir el puerto", JOptionPane.ERROR_MESSAGE);
               Logueador.getInstance().agregaAlLog(portInUseExc.toString());              
@@ -485,6 +501,27 @@ public void sentenceRead(SentenceEvent event) {
         this.estadoConexion = estadoConexion;
         setChanged();
         notifyObservers();
+    }
+
+    private boolean estanTodosLosArchivosNecesarios() {
+        boolean estanTodos=false;
+        //--- revisar, en principio si está la DLL q corresponde para la RXTXcomm segun la version de SO
+        return estanTodos;
+    }
+
+    private boolean copiarArchivosNecesarios() {
+        boolean sePudo=false;
+        //--- revisar, en principio si está la DLL q corresponde para la RXTXcomm segun la version de SO
+        try {
+            //    ---> C:\Program Files\Java\jdk1.7.0_05\bin\rxtxSerial.dll
+            // probar con System.setProperty( "java.library.path", "/path/to/libs" );
+            String ruta64b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64\\rxtxSerial.dll";
+            System.load(ruta64b);
+            sePudo=true;
+        } catch (UnsatisfiedLinkError e) { 
+          System.err.println("No se pudo cargar la libreria DLL para la lectura de puertos Serie.\n" + e);
+        }
+        return sePudo;
     }
 
 
