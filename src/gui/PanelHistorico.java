@@ -321,7 +321,18 @@ public class PanelHistorico extends javax.swing.JPanel {
 
     private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
         if (getIdCampaniaElegida()>=0){
-            ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
+            if (chkRecorrido.isSelected()){
+                ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
+            }
+            if (getCategoriasSeleccionadas().size()>0){
+                ControllerHistorico.getInstance().cargaPoisEnMapa(getIdCampaniaElegida(),getCategoriasSeleccionadas());
+            }
+            if (!(getCategoriasSeleccionadas().size()>0) && !(chkRecorrido.isSelected())){
+                JOptionPane.showMessageDialog(null, "No ha elegido que datos de la campaña elegida desea graficar");
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "No ha elegido ninguna campaña para graficar");
         }
     }//GEN-LAST:event_btnGraficarDatosActionPerformed
 
@@ -488,7 +499,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         chkPoisTodos.setSelected(false);
         chkRecorrido.setSelected(false);
         if (tableModelCatPois.getRowCount()==0){            
-            tableModelCatPois.addRow(new String[]{"","No se encontraron categorias de Pois en sistema...","",""});            
+            tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),null,"No se encontraron categorias de Pois en sistema..."});
             habilitaChkTodosLosPois(false);
             //habilitaPanelTablaCatPois(false);
             //habilitaBtnGraficarDatos(false);

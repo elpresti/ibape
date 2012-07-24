@@ -138,5 +138,11 @@ public void restauraBtnIniciarMapa(){
             JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
         }
     }
+
+    public void cargaPoisEnMapa(int idCampaniaElegida, ArrayList<Integer> categoriasSeleccionadas) {
+        if (!BrokerDbMapaHistorico.getInstance().cargarPoisDeCamp(idCampaniaElegida,categoriasSeleccionadas)){
+            JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
+        }
+    }
     
 }
