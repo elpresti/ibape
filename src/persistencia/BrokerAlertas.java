@@ -45,14 +45,15 @@ public class BrokerAlertas extends BrokerPpal{
         try {                                
             String titulo=null;
             if (alerta.getTitulo()!=null) {
-                titulo = ""+alerta.getTitulo()+"";
+                titulo = "'"+alerta.getTitulo()+"'";
             }
             String mensaje="";
             if (alerta.getMensaje()!=null) {
-                mensaje = ""+alerta.getMensaje()+"";
+                mensaje = "'"+alerta.getMensaje()+"'";
             }  
+            
             int flagsAcciones=alerta.getFlagsAcciones();
-            String estado = String.valueOf(alerta.isEstado());
+            String estado = "'"+String.valueOf(alerta.isEstado())+"'";
             if(alerta.getCondiciones()!=null){
                         sqlQuery = "INSERT INTO Alertas"
                         + "(estado,titulo,mensaje,flagsAcciones)"
@@ -65,21 +66,22 @@ public class BrokerAlertas extends BrokerPpal{
             }
                 //Ahora obtengo el id de la alerta insertada para insertar en la tabla condiciones
                 if (sePudo){
-                sqlQuery = "SELECT max(id) from alertas";
+                sqlQuery = "SELECT max(id) as id from alertas";
                 System.out.println("Select: "+sqlQuery);
                 rs= getStatement().executeQuery(sqlQuery);
                 if ( rs != null) {
-                    idAlerta=rs.getInt("id");
+                    alerta.setId(rs.getInt("id"));
+                    controllers.ControllerAlertas.getInstance().setIdUltAlertaInsertada(alerta.getId());
                     sePudo = true;
                 }else{sePudo=false;}
                 //Inserto condiciones en Tabla de Condiciones
                boolean ok=true; 
                for (Condicion c:alerta.getCondiciones()){
-                   if (c.getId()==0){
+                   if (c.getId()>=10000){
                     sqlQuery = "INSERT INTO Condiciones"
                         + "(idVariable,idAlerta,valor1,valor2,idRelacion,descripcion)"
                         + "VALUES"
-                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getIdRelacion()+","+c.getDescripcion()+")";
+                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getIdRelacion()+",'"+c.getDescripcion()+"')";
                         System.out.println("Insert: "+sqlQuery);
                         if (getStatement().executeUpdate(sqlQuery) > 0) {
                             sePudo = true;
@@ -339,10 +341,10 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
             String estado = String.valueOf(alerta.isEstado());
             if(alerta.getCondiciones()!=null){
                         sqlQuery ="Update Alertas "
-                        + "SET estado ="+alerta.isEstado()+", "
-                        + "mensaje ="+alerta.getMensaje()+", "
-                        + "flagsAcciones ="+alerta.getFlagsAcciones()+", "
-                        + "titulo ="+alerta.getTitulo()+" WHERE "
+                        + "SET estado='"+alerta.isEstado()+"', "
+                        + "mensaje="+alerta.getMensaje()+", "
+                        + "flagsAcciones="+alerta.getFlagsAcciones()+", "
+                        + "titulo='"+alerta.getTitulo()+"' WHERE "
                         + "id="+alerta.getId();
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
@@ -439,21 +441,45 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         ArrayList<modelo.alertas.Alerta> alertas = new ArrayList();        
         try {
             ResultSet rs = getStatement().executeQuery("SELECT * FROM Alertas");
-            while (rs.next()) {                
+
+            while (rs.next()) {    
                 modelo.alertas.Alerta alerta = new modelo.alertas.Alerta();
-                // Get the data from the row using the column name
                 alerta.setId(rs.getInt("id"));
                 alerta.setEstado(rs.getBoolean("estado"));
                 alerta.setTitulo(rs.getString("titulo"));
                 alerta.setMensaje(rs.getString("mensaje"));
-                alerta.setFlagsAcciones(rs.getInt("flagsAcciones"));
-                // Queda pendiente cargar sus Condiciones ----------
+                alerta.setFlagsAcciones(rs.getInt("flagsAcciones"));             
                 alertas.add(alerta);
+            }
+            
+            for (Alerta a:alertas){
+                ArrayList <Condicion> condiciones=getCondicionesFromDB(a.getId());
+                if (!condiciones.isEmpty()){
+                    a.setCondiciones(condiciones);
+                }  
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        } 
+        
+
+        
+        return alertas;
+    }
+   
+      public ArrayList<modelo.alertas.Condicion> getCondicionesFromDB(int idAlerta){
+        ArrayList<modelo.alertas.Condicion> condiciones = new ArrayList();        
+        try {
+            ResultSet rs = getStatement().executeQuery("SELECT * FROM Condiciones WHERE idAlerta="+idAlerta+"");
+
+            while (rs.next()) {    
+                modelo.alertas.Condicion condicion = new modelo.alertas.Condicion(rs.getInt("id"),rs.getInt("idVariable"),rs.getInt("idRelacion"),rs.getFloat("valor1"),rs.getFloat("valor2"),rs.getString("descripcion"));
+                condiciones.add(condicion);
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }        
-        return alertas;
+        return condiciones;
     }
 
     public ArrayList<Variable> getVariablesFromDB() {

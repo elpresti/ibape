@@ -4,6 +4,7 @@
  */
 package modelo.alertas;
 import controllers.ControllerAlertas;
+import java.util.ArrayList;
 import java.util.List;
 import persistencia.Logueador;
 /**
@@ -11,7 +12,7 @@ import persistencia.Logueador;
  * @author Martin
  */
 public class AdministraAlertas {
-    private static List<Alerta> alertas;
+    private static ArrayList<Alerta> alertas;
     private static AdministraAlertas unicaInstancia;
     private static boolean estadoAlertas;
 
@@ -20,7 +21,8 @@ public class AdministraAlertas {
      */
     
     private AdministraAlertas(){
-        leerAlertasDeLaDB();     
+        leerAlertasDeLaDB();
+        alertas=new ArrayList();
     }
     
     public static AdministraAlertas getInstance() {
@@ -44,18 +46,18 @@ public class AdministraAlertas {
         estadoAlertas = aEstadoAlertas;
     }
     
-    public List<Alerta> getAlertas() {
+    public ArrayList<Alerta> getAlertas() {
         return alertas;
     }
     
-    public List<Alerta> getAlertasActivas() {
+    public ArrayList<Alerta> getAlertasActivas() {
         return alertas;
     }
 
     /**
      * @param aAlertas the alertas to set
      */
-    public void setAlertas(List<Alerta> aAlertas) {
+    public void setAlertas(ArrayList<Alerta> aAlertas) {
         alertas = aAlertas;
     }
     
@@ -63,7 +65,7 @@ public class AdministraAlertas {
         boolean sePudo=false;        
         try {
             if (persistencia.BrokerAlertas.getInstance().insertAlerta(a)){
-                a.setId(persistencia.BrokerAlertas.getInstance().getIdUltimoInsert());
+                a.setId(controllers.ControllerAlertas.getInstance().getIdUltAlertaInsertada());
                 alertas.add(a);
                 sePudo = true;
             }

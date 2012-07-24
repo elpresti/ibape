@@ -4,6 +4,7 @@
  */
 package modelo.alertas;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,12 +12,12 @@ import java.util.List;
  * @author Martin
  */
 public class Alerta {
-    private static int id;
-    private static boolean estado;
-    private static String titulo;
-    private static String mensaje;
-    private static int flagsAcciones;    
-    private static List<Condicion> condiciones;
+    private int id;
+    private boolean estado;
+    private String titulo;
+    private String mensaje;
+    private int flagsAcciones;    
+    private ArrayList<Condicion> condiciones;
 
     /**
      * @return the id
@@ -27,7 +28,9 @@ public class Alerta {
         Alerta alerta=new Alerta();
     }
     */
-    
+    public Alerta(){
+        condiciones=new ArrayList();
+    }
     
     public int getId() {
         return id;
@@ -99,19 +102,21 @@ public class Alerta {
     /**
      * @return the condiciones
      */
-    public List<Condicion> getCondiciones() {
+    public ArrayList<Condicion> getCondiciones() {
         return condiciones;
     }
 
     /**
      * @param aCondiciones the condiciones to set
      */
-    public void setCondiciones(List<Condicion> aCondiciones) {
+    public void setCondiciones(ArrayList<Condicion> aCondiciones) {
         condiciones = aCondiciones;
     }
     
     public boolean agregarCondicion(Condicion c){
-        return true;
+        boolean result=false;
+        result=condiciones.add(c);
+        return result;
     }
     public boolean modificarCondicion(Condicion c){
         return true;

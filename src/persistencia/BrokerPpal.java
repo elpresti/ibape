@@ -18,6 +18,7 @@ public abstract class BrokerPpal {
     static BrokerPpal unicaInstancia;
     private Connection conexion;
     private Statement statement;
+    private Statement statementAlerta;
     private ResultSet resultSet;
     private boolean conectado;
     private String dbName;

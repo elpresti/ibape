@@ -115,4 +115,11 @@ public class Condicion {
     public void setIdAlerta(int idAlerta) {
         this.idAlerta = idAlerta;
     }
+
+    /**
+     * @param idVariable the idVariable to set
+     */
+    public void setIdVariable(int idVariable) {
+        this.idVariable = idVariable;
+    }
 }
