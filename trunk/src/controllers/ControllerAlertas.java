@@ -30,6 +30,7 @@ public class ControllerAlertas {
     private Relacion relacionAct;
     private Variable variableAct;
     private Alerta alertaAct;
+    private int idUltAlertaInsertada;
    
     public static ControllerAlertas getInstance() {
        if (unicaInstancia == null)
@@ -72,14 +73,14 @@ public class ControllerAlertas {
         return sePudo;
     }
 
-    public boolean nuevaAlerta(String nombre, String mensaje, String estado, List<modelo.alertas.Condicion> condiciones){
+    public boolean nuevaAlerta(String nombre, String mensaje, String estado, ArrayList<modelo.alertas.Condicion> condiciones){
         boolean sePudo=false;
         boolean est=false;
         if ((nombre.length()>1) && (mensaje.length()>1) && (!condiciones.isEmpty())){
             modelo.alertas.Alerta alerta = new modelo.alertas.Alerta();
             alerta.setTitulo(nombre);
             alerta.setMensaje(mensaje);
-            if (estado.matches("ACTIVADA")){
+            if (estado.matches("Activada")){
                 est=true;
             }else{
                 est=false;
@@ -88,7 +89,7 @@ public class ControllerAlertas {
             for (modelo.alertas.Condicion c:condiciones){
                 alerta.agregarCondicion(c);
             }
-
+           
             if (modelo.alertas.AdministraAlertas.getInstance().agregarAlerta(alerta)) {
                 sePudo=true;
                 gui.PanelOpcAlertas.getInstance().cargaGrillaAlertas();
@@ -106,14 +107,20 @@ public class ControllerAlertas {
         return sePudo;
     }
 
-    public boolean modificarAlerta(int id, String nombre, String mensaje, boolean estado,List<Condicion> condiciones){
+    public boolean modificarAlerta(int id, String nombre, String mensaje, String estado,ArrayList<Condicion> condiciones){
         boolean sePudo=false;
+        boolean est;
         if ((nombre.length()>1) && (mensaje.length()>1)){
             //traigo la campania vieja y le cargo los valores nuevos
             modelo.alertas.Alerta alerta = modelo.alertas.AdministraAlertas.getInstance().getAlerta(id);
             alerta.setTitulo(nombre);            
-            alerta.setMensaje(mensaje);  
-            alerta.setEstado(estado); 
+            alerta.setMensaje(mensaje);             
+            if (estado.matches("Activada")){
+                est=true;
+            }else{
+                est=false;
+            }
+            alerta.setEstado(est); 
             alerta.setCondiciones(condiciones);
             if (modelo.alertas.AdministraAlertas.getInstance().modificarAlerta(alerta)) {             
                 gui.PanelOpcAlertas.getInstance().cargaGrillaAlertas();
@@ -163,21 +170,36 @@ public class ControllerAlertas {
     }
 
     public void agregaCondicionAct(int idProvCondicion,int idRelacion,int idVariable,float valMin, float valMax,String descripcion){
-            boolean sePudo=false;
+        boolean encontro=false;
+        int i=0;
+        while ((!encontro)&&(i<=getCondicionesAct().size()-1)){
+            if (idProvCondicion==getCondicionesAct().get(i).getId()){
+                encontro=true;
+                getCondicionesAct().get(i).setIdRelacion(idRelacion);
+                getCondicionesAct().get(i).setDescripcion(descripcion);
+                getCondicionesAct().get(i).setValorMaximo(valMax);
+                getCondicionesAct().get(i).setValorMinimo(valMin);
+                getCondicionesAct().get(i).setIdVariable(idVariable);
+            }
+            i++;
+        }
+        if (!encontro){    
             
-            Condicion condicion=new Condicion(idProvCondicion,idRelacion,idVariable,valMin,valMax,descripcion);
-            sePudo=condicionesAct.add(condicion);
-
+            Condicion condicion=new Condicion(idProvCondicion,idVariable,idRelacion,valMin,valMax,descripcion);
+            getCondicionesAct().add(condicion);
+        }
+        
     }
 
     public void cambiaDatosActuales(int indexCondicion) {
         boolean encontro=false;
         int i=0;
-        while ((!encontro)&&(i<=condicionesAct.size()-1)){
-            if (indexCondicion==condicionesAct.get(i).getId()){
-                setCondicionAct(condicionesAct.get(i));
-                setRelacionAct(relaciones.get(getCondicionAct().getIdRelacion()));
-                setVariableAct(variables.get(getCondicionAct().getIdVariable()));               
+        while ((!encontro)&&(i<=getCondicionesAct().size()-1)){
+            if (indexCondicion==getCondicionesAct().get(i).getId()){
+                encontro=true;
+                setCondicionAct(getCondicionesAct().get(i));
+                setRelacionAct(getRelacionConId(condicionAct.getIdRelacion()));
+                setVariableAct(getVariableConId(condicionAct.getIdVariable()));               
             }
             i++;
         }
@@ -188,6 +210,34 @@ public class ControllerAlertas {
      */
     public Relacion getRelacionAct() {
         return relacionAct;
+    }
+ 
+    public Variable getVariableConId(int index){
+    int i=0;
+    Variable variable=new Variable();
+    boolean encontro=false;
+        while ((!encontro)&&(i<=variables.size()-1)){
+            if (variables.get(i).getId()==index){
+                encontro=true;
+                variable= variables.get(i);
+            }
+            i++;
+        }
+        return variable;
+    }
+    
+    public Relacion getRelacionConId(int index){
+    int i=0;
+    Relacion relacion=new Relacion();
+    boolean encontro=false;
+        while ((!encontro)&&(i<=relaciones.size()-1)){
+            if (relaciones.get(i).getId()==index){
+                encontro=true;
+                relacion= relaciones.get(i);
+            }
+            i++;
+        }
+        return relacion;
     }
 
     /**
@@ -239,6 +289,51 @@ public class ControllerAlertas {
      */
     public void setCondicionAct(Condicion condicionAct) {
         this.condicionAct = condicionAct;
+    }
+
+    public void borraCondicionListaAct (int idCondicion){
+    int i=0;
+    boolean encontro=false;
+        while ((!encontro)&&(i<=getCondicionesAct().size()-1)){
+            if (getCondicionesAct().get(i).getId()==idCondicion){
+                encontro=true;
+                getCondicionesAct().remove(i);
+            }
+            i++;
+        }
+
+    }
+    
+    public void borrarCondicion(int idDeCondicionSeleccionada) {
+        borraCondicionListaAct(idDeCondicionSeleccionada);
+    }
+
+    /**
+     * @return the condicionesAct
+     */
+    public ArrayList<Condicion> getCondicionesAct() {
+        return condicionesAct;
+    }
+
+    /**
+     * @param condicionesAct the condicionesAct to set
+     */
+    public void setCondicionesAct(ArrayList<Condicion> condicionesAct) {
+        this.condicionesAct = condicionesAct;
+    }
+
+    /**
+     * @return the idUltAlertaInsertada
+     */
+    public int getIdUltAlertaInsertada() {
+        return idUltAlertaInsertada;
+    }
+
+    /**
+     * @param idUltAlertaInsertada the idUltAlertaInsertada to set
+     */
+    public void setIdUltAlertaInsertada(int idUltAlertaInsertada) {
+        this.idUltAlertaInsertada = idUltAlertaInsertada;
     }
     
 }

@@ -102,7 +102,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelOpcionesAlertas.setPreferredSize(new java.awt.Dimension(500, 60));
         panelOpcionesAlertas.setLayout(new java.awt.GridLayout(2, 1));
 
-        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14));
+        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkAlertas.setLabel("Usar Alertas");
         chkAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -129,14 +129,14 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Id_Alerta", "Activada", "Nombre", "Acciones", "Mensaje", "Flags"
+                "Id_Alerta", "Estado", "Nombre", "Acciones", "Mensaje", "Flags"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, true, false, false, true, false
+                false, true, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -147,21 +147,33 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaAlertas.setColumnSelectionAllowed(true);
         tablaAlertas.setMaximumSize(new java.awt.Dimension(480, 72));
         tablaAlertas.setMinimumSize(new java.awt.Dimension(480, 72));
         tablaAlertas.setPreferredScrollableViewportSize(new java.awt.Dimension(480, 250));
         tablaAlertas.setPreferredSize(new java.awt.Dimension(480, 72));
+        tablaAlertas.getTableHeader().setReorderingAllowed(false);
+        tablaAlertas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaAlertasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaAlertas);
-        tablaAlertas.getColumnModel().getColumn(1).setMinWidth(50);
-        tablaAlertas.getColumnModel().getColumn(1).setPreferredWidth(50);
-        tablaAlertas.getColumnModel().getColumn(1).setMaxWidth(50);
+        tablaAlertas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaAlertas.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaAlertas.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaAlertas.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaAlertas.getColumnModel().getColumn(1).setMinWidth(60);
+        tablaAlertas.getColumnModel().getColumn(1).setPreferredWidth(60);
+        tablaAlertas.getColumnModel().getColumn(1).setMaxWidth(60);
+        tablaAlertas.getColumnModel().getColumn(2).setResizable(false);
         tablaAlertas.getColumnModel().getColumn(2).setPreferredWidth(100);
         tablaAlertas.getColumnModel().getColumn(3).setMinWidth(0);
         tablaAlertas.getColumnModel().getColumn(3).setPreferredWidth(0);
         tablaAlertas.getColumnModel().getColumn(3).setMaxWidth(0);
-        tablaAlertas.getColumnModel().getColumn(4).setMinWidth(100);
-        tablaAlertas.getColumnModel().getColumn(4).setPreferredWidth(200);
-        tablaAlertas.getColumnModel().getColumn(4).setMaxWidth(200);
+        tablaAlertas.getColumnModel().getColumn(4).setMinWidth(0);
+        tablaAlertas.getColumnModel().getColumn(4).setPreferredWidth(0);
+        tablaAlertas.getColumnModel().getColumn(4).setMaxWidth(0);
         tablaAlertas.getColumnModel().getColumn(5).setMinWidth(0);
         tablaAlertas.getColumnModel().getColumn(5).setPreferredWidth(0);
         tablaAlertas.getColumnModel().getColumn(5).setMaxWidth(0);
@@ -230,12 +242,18 @@ private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 // TODO add your handling code here:
         getPanelAlertasPpal().setVisible(false);                    
         panelAgregaEdita.setVisible(true);
+        setModificandoAlerta(false);
 }//GEN-LAST:event_btnAgregarActionPerformed
 
 private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-    setGuiModificarFilaElegida();
-    setModificandoAlerta(true);
-    controlaPanelAccionesAlerta();
+   int filaSeleccionada = tablaAlertas.getSelectedRow();
+    if (filaSeleccionada>=0){
+         setModificandoAlerta(true);
+         setGuiModificarFilaElegida();
+   }
+
+    
+
 }//GEN-LAST:event_btnModificarActionPerformed
 
 private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -250,6 +268,10 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         ControllerAlertas cAlertas=ControllerAlertas.getInstance();
         cAlertas.setEstadoAlertas(this.getChkAlertas().isSelected());
 }//GEN-LAST:event_chkAlertasActionPerformed
+
+private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaAlertasMouseClicked
+    controlaPanelAccionesAlerta();
+}//GEN-LAST:event_tablaAlertasMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
@@ -318,7 +340,7 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     public void cargaGrillaAlertas() {
         vaciaTabla();
-        List<modelo.alertas.Alerta> alertas = modelo.alertas.AdministraAlertas.getInstance().getAlertas();
+        ArrayList<modelo.alertas.Alerta> alertas = modelo.alertas.AdministraAlertas.getInstance().getAlertas();
         if ((alertas == null) || (alertas.isEmpty()) ) {
             modelo.alertas.AdministraAlertas.getInstance().leerAlertasDeLaDB();
             alertas = modelo.alertas.AdministraAlertas.getInstance().getAlertas();            
@@ -384,8 +406,8 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         NRO_COL_ESTADO=1;
         NRO_COL_TITULO=2;
         NRO_COL_MENSAJE=3;
+        NRO_COL_ACCIONES=5;
         NRO_COL_FLAGS=4;
-        NRO_COL_FLAGS=5;
         cantColumnas=6;        
         modeloTabla = (DefaultTableModel) tablaAlertas.getModel();
         tablaAlertas.setModel(modeloTabla);
@@ -393,77 +415,7 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         cargaGrillaAlertas();        
         
         controlaPanelAccionesAlerta();
-        // Se crea el JScrollPane, el JTable y se pone la cabecera...
-         //JScrollPane scroll = new JScrollPane();
-         //tablaCampanias.setDefaultRenderer(Object.class, new PanelOpcCampaniasAcciones());
-         //tablaCampanias.setDefaultEditor(Object.class, new PanelOpcCampaniasAcciones());
-         //scroll.setViewportView(tablaCampanias);
-         //scroll.setColumnHeaderView (tablaCampanias.getTableHeader());        
-        //tablaCampanias.setVisibleRowCount(6);
-        
-/* si queremos que algun campo sea editable, capturar el evento y demas... 
-        TableColumn column = tablaCampanias.getColumnModel().getColumn(NRO_COL_ACCIONES);
-        JXHyperlink btnGuardar = new JXHyperlink(); btnGuardar.setText("guardar");
-        JXHyperlink btnModificar = new JXHyperlink(); btnModificar.setText("modif");
-        JXHyperlink btnEliminar = new JXHyperlink(); btnEliminar.setText("Eliminar");
-        
-        
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jXHyperlinkBtnGuardarActionPerformed(evt);
-            }
-        });
-        btnModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jXHyperlinkBtnModificarActionPerformed(evt);
-                System.out.println("no hace nada xq falta codificar el método");
-            }
-        });
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jXHyperlinkBtnEliminarActionPerformed(evt);
-                System.out.println("no hace nada xq falta codificar el método");
-            }
-        });
-        
-        //Indicamos el CellEditor column
-        column.setCellEditor(new DefaultCellEditor(btnEliminar));
-
-        //Metodo para controlar el texto ingresado en el JTextField.
-
-    }
-
-    private void jXHyperlinkBtnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
-        try {
-            //String tmp = this.fieldPago.getText();
-            //Double Pago = Double.parseDouble(tmp);
-            //Obtenemos el numero de fila donde estamos ubicamos en este momento.
-            int fila = tablaCampanias.getSelectedRow();
-
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "No se selecciono ninguna fila", "Mensaje", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            int id = (int)tablaCampanias.getValueAt(fila, 0);
-            Double Deuda = Double.parseDouble(tmp);
-            tmp = String.valueOf(tablaCampanias.getValueAt(fila, 5));
-            Double Saldo = Double.parseDouble(tmp);
-            if (Pago < 0) {
-                JOptionPane.showMessageDialog(this, "El pago no puede ser negativo", "Mensaje", JOptionPane.WARNING_MESSAGE);
-                tablaCampanias.setValueAt(0.0, fila, 4);
-                return;
-            }
-
-            //Actualizamos otra columna con los valores, esta columna debe ser editable
-            tablaCampanias.setValueAt(Pago, fila, 5);
-            tablaCampanias.repaint();
-            modeloTabla.fireTableDataChanged();
-            JOptionPane.showMessageDialog(this, "Presionaste Enter pago de " + Pago, "Mensaje", JOptionPane.WARNING_MESSAGE);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-*/
+ 
     }
 
     public void vaciaTabla() {                
@@ -473,18 +425,13 @@ private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
        public void setGuiModificarFilaElegida() {
        int filaSeleccionada = tablaAlertas.getSelectedRow();
        if (filaSeleccionada>=0){
-           //Pendiente: Abrir PanelOpcAlertasAgregaEdita con la Alerta Seleccionada
-           
-           /*
-           lblNuevaAlerta.setText("Modificar datos de alerta:");
-           controlaPanelNuevaCampania(true);
-           campoBarcoCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_BARCO));           
-           campoCapitanCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_CAPITAN));
-           campoNombreCampania.setText((String)modeloTabla.getValueAt(filaSeleccionada, NRO_COL_NOMBRE_CAMP));       
-           */
+             PanelOpcAlertasAgregaEdita.getInstance().cargaAlertaEditar(getIdDeAlertaSeleccionada());
+             getPanelAlertasPpal().setVisible(false);                    
+             panelAgregaEdita.setVisible(true);
        }
     }
 
+       
     private void controlaPanelAccionesAlerta() {
     
         boolean estado;
