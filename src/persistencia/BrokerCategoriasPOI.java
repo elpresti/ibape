@@ -134,20 +134,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         }
         return sePudo;
     }
- 
-    /*
-    //main de prueba
-    public static void main(String[] args) {
-        BrokerCategoriasPOI.getInstance().creaArchivoDb();
-        BrokerCategoriasPOI.getInstance().crearTablaCajones();
-        BrokerCategoriasPOI.getInstance().crearTablaCategoriasPoi();         
-        BrokerCategoriasPOI.getInstance().creaConexionNueva();    
-         BrokerCategoriasPOI.getInstance().getCatPOISFromDB();   
-        CategoriaPoi a=new CategoriaPoi();
-        a.setPathIcono("c:\\a");
-        a.setTitulo("Test");
-        BrokerCategoriasPOI.getInstance().insertCategoriaPOI(a);       
-    }*/
+
     public ArrayList<modelo.dataManager.CategoriaPoi> getCatPOISDeUnaCampFromDB(int idDeCampania) {
         ArrayList<modelo.dataManager.CategoriaPoi> catPoisDeEstaCampania = new ArrayList();
         // --- metodo pendiente que debería devolver un arraylist con las CATEGORIAS de los POIs que pertenezcan a la campaña de ID especificado por parametro
