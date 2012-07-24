@@ -67,7 +67,7 @@ public class BrokerCampania extends BrokerPpal{
         ResultSet rs;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Campanias WHERE id = "+id);
-            if (rs != null) {
+            if (rs.next()) {
                 campania = new modelo.dataManager.Campania();
                 // Get the data from the row using the column name
                 try {
