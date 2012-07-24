@@ -22,7 +22,7 @@
          ge.getWindow().setVisibility(true);         
       }
       function failureCB(errorCode) {
-          alert("Error"+errorCode+". No se pudo crear una instancia de GE");		  
+          alert("Error "+errorCode+". No se pudo crear una instancia de GE. Asegurese de que su navegador tiene instalado y activado el Plugin de Google Earth.");		  
       }
       google.setOnLoadCallback(init);	  
 
