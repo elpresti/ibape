@@ -268,4 +268,62 @@ public class BrokerPOIs extends BrokerPpal {
     public void setPsSelectPoisXIdCampania(PreparedStatement psSelectPoisXIdCampania) {
         this.psSelectPoisXIdCampania = psSelectPoisXIdCampania;
     }
+    
+    
+    public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
+        ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
+        // --- metodo pendiente que debería devolver un arraylist de los POIs que pertenezcan a la campaña de ID especificado por parametro
+        // -> para saber si un POI pertenece a una campaña debo armar la consulta de SQL solicitando aquellos POIs cuya fecha
+        // se encuentre entre la fecha de inicio y fin de campaña
+        // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
+        // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
+        // -> validar el parametro de entrada y todo lo q pueda fallar
+        // -> hacer el SELECT usando el objeto PreparedStatement
+        if ((idDeCampania>=0) && (idDeCatPois>=0)){
+            try {
+                Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
+                if (laCampania != null) {
+                    PreparedStatement psSelect = getConexion().prepareStatement(
+                                "SELECT * FROM Pois "
+                                + "WHERE (idCampania= ? "
+                                + "OR fechaHora "
+                                + "BETWEEN ? AND ? ) AND idCategoriaPoi=? "
+                                + "ORDER BY fechaHora ASC");
+                    psSelect.setInt(1, idDeCampania);                
+                    psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
+                    if (laCampania.getEstado() == 1) {//campania finalizada
+                        psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
+                    } else {
+                        psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+                    }
+                    psSelect.setInt(4, idDeCatPois);
+                    System.out.println("Select : "+psSelect.toString());
+                    ResultSet rs=psSelect.executeQuery();
+                    while (rs.next()) {
+                        modelo.dataManager.POI poi = new modelo.dataManager.POI();
+                        // Get the data from the row using the column name
+                        poi.setId(rs.getInt("id"));
+                        poi.setLatitud(rs.getDouble("posLat"));
+                        poi.setLongitud(rs.getDouble("posLon"));
+                        poi.setFechaHora(rs.getDate("fechaHora"));
+                        poi.setPathImg(rs.getString("pathImg"));
+                        poi.setIdCampania(rs.getInt("idCampania"));
+                        poi.setDescripcion(rs.getString("descripcion"));                        
+                        poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                        poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
+                        //ver if null
+                        poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
+
+                        poisDeEstaCampania.add(poi);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logueador.getInstance().agregaAlLog(ex.toString());
+            }
+        }
+        return poisDeEstaCampania;
+    }    
+    
+    
+    
 }
