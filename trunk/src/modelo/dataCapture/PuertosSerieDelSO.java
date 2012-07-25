@@ -26,12 +26,15 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
     static PuertosSerieDelSO unicaInstancia;
     
     private ArrayList<String> puertosSerie;
+    
+    private String winSystem32Dir;
 
     private boolean leyendoPuertos=false;
     
     private boolean errorLeyendo=false;
         
     private PuertosSerieDelSO(){
+       inicializador();
     }
 
     public void run() {
@@ -192,9 +195,8 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
     }
     
     private boolean estanTodosLosArchivosNecesarios() {
-        boolean estanTodos=false;
-        String winSystem32Dir = System.getProperty("windir")+"\\system32\\rxtxSerial.dll";
-        File archivoRxtx = new File(winSystem32Dir);
+        boolean estanTodos=false;        
+        File archivoRxtx = new File(getWinSystem32Dir()+"\\rxtxSerial.dll");
         estanTodos = archivoRxtx.exists();
         //--- revisar, en principio si está la DLL q corresponde para la RXTXcomm segun la version de SO
         return estanTodos;
@@ -205,12 +207,20 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
         //--- revisar, en principio si está la DLL q corresponde para la RXTXcomm segun la version de SO
         try {
             //    ---> C:\Program Files\Java\jdk1.7.0_05\bin\rxtxSerial.dll
-            // probar con System.setProperty( "java.library.path", "/path/to/libs" );
-            String ruta64b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64";
-            String ruta32b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win32";
+            // probar con System.setProperty( "java.library.path", "/path/to/libs" );            
+            String rutaFrom64b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64\\rxtxSerial.dll";
+            String rutaFrom32b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win32\\rxtxSerial.dll";
+            String archivoFrom = new String();
+            if (is64bOS()){
+                archivoFrom = rutaFrom64b;
+            }
+            else{
+                archivoFrom = rutaFrom32b;
+            }                        
             //System.load(ruta32b);
             try{
-                agregarDirectorioDeLibrerias(ruta64b);
+                agregarDirectorioDeLibrerias(rutaFrom64b);
+                //LanSonda.getInstance().copy(archivoFrom, getWinSystem32Dir());
                 sePudo=true;
             }
             catch(Exception e){
@@ -246,5 +256,33 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
                     throw new IOException("Failed to get field handle to set library path");
             }
     }    
+
+    /**
+     * @return the winSystem32Dir
+     */
+    public String getWinSystem32Dir() {
+        return winSystem32Dir;
+    }
+
+    /**
+     * @param winSystem32Dir the winSystem32Dir to set
+     */
+    public void setWinSystem32Dir(String winSystem32Dir) {
+        this.winSystem32Dir = winSystem32Dir;
+    }
+
+    public boolean is64bOS() {
+        boolean is64bit = false;
+        if (System.getProperty("os.name").contains("Windows")) {
+            is64bit = (System.getenv("ProgramFiles(x86)") != null);
+        } else {
+            is64bit = (System.getProperty("os.arch").indexOf("64") != -1);
+        }
+        return is64bit;
+    }
+
+    private void inicializador() {
+        setWinSystem32Dir(System.getenv("windir")+"\\system32"); 
+    }
 
 }
