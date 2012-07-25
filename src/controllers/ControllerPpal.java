@@ -34,11 +34,6 @@ public class ControllerPpal {
     }
     
     public void accionesAlIniciar(){
-        try {            
-            modelo.dataCapture.PuertosSerieDelSO.getInstance().agregarDirectorioDeLibrerias(System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64\\rxtxSerial.dll");
-        } catch (IOException ex) {
-            Logger.getLogger(ControllerPpal.class.getName()).log(Level.SEVERE, null, ex);
-        }
         controllers.ControllerConfig.getInstance().inicializaConexiones();        
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
