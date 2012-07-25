@@ -67,7 +67,8 @@ abstract class PuertoSerie  extends java.util.Observable implements SentenceList
             }
             catch(UnsatisfiedLinkError e){
                 if (estanTodosLosArchivosNecesarios()){
-                    //error al intentar abrir el puerto serie especificado
+                    Logueador.getInstance().agregaAlLog("Error al intentar abrir el puerto serie especificado\n"+
+                            e.toString());
                 }
                 else{
                     if (copiarArchivosNecesarios()){
@@ -516,8 +517,16 @@ public void sentenceRead(SentenceEvent event) {
             //    ---> C:\Program Files\Java\jdk1.7.0_05\bin\rxtxSerial.dll
             // probar con System.setProperty( "java.library.path", "/path/to/libs" );
             String ruta64b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64\\rxtxSerial.dll";
-            System.load(ruta64b);
-            sePudo=true;
+            String ruta32b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win32\\rxtxSerial.dll";
+            //System.load(ruta32b);
+            try{
+                PuertosSerieDelSO.getInstance().agregarDirectorioDeLibrerias(ruta64b);
+                sePudo=true;
+            }
+            catch(Exception e){
+                Logueador.getInstance().agregaAlLog("No se pudo cargar la DLL para utilizar puertos COM\n"+
+                        e.toString());
+            }
         } catch (UnsatisfiedLinkError e) { 
           System.err.println("No se pudo cargar la libreria DLL para la lectura de puertos Serie.\n" + e);
         }
