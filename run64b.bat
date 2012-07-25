@@ -1,0 +1,1 @@
+java  -Djava.library.path=lib/DLL-RXTX-win64 -jar "IBAPE.jar"
