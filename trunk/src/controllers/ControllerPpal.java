@@ -4,6 +4,9 @@
  */
 package controllers;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
 import modelo.gisModule.Browser;
 import persistencia.BrokerConfig;
@@ -31,6 +34,11 @@ public class ControllerPpal {
     }
     
     public void accionesAlIniciar(){
+        try {            
+            modelo.dataCapture.PuertosSerieDelSO.getInstance().agregarDirectorioDeLibrerias(System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64\\rxtxSerial.dll");
+        } catch (IOException ex) {
+            Logger.getLogger(ControllerPpal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         controllers.ControllerConfig.getInstance().inicializaConexiones();        
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
@@ -53,16 +61,24 @@ public class ControllerPpal {
         boolean sePudo=true;
         gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();
         gui.PanelOpcCampanias c = gui.PanelOpcCampanias.getInstance();
+        String comboPuertoGPS="";
+        if (p.getComboPuertoGps().getSelectedItem() != null){
+            comboPuertoGPS = p.getComboPuertoGps().getSelectedItem().toString();
+        }
+        String comboPuertoSONDA="";
+        if (p.getComboPuertoSonda().getSelectedItem() != null){
+            comboPuertoSONDA = p.getComboPuertoSonda().getSelectedItem().toString();
+        }        
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Gps(
                 String.valueOf(p.getChkEstadoGps().isSelected()), 
-                p.getComboPuertoGps().getSelectedItem().toString(), 
+                comboPuertoGPS, 
                 p.getComboVelocidadGps().getSelectedItem().toString(), 
                 p.getComboBitsDatosGps().getSelectedItem().toString(), 
                 p.getComboParidadGps().getSelectedItem().toString(),
                 String.valueOf(p.getChkAutoConectaGps().isSelected()));
         sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Sonda(
                 String.valueOf(p.getChkEstadoSonda().isSelected()), 
-                p.getComboPuertoSonda().getSelectedItem().toString(),
+                comboPuertoSONDA,
                 p.getComboVelocidadSonda().getSelectedItem().toString(), 
                 p.getComboBitsDatosSonda().getSelectedItem().toString(), 
                 p.getComboParidadSonda().getSelectedItem().toString(),

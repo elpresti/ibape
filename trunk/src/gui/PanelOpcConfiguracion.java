@@ -1677,11 +1677,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     public void setContenidoComboCOMgps(ArrayList<String> elementos){
         guardaComGpsElegido();
         comboPuertoGps.removeAllItems();
-        int i=0;
-        if (elementos.size()==1) { comboPuertoGps.setToolTipText(elementos.get(i)); }
-        while (i<elementos.size()){
-            comboPuertoGps.addItem(elementos.get(i));
-            i++;
+        if (elementos != null){
+            int i=0;
+            if (elementos.size()==1) { comboPuertoGps.setToolTipText(elementos.get(i)); }
+            while (i<elementos.size()){
+                comboPuertoGps.addItem(elementos.get(i));
+                i++;
+            }
         }
         eligeComGpsQueEstaba();
     }
@@ -1689,11 +1691,13 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
     public void setContenidoComboCOMsonda(ArrayList<String> elementos){
         guardaComSondaElegido();
         comboPuertoSonda.removeAllItems();
-        int i=0;
-        if (elementos.size()==1) { comboPuertoSonda.setToolTipText(elementos.get(i)); }
-        while (i<elementos.size()){
-            comboPuertoSonda.addItem(elementos.get(i));
-            i++;
+        if (elementos != null){        
+            int i=0;
+            if (elementos.size()==1) { comboPuertoSonda.setToolTipText(elementos.get(i)); }
+            while (i<elementos.size()){
+                comboPuertoSonda.addItem(elementos.get(i));
+                i++;
+            }
         }
         eligeComSondaQueEstaba();
     }

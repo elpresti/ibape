@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Campania;
 import modelo.dataManager.Marca;
 import modelo.dataManager.POI;
-import sun.text.normalizer.Trie.DataManipulate;
+//import sun.text.normalizer.Trie.DataManipulate;
 
 /**
  *
