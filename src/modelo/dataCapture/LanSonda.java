@@ -152,7 +152,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
         return d;
     }
 
-    public static void copy(String from, String to) throws IOException {
+    public void copy(String from, String to) throws IOException {
         InputStream in = null;
         OutputStream out = null;
         int amountRead;
