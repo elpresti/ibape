@@ -143,7 +143,7 @@ public class BrokerConfig {
         gpsConfig.setAttribute("ComboVelocidad","4800");
         gpsConfig.setAttribute("ComboBitsDatos","8");
         gpsConfig.setAttribute("ComboParidad","Ninguno");
-        gpsConfig.setAttribute("Autoconexion","true");
+        gpsConfig.setAttribute("Autoconexion","false");
         elemConfig.addContent(gpsConfig);
                 
         Element sondaConfig =  new Element("PanelConfiguracion-Sonda");

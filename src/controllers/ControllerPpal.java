@@ -7,6 +7,7 @@ package controllers;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import modelo.dataManager.AdministraCampanias;
 import modelo.gisModule.Browser;
 import persistencia.BrokerConfig;
@@ -250,5 +251,9 @@ public class ControllerPpal {
         }
         return sePudo;
     }    
+
+    public void msgReiniciarAplicacion() {
+        JOptionPane.showMessageDialog(null, "Fue necesario inicializar IBAPE, ahora debe reiniciar la aplicación");
+    }
 
 }

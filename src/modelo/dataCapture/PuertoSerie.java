@@ -66,13 +66,20 @@ abstract class PuertoSerie  extends java.util.Observable implements SentenceList
                 idCOMX = CommPortIdentifier.getPortIdentifier("COM"+getNroCom());
             }
             catch(UnsatisfiedLinkError e){
-                if (estanTodosLosArchivosNecesarios()){
+                if (Sistema.getInstance().estanTodosLosArchivosNecesarios()){
                     Logueador.getInstance().agregaAlLog("Error al intentar abrir el puerto serie especificado\n"+
                             e.toString());
                 }
                 else{
-                    if (copiarArchivosNecesarios()){
-                        idCOMX = CommPortIdentifier.getPortIdentifier("COM"+getNroCom()); //try again
+                    if (Sistema.getInstance().copiarArchivosNecesarios()){
+                        JOptionPane.showMessageDialog(null, "IBAPE fue inicializado correctamente, es necesario que reinicie la aplicación");
+                        try{
+                            idCOMX = CommPortIdentifier.getPortIdentifier("COM"+getNroCom()); //try again
+                        }
+                        catch(Exception exc){
+                            Logueador.getInstance().agregaAlLog("Se cargó la DLL pero aun asi no se pudo abrir el COM solicitado\n"+
+                                    exc.toString());
+                        } 
                     }                    
                 }
             }           
@@ -503,36 +510,5 @@ public void sentenceRead(SentenceEvent event) {
         setChanged();
         notifyObservers();
     }
-
-    private boolean estanTodosLosArchivosNecesarios() {
-        boolean estanTodos=false;
-        //--- revisar, en principio si está la DLL q corresponde para la RXTXcomm segun la version de SO
-        return estanTodos;
-    }
-
-    private boolean copiarArchivosNecesarios() {
-        boolean sePudo=false;
-        //--- revisar, en principio si está la DLL q corresponde para la RXTXcomm segun la version de SO
-        try {
-            //    ---> C:\Program Files\Java\jdk1.7.0_05\bin\rxtxSerial.dll
-            // probar con System.setProperty( "java.library.path", "/path/to/libs" );
-            String ruta64b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win64\\rxtxSerial.dll";
-            String ruta32b = System.getProperty("user.dir")+"\\lib\\DLL-RXTX-win32\\rxtxSerial.dll";
-            //System.load(ruta32b);
-            try{
-                PuertosSerieDelSO.getInstance().agregarDirectorioDeLibrerias(ruta64b);
-                sePudo=true;
-            }
-            catch(Exception e){
-                Logueador.getInstance().agregaAlLog("No se pudo cargar la DLL para utilizar puertos COM\n"+
-                        e.toString());
-            }
-        } catch (UnsatisfiedLinkError e) { 
-          System.err.println("No se pudo cargar la libreria DLL para la lectura de puertos Serie.\n" + e);
-        }
-        return sePudo;
-    }
-
-
 
 }
