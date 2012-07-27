@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.gisModule.Browser;
 import persistencia.BrokerConfig;
@@ -254,6 +255,17 @@ public class ControllerPpal {
 
     public void msgReiniciarAplicacion() {
         JOptionPane.showMessageDialog(null, "Fue necesario inicializar IBAPE, ahora debe reiniciar la aplicación");
+    }
+
+    public void msgNoSePudoCopiarArchivosNecesarios() {
+        String archOS;
+        if (Sistema.getInstance().is64bOS()){
+            archOS = "run64b.bat";
+        }
+        else{
+            archOS = "run32b.bat";
+        }
+        JOptionPane.showMessageDialog(null, "No se pudieron copiar los archivos necesarios para recibir datos por puerto serie\n Pruebe de iniciar IBAPE ejecutando "+archOS, "Problemas...", JOptionPane.ERROR_MESSAGE);
     }
 
 }
