@@ -130,9 +130,9 @@ public class BrokerDbMapaHistorico implements Runnable{
                         new Timestamp(punto.getFechaHora().getTime()));
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLATITUDpos()), String.valueOf(punto.getLatitud()));
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLONGITUDpos()), String.valueOf(punto.getLongitud()));
-                //preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoPROFUNDIDADpos()), String.valueOf(punto.getProfundidad()));
-                //preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoVELOCIDADpos()), String.valueOf(punto.getVelocidad()));
-                //preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), String.valueOf(punto.getTempAgua()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoPROFUNDIDADpos()), "");//String.valueOf(punto.getProfundidad()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoVELOCIDADpos()), "");//String.valueOf(punto.getVelocidad()));
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), "");//String.valueOf(punto.getTempAgua()));
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "POI Historico");
                 preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),punto.getDescripcion());
