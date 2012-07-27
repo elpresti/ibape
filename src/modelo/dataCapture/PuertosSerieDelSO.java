@@ -99,7 +99,10 @@ public class PuertosSerieDelSO extends java.util.Observable implements Runnable{
                 else{
                     if (Sistema.getInstance().copiarArchivosNecesarios()){
                         retryPendiente = true;
-                    }                    
+                    }
+                    else{
+                        controllers.ControllerPpal.getInstance().msgNoSePudoCopiarArchivosNecesarios();
+                    }
                 }
             }
             if (retryPendiente){
