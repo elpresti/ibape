@@ -5,6 +5,7 @@
 package modelo.dataManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -181,21 +182,22 @@ public class POI {
         if (conCamara){
           salida=salida
             +"<Camera>"
-              +"<longitude>"+(getLongitud()*0.99999)+"</longitude>"
-              +"<latitude>"+(getLatitud()*1.00005)+"</latitude>"
+              +"<longitude>"+getLongitud()+"</longitude>"
+              +"<latitude>"+getLatitud()+"</latitude>"
               +"<altitude>50</altitude>"
               +"<heading>0</heading>"   //gira el ojo a la derecha (positivo) a la izquierda (negativo) 
-              +"<tilt>70</tilt>" //angulo de vision del ojo. 0= vista vertical a la tirra (desde arriba), 75=vista con 75° de inclinacion
+              +"<tilt>0</tilt>" //angulo de vision del ojo. 0= vista vertical a la tirra (desde arriba), 75=vista con 75° de inclinacion
             +"</Camera>";        
         }
-        java.sql.Timestamp fechaYhoraActual=new java.sql.Timestamp(getFechaHora().getTime());
+        java.sql.Timestamp fechaYhora=new java.sql.Timestamp(getFechaHora().getTime());
+        String horaStr=fechaYhora.getHours()+":"+fechaYhora.getMinutes()+":"+fechaYhora.getSeconds();
         salida=salida
           +"<Placemark>"
-            +"<name>"+fechaYhoraActual.getHours()+":"+fechaYhoraActual.getMinutes()+":"+fechaYhoraActual.getSeconds()+"</name>"
+            +"<name>"+horaStr+"</name>"
             +"<description>"
                + "<![CDATA[<div>"
                   + "Datos de este punto "
-                  + "<br>  <strong>- Fecha y hora:</strong> "+getFechaHora()+" hs"
+                  + "<br>  <strong>- Fecha y hora:</strong> "+getFechaHora()+" "+horaStr+" hs"
                   + "<br>  <strong>- Latitud:</strong> "+getLatitud()
                   + "<br>  <strong>- Longitud:</strong> "+getLongitud()
                   //+ "<br>  <strong>- Rumbo:</strong> "+getRumbo()+"° "

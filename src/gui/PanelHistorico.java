@@ -321,6 +321,11 @@ public class PanelHistorico extends javax.swing.JPanel {
 
     private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
         if (getIdCampaniaElegida()>=0){
+            //si no se ha hecho click en iniciar Mapa historico previamente, lo hago
+            if (btnIniciarMapaHistorico.isEnabled() && btnIniciarMapaHistorico.isVisible()){
+                btnIniciarMapaHistoricoActionPerformed(null);
+            }
+            
             if (chkRecorrido.isSelected()){
                 ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
             }
