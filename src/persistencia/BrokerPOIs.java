@@ -88,7 +88,7 @@ public class BrokerPOIs extends BrokerPpal {
         ResultSet rs=null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Pois WHERE id = " + id);
-            if (rs != null) {
+            if (rs.next()) {
                 poi = new modelo.dataManager.POI();
                 // Get the data from the row using the column name
                 poi.setId(rs.getInt("id"));
@@ -143,7 +143,7 @@ public class BrokerPOIs extends BrokerPpal {
                     sqlQuery = "SELECT max(id) from Pois";
                     System.out.println("Select: " + sqlQuery);
                     rs = getStatement().executeQuery(sqlQuery);
-                    if (rs != null) {
+                    if (rs.next()) {
                         int idPOI = rs.getInt("id");
                         for (Marca m : poi.getMarcas()) {
                             //if (m.getId() == 0) {
@@ -226,7 +226,7 @@ public class BrokerPOIs extends BrokerPpal {
         // -> hacer el SELECT usando el objeto PreparedStatement
         try {
 
-            Campania unaCamp = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania); //cuando la campania no existe tira exc
+            Campania unaCamp = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania); 
 
             if (unaCamp != null) {
                 java.sql.Date fechaInicio = null;
@@ -260,9 +260,9 @@ public class BrokerPOIs extends BrokerPpal {
                     poi.setPathImg(rs.getString("pathImg"));
                     poi.setIdCampania(rs.getInt("idCampania"));
                     poi.setDescripcion(rs.getString("descripcion"));
-
-                    //poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
-                    poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
+//--
+                    poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                    //poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
                     //ver if null
                     poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
 
@@ -282,6 +282,8 @@ public class BrokerPOIs extends BrokerPpal {
         ArrayList a = BrokerPOIs.getInstance().getPOISDeUnaCampFromDB(2);
     }
 
+    
+    //este queda???
     public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
         // --- metodo pendiente que debería devolver un arraylist de los POIs que pertenezcan a la campaña de ID especificado por parametro

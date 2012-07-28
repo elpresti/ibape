@@ -9,11 +9,12 @@ package modelo.dataManager;
  * @author Sebastian
  */
 public class CategoriaPoi {
+
     private String titulo;
     private String pathIcono;
     private int id;
-    
-    public CategoriaPoi(){
+
+    public CategoriaPoi() {
     }
 
     /**
@@ -45,15 +46,32 @@ public class CategoriaPoi {
     }
 
     public void setId(int id) {
-        this.id=id;
+        this.id = id;
     }
 
     public int getId() {
         return id;
     }
-   
+
     @Override
     public String toString() {
-    return this.titulo;
-  }
+        return this.titulo;
+    }
+
+    @Override
+    public boolean equals(Object objeto) {
+        if (objeto == null) {
+            return false;
+        }
+        CategoriaPoi unaCat = (CategoriaPoi) objeto;
+        if (this.getTitulo().equals(unaCat.getTitulo())) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getTitulo().hashCode();
+    }
 }
