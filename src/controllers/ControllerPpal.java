@@ -265,7 +265,8 @@ public class ControllerPpal {
         else{
             archOS = "run32b.bat";
         }
-        JOptionPane.showMessageDialog(null, "No se pudieron copiar los archivos necesarios para recibir datos por puerto serie\n Pruebe de iniciar IBAPE ejecutando "+archOS, "Problemas...", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "No se pudieron copiar los archivos necesarios para recibir datos por puerto "
+                + "serie\n Pruebe de iniciar IBAPE ejecutando "+archOS, "Problemas para capturar datos", JOptionPane.ERROR_MESSAGE);
     }
 
 }

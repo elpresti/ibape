@@ -135,7 +135,7 @@ public abstract class BrokerHistorico implements Runnable{
                         getConexion().close();
                 }
         } catch (Exception e) {
-            Logueador.getInstance().agregaAlLog(e.getStackTrace().toString());
+            Logueador.getInstance().agregaAlLog(e.toString());
             System.out.println(e);
         }
     }
@@ -187,7 +187,7 @@ public abstract class BrokerHistorico implements Runnable{
                 creaConexionNueva();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(BrokerHistorico.class.getName()).log(Level.SEVERE, null, ex);
+            Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return conexion;
     }

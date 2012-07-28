@@ -43,8 +43,9 @@ public class BrokerPOIs extends BrokerPpal {
 
     public ArrayList<modelo.dataManager.POI> getPOISFromDB() {
         ArrayList<modelo.dataManager.POI> POIs = new ArrayList();
+        ResultSet rs = null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Pois");
+            rs = getStatement().executeQuery("SELECT * FROM Pois");
             while (rs.next()) {
                 modelo.dataManager.POI poi = new modelo.dataManager.POI();
                 // Get the data from the row using the column name
@@ -66,13 +67,25 @@ public class BrokerPOIs extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return POIs;
     }
 
     public modelo.dataManager.POI getPOIFromDB(int id) {
         modelo.dataManager.POI poi = new modelo.dataManager.POI();
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
-        ResultSet rs;
+        ResultSet rs=null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Pois WHERE id = " + id);
             if (rs != null) {
@@ -99,7 +112,7 @@ public class BrokerPOIs extends BrokerPpal {
     public boolean insertPOI(modelo.dataManager.POI poi) {
         boolean sePudo = false;
         String sqlQuery = "";
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             String PathImg = "";
             if (poi.getPathImg() != null) {
@@ -124,7 +137,7 @@ public class BrokerPOIs extends BrokerPpal {
                     + "," + poi.getIdCampania() + "," + Desc + ")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
-                sePudo = true;//sin las marcas
+                //sePudo = true;//sin las marcas
                 if (poi.getMarcas() != null) {
                     //recuperar el id para insertar las marcas
                     sqlQuery = "SELECT max(id) from Pois";
@@ -138,16 +151,24 @@ public class BrokerPOIs extends BrokerPpal {
                             BrokerMarca.getInstance().insertMarca(m);
                             //}
                         }
-                    }
-                    sePudo = true;
-                } else {
-                    sePudo = false; //marcas=null
+                    }                    
                 }
-            } else {
-                sePudo = false;
+                sePudo = true;
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
