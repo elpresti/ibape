@@ -52,7 +52,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
     public modelo.dataManager.CategoriaPoi getCatPOIFromDB(int id) {
         modelo.dataManager.CategoriaPoi CatPOI = new CategoriaPoi();
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
-        ResultSet rs;
+        ResultSet rs=null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM CategoriasPoi WHERE id = " + id);
             if (rs != null) {        
@@ -64,6 +64,18 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }        
         return CatPOI;
     }
 

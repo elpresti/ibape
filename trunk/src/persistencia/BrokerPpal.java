@@ -63,6 +63,13 @@ public abstract class BrokerPpal {
      * @return the connect
      */
     public Connection getConexion() {
+        try {
+            if ((conexion == null) || (conexion != null && conexion.isClosed())){
+                creaConexionNueva();
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
         return conexion;
     }
 
@@ -77,6 +84,13 @@ public abstract class BrokerPpal {
      * @return the statement
      */
     public Statement getStatement() {
+        if (statement == null){
+            try {
+                setStatement(getConexion().createStatement());
+            } catch (SQLException ex) {
+                Logueador.getInstance().agregaAlLog(ex.toString());
+            }
+        }
         return statement;
     }
 
@@ -831,5 +845,19 @@ public abstract class BrokerPpal {
         return sePudo;
     }
 
+    public void closeDbConnection() {   
+        try {
+                if (getStatement() != null) {
+                        getStatement().close();
+                }
+
+                if (getConexion() != null) {
+                        getConexion().close();
+                }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+            System.out.println(e);
+        }
+    }
     
 }
