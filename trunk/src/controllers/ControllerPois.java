@@ -6,6 +6,7 @@ package controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -57,7 +58,7 @@ public class ControllerPois {
     public void agregaPOI(int idCategoriaPOI, String descripcion) {
        if(AdministraCampanias.getInstance().getCampaniaEnCurso()!=null){
         modelo.dataManager.POI p = new POI();
-        p.setFechaHora(Punto.getInstance().getFechaYhora());
+        p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
         p.setIdCategoriaPOI(idCategoriaPOI);
         p.setLatitud(Punto.getInstance().getLatitud());
         p.setLongitud(Punto.getInstance().getLongitud());
