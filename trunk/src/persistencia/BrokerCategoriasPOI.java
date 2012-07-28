@@ -7,6 +7,7 @@ package persistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import modelo.dataManager.CategoriaPoi;
 
 /**
@@ -37,9 +38,9 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             while (rs.next()) {
                 modelo.dataManager.CategoriaPoi catPoi = new modelo.dataManager.CategoriaPoi();
                 // Get the data from the row using the column name
-                catPoi.setId(0+rs.getInt("id"));
-                catPoi.setPathIcono(""+rs.getString("pathIcono"));
-                catPoi.setTitulo(""+rs.getString("titulo"));
+                catPoi.setId(0 + rs.getInt("id"));
+                catPoi.setPathIcono("" + rs.getString("pathIcono"));
+                catPoi.setTitulo("" + rs.getString("titulo"));
 
                 CatPOIS.add(catPoi);
             }
@@ -55,11 +56,11 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         ResultSet rs=null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM CategoriasPoi WHERE id = " + id);
-            if (rs != null) {        
+            if (rs.next()) {
                 // Get the data from the row using the column name
-                CatPOI.setId(0+rs.getInt("id"));
-                CatPOI.setPathIcono(""+rs.getString("pathIcono"));
-                CatPOI.setTitulo(""+rs.getString("titulo"));
+                CatPOI.setId(0 + rs.getInt("id"));
+                CatPOI.setPathIcono("" + rs.getString("pathIcono"));
+                CatPOI.setTitulo("" + rs.getString("titulo"));
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -148,14 +149,28 @@ public class BrokerCategoriasPOI extends BrokerPpal {
     }
 
     public ArrayList<modelo.dataManager.CategoriaPoi> getCatPOISDeUnaCampFromDB(int idDeCampania) {
-        ArrayList<modelo.dataManager.CategoriaPoi> catPoisDeEstaCampania = new ArrayList();
+        //ArrayList<modelo.dataManager.CategoriaPoi> catPoisDeEstaCampania = new ArrayList();
         // --- metodo pendiente que debería devolver un arraylist con las CATEGORIAS de los POIs que pertenezcan a la campaña de ID especificado por parametro
         // -> probar usando JOINs, capaz sale mas facil que volver a llamar a getPOISDeUnaCampFromDB() para iterarlos y obtener su id de CatPoi
         // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
         // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
         // -> validar el parametro de entrada y todo lo q pueda fallar
         // -> hacer el SELECT usando el objeto PreparedStatement
+        HashSet lista = new HashSet(); 
+        for (modelo.dataManager.POI unPOI : BrokerPOIs.getInstance().getPOISDeUnaCampFromDB(idDeCampania)) {  
+            lista.add(unPOI.getCategoria());
+        }
+        ArrayList<modelo.dataManager.CategoriaPoi> catPoisDeEstaCampania = new ArrayList<modelo.dataManager.CategoriaPoi>(lista);
         return catPoisDeEstaCampania;
     }
-    
+
+
+/*
+    //main de prueba
+    public static void main(String[] args) {
+        ArrayList<modelo.dataManager.CategoriaPoi> a = BrokerCategoriasPOI.getInstance().getCatPOISDeUnaCampFromDB(1);
+        for (int i = 0; i < a.size(); i++) {
+            System.out.println(a.get(i).getTitulo());
+        }
+    }*/
 }

@@ -353,7 +353,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void btnAgregaPoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaPoiActionPerformed
         // Agrega POI:        
-        if (comboCategorias.getItemCount() > 0 && campoDescripcionNuevoPoi.getText().length() > 3) {
+        if (comboCategorias.getItemCount() > 0 && campoDescripcionNuevoPoi.getText().length() > 2) {
             CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
             controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText());
             cargaGrillaPOIS();
@@ -365,7 +365,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void btnAgregaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaCategoriaActionPerformed
         // Agrega Categoria POI:
-        if (campoNombreNuevaCat.getText().length() > 3) {        
+        if (campoNombreNuevaCat.getText().length() > 2) {        
         controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText());
         cargaGrillaCategoriaPOIS();
         cargaComboCategorias();
@@ -426,7 +426,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             System.out.println(e);
         }
     }
-    /*    //main de prueba
+    /*  //main de prueba
     
     public static void main(String[] args) {
     javax.swing.JFrame elFrame = new javax.swing.JFrame();
@@ -492,13 +492,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         modeloTablaCategoriasPOI.addColumn("Acciones");
         //Cuerpo
         ArrayList a = new ArrayList();
-        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
-            a.clear();
+        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {            
             a.add(cP.getId());
             a.add(cP.getTitulo());
             a.add(cP.getPathIcono());
             a.add("Acciones");
             modeloTablaCategoriasPOI.addRow(agregaUnaFilaGenerica(cantCols, a));
+            a.clear();
         }
         tablaCategorias.setModel(modeloTablaCategoriasPOI);
         //escondo la columna ID 
@@ -540,8 +540,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
             }*/
             ArrayList a = new ArrayList();
-            for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-                a.clear();
+            for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {                
                 a.add(p.getId());
                 a.add(p.getFechaHora());
                 a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
@@ -550,6 +549,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 a.add(p.getDescripcion());
                 a.add("Acciones");
                 modeloTablaPOIS.addRow(agregaUnaFilaGenerica(cantCols, a));
+                a.clear();
             }
         } catch (Exception e) {
             System.out.println(e);
