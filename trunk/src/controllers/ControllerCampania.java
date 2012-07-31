@@ -178,9 +178,5 @@ public class ControllerCampania {
     private void inicializador() {
         setEstadoHistoricoDeCampEnCurso(0);
     }
-
-    public ArrayList<CategoriaPoi> getCatPOISFromDB() {
-        return  BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
-    }
     
 }

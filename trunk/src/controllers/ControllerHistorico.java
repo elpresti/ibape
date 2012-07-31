@@ -144,5 +144,15 @@ public void restauraBtnIniciarMapa(){
             JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
         }
     }
+
+    public void actualizaDatosEnGui() {
+        controllers.ControllerHistorico.getInstance().cargaGrillaCampanias();
+        //PanelHistorico.getInstance().inicializaTablaCategoriasPois(); 
+        PanelHistorico.getInstance().seteaBotonesMapa();
+    }
+
+    public ArrayList<CategoriaPoi> getCatPOISDeUnaCampFromDB(int idCampaniaElegida) {
+        return  persistencia.BrokerCategoriasPOI.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaElegida);
+    }
     
 }

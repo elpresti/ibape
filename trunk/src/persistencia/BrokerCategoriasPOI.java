@@ -83,7 +83,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
     public boolean insertCategoriaPOI(modelo.dataManager.CategoriaPoi categoriaPOI) {
         boolean sePudo = false;
         String sqlQuery = "";
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             String titulo = null;
             if (categoriaPOI.getTitulo() != null) {
@@ -107,6 +107,18 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }        
         return sePudo;
     }
 

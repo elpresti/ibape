@@ -217,14 +217,14 @@ public class PanelHistorico extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Elegir", "Categorias de POI"
+                "id", "Elegir", "Icono", "Categorias de POI"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false
+                false, true, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -236,10 +236,15 @@ public class PanelHistorico extends javax.swing.JPanel {
             }
         });
         jScrollPane2.setViewportView(tablaCatPois);
-        tablaCatPois.getColumnModel().getColumn(0).setMinWidth(40);
-        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(40);
-        tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(200);
+        tablaCatPois.getColumnModel().getColumn(0).setResizable(false);
+        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaCatPois.getColumnModel().getColumn(1).setMinWidth(40);
+        tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(40);
+        tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(40);
+        tablaCatPois.getColumnModel().getColumn(2).setMinWidth(50);
+        tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(50);
+        tablaCatPois.getColumnModel().getColumn(3).setPreferredWidth(200);
 
         panelInferior.add(jScrollPane2);
 
@@ -471,49 +476,65 @@ public class PanelHistorico extends javax.swing.JPanel {
         if (idCampaniaElegida>=0){
             this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());                        
             habilitaChkRecorrido(true);
-            setTxtCantidadDePuntosDeCampElegida(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(this.idCampaniaElegida));
+            setTxtCantidadDePuntosDeCampElegida(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(this.idCampaniaElegida));            
         }
         else
           { this.idCampaniaElegida = idCampaniaElegida; 
             habilitaChkRecorrido(false);
             setTxtCantidadDePuntosDeCampElegida(-1);
           }
+        inicializaTablaCategoriasPois();//carga las categorias para esta campaña        
     }
 
-    public void inicializaTablaCategoriasPois() {        
-        TableModelCatPoisHistorico tableModelCatPois = (TableModelCatPoisHistorico)cargaGrillaCategoriaPOIS();        
-        tablaCatPois.setModel(tableModelCatPois);
+    public void inicializaTablaCategoriasPois() {
+        if (getIdCampaniaElegida()>=0){
+            TableModelCatPoisHistorico tableModelCatPois = (TableModelCatPoisHistorico)cargaGrillaCategoriaPOIS();        
+            tablaCatPois.setModel(tableModelCatPois);
+            //resize la columna Elejir
+            tablaCatPois.getColumnModel().getColumn(1).setMinWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
+            //escondo la columna Iconos
+            tablaCatPois.getColumnModel().getColumn(2).setMinWidth(40); 
+            tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(40); 
+            tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(40);
+            //seteo los checkboxes
+            tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
+            tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
+            habilitaBtnGraficarDatos(false); 
+            chkPoisTodos.setSelected(false);
+            chkRecorrido.setSelected(false);
+            if (tableModelCatPois.getRowCount()==0){            
+                tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),null,"No se encontraron categorias de Pois en sistema..."});
+                habilitaChkTodosLosPois(false);
+                //habilitaPanelTablaCatPois(false);
+                //habilitaBtnGraficarDatos(false);
+            }
+            else{
+                habilitaChkTodosLosPois(true);
+                //habilitaPanelTablaCatPois(true);
+                //habilitaBtnGraficarDatos(true);
+            }
+        }
+        else{
+                //escondo la columna ELEJIR
+                tablaCatPois.getColumnModel().getColumn(1).setMinWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
+                DefaultTableModel modelo = (DefaultTableModel)tablaCatPois.getModel();
+                modelo.setRowCount(0);//vacío la tabla de categorias de POis
+                setCategoriasSeleccionadas(new ArrayList()); //inicializo el vector de categorias seleccionadas                
+                modelo.addRow(new Object[]{-1,new JCheckBox(),null,"No se ha seleccionado ninguna campaña..."});
+                tablaCatPois.setModel(modelo);
+                habilitaChkTodosLosPois(false);
+        }
         //escondo la columna ID 
         tablaCatPois.getColumnModel().getColumn(0).setMinWidth(0); 
         tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(0); 
         tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(0); 
-        tablaCatPois.getColumnModel().getColumn(0).setResizable(false);
-        //resize la columna Elejir
-        tablaCatPois.getColumnModel().getColumn(1).setMinWidth(30); 
-        tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(30); 
-        tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(30); 
-        tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
-        //escondo la columna Iconos
-        tablaCatPois.getColumnModel().getColumn(2).setMinWidth(40); 
-        tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(40); 
-        tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(40);
-        //seteo los checkboxes
-        tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
-        tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
-        habilitaBtnGraficarDatos(false); 
-        chkPoisTodos.setSelected(false);
-        chkRecorrido.setSelected(false);
-        if (tableModelCatPois.getRowCount()==0){            
-            tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),null,"No se encontraron categorias de Pois en sistema..."});
-            habilitaChkTodosLosPois(false);
-            //habilitaPanelTablaCatPois(false);
-            //habilitaBtnGraficarDatos(false);
-        }
-        else{
-            habilitaChkTodosLosPois(true);
-            //habilitaPanelTablaCatPois(true);
-            //habilitaBtnGraficarDatos(true);
-        }
+        tablaCatPois.getColumnModel().getColumn(0).setResizable(false);        
   }
     
   public void habilitaPanelTablaCatPois(boolean estado){
@@ -548,7 +569,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         encabezado[3] = "Nombre de la categoria";
         dm.setColumnIdentifiers(encabezado);
         //Cuerpo
-        for (CategoriaPoi cP : ControllerCampania.getInstance().getCatPOISFromDB()) {
+        for (CategoriaPoi cP : ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(getIdCampaniaElegida())) {
             Object[] fila = new Object[4]; //creamos la fila
             fila[0]=cP.getId(); //en la columna 0 va el ID
             fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
