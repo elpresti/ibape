@@ -11,6 +11,8 @@
 package gui;
 
 import controllers.ControllerAlertas;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -343,6 +345,7 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private void inicializador() {
         mostrarBtnPanelNavegacion(false);
         cargaIconosAbotones();
+        cargaLogo();
     }
 
     public void mostrarBtnPanelNavegacion(boolean b) {
@@ -359,6 +362,14 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
         lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
         lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
         
+    }
+
+    private void cargaLogo() {        
+        /*
+        ImageIcon imageIcon = new ImageIcon("imgs\\logo2.gif");
+        lblLogo.setIcon(imageIcon); 
+        imageIcon.setImageObserver(lblLogo);
+        */
     }
     
     
