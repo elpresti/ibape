@@ -11,6 +11,7 @@
 package gui;
 
 import controllers.ControllerAlertas;
+import java.awt.Dimension;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -60,8 +61,11 @@ public class PanelSelector extends javax.swing.JPanel {
         panelAyuda = new org.jdesktop.swingx.JXPanel();
         lnkAyuda = new org.jdesktop.swingx.JXHyperlink();
         panelBotones = new org.jdesktop.swingx.JXPanel();
+        panelBtnRegistraPOI = new org.jdesktop.swingx.JXPanel();
         btnRegistraPOI = new javax.swing.JButton();
+        panelBtnLanzaRecoge = new org.jdesktop.swingx.JXPanel();
         btnLanzaRecoge = new javax.swing.JButton();
+        panelLogo = new org.jdesktop.swingx.JXPanel();
         lblLogo = new org.jdesktop.swingx.JXLabel();
 
         setMaximumSize(new java.awt.Dimension(170, 1800));
@@ -73,6 +77,7 @@ public class PanelSelector extends javax.swing.JPanel {
         PanelScrollBotones.setMinimumSize(new java.awt.Dimension(152, 200));
         PanelScrollBotones.setPreferredSize(new java.awt.Dimension(170, 530));
 
+        jXTaskPaneContainer1.setBackground(new java.awt.Color(240, 240, 240));
         jXTaskPaneContainer1.setMaximumSize(new java.awt.Dimension(150, 1000));
         jXTaskPaneContainer1.setMinimumSize(new java.awt.Dimension(150, 100));
         jXTaskPaneContainer1.setPreferredSize(new java.awt.Dimension(150, 800));
@@ -212,9 +217,11 @@ public class PanelSelector extends javax.swing.JPanel {
 
         jXTaskPaneContainer1.add(taskPaneAyuda);
 
-        panelBotones.setMinimumSize(new java.awt.Dimension(150, 33));
-        panelBotones.setPreferredSize(new java.awt.Dimension(150, 150));
-        panelBotones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 25));
+        panelBotones.setMinimumSize(new java.awt.Dimension(150, 300));
+        panelBotones.setPreferredSize(new java.awt.Dimension(150, 300));
+        panelBotones.setLayout(new javax.swing.BoxLayout(panelBotones, javax.swing.BoxLayout.PAGE_AXIS));
+
+        panelBtnRegistraPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
 
         btnRegistraPOI.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnRegistraPOI.setText("Registra POI");
@@ -225,7 +232,11 @@ public class PanelSelector extends javax.swing.JPanel {
                 btnRegistraPOIActionPerformed(evt);
             }
         });
-        panelBotones.add(btnRegistraPOI);
+        panelBtnRegistraPOI.add(btnRegistraPOI);
+
+        panelBotones.add(panelBtnRegistraPOI);
+
+        panelBtnLanzaRecoge.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
         btnLanzaRecoge.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnLanzaRecoge.setText("Lanza / Recoge");
@@ -236,11 +247,17 @@ public class PanelSelector extends javax.swing.JPanel {
                 btnLanzaRecogeActionPerformed(evt);
             }
         });
-        panelBotones.add(btnLanzaRecoge);
+        panelBtnLanzaRecoge.add(btnLanzaRecoge);
 
-        lblLogo.setText("LOGO IBAPE");
+        panelBotones.add(panelBtnLanzaRecoge);
+
+        panelLogo.setPreferredSize(new java.awt.Dimension(150, 150));
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"))); // NOI18N
         lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        panelBotones.add(lblLogo);
+        panelLogo.add(lblLogo);
+
+        panelBotones.add(panelLogo);
 
         jXTaskPaneContainer1.add(panelBotones);
 
@@ -310,10 +327,13 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private org.jdesktop.swingx.JXPanel panelAlertas;
     private org.jdesktop.swingx.JXPanel panelAyuda;
     private org.jdesktop.swingx.JXPanel panelBotones;
+    private org.jdesktop.swingx.JXPanel panelBtnLanzaRecoge;
+    private org.jdesktop.swingx.JXPanel panelBtnRegistraPOI;
     private org.jdesktop.swingx.JXPanel panelCampanias;
     private org.jdesktop.swingx.JXPanel panelConfiguracion;
     private org.jdesktop.swingx.JXPanel panelHistorico;
     private org.jdesktop.swingx.JXPanel panelInformes;
+    private org.jdesktop.swingx.JXPanel panelLogo;
     private org.jdesktop.swingx.JXPanel panelNavegacion;
     private org.jdesktop.swingx.JXPanel panelOpciones;
     private org.jdesktop.swingx.JXPanel panelPois;
@@ -345,7 +365,6 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private void inicializador() {
         mostrarBtnPanelNavegacion(false);
         cargaIconosAbotones();
-        cargaLogo();
     }
 
     public void mostrarBtnPanelNavegacion(boolean b) {
@@ -362,14 +381,6 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
         lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
         lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
         
-    }
-
-    private void cargaLogo() {        
-        /*
-        ImageIcon imageIcon = new ImageIcon("imgs\\logo2.gif");
-        lblLogo.setIcon(imageIcon); 
-        imageIcon.setImageObserver(lblLogo);
-        */
     }
     
     
