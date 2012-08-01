@@ -203,7 +203,7 @@ function mueveCamaraApunto(latitud,longitud) {
  
 </head>
 
-<body onLoad="setInterval('consultaYmuestra()',5000);">
+<body onLoad="setInterval('consultaYmuestra()',3000);">
 
 <div id="map3d" style="height: 100%; width: 100%"></div>  
 <div id="botonardi">
