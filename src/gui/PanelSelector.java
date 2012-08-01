@@ -39,6 +39,8 @@ public class PanelSelector extends javax.swing.JPanel {
 
         PanelScrollBotones = new javax.swing.JScrollPane();
         jXTaskPaneContainer1 = new org.jdesktop.swingx.JXTaskPaneContainer();
+        panelLogo = new org.jdesktop.swingx.JXPanel();
+        lblLogo = new org.jdesktop.swingx.JXLabel();
         taskPaneNavegacion = new org.jdesktop.swingx.JXTaskPane();
         panelNavegacion = new org.jdesktop.swingx.JXPanel();
         lnkNavegacion = new org.jdesktop.swingx.JXHyperlink();
@@ -65,8 +67,6 @@ public class PanelSelector extends javax.swing.JPanel {
         btnRegistraPOI = new javax.swing.JButton();
         panelBtnLanzaRecoge = new org.jdesktop.swingx.JXPanel();
         btnLanzaRecoge = new javax.swing.JButton();
-        panelLogo = new org.jdesktop.swingx.JXPanel();
-        lblLogo = new org.jdesktop.swingx.JXLabel();
 
         setMaximumSize(new java.awt.Dimension(170, 1800));
         setMinimumSize(new java.awt.Dimension(100, 500));
@@ -83,6 +83,14 @@ public class PanelSelector extends javax.swing.JPanel {
         jXTaskPaneContainer1.setPreferredSize(new java.awt.Dimension(150, 800));
         jXTaskPaneContainer1.setScrollableTracksViewportWidth(false);
         jXTaskPaneContainer1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        panelLogo.setPreferredSize(new java.awt.Dimension(150, 150));
+
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"))); // NOI18N
+        lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        panelLogo.add(lblLogo);
+
+        jXTaskPaneContainer1.add(panelLogo);
 
         taskPaneNavegacion.setTitle("Navegación");
         taskPaneNavegacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
@@ -217,8 +225,8 @@ public class PanelSelector extends javax.swing.JPanel {
 
         jXTaskPaneContainer1.add(taskPaneAyuda);
 
-        panelBotones.setMinimumSize(new java.awt.Dimension(150, 300));
-        panelBotones.setPreferredSize(new java.awt.Dimension(150, 300));
+        panelBotones.setMinimumSize(new java.awt.Dimension(150, 100));
+        panelBotones.setPreferredSize(new java.awt.Dimension(150, 100));
         panelBotones.setLayout(new javax.swing.BoxLayout(panelBotones, javax.swing.BoxLayout.PAGE_AXIS));
 
         panelBtnRegistraPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
@@ -250,14 +258,6 @@ public class PanelSelector extends javax.swing.JPanel {
         panelBtnLanzaRecoge.add(btnLanzaRecoge);
 
         panelBotones.add(panelBtnLanzaRecoge);
-
-        panelLogo.setPreferredSize(new java.awt.Dimension(150, 150));
-
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"))); // NOI18N
-        lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        panelLogo.add(lblLogo);
-
-        panelBotones.add(panelLogo);
 
         jXTaskPaneContainer1.add(panelBotones);
 
