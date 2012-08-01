@@ -12,7 +12,10 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.Calendar;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.LookAndFeel;
@@ -35,7 +38,7 @@ public class VentanaIbape extends JXFrame {
     private MultiSplitLayout multiSplitLayout; 
     
     /** Creates new form VentanaIbape */
-    private VentanaIbape() {
+    private VentanaIbape() {        
         setLookAndFeel();
         initComponents();
         inicializador();
@@ -55,7 +58,7 @@ public class VentanaIbape extends JXFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IBaPE v1.0");
-        setMinimumSize(new java.awt.Dimension(520, 660));
+        setMinimumSize(new java.awt.Dimension(520, 500));
 
         splitPanePpal.setDividerSize(9);
         splitPanePpal.setPreferredSize(new java.awt.Dimension(700, 530));
@@ -64,18 +67,6 @@ public class VentanaIbape extends JXFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {       
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            public void run() {
-                VentanaIbape.getInstance().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSplitPane splitPanePpal;
     // End of variables declaration//GEN-END:variables
@@ -84,6 +75,16 @@ public class VentanaIbape extends JXFrame {
     private void inicializador() {
         //Create a split pane with the two scroll panes in it.
         //splitPane = new JSplitPane(JsplitPane.HORIZONTAL_SPLIT);
+        
+        //posiciono el Frame en el centro de la pantalla
+        int posicionX = (Toolkit.getDefaultToolkit().getScreenSize().width/2)-(getWidth()/2);
+        int posicionY = Toolkit.getDefaultToolkit().getScreenSize().height/2-(getHeight()/2);
+        this.setLocation(posicionX,posicionY);          
+        
+        //cargo el icono de la aplicacion
+        java.net.URL imgURL = getClass().getResource("/imgs/iconoIbape32x32.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage(imgURL);
+        setIconImage(icon);               
         
         //Configuramos los parametros del Logger
         PropertyConfigurator.configure( System.getProperty("user.dir")+ "\\lib\\log4j.properties");
