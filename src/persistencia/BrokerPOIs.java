@@ -283,16 +283,10 @@ public class BrokerPOIs extends BrokerPpal {
     }
 
     
-    //este queda???
+    //este queda??? ---> si, queda
     public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
-        // --- metodo pendiente que debería devolver un arraylist de los POIs que pertenezcan a la campaña de ID especificado por parametro
-        // -> para saber si un POI pertenece a una campaña debo armar la consulta de SQL solicitando aquellos POIs cuya fecha
-        // se encuentre entre la fecha de inicio y fin de campaña
-        // -> tener en cuenta que puede haber una campaña en curso, por lo tanto tendra fecha de inicio pero no de fin, en este caso
-        // asumir como fecha final la fecha actual Calendar.getInstance().getTime();
-        // -> validar el parametro de entrada y todo lo q pueda fallar
-        // -> hacer el SELECT usando el objeto PreparedStatement
+        ResultSet rs = null;
         if ((idDeCampania >= 0) && (idDeCatPois >= 0)) {
             try {
                 Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
@@ -312,7 +306,7 @@ public class BrokerPOIs extends BrokerPpal {
                     }
                     psSelect.setInt(4, idDeCatPois);
                     System.out.println("Select : " + psSelect.toString());
-                    ResultSet rs = psSelect.executeQuery();
+                    rs = psSelect.executeQuery();
                     while (rs.next()) {
                         modelo.dataManager.POI poi = new modelo.dataManager.POI();
                         // Get the data from the row using the column name
@@ -335,6 +329,64 @@ public class BrokerPOIs extends BrokerPpal {
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return poisDeEstaCampania;
     }
+    
+    public int getCantPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
+        int cantPoisDeEstaCampania = 0;
+        ResultSet rs = null;
+        if ((idDeCampania >= 0) && (idDeCatPois >= 0)) {
+            try {
+                Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
+                if (laCampania != null) {
+                    PreparedStatement psSelect = getConexion().prepareStatement(
+                            "SELECT count() FROM Pois "
+                            + "WHERE (idCampania= ? "
+                            + "OR fechaHora "
+                            + "BETWEEN ? AND ? ) AND idCategoriaPoi=? ");
+                    psSelect.setInt(1, idDeCampania);
+                    psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
+                    if (laCampania.getEstado() == 1) {//campania finalizada
+                        psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
+                    } else {
+                        psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+                    }
+                    psSelect.setInt(4, idDeCatPois);
+                    System.out.println("Select : " + psSelect.toString());
+                    rs = psSelect.executeQuery();
+                    if (rs.next()) {
+                        cantPoisDeEstaCampania = rs.getInt(1);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logueador.getInstance().agregaAlLog(ex.toString());
+            }
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return cantPoisDeEstaCampania;
+    }
+    
 }

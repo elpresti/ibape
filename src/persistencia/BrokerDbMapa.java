@@ -82,7 +82,8 @@ public class BrokerDbMapa implements Runnable{
                     preparedStatement.setString(Integer.valueOf(getCampoOBJETOpos()), String.valueOf(p.getObjeto()));
                     preparedStatement.setBoolean(Integer.valueOf(getCampoLEIDOpos()), false);
                     preparedStatement.setString(Integer.valueOf(getCampoCOMENTARIOSpos()),p.getComentarios());
-                    preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), p.convierteAkml(isConCamara()));
+                    preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), 
+                            modelo.gisModule.GeneradorKML.getInstance().conviertePuntoNavegacionAkml(p,isConCamara()));
                     preparedStatement.executeUpdate();
                     sePudo=true;
                     setUltimoInsert(fechaYhoraActual);

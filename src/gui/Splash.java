@@ -81,7 +81,7 @@ public class Splash extends javax.swing.JFrame {
         for (int i = 1;i<=13;i++){
             barraProgreso.setValue(i*10);
             try {
-                Thread.sleep(400); 
+                Thread.sleep(300); 
             } catch (InterruptedException ex) {
                 Logger.getLogger(Splash.class.getName()).log(Level.SEVERE, null, ex);
             }

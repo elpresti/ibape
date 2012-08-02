@@ -502,6 +502,10 @@ public class PanelHistorico extends javax.swing.JPanel {
             //seteo los checkboxes
             tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
             tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
+            //ajusto la columna de cantidad de puntos
+            tablaCatPois.getColumnModel().getColumn(4).setMinWidth(50); 
+            tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(50); 
+            
             habilitaBtnGraficarDatos(false); 
             chkPoisTodos.setSelected(false);
             chkRecorrido.setSelected(false);
@@ -562,19 +566,21 @@ public class PanelHistorico extends javax.swing.JPanel {
         setCategoriasSeleccionadas(new ArrayList()); //inicializo en vacío el vector de categorias seleccionadas
         TableModelCatPoisHistorico dm = new TableModelCatPoisHistorico();
         //Cabecera
-        String[] encabezado = new String[4];
+        String[] encabezado = new String[5];
         encabezado[0] = "Id";
         encabezado[1] = "Elejir";        
         encabezado[2] = "Icono";
         encabezado[3] = "Nombre de la categoria";
+        encabezado[4] = "#Puntos";
         dm.setColumnIdentifiers(encabezado);
         //Cuerpo
         for (CategoriaPoi cP : ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(getIdCampaniaElegida())) {
-            Object[] fila = new Object[4]; //creamos la fila
+            Object[] fila = new Object[5]; //creamos la fila
             fila[0]=cP.getId(); //en la columna 0 va el ID
             fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
             fila[2]=cP.getPathIcono();//en la columna 2 va el Icono
             fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI
+            fila[4]=ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(getIdCampaniaElegida(),cP.getId());
             dm.addRow(fila);
         }
         return dm;
