@@ -36,61 +36,6 @@ public class Punto extends Observable{
         return unicaInstancia;
     }
 
-    public String convierteAkml(boolean conCamara) {
-        //Cosas pendientes de incluir:
-            // - Miniatura imagen de la sonda
-            // - Cantidad de marcas encontradas
-            // - Alertas (todas)
-        
-        //Preset de camara 1 = vista aerea trasera:
-        //Longitud:getLonConNegativo()*1.00003  Latitud:getLatConNegativo()*1.00006  altitude:50  heading:35  tilt:75
-        //Preset de camara 2 = vista aerea lateral derecha:
-        //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
-        // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671);
-        String salida = "";
-        //...metodo pendiente        
-        salida=//"<?xml version='1.0' encoding='UTF-8'?>"
-        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
-        //"<kml xmlns=\"http://www.opengis.net/kml/2.2\">"
-        +"<Document>";
-        if (conCamara){
-          salida=salida
-            +"<Camera>"
-              +"<longitude>"+(getLonConNegativo()*0.99999)+"</longitude>"
-              +"<latitude>"+(getLatConNegativo()*1.00005)+"</latitude>"
-              +"<altitude>50</altitude>"
-              +"<heading>0</heading>"   //gira el ojo a la derecha (positivo) a la izquierda (negativo) 
-              +"<tilt>70</tilt>" //angulo de vision del ojo. 0= vista vertical a la tirra (desde arriba), 75=vista con 75° de inclinacion
-            +"</Camera>";        
-        }
-        java.sql.Timestamp fechaYhoraActual=getFechaYhora();
-        salida=salida
-          +"<Placemark>"
-            +"<name>"+fechaYhoraActual.getHours()+":"+fechaYhoraActual.getMinutes()+":"+fechaYhoraActual.getSeconds()+"</name>"
-            +"<description>"
-               + "<![CDATA[<div>"
-                  + "Datos de este punto "
-                  + "<br>  <strong>- Fecha y hora:</strong> "+getFechaYhora()+" hs"
-                  + "<br>  <strong>- Latitud:</strong> "+getLatitud()+" "+getLatHemisf()
-                  + "<br>  <strong>- Longitud:</strong> "+getLongitud()+" "+getLonHemisf()                  
-                  + "<br>  <strong>- Rumbo:</strong> "+getRumbo()+"° "
-                  + "<br>  <strong>- Velocidad:</strong> "+getVelocidad()+" kmph"
-                  + "<br>  <strong>- Profundidad:</strong> "+getProfundidad()+" m"                
-                  + "<br><br>Esto es una url: <a href=\"http://www.google.com\" target=\"_blank\">Google!</a>"
-               + "</div>]]>"
-            + "</description>"
-            +"<Point>"
-                //+"<gx:altitudeMode>absolute</gx:altitudeMode>" //clampToGround, relativeToGround, absolute
-                +"<coordinates>"+getLonConNegativo()+","+getLatConNegativo()+","+getAltitud()+"</coordinates>"  
-            +"</Point>"
-          +"</Placemark>"
-        +"</Document>"                
-                
-        +"</kml>";    
-        return salida;
-    }
-
-
     /**
      * @return the fechaYhora
      */

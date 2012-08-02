@@ -65,7 +65,8 @@ public class Campania {
      */
     public void setEstado(int estado) {
         this.estado = estado;
-        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){ 
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null && 
+                AdministraCampanias.getInstance().getCampaniaEnCurso().equals(this)){ 
             persistencia.BrokerCampania.getInstance().updateCampania(this);
         }        
     }
