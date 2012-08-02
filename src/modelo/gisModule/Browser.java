@@ -10,7 +10,6 @@ import edu.stanford.ejalbert.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import persistencia.Logueador;
-import vista.VentanaPpal;
 
 /**
  *

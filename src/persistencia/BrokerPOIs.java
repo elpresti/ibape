@@ -278,10 +278,11 @@ public class BrokerPOIs extends BrokerPpal {
     }
 
     //main de prueba
+/*    
     public static void main(String[] args) {
         ArrayList a = BrokerPOIs.getInstance().getPOISDeUnaCampFromDB(2);
     }
-
+*/
     
     //este queda??? ---> si, queda
     public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {

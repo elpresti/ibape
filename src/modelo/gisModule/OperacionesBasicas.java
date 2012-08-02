@@ -84,6 +84,7 @@ public class OperacionesBasicas {
 		setAlto(getImagenOriginal().getHeight(null));
 	}
 
+/*    
     public static void main(String[] args){
 
         int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
@@ -104,7 +105,8 @@ public class OperacionesBasicas {
 //        //grabamos la imagen en disco
 //        getInstance().grabarImagen(imgProcesada);
     }
-
+*/
+    
     public int cuantosPecesHay(String rutaImg){
         int cantPeces = 0;
 
