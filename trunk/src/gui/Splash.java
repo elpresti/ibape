@@ -8,34 +8,19 @@ import java.awt.Color;
 import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import persistencia.Logueador;
 
 /**
  *
  * @author Sebastian
  */
-public class Splash extends javax.swing.JFrame {
-
+public class Splash extends javax.swing.JFrame implements Runnable{
+    private Thread threadSplash;
     /**
      * Creates new form Splash
      */
     public Splash() {
-        VentanaIbape.getInstance();        
-        initComponents();
-        this.setVisible(true);
-        panelLogo.setOpaque(false);
-        //panelLogo.setForeground(null);
-        panelBarraProgreso.setOpaque(false);        
-        barraProgreso.setBorderPainted(true);
-        barraProgreso.setForeground(new Color(50,50,153,100));
-        barraProgreso.setStringPainted(true);
-        //this.setSize(500, 500); 
-        int posicionX = (Toolkit.getDefaultToolkit().getScreenSize().width/2)-(getWidth()/2);
-        int posicionY = Toolkit.getDefaultToolkit().getScreenSize().height/2-(getHeight()/2);
-        this.setLocation(posicionX,posicionY);                
-        run();        
-        setVisible(false);
-        dispose();
-        VentanaIbape.getInstance().setVisible(true);
+        //inicializador();
     }
 
     /**
@@ -77,7 +62,7 @@ public class Splash extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 
-    public void run(){
+    public void hacePreLoad(){
         for (int i = 1;i<=13;i++){
             barraProgreso.setValue(i*10);
             try {
@@ -88,12 +73,41 @@ public class Splash extends javax.swing.JFrame {
         }
     }
 
-
+    private void inicializador() {
+        VentanaIbape.getInstance();        
+        initComponents();
+        this.setVisible(true);
+        panelLogo.setOpaque(false);
+        //panelLogo.setForeground(null);
+        panelBarraProgreso.setOpaque(false);        
+        barraProgreso.setBorderPainted(true);
+        barraProgreso.setForeground(new Color(50,50,153,100));
+        barraProgreso.setStringPainted(true);
+        //this.setSize(500, 500); 
+        int posicionX = (Toolkit.getDefaultToolkit().getScreenSize().width/2)-(getWidth()/2);
+        int posicionY = Toolkit.getDefaultToolkit().getScreenSize().height/2-(getHeight()/2);
+        this.setLocation(posicionX,posicionY);                
+        hacePreLoad();        
+        setVisible(false);
+        dispose();
+        VentanaIbape.getInstance().setVisible(true);
+    }
     
-    /**
-     * @param args the command line arguments
-     */
-/*    
+    public void run(){ 
+        inicializador();
+        threadSplash = null; 
+    }
+    
+    public void start(){
+       if (threadSplash == null) {
+            threadSplash = new Thread(this);
+            threadSplash.setPriority(Thread.MIN_PRIORITY);
+            threadSplash.start();
+        }
+    }
+    
+    
+ /*
     public static void main(String args[]) {       
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -102,8 +116,10 @@ public class Splash extends javax.swing.JFrame {
         });
     }
 */
+
+    
     public static void main(String args[]) {
-        new Splash();
+        new Splash().run();
     }
     
 }

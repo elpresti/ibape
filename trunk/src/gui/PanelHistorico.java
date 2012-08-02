@@ -330,7 +330,7 @@ public class PanelHistorico extends javax.swing.JPanel {
             if (btnIniciarMapaHistorico.isEnabled() && btnIniciarMapaHistorico.isVisible()){
                 btnIniciarMapaHistoricoActionPerformed(null);
             }
-            
+ 
             if (chkRecorrido.isSelected()){
                 ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
             }

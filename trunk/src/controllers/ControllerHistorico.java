@@ -6,6 +6,8 @@ package controllers;
 
 import gui.PanelHistorico;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +29,7 @@ public class ControllerHistorico {
     static ControllerHistorico unicaInstancia;
     private BrokerHistoricoPunto brokerHistoricoPunto;
     private BrokerHistoricoSondaSet brokerHistoricoSondaSet;
+    private int idCampaniaElegida;
             
     private ControllerHistorico(){
         inicializador();
@@ -41,6 +44,7 @@ public class ControllerHistorico {
     private void inicializador() {
         brokerHistoricoPunto = BrokerHistoricoPunto.getInstance();
         brokerHistoricoSondaSet = BrokerHistoricoSondaSet.getInstance();
+        setIdCampaniaElegida(-1);
     }
 
     public void configuraBrokerHistorico() {
@@ -134,9 +138,19 @@ public void restauraBtnIniciarMapa(){
 }
 
     public void cargaRecorridoEnMapa(int idCampaniaElegida) {
-        if (!BrokerDbMapaHistorico.getInstance().cargarRecorridoDeCamp(idCampaniaElegida)){
-            JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
-        }
+        setIdCampaniaElegida(idCampaniaElegida);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    Thread.sleep(2000);//espera 2 segundos xq probablemente se este abriendo el webserver
+                    if (!BrokerDbMapaHistorico.getInstance().cargarRecorridoDeCamp(getIdCampaniaElegida())){
+                        JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
+                    }
+                } catch (InterruptedException ex) {
+                    Logueador.getInstance().agregaAlLog(ex.toString());
+                }
+            }
+        });
     }
 
     public void cargaPoisEnMapa(int idCampaniaElegida, ArrayList<Integer> categoriasSeleccionadas) {
@@ -157,6 +171,20 @@ public void restauraBtnIniciarMapa(){
 
     public Object getCantPOISDeUnaCampSegunCatPoi(int idCampaniaElegida, int idCategoria) {
         return persistencia.BrokerPOIs.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCampaniaElegida, idCategoria);
+    }
+
+    /**
+     * @return the idCampaniaElegida
+     */
+    public int getIdCampaniaElegida() {
+        return idCampaniaElegida;
+    }
+
+    /**
+     * @param idCampaniaElegida the idCampaniaElegida to set
+     */
+    public void setIdCampaniaElegida(int idCampaniaElegida) {
+        this.idCampaniaElegida = idCampaniaElegida;
     }
     
 }
