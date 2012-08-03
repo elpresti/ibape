@@ -98,6 +98,7 @@ public class PanelSelector extends javax.swing.JPanel {
         panelNavegacion.setPreferredSize(new java.awt.Dimension(140, 30));
         panelNavegacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
+        lnkNavegacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-navegacion.png"))); // NOI18N
         lnkNavegacion.setText("Navegación");
         lnkNavegacion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkNavegacion.addActionListener(new java.awt.event.ActionListener() {
@@ -117,6 +118,7 @@ public class PanelSelector extends javax.swing.JPanel {
         panelHistorico.setPreferredSize(new java.awt.Dimension(140, 35));
         panelHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkHistorico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-historial.png"))); // NOI18N
         lnkHistorico.setText("Historico");
         lnkHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkHistorico.addActionListener(new java.awt.event.ActionListener() {
@@ -139,6 +141,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelConfiguracion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-configuracion.png"))); // NOI18N
         lnkConfiguracion.setText("Configuración");
         lnkConfiguracion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkConfiguracion.addActionListener(new java.awt.event.ActionListener() {
@@ -152,6 +155,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelAlertas.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkAlertas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-alertas.png"))); // NOI18N
         lnkAlertas.setText("Alertas");
         lnkAlertas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkAlertas.addActionListener(new java.awt.event.ActionListener() {
@@ -165,6 +169,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelCampanias.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkCampanias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-campanias.png"))); // NOI18N
         lnkCampanias.setText("Campañas");
         lnkCampanias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkCampanias.addActionListener(new java.awt.event.ActionListener() {
@@ -178,6 +183,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelPois.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkPois.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-pois.png"))); // NOI18N
         lnkPois.setText("Puntos de Interes");
         lnkPois.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkPois.addActionListener(new java.awt.event.ActionListener() {
@@ -191,6 +197,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelInformes.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkInformes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-Informes.png"))); // NOI18N
         lnkInformes.setText("Informes");
         lnkInformes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkInformes.addActionListener(new java.awt.event.ActionListener() {
@@ -212,6 +219,7 @@ public class PanelSelector extends javax.swing.JPanel {
         panelAyuda.setPreferredSize(new java.awt.Dimension(140, 35));
         panelAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        lnkAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-ayuda.png"))); // NOI18N
         lnkAyuda.setText("Ayuda");
         lnkAyuda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkAyuda.addActionListener(new java.awt.event.ActionListener() {
@@ -372,14 +380,14 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
     }
 
     private void cargaIconosAbotones() {
-        lnkNavegacion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-navegacion.png"));
-        lnkAlertas.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-alertas.png"));
-        lnkAyuda.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-ayuda.png"));
-        lnkCampanias.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-campanias.png"));
-        lnkConfiguracion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-configuracion.png"));
-        lnkHistorico.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-historial.png"));
-        lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
-        lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
+        //lnkNavegacion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-navegacion.png"));
+        //lnkAlertas.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-alertas.png"));
+        //lnkAyuda.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-ayuda.png"));
+        //lnkCampanias.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-campanias.png"));
+        //lnkConfiguracion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-configuracion.png"));
+        //lnkHistorico.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-historial.png"));
+        //lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
+        //lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
         
     }
     

@@ -87,7 +87,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelTitulo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
 
         lblTitulo.setText("Alertas");
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         panelTitulo.add(lblTitulo);
 
         panelAlertasPpal.add(panelTitulo, java.awt.BorderLayout.NORTH);
@@ -112,7 +112,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelOpcionesAlertas.add(chkAlertas);
 
         lblTxtTablaAlertas.setText(" Tabla de alertas:");
-        lblTxtTablaAlertas.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTxtTablaAlertas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelOpcionesAlertas.add(lblTxtTablaAlertas);
 
         panelCentro.add(panelOpcionesAlertas);
@@ -187,11 +187,12 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
 
         lblAccionesAlerta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesAlerta.setText("Acciones sobre la alerta elegida:");
-        lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelAccionesCampElegida.add(lblAccionesAlerta);
 
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
 
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
         btnModificar.setText("");
         btnModificar.setToolTipText("Modificar campaña");
         btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -202,6 +203,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         });
         panelAcciones.add(btnModificar);
 
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-eliminar.png"))); // NOI18N
         btnEliminar.setText("");
         btnEliminar.setToolTipText("Eliminar campaña");
         btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -224,7 +226,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelBtnAgregar.setMinimumSize(new java.awt.Dimension(500, 40));
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 14));
+        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnAgregar.setText("Agregar alerta");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -474,8 +476,8 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     }
 
     private void cargaIconosDeBotones() {
-        btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
-        btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
+        //btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
+        //btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
     }
     
     public void habilitaTablaAlertas(){

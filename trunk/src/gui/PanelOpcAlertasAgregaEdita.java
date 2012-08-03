@@ -135,7 +135,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblAlertaNueva.setText("Alerta Nueva");
-        lblAlertaNueva.setFont(new java.awt.Font("Tahoma", 0, 18));
+        lblAlertaNueva.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         panelSuperior.add(lblAlertaNueva);
 
         panelAgregaEdita.add(panelSuperior, java.awt.BorderLayout.NORTH);
@@ -161,7 +161,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelLblNombre.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblNombre.setText("Nombre");
-        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblNombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelLblNombre.add(lblNombre);
 
         panelNombre.add(panelLblNombre);
@@ -189,7 +189,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelLblEstado.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblEstado.setText("Estado");
-        lblEstado.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblEstado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelLblEstado.add(lblEstado);
 
         panelEstado.add(panelLblEstado);
@@ -199,7 +199,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelComboEstado.setPreferredSize(new java.awt.Dimension(350, 33));
         panelComboEstado.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        comboEstado.setFont(new java.awt.Font("Tahoma", 0, 14));
+        comboEstado.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         comboEstado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Desactivada", "Activada" }));
         comboEstado.setMaximumSize(new java.awt.Dimension(150, 23));
         comboEstado.setMinimumSize(new java.awt.Dimension(150, 23));
@@ -215,7 +215,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelTxtCondiciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lblCondiciones.setText("Condiciones que deben cumplirse para que ocurra la alerta:");
-        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblCondiciones.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTxtCondiciones.add(lblCondiciones);
 
         panelDatosAlerta.add(panelTxtCondiciones);
@@ -276,13 +276,14 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
 
         lblAccionesCondicion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesCondicion.setText("Acciones condición seleccionada");
-        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelAccionesCampElegida.add(lblAccionesCondicion);
 
         panelAcciones.setMinimumSize(new java.awt.Dimension(62, 17));
         panelAcciones.setPreferredSize(new java.awt.Dimension(62, 17));
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
 
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
         btnModificar.setText("");
         btnModificar.setToolTipText("Modificar campaña");
         btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -293,6 +294,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         });
         panelAcciones.add(btnModificar);
 
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-eliminar.png"))); // NOI18N
         btnEliminar.setText("");
         btnEliminar.setToolTipText("Eliminar campaña");
         btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -321,7 +323,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
 
         panelRelleno.setPreferredSize(new java.awt.Dimension(450, 10));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         panelRelleno.add(jLabel1);
 
         panelMedio.add(panelRelleno);
@@ -344,7 +346,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelLblVariable.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblVariable.setText("Variable a monitorear");
-        lblVariable.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblVariable.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelLblVariable.add(lblVariable);
 
         panelVariable.add(panelLblVariable);
@@ -354,7 +356,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelComboVariable.setPreferredSize(new java.awt.Dimension(300, 34));
         panelComboVariable.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox1.setMaximumSize(new java.awt.Dimension(200, 23));
         jComboBox1.setMinimumSize(new java.awt.Dimension(200, 23));
         jComboBox1.setPreferredSize(new java.awt.Dimension(200, 23));
@@ -389,7 +391,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelLblRelacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblRelacion.setText("Relacion de variable");
-        lblRelacion.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblRelacion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelLblRelacion.add(lblRelacion);
 
         panelRelacion.add(panelLblRelacion);
@@ -399,7 +401,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelComboRelacion.setPreferredSize(new java.awt.Dimension(300, 34));
         panelComboRelacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jComboBox2.setMaximumSize(new java.awt.Dimension(150, 23));
         jComboBox2.setMinimumSize(new java.awt.Dimension(150, 23));
         jComboBox2.setPreferredSize(new java.awt.Dimension(150, 23));
@@ -422,7 +424,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelLblValMin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblValMin.setText("Valor mínimo");
-        lblValMin.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblValMin.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelLblValMin.add(lblValMin);
 
         panelValMin.add(panelLblValMin);
@@ -432,7 +434,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoValMin.setPreferredSize(new java.awt.Dimension(300, 34));
         panelCampoValMin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField1.setMaximumSize(new java.awt.Dimension(150, 23));
         jTextField1.setMinimumSize(new java.awt.Dimension(150, 23));
         jTextField1.setPreferredSize(new java.awt.Dimension(150, 23));
@@ -451,7 +453,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelLblValMax.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
         lblValMax.setText("Valor máximo");
-        lblValMax.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblValMax.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelLblValMax.add(lblValMax);
 
         panelValMax.add(panelLblValMax);
@@ -461,7 +463,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoValMax.setPreferredSize(new java.awt.Dimension(300, 34));
         panelCampoValMax.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jTextField2.setMaximumSize(new java.awt.Dimension(150, 23));
         jTextField2.setMinimumSize(new java.awt.Dimension(150, 23));
         jTextField2.setPreferredSize(new java.awt.Dimension(150, 23));
@@ -697,9 +699,9 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     }
     
-        private void cargaIconosDeBotones() {
-        btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
-        btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
+    private void cargaIconosDeBotones() {
+        //btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
+        //btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
         btnInsertar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-insertar.png"));
     }
     

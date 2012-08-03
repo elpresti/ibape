@@ -73,5 +73,6 @@ public class CategoriaPoi {
     @Override
     public int hashCode() {
         return this.getTitulo().hashCode();
-    }
+    }    
+    
 }

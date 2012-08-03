@@ -5,13 +5,20 @@
 package modelo.dataCapture;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import persistencia.Logueador;
 
 /**
@@ -21,8 +28,10 @@ import persistencia.Logueador;
 public class Sistema {
     private static Sistema unicaInstancia;
     private String currentVarDir;
+    private String rutaIconosCatPois;
     
     private Sistema(){
+        inicializador();
     }
     
     public static Sistema getInstance() {
@@ -199,4 +208,49 @@ public class Sistema {
         return is64bit;
     }
     
+    public ArrayList<String> getIconosCatPois(){
+            ArrayList<String> fileNamesIconosCat = new ArrayList();
+            //escanea en el directorio imgs/iconos los PNG cuyo filename comience con "icono-cat-", y los va guardando en el vector
+            // FileFilter that accepts all files except directories
+            FileFilter noDirectories = new FileFilter() {
+                public boolean accept(File f) {
+                    if (!f.isDirectory() && f.getName().toLowerCase().endsWith("png") &&
+                            f.getName().toLowerCase().startsWith("icono-cat-")){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }                    
+                }
+            };
+            // Directory to list (here: user's home directory)
+            File directory = new File(getRutaIconosCatPois());
+            // Obtain non-directory files in the directory
+            File[] filesInDirectory = directory.listFiles(noDirectories);
+            if (filesInDirectory != null){           
+                for (File oneFileName : filesInDirectory){
+                    fileNamesIconosCat.add(oneFileName.getName());
+                }
+            }
+            return fileNamesIconosCat;
+    }    
+
+    /**
+     * @return the rutaIconosCatPois
+     */
+    public String getRutaIconosCatPois() {
+        return rutaIconosCatPois;
+    }
+
+    /**
+     * @param rutaIconosCatPois the rutaIconosCatPois to set
+     */
+    public void setRutaIconosCatPois(String rutaIconosCatPois) {
+        this.rutaIconosCatPois = rutaIconosCatPois;
+    }
+
+    private void inicializador() {
+        setRutaIconosCatPois("imgs\\iconos\\");
+    }
+        
 }
