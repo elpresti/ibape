@@ -167,7 +167,7 @@ public class Punto extends Observable{
         if (this.profundidad != profundidad){
             this.profundidad = profundidad;
             setChanged();
-            notifyObservers();
+            notifyObservers(1);
             seModifico=true;
         }
         return seModifico;
@@ -347,5 +347,5 @@ public class Punto extends Observable{
         }
         return seModifico;                 
     }
-
+    
 }
