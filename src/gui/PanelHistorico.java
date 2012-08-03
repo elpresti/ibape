@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
@@ -29,6 +31,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.CategoriaPoi;
 import org.jdesktop.swingx.JXLabel;
 
@@ -221,7 +224,7 @@ public class PanelHistorico extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, true, false, false
@@ -438,6 +441,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
         habilitaPanelTablaCatPois(false);
         seteaBotonesMapa();
+        tablaCatPois.setRowHeight(50);
     }
      
     public void marcaCampaniaEnCurso(){
@@ -496,13 +500,16 @@ public class PanelHistorico extends javax.swing.JPanel {
             tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(30); 
             tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
             //escondo la columna Iconos
-            tablaCatPois.getColumnModel().getColumn(2).setMinWidth(40); 
-            tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(40); 
-            tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(40);
+            tablaCatPois.getColumnModel().getColumn(2).setMinWidth(50); 
+            tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(50); 
+            tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(50);           
+            tablaCatPois.getColumnModel().getColumn(2).setResizable(true);
+            tablaCatPois.getColumnModel().getColumn(2).setCellRenderer(new IconRenderer());
             //seteo los checkboxes
             tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
             tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
             //ajusto la columna de cantidad de puntos
+            tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(50);
             tablaCatPois.getColumnModel().getColumn(4).setMinWidth(50); 
             tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(50); 
             
@@ -510,8 +517,17 @@ public class PanelHistorico extends javax.swing.JPanel {
             chkPoisTodos.setSelected(false);
             chkRecorrido.setSelected(false);
             if (tableModelCatPois.getRowCount()==0){            
-                tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),null,"No se encontraron categorias de Pois en sistema..."});
+                tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se encontraron categorias de Pois en sistema..."});
                 habilitaChkTodosLosPois(false);
+                //escondo la columna de cantidad de puntos
+                tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(4).setMinWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(0);
+                //escondo la columna Iconos
+                tablaCatPois.getColumnModel().getColumn(2).setMinWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(0);
+
                 //habilitaPanelTablaCatPois(false);
                 //habilitaBtnGraficarDatos(false);
             }
@@ -578,8 +594,13 @@ public class PanelHistorico extends javax.swing.JPanel {
             Object[] fila = new Object[5]; //creamos la fila
             fila[0]=cP.getId(); //en la columna 0 va el ID
             fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
-            fila[2]=cP.getPathIcono();//en la columna 2 va el Icono
-            fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI
+            if (cP.getPathIcono() != null && cP.getPathIcono().contains("png")){
+                fila[2]=new JLabel(new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()));//en la columna 2 va el Icono
+            }
+            else{
+                fila[2]=new JLabel("Sin Icono");
+            }
+            fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI 
             fila[4]=ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(getIdCampaniaElegida(),cP.getId());
             dm.addRow(fila);
         }
@@ -723,4 +744,14 @@ class TableModelCatPoisHistorico extends DefaultTableModel {
             return true;
         else return false;
       }
+}
+
+
+/*  clases y metodos que cargan y controlan los CHECKBOXES en la TABLA CATEGORIA DE POIS */
+class IconRenderer implements TableCellRenderer {  
+  public Component getTableCellRendererComponent(JTable table, Object value,
+                   boolean isSelected, boolean hasFocus, int row, int column) {
+    if (value==null) return null;
+    return (Component)value;
+  }
 }

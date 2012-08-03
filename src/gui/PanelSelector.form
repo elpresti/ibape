@@ -114,6 +114,9 @@
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkNavegacion">
                       <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/imgs/icono-navegacion.png"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="Navegaci&#xf3;n"/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="12" style="0"/>
@@ -150,6 +153,9 @@
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkHistorico">
                       <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/imgs/icono-historial.png"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="Historico"/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="12" style="0"/>
@@ -196,6 +202,9 @@
                       <SubComponents>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkConfiguracion">
                           <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/imgs/icono-configuracion.png"/>
+                            </Property>
                             <Property name="text" type="java.lang.String" value="Configuraci&#xf3;n"/>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="12" style="0"/>
@@ -215,6 +224,9 @@
                       <SubComponents>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkAlertas">
                           <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/imgs/icono-alertas.png"/>
+                            </Property>
                             <Property name="text" type="java.lang.String" value="Alertas"/>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="12" style="0"/>
@@ -234,6 +246,9 @@
                       <SubComponents>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkCampanias">
                           <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/imgs/icono-campanias.png"/>
+                            </Property>
                             <Property name="text" type="java.lang.String" value="Campa&#xf1;as"/>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="12" style="0"/>
@@ -253,6 +268,9 @@
                       <SubComponents>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkPois">
                           <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/imgs/icono-pois.png"/>
+                            </Property>
                             <Property name="text" type="java.lang.String" value="Puntos de Interes"/>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="12" style="0"/>
@@ -272,6 +290,9 @@
                       <SubComponents>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkInformes">
                           <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/imgs/icono-Informes.png"/>
+                            </Property>
                             <Property name="text" type="java.lang.String" value="Informes"/>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Tahoma" size="12" style="0"/>
@@ -310,6 +331,9 @@
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="lnkAyuda">
                       <Properties>
+                        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                          <Image iconType="3" name="/imgs/icono-ayuda.png"/>
+                        </Property>
                         <Property name="text" type="java.lang.String" value="Ayuda"/>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="12" style="0"/>
