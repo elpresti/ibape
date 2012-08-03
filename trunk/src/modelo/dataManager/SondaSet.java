@@ -5,12 +5,13 @@
 package modelo.dataManager;
 
 import java.util.Date;
+import java.util.Observable;
 
 /**
  *
  * @author Sebastian
  */
-public class SondaSet {
+public class SondaSet extends Observable{
     private Date usadoDesde;
     private Date usadoHasta;
     private int frecuencia; // LOW/1=MID/HIGH (rango de valores posibles: 0-255)

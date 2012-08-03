@@ -7,12 +7,16 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JOptionPane;
 import modelo.alertas.AdministraAlertas;
 import modelo.alertas.Alerta;
 import modelo.alertas.Condicion;
 import modelo.alertas.Relacion;
 import modelo.alertas.Variable;
+import modelo.dataManager.Punto;
+import modelo.dataManager.SondaSet;
 import org.jdom.Element;
 import persistencia.BrokerConfig;
 import persistencia.Logueador;
@@ -21,7 +25,7 @@ import persistencia.Logueador;
  *
  * @author Martin
  */
-public class ControllerAlertas {
+public class ControllerAlertas implements Observer{
     static ControllerAlertas unicaInstancia;
     private ArrayList<Variable> variables;
     private ArrayList<Relacion> relaciones;
@@ -31,6 +35,11 @@ public class ControllerAlertas {
     private Variable variableAct;
     private Alerta alertaAct;
     private int idUltAlertaInsertada;
+    private Punto punto=modelo.dataManager.Punto.getInstance();
+    private SondaSet sonda=modelo.dataManager.SondaSet.getInstance();
+    private AdministraAlertas administraAlertas=modelo.alertas.AdministraAlertas.getInstance();
+    private ArrayList<Alerta> alertasEnFuncionamiento= new ArrayList<Alerta>();
+    private ArrayList<Alerta> alertasActivadas= new ArrayList<Alerta>();
    
     public static ControllerAlertas getInstance() {
        if (unicaInstancia == null)
@@ -38,6 +47,17 @@ public class ControllerAlertas {
        return unicaInstancia;
     }
 
+    private ControllerAlertas(){
+        
+        administraAlertas.addObserver(this);
+        punto.addObserver(this);
+        sonda.addObserver(this);
+        alertasOn();
+        
+
+        //gui.PanelOpcConfiguracion.getInstance();
+    }
+    
     /**
      * @return the variables
      */
@@ -98,7 +118,7 @@ public class ControllerAlertas {
         return sePudo;
     }
     
-    public boolean borrarAlerta(int idAlerta){
+    public static boolean borrarAlerta(int idAlerta){
         boolean sePudo=false;
         if (AdministraAlertas.getInstance().eliminarAlerta(AdministraAlertas.getInstance().getAlerta(idAlerta))){
             gui.PanelOpcAlertas.getInstance().cargaGrillaAlertas();
@@ -137,7 +157,7 @@ public class ControllerAlertas {
             Element raizConfiguracionIbape= BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
             gui.PanelOpcAlertas.getInstance().getChkAlertas().setSelected(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
-            modelo.alertas.AdministraAlertas.setEstadoAlertas(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
+            modelo.alertas.AdministraAlertas.getInstance().setEstadoAlertas(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
             sePudo=true;
             }
         catch (Exception e) 
@@ -155,7 +175,7 @@ public class ControllerAlertas {
             gui.PanelOpcAlertas.getInstance().deshabilitaTablaAlertas();
         }
         persistencia.BrokerConfig.getInstance().guardaConfiguracion();
-        modelo.alertas.AdministraAlertas.setEstadoAlertas(estado);               
+        modelo.alertas.AdministraAlertas.getInstance().setEstadoAlertas(estado);               
     }
 
     public boolean leeRelacionesDB(int index) {
@@ -335,5 +355,124 @@ public class ControllerAlertas {
     public void setIdUltAlertaInsertada(int idUltAlertaInsertada) {
         this.idUltAlertaInsertada = idUltAlertaInsertada;
     }
+
+    public void update(Observable o, Object arg) {
+      
+      if (o == punto){
+          if (((int) arg)==1){
+              analizaActivacionesProfundidad(); 
+          }
+          
+      }
+      else
+          if (o == sonda){
+           
+          }
+          else 
+              if (o == administraAlertas){
+               
+              }
+
+    }
+
+    private void alertasOn() {
+        
+   
+
+        if (modelo.alertas.AdministraAlertas.getInstance().isEstadoAlertas()){
+
+
+            if ((modelo.alertas.AdministraAlertas.getInstance().getAlertas() == null) || (modelo.alertas.AdministraAlertas.getInstance().getAlertas().isEmpty()) ) {
+                modelo.alertas.AdministraAlertas.getInstance().leerAlertasDeLaDB();       
+            }
+            alertasEnFuncionamiento = modelo.alertas.AdministraAlertas.getInstance().getAlertasEnFuncionamiento();            
+
+        }
     
 }
+
+    private void analizaActivacionesProfundidad() {
+        ArrayList<Condicion> condiciones;
+        boolean activacion;
+        boolean activacionAnt;
+        int i = 0;
+        while ((i<alertasEnFuncionamiento.size())){
+            condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
+            int f=0;
+            activacionAnt=alertasEnFuncionamiento.get(i).isEstado();
+            activacion=false;
+            while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var profundidad
+                if ((condiciones.get(f).getIdVariable()==1)){
+                    activacion=analizaCondiciones(condiciones);
+                }
+                f++;
+            }
+            if (activacion){
+                if (activacionAnt){
+                    //Alerta continua activada
+                }else{
+                    alertasActivadas.add(alertasEnFuncionamiento.get(i));
+                }
+            }else{
+                if (activacionAnt){
+                    alertasActivadas.remove(alertasEnFuncionamiento.get(i));
+                }else{
+                    //Alerta continua desactivada
+                }
+            }
+            i++;
+        }
+
+    }
+
+    private boolean analizaCondiciones(ArrayList<Condicion> condiciones) {
+        int f=0;
+        boolean cumpleTodo=true;
+        while ((f<condiciones.size()) && (cumpleTodo)){
+                Condicion c=condiciones.get(f);
+                if ((c.getIdVariable()==1)){
+                    cumpleTodo=cumpleTodo && cumpleCondicionProfundidad(c);
+                f++;
+            }
+          
+        }
+        return cumpleTodo;
+    }
+
+    private boolean cumpleCondicionProfundidad(Condicion c) {
+        boolean cumpleTodo=true;
+        if (c.getIdRelacion()==1){
+                        if (c.getValorMinimo()==punto.getProfundidad()){
+                            cumpleTodo=cumpleTodo && true;
+                        }else{
+                            cumpleTodo=cumpleTodo && false;
+                        }
+                    }else{
+                        if (c.getIdRelacion()==2){
+                            if (c.getValorMinimo()<=punto.getProfundidad()){
+                                cumpleTodo=cumpleTodo && true;
+                            }else{
+                                cumpleTodo=cumpleTodo && false;
+                            }
+                        }else{
+                            if (c.getIdRelacion()==3){
+                                if (c.getValorMinimo()>=punto.getProfundidad()){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }else{
+                                if (c.getValorMinimo()<=punto.getProfundidad() && c.getValorMaximo()>=punto.getProfundidad()){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }   
+                        }
+                    }
+        return cumpleTodo;
+        }
+    }
+
+
+    
