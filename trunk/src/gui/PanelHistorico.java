@@ -13,8 +13,12 @@ package gui;
 import controllers.ControllerCampania;
 import controllers.ControllerHistorico;
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -441,7 +445,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
         habilitaPanelTablaCatPois(false);
         seteaBotonesMapa();
-        tablaCatPois.setRowHeight(50);
+        tablaCatPois.setRowHeight(30);
     }
      
     public void marcaCampaniaEnCurso(){
@@ -500,18 +504,18 @@ public class PanelHistorico extends javax.swing.JPanel {
             tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(30); 
             tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
             //escondo la columna Iconos
-            tablaCatPois.getColumnModel().getColumn(2).setMinWidth(50); 
-            tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(50); 
-            tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(50);           
+            tablaCatPois.getColumnModel().getColumn(2).setMinWidth(33); 
+            tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(33); 
+            tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(33);
             tablaCatPois.getColumnModel().getColumn(2).setResizable(true);
             tablaCatPois.getColumnModel().getColumn(2).setCellRenderer(new IconRenderer());
             //seteo los checkboxes
             tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
             tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
             //ajusto la columna de cantidad de puntos
-            tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(50);
-            tablaCatPois.getColumnModel().getColumn(4).setMinWidth(50); 
-            tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(50); 
+            tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(30);
+            tablaCatPois.getColumnModel().getColumn(4).setMinWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(30); 
             
             habilitaBtnGraficarDatos(false); 
             chkPoisTodos.setSelected(false);
@@ -595,10 +599,20 @@ public class PanelHistorico extends javax.swing.JPanel {
             fila[0]=cP.getId(); //en la columna 0 va el ID
             fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
             if (cP.getPathIcono() != null && cP.getPathIcono().contains("png")){
-                fila[2]=new JLabel(new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()));//en la columna 2 va el Icono
+                //fila[2]=new JLabel(new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()));//en la columna 2 va el Icono
+                //--- resize Icon
+                Image source = new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()).getImage();
+                BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = (Graphics2D)image.getGraphics();
+                g2d.drawImage(source, 0, 0, null);
+                g2d.dispose();
+                //-------------
+                fila[2]=Sistema.getInstance().getLabelWithImgResized(25, 32, image);//en la columna 2 va el Icono
             }
             else{
-                fila[2]=new JLabel("Sin Icono");
+                JLabel lblSinIcono = new JLabel("No Icon");
+                lblSinIcono.setFont(new Font("Arial", Font.PLAIN, 8));
+                fila[2]=lblSinIcono;
             }
             fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI 
             fila[4]=ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(getIdCampaniaElegida(),cP.getId());
@@ -747,11 +761,12 @@ class TableModelCatPoisHistorico extends DefaultTableModel {
 }
 
 
-/*  clases y metodos que cargan y controlan los CHECKBOXES en la TABLA CATEGORIA DE POIS */
+/*  clases y metodos que cargan y controlan los ICONOS en la TABLA CATEGORIA DE POIS */
 class IconRenderer implements TableCellRenderer {  
   public Component getTableCellRendererComponent(JTable table, Object value,
                    boolean isSelected, boolean hasFocus, int row, int column) {
     if (value==null) return null;
     return (Component)value;
   }
+  
 }

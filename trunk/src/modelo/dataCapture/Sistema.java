@@ -4,6 +4,9 @@
  */
 package modelo.dataCapture;
 
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -19,6 +22,10 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
 import persistencia.Logueador;
 
 /**
@@ -251,6 +258,37 @@ public class Sistema {
 
     private void inicializador() {
         setRutaIconosCatPois("imgs\\iconos\\");
+    }
+    
+    public JLabel getLabelWithImgResized(int w, int h, BufferedImage image) {  
+        BufferedImage scaled = scaleImg(image, w, h);  
+        JLabel label = new JLabel(new ImageIcon(scaled));  
+        label.setPreferredSize(new Dimension(w, h));  
+        label.setBorder(BorderFactory.createEtchedBorder());  
+        return label;  
+    }  
+   
+    private BufferedImage scaleImg(BufferedImage src, int w, int h) {  
+        int type = BufferedImage.TYPE_INT_RGB;  
+        BufferedImage dst = new BufferedImage(w, h, type);  
+        Graphics2D g2 = dst.createGraphics();  
+        // Fill background for scale to fit.  
+        g2.setBackground(UIManager.getColor("Panel.background"));  
+        g2.clearRect(0,0,w,h);  
+        double xScale = (double)w/src.getWidth();  
+        double yScale = (double)h/src.getHeight();  
+        // Scaling options:  
+        // Scale to fit - image just fits in label.  
+        double scale = Math.min(xScale, yScale);  
+        // Scale to fill - image just fills label.  
+        //double scale = Math.max(xScale, yScale);  
+        int width  = (int)(scale*src.getWidth());  
+        int height = (int)(scale*src.getHeight());  
+        int x = (w - width)/2;  
+        int y = (h - height)/2;  
+        g2.drawImage(src, x, y, width, height, null);  
+        g2.dispose();  
+        return dst;  
     }
         
 }
