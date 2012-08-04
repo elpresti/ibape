@@ -6,6 +6,8 @@ package modelo.gisModule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import modelo.dataManager.POI;
+import modelo.dataManager.PuntoHistorico;
 
 /**
  *
@@ -88,6 +90,52 @@ public class GeneradorKML {
         return salida;
     }
 
+    public String getKmlStylesFromCatPois(ArrayList<POI> pois){
+        String salida="";
+        ArrayList<String> categorias=new ArrayList();
+        int i = 0;
+        for (POI poi : pois){
+            if (poi.getCategoria().getPathIcono() != null  &&  !categorias.contains(poi.getCategoria().getPathIcono())
+                &&  poi.getCategoria().getPathIcono().toLowerCase().contains("png")) {
+                salida+=
+                "<Style id=\""+poi.getCategoria().getPathIcono()+"\">"
+               +"<IconStyle>"
+               +   "<Icon>"
+               +     "<href>http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
+                        +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
+                        +poi.getCategoria().getPathIcono()
+               +     "</href>"
+               +   "</Icon>"
+               +"</IconStyle>"
+               +"</Style>";
+                categorias.add(poi.getCategoria().getPathIcono());
+            }
+            i++;
+        }
+        return salida;
+    }
+
+
+    public String getKmlStyleFromCatPoi(POI poi){
+        String salida="";    
+        if (poi != null){
+            if (poi.getCategoria().getPathIcono() != null  &&  poi.getCategoria().getPathIcono().toLowerCase().contains("png")) {
+                salida+=
+                "<Style id=\""+poi.getCategoria().getPathIcono()+"\">"
+               +"<IconStyle>"
+               +   "<Icon>"
+               +     "<href>http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
+                        +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
+                        +poi.getCategoria().getPathIcono()
+               +     "</href>"
+               +   "</Icon>"
+               +"</IconStyle>"
+               +"</Style>";
+            }
+        }
+        return salida;
+    }
+    
     
     public String conviertePuntoHistoricoAkml(modelo.dataManager.PuntoHistorico punto, boolean conCamara) {
         //Cosas pendientes de incluir:
@@ -157,6 +205,7 @@ public class GeneradorKML {
         salida=
         "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
         +"<Document>";
+        salida+=getKmlStyleFromCatPoi(poi);
         if (conCamara){
           salida=salida
             +"<Camera>"
@@ -171,8 +220,11 @@ public class GeneradorKML {
         String horaStr=fechaYhora.getHours()+":"+fechaYhora.getMinutes()+":"+fechaYhora.getSeconds();
         salida=salida
           +"<Placemark>"
-            +"<name>"+horaStr+"</name>"
-            +"<description>"
+            +"<name>"+horaStr+"</name>";
+        if (poi.getCategoria().getPathIcono() != null  &&  poi.getCategoria().getPathIcono().toLowerCase().contains("png")){
+            salida+="<styleUrl>#"+poi.getCategoria().getPathIcono()+"</styleUrl>";  
+        }
+        salida+="<description>"
                + "<![CDATA[<div>"
                   + "Datos de este punto "
                   + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
