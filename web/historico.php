@@ -19,16 +19,16 @@
 
       function initCB(instance) {
          ge = instance;
-         ge.getWindow().setVisibility(true);         
+         ge.getWindow().setVisibility(true);		
+		 //configura parametros
+		 ge.getNavigationControl().setVisibility(ge.VISIBILITY_AUTO);// add a navigation control
+		 ge.getOptions().setStatusBarVisibility(true);
+		 ge.getOptions().setScaleLegendVisibility(true);		 
       }
       function failureCB(errorCode) {
           alert("Error "+errorCode+". No se pudo crear una instancia de GE. Asegurese de que su navegador tiene instalado y activado el Plugin de Google Earth.");		  
       }
       google.setOnLoadCallback(init);	  
-
-	  //configura parametros
-	  ge.getOptions().setStatusBarVisibility(true);
-	  ge.getOptions().setScaleLegendVisibility(true);
     </script>
 
 <script type="text/javascript">

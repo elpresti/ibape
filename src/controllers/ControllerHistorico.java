@@ -186,5 +186,9 @@ public void restauraBtnIniciarMapa(){
     public void setIdCampaniaElegida(int idCampaniaElegida) {
         this.idCampaniaElegida = idCampaniaElegida;
     }
+
+    public void vaciaMapaHistorico() {
+        BrokerDbMapaHistorico.getInstance().vaciaMapaHistorico();
+    }
     
 }

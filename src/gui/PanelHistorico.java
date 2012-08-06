@@ -338,13 +338,16 @@ public class PanelHistorico extends javax.swing.JPanel {
                 btnIniciarMapaHistoricoActionPerformed(null);
             }
  
-            if (chkRecorrido.isSelected()){
-                ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
+            if (chkRecorrido.isSelected() || (chkPoisTodos.isSelected() && getCategoriasSeleccionadas().size()>0) ){
+                ControllerHistorico.getInstance().vaciaMapaHistorico();
+                if (chkRecorrido.isSelected()){
+                    ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
+                }
+                if (getCategoriasSeleccionadas().size()>0){
+                    ControllerHistorico.getInstance().cargaPoisEnMapa(getIdCampaniaElegida(),getCategoriasSeleccionadas());
+                }
             }
-            if (getCategoriasSeleccionadas().size()>0){
-                ControllerHistorico.getInstance().cargaPoisEnMapa(getIdCampaniaElegida(),getCategoriasSeleccionadas());
-            }
-            if (!(getCategoriasSeleccionadas().size()>0) && !(chkRecorrido.isSelected())){
+            else{
                 JOptionPane.showMessageDialog(null, "No ha elegido que datos de la campaña elegida desea graficar");
             }
         }
@@ -550,8 +553,8 @@ public class PanelHistorico extends javax.swing.JPanel {
                 DefaultTableModel modelo = (DefaultTableModel)tablaCatPois.getModel();
                 modelo.setRowCount(0);//vacío la tabla de categorias de POis
                 setCategoriasSeleccionadas(new ArrayList()); //inicializo el vector de categorias seleccionadas                
-                modelo.addRow(new Object[]{-1,new JCheckBox(),null,"No se ha seleccionado ninguna campaña..."});
-                tablaCatPois.setModel(modelo);
+                modelo.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se ha seleccionado ninguna campaña..."});
+                tablaCatPois.setModel(modelo); 
                 habilitaChkTodosLosPois(false);
         }
         //escondo la columna ID 
@@ -748,8 +751,11 @@ class TableModelCatPoisHistorico extends DefaultTableModel {
       public Class getColumnClass(int col) {  
         switch (col){
             case 0: return Integer.class;//esta column accepts only Integer values
-            case 1: return Boolean.class;
-            default: return String.class;//other columns accept String values
+            case 1: return Object.class;
+            case 2: return Object.class;
+            case 3: return String.class; 
+            case 4: return Integer.class;
+            default: return Object.class;//other columns accept Object
         }
     }  
     @Override  

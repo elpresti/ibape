@@ -85,7 +85,9 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     
     public boolean insertPunto(Punto pto) {
         boolean sePudo = false;        
-        if ((Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 15000) { //10000=10seg. 
+        boolean tiempoMinimoCumplido=(Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 15000;//10000=10seg.
+        boolean datosMinimos = pto.getLatitud()>0  && pto.getLongitud()>0;
+        if (tiempoMinimoCumplido && datosMinimos) {
             try {
                 ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(3);
                 if (pto.getFechaYhora() != null){ 
@@ -116,23 +118,27 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     
     public boolean insertPunto(PuntoHistorico ph) {
         boolean sePudo = false;
-        try {
-            getPsInsert().setLong(1, Calendar.getInstance().getTime().getTime());          
-            getPsInsert().setDouble(2,ph.getLatitud());//guardamos la latitud en Grados Decimales
-            getPsInsert().setDouble(3,ph.getLongitud());//guardamos la longitud en Grados Decimales --> Valor decimal = grados + (minutos/60) + (y 3600 segundos)
-            getPsInsert().setDouble(4,ph.getAltitud());
-            getPsInsert().setDouble(5,ph.getVelocidad());
-            getPsInsert().setDouble(6,ph.getRumbo());
-            getPsInsert().setDouble(7,ph.getProfundidad());
-            getPsInsert().setDouble(8,ph.getVelocidadAgua());
-            getPsInsert().setDouble(9,ph.getTempAgua());
+        boolean tiempoMinimoCumplido=(Calendar.getInstance().getTime().getTime() - getfYhUltimoInsert().getTime()) >= 15000;//10000=10seg.
+        boolean datosMinimos = ph.getLatitud()>0  && ph.getLongitud()>0;
+        if (tiempoMinimoCumplido && datosMinimos) {         
+            try {
+                getPsInsert().setLong(1, Calendar.getInstance().getTime().getTime());          
+                getPsInsert().setDouble(2,ph.getLatitud());//guardamos la latitud en Grados Decimales
+                getPsInsert().setDouble(3,ph.getLongitud());//guardamos la longitud en Grados Decimales --> Valor decimal = grados + (minutos/60) + (y 3600 segundos)
+                getPsInsert().setDouble(4,ph.getAltitud());
+                getPsInsert().setDouble(5,ph.getVelocidad());
+                getPsInsert().setDouble(6,ph.getRumbo());
+                getPsInsert().setDouble(7,ph.getProfundidad());
+                getPsInsert().setDouble(8,ph.getVelocidadAgua());
+                getPsInsert().setDouble(9,ph.getTempAgua());
 
-            System.out.println("Insert PH: "+getPsInsert().toString());
-            if (getPsInsert().executeUpdate() > 0) {
-                sePudo = true;
+                System.out.println("Insert PH: "+getPsInsert().toString());
+                if (getPsInsert().executeUpdate() > 0) {
+                    sePudo = true;
+                }
+            } catch (SQLException ex) {
+                Logueador.getInstance().agregaAlLog(ex.toString());
             }
-        } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return sePudo;
     }
