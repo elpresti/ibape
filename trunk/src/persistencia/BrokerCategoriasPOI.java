@@ -33,8 +33,9 @@ public class BrokerCategoriasPOI extends BrokerPpal {
 
     public ArrayList<modelo.dataManager.CategoriaPoi> getCatPOISFromDB() {
         ArrayList<modelo.dataManager.CategoriaPoi> CatPOIS = new ArrayList();
+        ResultSet rs = null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM CategoriasPoi");
+            rs = getStatement().executeQuery("SELECT * FROM CategoriasPoi");
             while (rs.next()) {
                 modelo.dataManager.CategoriaPoi catPoi = new modelo.dataManager.CategoriaPoi();
                 // Get the data from the row using the column name
@@ -47,6 +48,18 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }        
         return CatPOIS;
     }
 
@@ -134,21 +147,28 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
-
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }        
         return sePudo;
     }
 
     public boolean updateCategoriaPOI(modelo.dataManager.CategoriaPoi categoriaPOI) {
         boolean sePudo = false;
         String sqlQuery = "";
-        ResultSet rs;
         try {
             sqlQuery = "Update CategoriasPoi "
                     + "SET titulo =" + categoriaPOI.getTitulo() + ", "
                     + "pathIcono =" + categoriaPOI.getPathIcono() + ", "
                     + " WHERE "
                     + "id=" + categoriaPOI.getId();
-            System.out.println("Insert: " + sqlQuery);
+            System.out.println("Update CatPOI: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
             } else {
@@ -156,6 +176,15 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
@@ -185,4 +214,4 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             System.out.println(a.get(i).getTitulo());
         }
     }*/
-}
+} 

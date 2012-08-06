@@ -43,7 +43,6 @@ public class BrokerDbMapaHistorico implements Runnable{
     public boolean cargarRecorridoDeCamp(int idCamp){
         boolean sePudo=true;
         if (idCamp>=0){
-            vaciaMapaHistorico();
             ArrayList<PuntoHistorico> puntos = BrokerHistoricoPunto.getInstance().getPuntos(
                     BrokerCampania.getInstance().getCampaniaFromDb(idCamp).getFechaInicio(), 
                     Calendar.getInstance().getTime());

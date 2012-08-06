@@ -257,7 +257,7 @@ public class Sistema {
     }
 
     private void inicializador() {
-        setRutaIconosCatPois("imgs\\iconos\\");
+        setRutaIconosCatPois("web\\imgs\\");
     }
     
     public JLabel getLabelWithImgResized(int w, int h, BufferedImage image) {  

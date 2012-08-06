@@ -39,7 +39,7 @@ public class GeneradorKML {
             //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
             // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671); 
             salida=
-            "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
+            "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">"
             +"<Document>"
                 +"<name>Codigo KML</name>"
                 +"<Style id=\"yellowLineGreenPoly\">"
@@ -76,7 +76,7 @@ public class GeneradorKML {
                       +"<coordinates>";
             int i=0;
             while (i<puntos.size()){
-                salida+=puntos.get(i).getLongitud()+","+puntos.get(i).getLatitud()+","+puntos.get(i).getAltitud()+" ";
+                salida+=puntos.get(i).getLongitud()+","+puntos.get(i).getLatitud()+",0 ";//"+puntos.get(i).getAltitud()+" ";
                 i++;
             }
             salida+=
@@ -150,7 +150,7 @@ public class GeneradorKML {
         // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671);
         String salida = ""; 
         salida=
-        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
+        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">"
         +"<Document>";
         if (conCamara){
           salida=salida
@@ -203,7 +203,7 @@ public class GeneradorKML {
         // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671);
         String salida = ""; 
         salida=
-        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
+        "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">"
         +"<Document>";
         salida+=getKmlStyleFromCatPoi(poi);
         if (conCamara){
