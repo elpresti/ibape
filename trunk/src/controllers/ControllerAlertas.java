@@ -131,7 +131,7 @@ public class ControllerAlertas implements Observer{
         boolean sePudo=false;
         boolean est;
         if ((nombre.length()>1) && (mensaje.length()>1)){
-            //traigo la campania vieja y le cargo los valores nuevos
+            //traigo la alerta a modificar y le cargo los valores nuevos
             modelo.alertas.Alerta alerta = modelo.alertas.AdministraAlertas.getInstance().getAlerta(id);
             alerta.setTitulo(nombre);            
             alerta.setMensaje(mensaje);             
@@ -190,7 +190,9 @@ public class ControllerAlertas implements Observer{
     }
 
     public void agregaCondicionAct(int idProvCondicion,int idRelacion,int idVariable,float valMin, float valMax,String descripcion){
-        boolean encontro=false;
+    
+    if (condicionesAct!=null){
+        boolean encontro=false;    
         int i=0;
         while ((!encontro)&&(i<=getCondicionesAct().size()-1)){
             if (idProvCondicion==getCondicionesAct().get(i).getId()){
@@ -208,7 +210,11 @@ public class ControllerAlertas implements Observer{
             Condicion condicion=new Condicion(idProvCondicion,idVariable,idRelacion,valMin,valMax,descripcion);
             getCondicionesAct().add(condicion);
         }
-        
+    }else{
+            setCondicionesAct(new ArrayList<Condicion>());
+            Condicion condicion=new Condicion(idProvCondicion,idVariable,idRelacion,valMin,valMax,descripcion);
+            getCondicionesAct().add(condicion);
+    }
     }
 
     public void cambiaDatosActuales(int indexCondicion) {

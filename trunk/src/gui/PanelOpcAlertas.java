@@ -87,7 +87,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelTitulo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 10));
 
         lblTitulo.setText("Alertas");
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
         panelTitulo.add(lblTitulo);
 
         panelAlertasPpal.add(panelTitulo, java.awt.BorderLayout.NORTH);
@@ -102,7 +102,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelOpcionesAlertas.setPreferredSize(new java.awt.Dimension(500, 60));
         panelOpcionesAlertas.setLayout(new java.awt.GridLayout(2, 1));
 
-        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14));
         chkAlertas.setLabel("Usar Alertas");
         chkAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,7 +112,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelOpcionesAlertas.add(chkAlertas);
 
         lblTxtTablaAlertas.setText(" Tabla de alertas:");
-        lblTxtTablaAlertas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTxtTablaAlertas.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelOpcionesAlertas.add(lblTxtTablaAlertas);
 
         panelCentro.add(panelOpcionesAlertas);
@@ -136,7 +136,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
                 java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, false, false, true, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -187,7 +187,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
 
         lblAccionesAlerta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesAlerta.setText("Acciones sobre la alerta elegida:");
-        lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelAccionesCampElegida.add(lblAccionesAlerta);
 
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
@@ -226,7 +226,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelBtnAgregar.setMinimumSize(new java.awt.Dimension(500, 40));
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnAgregar.setFont(new java.awt.Font("Tahoma", 0, 14));
         btnAgregar.setText("Agregar alerta");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,7 +242,8 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
 
 private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
 // TODO add your handling code here:
-        getPanelAlertasPpal().setVisible(false);                    
+        getPanelAlertasPpal().setVisible(false);
+        panelAgregaEdita.cargaAlertaEditar(-1);
         panelAgregaEdita.setVisible(true);
         setModificandoAlerta(false);
 }//GEN-LAST:event_btnAgregarActionPerformed
@@ -254,9 +255,12 @@ private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
          setGuiModificarFilaElegida();
    }
 
-    
-
+ 
 }//GEN-LAST:event_btnModificarActionPerformed
+
+private void tablaAlertasActionPerformed(java.awt.event.ActionEvent evt){
+    
+}   
 
 private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
     String txtPregunta = "Está por eliminar una alerta del disco, está usted seguro?";

@@ -97,8 +97,9 @@ public class AdministraAlertas extends java.util.Observable {
         boolean sePudo=false;        
         try {           
             persistencia.BrokerAlertas.getInstance().updateAlerta(a);
+            int posicion=alertas.indexOf(getAlerta(a.getId()));
             alertas.remove(getAlerta(a.getId()));
-            alertas.add(a);                        
+            alertas.add(posicion,a);                        
             sePudo=true;
         }
         catch (Exception e)
