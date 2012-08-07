@@ -126,7 +126,8 @@ public class BrokerAlertas extends BrokerPpal{
    public boolean insertaVariables(){
         boolean sePudo = false;
         String sqlQuery="";
-        try {                                
+        try {
+            /*
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
@@ -135,11 +136,13 @@ public class BrokerAlertas extends BrokerPpal{
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
                 }else{sePudo=false;}
+             
+             */
                 
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(2,'Distancia','mts')";
+            +"(2,'Profundidad','mts')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -153,6 +156,82 @@ public class BrokerAlertas extends BrokerPpal{
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
                 }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(4,'Latitud','ggmmss')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(5,'Longitud','ggmmss')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(6,'Velocidad','km/h')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+               
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(7,'Rumbo','')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(8,'Velocidad Agua','km/h')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(9,'Temperatura Agua','grados C')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(10,'Fecha','ddmmaaaa')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(11,'Hora','hhmmss')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+
                 
             }catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -206,6 +285,8 @@ public class BrokerAlertas extends BrokerPpal{
         return sePudo;
     }
    
+
+   
       public boolean insertaRelacionesxVariables(){
         boolean sePudo = false;
         String sqlQuery="";
@@ -222,34 +303,98 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(1,2)";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}
-                
-            sqlQuery = "INSERT INTO RelacionesXVariables"
-            + "(idVariable,idRelacion)"
-            + "VALUES"
-            +"(1,3)";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}
-                
-            sqlQuery = "INSERT INTO RelacionesXVariables"
-            + "(idVariable,idRelacion)"
-            + "VALUES"
-            +"(1,4)";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}
-                
-                            sqlQuery = "INSERT INTO RelacionesXVariables"
-            + "(idVariable,idRelacion)"
-            + "VALUES"
             +"(2,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(3,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(4,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(5,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(6,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(7,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(8,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(9,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(10,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(11,1)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,2)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -267,7 +412,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(2,3)";
+            +"(3,2)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -276,16 +421,16 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(2,4)";
+            +"(4,2)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
                 }else{sePudo=false;}
-
-              sqlQuery = "INSERT INTO RelacionesXVariables"
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(3,1)";
+            +"(5,2)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -294,7 +439,45 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(3,2)";
+            +"(6,2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(8,2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(9,2)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}     
+                
+               
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(2,3)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -312,7 +495,137 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
+            +"(4,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(5,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(6,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(8,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(9,3)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}   
+                
+
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(1,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(2,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
             +"(3,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(4,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(5,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(6,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(8,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(9,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(10,4)";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+            sqlQuery = "INSERT INTO RelacionesXVariables"
+            + "(idVariable,idRelacion)"
+            + "VALUES"
+            +"(11,4)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -346,7 +659,7 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
                         + "flagsAcciones="+alerta.getFlagsAcciones()+", "
                         + "titulo='"+alerta.getTitulo()+"' WHERE "
                         + "id="+alerta.getId();
-                System.out.println("Insert: "+sqlQuery);
+                System.out.println("Update: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
                 }else{sePudo=false;}
@@ -354,7 +667,7 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
                 //Borro todas las condiciones correspondientes a esta alerta
                 
                 sqlQuery = "DELETE FROM Condiciones "
-                            + "WHERE (idAlerta = "+alerta.hashCode()+")";
+                            + "WHERE (idAlerta = "+alerta.getId()+")";
                             System.out.println("DELETE: "+sqlQuery);
                             if (getStatement().executeUpdate(sqlQuery) > 0) {
                                 sePudo = true;
@@ -367,7 +680,7 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
                         sqlQuery = "INSERT INTO Condiciones"
                         + "(idVariable,idAlerta,valor1,valor2,idRelacion,descripcion)"
                         + "VALUES"
-                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getIdRelacion()+","+c.getDescripcion()+")";
+                        +"("+c.getIdVariable()+","+alerta.getId()+","+c.getValorMinimo()+","+c.getValorMaximo()+","+c.getIdRelacion()+",'"+c.getDescripcion()+"')";
                         System.out.println("Insert: "+sqlQuery);
                         if (getStatement().executeUpdate(sqlQuery) > 0) {
                             sePudo = true;
@@ -445,7 +758,12 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
             while (rs.next()) {    
                 modelo.alertas.Alerta alerta = new modelo.alertas.Alerta();
                 alerta.setId(rs.getInt("id"));
-                alerta.setEstado(rs.getBoolean("estado"));
+                String estado=rs.getString("estado");
+                if (estado.equals("true")){
+                    alerta.setEstado(true);
+                }else{
+                    alerta.setEstado(false);
+                }
                 alerta.setTitulo(rs.getString("titulo"));
                 alerta.setMensaje(rs.getString("mensaje"));
                 alerta.setFlagsAcciones(rs.getInt("flagsAcciones"));             
@@ -458,6 +776,7 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
                     a.setCondiciones(condiciones);
                 }  
             }
+            rs.close();
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         } 
