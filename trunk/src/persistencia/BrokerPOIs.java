@@ -232,7 +232,7 @@ public class BrokerPOIs extends BrokerPpal {
                 java.sql.Date fechaInicio = null;
                 java.sql.Date fechaFin = null;
                 fechaInicio = new java.sql.Date(unaCamp.getFechaInicio().getTime());
-                if (unaCamp.getEstado() == 1) {//campania finalizada
+                if (unaCamp.getEstado() == 1 && unaCamp.getFechaFin() != null) {//campania finalizada
                     fechaInicio = new java.sql.Date(unaCamp.getFechaFin().getTime());
                 } else {
                     fechaFin = new java.sql.Date(Calendar.getInstance().getTime().getTime());
@@ -359,7 +359,7 @@ public class BrokerPOIs extends BrokerPpal {
                             + "BETWEEN ? AND ? ) AND idCategoriaPoi=? ");
                     psSelect.setInt(1, idDeCampania);
                     psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
-                    if (laCampania.getEstado() == 1) {//campania finalizada
+                    if (laCampania.getEstado() == 1  && laCampania.getFechaFin() != null) {//campania finalizada
                         psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
                     } else {
                         psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
