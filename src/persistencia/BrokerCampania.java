@@ -39,8 +39,9 @@ public class BrokerCampania extends BrokerPpal{
 
     public ArrayList<modelo.dataManager.Campania> getCampaniasFromDB(){
         ArrayList<modelo.dataManager.Campania> campanias = new ArrayList();        
+        ResultSet rs= null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Campanias");
+            rs = getStatement().executeQuery("SELECT * FROM Campanias");
             while (rs.next()) {                
                 modelo.dataManager.Campania campania = new modelo.dataManager.Campania();
                 // Get the data from the row using the column name
@@ -57,14 +58,26 @@ public class BrokerCampania extends BrokerPpal{
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
-        }        
+        }   
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return campanias;
     }
 
     public modelo.dataManager.Campania getCampaniaFromDb(int id) {
         modelo.dataManager.Campania campania = null;
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
-        ResultSet rs;
+        ResultSet rs= null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Campanias WHERE id = "+id);
             if (rs.next()) {
@@ -87,6 +100,18 @@ public class BrokerCampania extends BrokerPpal{
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return campania;
     }
@@ -138,6 +163,15 @@ public class BrokerCampania extends BrokerPpal{
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
 
@@ -186,7 +220,15 @@ public class BrokerCampania extends BrokerPpal{
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
-
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
     
@@ -203,12 +245,21 @@ public class BrokerCampania extends BrokerPpal{
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }        
-        
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
     
     public modelo.dataManager.Campania getCampaniaPausada(){
-        modelo.dataManager.Campania campania = null;                  
+        modelo.dataManager.Campania campania = null;  
+        ResultSet rs = null;
         try {
             String sqlQuery=
                     "   SELECT * FROM Campanias "
@@ -216,7 +267,7 @@ public class BrokerCampania extends BrokerPpal{
                     + " ORDER BY id ASC "
                     + " LIMIT 0,1 ";
             System.out.println(sqlQuery);
-            ResultSet rs = getStatement().executeQuery(sqlQuery);
+            rs = getStatement().executeQuery(sqlQuery);
             boolean hayPausada=false;
             if (rs.next()){
                 hayPausada=true;
@@ -252,7 +303,19 @@ public class BrokerCampania extends BrokerPpal{
         }
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
-        }        
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return campania;
     }
 

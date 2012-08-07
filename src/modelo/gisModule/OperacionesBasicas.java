@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.Color;
+import java.util.Arrays;
 
 
 /**
@@ -23,6 +24,7 @@ public class OperacionesBasicas {
     static OperacionesBasicas unicaInstancia;
     private Detector detector;
     private BufferedImage imagenOriginal;
+    private BufferedImage imgProcesada;
     private int ancho;
     private int alto;
 
@@ -84,7 +86,7 @@ public class OperacionesBasicas {
 		setAlto(getImagenOriginal().getHeight(null));
 	}
 
-/*    
+   
     public static void main(String[] args){
 
         int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
@@ -105,7 +107,7 @@ public class OperacionesBasicas {
 //        //grabamos la imagen en disco
 //        getInstance().grabarImagen(imgProcesada);
     }
-*/
+
     
     public int cuantosPecesHay(String rutaImg){
         int cantPeces = 0;
@@ -139,6 +141,7 @@ public class OperacionesBasicas {
         getInstance().grabarImagen(imgConFondo,"imgs\\imagenConFondo.tmp");
         getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondo.tmp");
         getInstance().grabarImagen(eliminaHoras(imgConFondo),"imgs\\imagenSinHoras.tmp");
+        
         //buscaMarcas(fondo)
 
 
@@ -480,7 +483,44 @@ public class OperacionesBasicas {
     
     public ArrayList<modelo.dataManager.Marca> getMarcas(BufferedImage imgSoloMarcas){
         ArrayList<modelo.dataManager.Marca> marcas = new ArrayList();
-        // -- metodo pendiente --
+        // -- metodo pendiente --        
+
+        //Leemos la imagen con obtenerImagen()
+        //OperacionesBasicas.getInstance().obtenerImagen(rutaImg);
+        //Creamos los filtros para la imagen con la clase Filtros
+        Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
+        BufferedImage imgProcesada = filtros.erode(getImagenOriginal());
+
+        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+        imgProcesada = filtros.dilate(imgProcesada);
+
+        getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+
+        int fondo[] = new int[967];
+        fondo = buscaFondo(imgProcesada);
+        //new ArrayList(Arrays.asList(fondo));
+        setImgProcesada(dibujaFondo(imgProcesada, fondo)); //guarda la imagen con fondo
+        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenConFondo.tmp"); //la guarda en disco
+        setImgProcesada(eliminaFondo(getImgProcesada(), fondo));
+        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinFondo.tmp");
+        setImgProcesada(eliminaHoras(getImgProcesada()));
+        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinHoras.tmp");
+        //buscaMarcas(fondo)
+                
         return marcas;
+    }
+
+    /**
+     * @return the imgProcesada
+     */
+    public BufferedImage getImgProcesada() {
+        return imgProcesada;
+    }
+
+    /**
+     * @param imgProcesada the imgProcesada to set
+     */
+    public void setImgProcesada(BufferedImage imgProcesada) {
+        this.imgProcesada = imgProcesada;
     }
 }
