@@ -22,13 +22,28 @@ import modelo.dataManager.SondaSetHistorico;
  */
 public abstract class BrokerHistorico implements Runnable{
     private static Thread dbHthread;
-    private static Campania campania;
+    private static Campania campania;//en curso
+    private static Campania readCampania;//para leer de historico
     private static Connection conexion;
     private static Connection readConection; //conexion exclusiva para lectura de Historico
     private static Statement statement;
     private static Statement readStatement; //statement exclusivo para lectura de Historico
     private static String dbFileName;
     private static String folderNameHistorico;    
+
+    /**
+     * @return the readCampania
+     */
+    public static Campania getReadCampania() {
+        return readCampania;
+    }
+
+    /**
+     * @param aReadCampania the readCampania to set
+     */
+    public static void setReadCampania(Campania aReadCampania) {
+        readCampania = aReadCampania;
+    }
     
     public BrokerHistorico(){
         inicializaBrokerHistorico();

@@ -132,25 +132,20 @@ public class ControllerHistorico {
         return sePudo;
     }
     
-public void restauraBtnIniciarMapa(){
-    PanelHistorico.getInstance().restauraBtnIniciarMapa();
-    PanelHistorico.getInstance().seteaBotonesMapa();    
-}
+    public void restauraBtnIniciarMapa(){
+        PanelHistorico.getInstance().restauraBtnIniciarMapa();
+        PanelHistorico.getInstance().seteaBotonesMapa();    
+    }
+
+    public void restauraBtnGraficarDatos(){
+        PanelHistorico.getInstance().restauraBtnGraficarDatos();
+    }
 
     public void cargaRecorridoEnMapa(int idCampaniaElegida) {
         setIdCampaniaElegida(idCampaniaElegida);
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    Thread.sleep(2000);//espera 2 segundos xq probablemente se este abriendo el webserver
-                    if (!BrokerDbMapaHistorico.getInstance().cargarRecorridoDeCamp(getIdCampaniaElegida())){
-                        JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
-                    }
-                } catch (InterruptedException ex) {
-                    Logueador.getInstance().agregaAlLog(ex.toString());
-                }
-            }
-        });
+        if (!BrokerDbMapaHistorico.getInstance().cargarRecorridoDeCamp(getIdCampaniaElegida())){
+            JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
+        }
     }
 
     public void cargaPoisEnMapa(int idCampaniaElegida, ArrayList<Integer> categoriasSeleccionadas) {
@@ -190,5 +185,41 @@ public void restauraBtnIniciarMapa(){
     public void vaciaMapaHistorico() {
         BrokerDbMapaHistorico.getInstance().vaciaMapaHistorico();
     }
+
+    public void graficarDatos(int retardo) {
+        GraficaDatosHistoricos grafica = new GraficaDatosHistoricos();
+        grafica.retardo=retardo;
+        grafica.start();
+    }
     
+}
+
+class GraficaDatosHistoricos implements Runnable{
+    Thread thGraficar;
+    public int retardo;
+    public void run() { 
+        try{
+            thGraficar.sleep(retardo);
+            ControllerHistorico.getInstance().vaciaMapaHistorico();
+            if (PanelHistorico.getInstance().getCategoriasSeleccionadas().size()>0){
+                ControllerHistorico.getInstance().cargaPoisEnMapa(PanelHistorico.getInstance().getIdCampaniaElegida(),
+                        PanelHistorico.getInstance().getCategoriasSeleccionadas());
+            }
+            if (PanelHistorico.getInstance().getChkRecorrido().isSelected()){
+                ControllerHistorico.getInstance().cargaRecorridoEnMapa(PanelHistorico.getInstance().getIdCampaniaElegida());
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        ControllerHistorico.getInstance().restauraBtnGraficarDatos();
+        thGraficar = null;
+    }
+    public void start() {
+        if (thGraficar == null) {
+            thGraficar = new Thread(this);
+            thGraficar.setPriority(Thread.MIN_PRIORITY);
+            thGraficar.start();
+        }
+    }
 }

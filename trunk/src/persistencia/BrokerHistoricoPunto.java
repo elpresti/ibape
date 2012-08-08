@@ -184,43 +184,56 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
     }
 
     public ArrayList<PuntoHistorico> getPuntos(java.util.Date fechaDesde, java.util.Date fechaHasta){
-        ArrayList<PuntoHistorico> recorrido = new ArrayList();            
+        ArrayList<PuntoHistorico> recorrido = new ArrayList();
+        ResultSet rs = null;
         try {
-            Calendar calendario = Calendar.getInstance();
-            if (fechaHasta == null){                
-                fechaHasta = calendario.getTime();
+            if (getReadCampania() != null  &&  creaConexionParaLeerHistorico(getReadCampania().getId())){                
+                Calendar calendario = Calendar.getInstance();
+                if (fechaHasta == null){                
+                    fechaHasta = calendario.getTime();
+                }
+                if (fechaDesde == null){                
+                    calendario.set(1970, 1, 1);
+                    fechaDesde = calendario.getTime();
+                }
+                String sqlQuery=
+                        "  SELECT * FROM Puntos  "
+                        + "WHERE fechaYhora "
+                        + "BETWEEN "+ fechaDesde.getTime() + " AND "+ fechaHasta.getTime() +" "
+                        + "ORDER BY fechaYhora ASC";
+                System.out.println(sqlQuery);
+                rs = getReadStatement().executeQuery(sqlQuery);            
+                while (rs.next()) {
+                    PuntoHistorico ph = new PuntoHistorico();
+                    // Get the data from the row using the column name
+                    ph.setId(rs.getInt("id"));
+                    ph.setAltitud(rs.getDouble("altitud"));
+                    ph.setFechaYhora(rs.getTimestamp("fechaYhora"));
+                    ph.setLatitud(rs.getDouble("latitud"));
+                    ph.setLongitud(rs.getDouble("longitud"));
+                    ph.setProfundidad(rs.getDouble("profundidad"));
+                    ph.setRumbo(rs.getDouble("rumbo"));
+                    ph.setTempAgua(rs.getDouble("tempAgua"));
+                    ph.setVelocidad(rs.getDouble("velocidad"));
+                    ph.setVelocidadAgua(rs.getDouble("velocidadAgua"));
+                    recorrido.add(ph);
+                }
             }
-            if (fechaDesde == null){                
-                calendario.set(1970, 1, 1);
-                fechaDesde = calendario.getTime();
-            }
-            String sqlQuery=
-                    "  SELECT * FROM Puntos  "
-                    + "WHERE fechaYhora "
-                    + "BETWEEN "+ fechaDesde.getTime() + " AND "+ fechaHasta.getTime() +" "
-                    + "ORDER BY fechaYhora ASC";
-            System.out.println(sqlQuery);
-            ResultSet rs = getStatement().executeQuery(sqlQuery);            
-            while (rs.next()) {
-                PuntoHistorico ph = new PuntoHistorico();
-                // Get the data from the row using the column name
-                ph.setId(rs.getInt("id"));
-                ph.setAltitud(rs.getDouble("altitud"));
-                ph.setFechaYhora(rs.getTimestamp("fechaYhora"));
-                ph.setLatitud(rs.getDouble("latitud"));
-                ph.setLongitud(rs.getDouble("longitud"));
-                ph.setProfundidad(rs.getDouble("profundidad"));
-                ph.setRumbo(rs.getDouble("rumbo"));
-                ph.setTempAgua(rs.getDouble("tempAgua"));
-                ph.setVelocidad(rs.getDouble("velocidad"));
-                ph.setVelocidadAgua(rs.getDouble("velocidadAgua"));
-                recorrido.add(ph);
-            }
-            rs.close();
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }        
-
+        //ya la use, asique cierro ResultSets y Statements usados
+        try{
+            if (rs != null){
+                rs.close();
+            }
+            if (getReadStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return recorrido;
     }    
 
