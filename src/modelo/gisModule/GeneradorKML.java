@@ -6,6 +6,7 @@ package modelo.gisModule;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.POI;
 import modelo.dataManager.PuntoHistorico;
 
@@ -95,8 +96,7 @@ public class GeneradorKML {
         ArrayList<String> categorias=new ArrayList();
         int i = 0;
         for (POI poi : pois){
-            if (poi.getCategoria().getPathIcono() != null  &&  !categorias.contains(poi.getCategoria().getPathIcono())
-                &&  poi.getCategoria().getPathIcono().toLowerCase().contains("png")) {
+            if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())  &&  !categorias.contains(poi.getCategoria().getPathIcono())) {
                 salida+=
                 "<Style id=\""+poi.getCategoria().getPathIcono()+"\">"
                +"<IconStyle>"
@@ -119,7 +119,7 @@ public class GeneradorKML {
     public String getKmlStyleFromCatPoi(POI poi){
         String salida="";    
         if (poi != null){
-            if (poi.getCategoria().getPathIcono() != null  &&  poi.getCategoria().getPathIcono().toLowerCase().contains("png")) {
+            if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())) {
                 salida+=
                 "<Style id=\""+poi.getCategoria().getPathIcono()+"\">"
                +"<IconStyle>"
@@ -148,7 +148,7 @@ public class GeneradorKML {
         //Preset de camara 2 = vista aerea lateral derecha:
         //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
         // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671);
-        String salida = ""; 
+        String salida = "";
         salida=
         "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">"
         +"<Document>";
@@ -221,19 +221,31 @@ public class GeneradorKML {
         salida=salida
           +"<Placemark>"
             +"<name>"+horaStr+"</name>";
-        if (poi.getCategoria().getPathIcono() != null  &&  poi.getCategoria().getPathIcono().toLowerCase().contains("png")){
-            salida+="<styleUrl>#"+poi.getCategoria().getPathIcono()+"</styleUrl>";  
+        if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
+            salida+="<styleUrl>#"+poi.getCategoria().getPathIcono()+"</styleUrl>";
         }
         salida+="<description>"
                + "<![CDATA[<div>"
-                  + "Datos de este punto "
-                  + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
-                  + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
-                  + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
-                  //+ "<br>  <strong>- Rumbo:</strong> "+getRumbo()+"° "
-                  //+ "<br>  <strong>- Velocidad:</strong> "+getVelocidad()+" kmph"
-                  //+ "<br>  <strong>- Profundidad:</strong> "+getProfundidad()+" m"                
-                  + "<br><br>Esto es una url: <a href=\"http://www.google.com\" target=\"_blank\">Google!</a>"
+                  + "<table border=0>"
+                    + "<tr>"
+                    +    "<td valign=\"top\">"
+                            + "Datos de este punto "
+                            + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
+                            + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
+                            + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
+                            + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo()
+                            + "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion()
+                    +    "</td>"
+                    +    "<td valign=\"top\" align=\"right\">";
+                    if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
+                            salida+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
+                                    +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
+                                    +poi.getCategoria().getPathIcono()+"\">";                        
+                    }
+                    salida+=
+                         "</td>"                
+                    + "</tr>"
+                  + "</table>" 
                + "</div>]]>"
             + "</description>"
             +"<Point>"
