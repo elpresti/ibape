@@ -43,9 +43,17 @@ public class BrokerDbMapaHistorico implements Runnable{
     public boolean cargarRecorridoDeCamp(int idCamp){
         boolean sePudo=true;
         if (idCamp>=0){
-            ArrayList<PuntoHistorico> puntos = BrokerHistoricoPunto.getInstance().getPuntos(
-                    BrokerCampania.getInstance().getCampaniaFromDb(idCamp).getFechaInicio(), 
-                    Calendar.getInstance().getTime());
+            modelo.dataManager.Campania campElegida = BrokerCampania.getInstance().getCampaniaFromDb(idCamp);
+            BrokerHistorico.setReadCampania(campElegida);
+            ArrayList<PuntoHistorico> puntos = new ArrayList();
+            if (campElegida.getFechaFin() != null){
+                puntos = BrokerHistoricoPunto.getInstance().getPuntos( 
+                        campElegida.getFechaInicio(),campElegida.getFechaFin());
+            }
+            else{
+                puntos = BrokerHistoricoPunto.getInstance().getPuntos(
+                        campElegida.getFechaInicio(),Calendar.getInstance().getTime());
+            }
             int i=0;
             /*
             while (i<puntos.size() && sePudo){
@@ -207,7 +215,7 @@ public class BrokerDbMapaHistorico implements Runnable{
                 }
             }        
     */
-            Thread.sleep(4000);
+            BdbMap.sleep(4000);
             tablaLista();
             
         } catch (InterruptedException ex) {

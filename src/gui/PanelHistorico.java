@@ -49,6 +49,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     private ButtonGroup grupoElijeCampania;
     private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
     private String txtBtnIniciaMapa;
+    private String txtBtnGraficarDatos;
     private int idCampaniaElegida;
     private int NRO_COL_ID_CAMP;
     private int NRO_COL_ELEGIR;
@@ -297,7 +298,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void chkPoisTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodosActionPerformed
-        if ((chkPoisTodos.isSelected()) || (chkRecorrido.isSelected())){
+        if ((chkPoisTodos.isSelected()) || (getChkRecorrido().isSelected())){
             habilitaBtnGraficarDatos(true);
         }
         else{
@@ -312,7 +313,7 @@ public class PanelHistorico extends javax.swing.JPanel {
     }//GEN-LAST:event_chkPoisTodosActionPerformed
 
     private void chkRecorridoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRecorridoActionPerformed
-        if (chkRecorrido.isSelected()){
+        if (getChkRecorrido().isSelected()){
             habilitaBtnGraficarDatos(true);
         }
         else{
@@ -333,19 +334,19 @@ public class PanelHistorico extends javax.swing.JPanel {
 
     private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
         if (getIdCampaniaElegida()>=0){
-            //si no se ha hecho click en iniciar Mapa historico previamente, lo hago
-            if (btnIniciarMapaHistorico.isEnabled() && btnIniciarMapaHistorico.isVisible()){
-                btnIniciarMapaHistoricoActionPerformed(null);
-            }
- 
-            if (chkRecorrido.isSelected() || (chkPoisTodos.isSelected() && getCategoriasSeleccionadas().size()>0) ){
-                ControllerHistorico.getInstance().vaciaMapaHistorico();
-                if (chkRecorrido.isSelected()){
-                    ControllerHistorico.getInstance().cargaRecorridoEnMapa(getIdCampaniaElegida());
+            if (getChkRecorrido().isSelected() || (chkPoisTodos.isSelected() && getCategoriasSeleccionadas().size()>0) ){                
+                setTxtBtnGraficarDatos(btnGraficarDatos.getText());
+                btnGraficarDatos.setText("Transfiriendo datos...");
+                habilitaBtnGraficarDatos(false);
+                int retardo= 0; //sin retardo
+                if (btnIniciarMapaHistorico.isEnabled() && btnIniciarMapaHistorico.isVisible()){
+                    btnIniciarMapaHistoricoActionPerformed(null);//si no se ha hecho click en iniciar Mapa historico previamente, lo hago
+                    retardo=5000;//5 segundos de retardo para graficar xq estba el webserver cerrado
                 }
-                if (getCategoriasSeleccionadas().size()>0){
-                    ControllerHistorico.getInstance().cargaPoisEnMapa(getIdCampaniaElegida(),getCategoriasSeleccionadas());
+                else{
+                    retardo=4000;//4 segundos de retardo para que lea la DB el browser
                 }
+                ControllerHistorico.getInstance().graficarDatos(retardo);
             }
             else{
                 JOptionPane.showMessageDialog(null, "No ha elegido que datos de la campaña elegida desea graficar");
@@ -361,6 +362,11 @@ public class PanelHistorico extends javax.swing.JPanel {
         btnIniciarMapaHistorico.setEnabled(true);
         btnIniciarMapaHistorico.setVisible(false);
         btnDetenerMapaHistorico.setVisible(true);        
+    }
+
+    public void restauraBtnGraficarDatos(){
+        btnGraficarDatos.setText(getTxtBtnGraficarDatos());
+        habilitaBtnGraficarDatos(true);
     }
     
     private void btnDetenerMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerMapaHistoricoActionPerformed
@@ -522,7 +528,7 @@ public class PanelHistorico extends javax.swing.JPanel {
             
             habilitaBtnGraficarDatos(false); 
             chkPoisTodos.setSelected(false);
-            chkRecorrido.setSelected(false);
+            getChkRecorrido().setSelected(false);
             if (tableModelCatPois.getRowCount()==0){            
                 tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se encontraron categorias de Pois en sistema..."});
                 habilitaChkTodosLosPois(false);
@@ -574,7 +580,7 @@ public class PanelHistorico extends javax.swing.JPanel {
   }
   
   public void habilitaChkRecorrido(boolean estado){
-      chkRecorrido.setEnabled(estado);
+        getChkRecorrido().setEnabled(estado);
   }
    
   public void habilitaBtnGraficarDatos(boolean estado){
@@ -678,6 +684,27 @@ public class PanelHistorico extends javax.swing.JPanel {
      */
     public void setTxtBtnIniciaMapa(String txtBtnIniciaMapa) {
         this.txtBtnIniciaMapa = txtBtnIniciaMapa;
+    }
+
+    /**
+     * @return the chkRecorrido
+     */
+    public javax.swing.JCheckBox getChkRecorrido() {
+        return chkRecorrido;
+    }
+
+    /**
+     * @return the txtBtnGraficarDatos
+     */
+    public String getTxtBtnGraficarDatos() {
+        return txtBtnGraficarDatos;
+    }
+
+    /**
+     * @param txtBtnGraficarDatos the txtBtnGraficarDatos to set
+     */
+    public void setTxtBtnGraficarDatos(String txtBtnGraficarDatos) {
+        this.txtBtnGraficarDatos = txtBtnGraficarDatos;
     }
     
 }

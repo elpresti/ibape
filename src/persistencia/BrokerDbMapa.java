@@ -259,7 +259,7 @@ public class BrokerDbMapa implements Runnable{
 
     public void run() {
         try {         
-            BdbMap.sleep(3000);
+            BdbMap.sleep(5000);//espero 5 segundos para darle tiempo a q levante el webserver
             dbLista();
             //if (!(dbLista())) {
             //    JOptionPane.showMessageDialog(null, "No se pudo crear y conectar a la DB Mapa Navegacion");
