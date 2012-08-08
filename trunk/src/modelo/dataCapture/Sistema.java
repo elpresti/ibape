@@ -290,5 +290,9 @@ public class Sistema {
         g2.dispose();  
         return dst;  
     }
-        
+ 
+    
+    public boolean pathIconoEsValido(String pathIcono){
+        return (pathIcono != null)  &&  pathIcono.toLowerCase().contains("png");
+    }
 }

@@ -601,16 +601,16 @@ public class PanelHistorico extends javax.swing.JPanel {
             Object[] fila = new Object[5]; //creamos la fila
             fila[0]=cP.getId(); //en la columna 0 va el ID
             fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
-            if (cP.getPathIcono() != null && cP.getPathIcono().contains("png")){
+            if (modelo.dataCapture.Sistema.getInstance().pathIconoEsValido(cP.getPathIcono())){
                 //fila[2]=new JLabel(new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()));//en la columna 2 va el Icono
                 //--- resize Icon
-                Image source = new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()).getImage();
+                Image source = new ImageIcon(modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()).getImage();
                 BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2d = (Graphics2D)image.getGraphics();
                 g2d.drawImage(source, 0, 0, null);
                 g2d.dispose();
                 //-------------
-                fila[2]=Sistema.getInstance().getLabelWithImgResized(25, 32, image);//en la columna 2 va el Icono
+                fila[2]=modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image);//en la columna 2 va el Icono
             }
             else{
                 JLabel lblSinIcono = new JLabel("No Icon");
