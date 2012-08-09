@@ -530,7 +530,7 @@ public class PanelHistorico extends javax.swing.JPanel {
             chkPoisTodos.setSelected(false);
             getChkRecorrido().setSelected(false);
             if (tableModelCatPois.getRowCount()==0){            
-                tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se encontraron categorias de Pois en sistema..."});
+                tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se encontraron POIs para la campaña seleccionada..."});
                 habilitaChkTodosLosPois(false);
                 //escondo la columna de cantidad de puntos
                 tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(0); 
