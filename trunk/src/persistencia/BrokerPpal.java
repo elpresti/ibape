@@ -6,8 +6,11 @@ package persistencia;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -26,7 +29,7 @@ public abstract class BrokerPpal {
     public BrokerPpal() {
         inicializador();
     }
-
+    
     public boolean creaConexionNueva() {
         boolean sePudo = false;
         try {
@@ -859,5 +862,35 @@ public abstract class BrokerPpal {
             System.out.println(e);
         }
     }
+    
+
+    public void vaciarJTable(DefaultTableModel dTM) {
+        dTM.setColumnCount(0);
+        while (dTM.getRowCount() > 0) {
+            dTM.removeRow(0);
+        }
+        //dTM.setRowCount(0);
+    }
+
+    public void ocultarColJTable(JTable tabla, int indice) {
+        tabla.getColumnModel().getColumn(indice).setMaxWidth(0);
+        tabla.getColumnModel().getColumn(indice).setMinWidth(0);
+        tabla.getColumnModel().getColumn(indice).setPreferredWidth(0);
+        tabla.getColumnModel().getColumn(indice).setResizable(false);
+    }
+
+    public Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Object[] fila = new Object[cantCols]; //creamos la fila
+        for (int i = 0; i < unObjeto.size(); i++) {
+            if (unObjeto.get(i) != null) {
+                fila[i] = String.valueOf(unObjeto.get(i));
+            } else {
+                fila[i] = "";
+            }
+        }
+        return fila;
+    }
+
     
 }

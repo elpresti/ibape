@@ -446,7 +446,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     elFrame.add(a);
     elFrame.setVisible(true);
     }*/
-
+    
     private void cargaComboCategorias() {
         //carga combo
         comboCategorias.removeAllItems();
@@ -455,38 +455,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
     }
 
-    private void vaciarJTable(DefaultTableModel dTM) {
-        dTM.setColumnCount(0);
-        while (dTM.getRowCount() > 0) {
-            dTM.removeRow(0);
-        }
-        //dTM.setRowCount(0);
-    }
-
-    private void ocultarColJTable(JTable tabla, int indice) {
-        tabla.getColumnModel().getColumn(indice).setMaxWidth(0);
-        tabla.getColumnModel().getColumn(indice).setMinWidth(0);
-        tabla.getColumnModel().getColumn(indice).setPreferredWidth(0);
-    }
-
-    private Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
-        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Object[] fila = new Object[cantCols]; //creamos la fila
-        for (int i = 0; i < unObjeto.size(); i++) {
-            if (unObjeto.get(i) != null) {
-                fila[i] = String.valueOf(unObjeto.get(i));
-            } else {
-                fila[i] = "";
-            }
-        }
-        return fila;
-    }
-
     private void cargaGrillaCategoriaPOIS() {
         //DefaultTableModel dm = (DefaultTableModel) tablaCategorias.getModel(); 
         //modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
         //tablaCategorias.setModel(modeloTablaCategoriasPOI);
-        vaciarJTable(modeloTablaCategoriasPOI);
+         BrokerPOIs.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
         //dm.setRowCount(0);
         int cantCols = 4;
         //Cabecera
@@ -507,16 +480,12 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             a.add(cP.getTitulo());
             a.add(cP.getPathIcono());
             a.add("Acciones");
-            modeloTablaCategoriasPOI.addRow(agregaUnaFilaGenerica(cantCols, a));
+            modeloTablaCategoriasPOI.addRow(BrokerPOIs.getInstance().agregaUnaFilaGenerica(cantCols, a));
             a.clear();
         }
         tablaCategorias.setModel(modeloTablaCategoriasPOI);
         //escondo la columna ID 
-        tablaCategorias.getColumnModel().getColumn(0).setMinWidth(0);
-        tablaCategorias.getColumnModel().getColumn(0).setMaxWidth(0);
-        tablaCategorias.getColumnModel().getColumn(0).setPreferredWidth(0);
-        tablaCategorias.getColumnModel().getColumn(0).setResizable(false);
-
+        BrokerPOIs.getInstance().ocultarColJTable(tablaCategorias, 0);
     }
 
     private void cargaGrillaPOIS() {
@@ -524,7 +493,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
             //modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
             //tablaPois.setModel(modeloTablaPOIS);
-            vaciarJTable(modeloTablaPOIS);
+            BrokerPOIs.getInstance().vaciarJTable(modeloTablaPOIS);
             //dm.setRowCount(0);
             int cantCols = 6;
             //Cabecera
@@ -558,7 +527,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 a.add(coordenadas);
                 a.add(p.getDescripcion());
                 a.add("Acciones");
-                modeloTablaPOIS.addRow(agregaUnaFilaGenerica(cantCols, a));
+                modeloTablaPOIS.addRow(BrokerPOIs.getInstance().agregaUnaFilaGenerica(cantCols, a));
                 a.clear();
             }
         } catch (Exception e) {
@@ -566,9 +535,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
         tablaPois.setModel(modeloTablaPOIS);
         //escondo la columna ID 
-        tablaPois.getColumnModel().getColumn(0).setMinWidth(0);
-        tablaPois.getColumnModel().getColumn(0).setMaxWidth(0);
-        tablaPois.getColumnModel().getColumn(0).setPreferredWidth(0);
-        tablaPois.getColumnModel().getColumn(0).setResizable(false);
+        BrokerPOIs.getInstance().ocultarColJTable(tablaPois, 0);
     }
 }
