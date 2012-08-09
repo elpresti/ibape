@@ -50,7 +50,7 @@ public class BrokerEspecie extends BrokerPpal {
         modelo.dataManager.Especie esp = null;
         try {
             ResultSet rs = getStatement().executeQuery("SELECT * FROM Especies WHERE id= " + id);
-            if (rs != null) {
+            if (rs.next()) {
                 // Get the data from the row using the column name
                 esp.setId(rs.getInt("id"));
                 esp.setNombre(rs.getString("nombre"));
@@ -61,4 +61,5 @@ public class BrokerEspecie extends BrokerPpal {
         return esp;
     }
     //ABM no aplica se carga de la base
+
 }

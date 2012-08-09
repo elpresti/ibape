@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Cajon;
 import modelo.dataManager.Especie;
 import persistencia.BrokerEspecie;
+import persistencia.BrokerLance;
 import persistencia.Logueador;
 
 /**
@@ -24,7 +25,7 @@ import persistencia.Logueador;
  * @author Sebastian
  */
 public class PanelFinalizarLance extends javax.swing.JPanel {
-    
+
     static PanelFinalizarLance unicaInstancia;
 
     /** Creates new form PanelFinalizarLance */
@@ -295,25 +296,31 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private void comboEspeciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEspeciesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboEspeciesActionPerformed
-    
+
     private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
         // TODO add your handling code here:
         controllers.ControllerLance.getInstance().guardaLance();
     }//GEN-LAST:event_btnGuardarLanceActionPerformed
-    
+
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        if (Integer.parseInt(campoCajones.getText())>0 && comboEspecies.getSelectedIndex() != -1) {
         Cajon unCajon = new Cajon();
-        unCajon.setIdLance(0);//ver
-        // unCajon.setIdEspecie(ControllerLance.getInstance().getIdxNombreEspecie(comboEspecies.getSelectedItem().toString()));
-        // unCajon.setCantidad(strToInt(campoCajones.getText()));
+        unCajon.setIdLance(BrokerLance.getInstance().getIdLanceActual());
+        Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
+        unCajon.setIdEspecie(unaEsp.getId());
+        unCajon.setCantidad(Integer.parseInt(campoCajones.getText()));
         ControllerLance.getInstance().addCajon(unCajon);
+
+        Object fila[] = new Object[3];
+        fila[0] = unaEsp.getId();//idespecie
+        fila[1] = campoCajones.getText();
+        fila[2] = "acciones";
+        //insertar la fila    
+        } else {
+            JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
+        }
         
-        Object fila[]=new Object[3];
-        fila[0]="1";//idespecie
-        fila[1]=campoCajones.getText();
-        fila[2]="";
-        // tablaCajones.add(fila);
     }//GEN-LAST:event_jButton1ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLance;
@@ -351,43 +358,41 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         }
         return unicaInstancia;
     }
-    
+
     public void cargaComboEspecies(ArrayList<String> arr) {
     }
 
     //main de prueba 
     /*
     public static void main(String[] args) {
-        javax.swing.JFrame elFrame = new javax.swing.JFrame();
-        elFrame.setSize(500, 500);
-        PanelFinalizarLance a = new PanelFinalizarLance();
-        //cargaEspecies();
-        elFrame.add(a);
-        elFrame.setVisible(true);
-        
-    }
-*/
+    javax.swing.JFrame elFrame = new javax.swing.JFrame();
+    elFrame.setSize(500, 500);
+    PanelFinalizarLance a = new PanelFinalizarLance();
+    //cargaEspecies();
+    elFrame.add(a);
+    elFrame.setVisible(true);
+    
+    }*/
+     
     private void inicializador() {
         cargaEspecies();
         controllers.ControllerLance.getInstance();
     }
-    
+
     private void cargaEspecies() {
         try {
-            BrokerEspecie.getInstance().creaConexionNueva(); //sacar
             comboEspecies.removeAllItems();
             for (Especie i : controllers.ControllerLance.getInstance().getListadoEspecies()) {
-                comboEspecies.addItem(i.getNombre());
+                comboEspecies.addItem(i);
             }
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
     }
-    
+
     public ArrayList<Cajon> getCajones() {
         //------------
         for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-            
         }
 
         //------------
@@ -395,13 +400,13 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         Cajon unCajon = new Cajon();
         for (int i = 0; i < tablaCajones.getRowCount(); i++) {
             unCajon.setIdLance(0); //que lance?
-          //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
-          //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
+            //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
+            //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
             listaCajones.add(unCajon);
         }
         return listaCajones;
     }
-    
+
     public String getComentarios() {
         if (!txtComentarios.getText().isEmpty()) {
             return txtComentarios.getText();

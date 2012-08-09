@@ -68,15 +68,14 @@ public class BrokerPOIs extends BrokerPpal {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
         //ya la use, asique cierro ResultSets y Statements usados
-        try{
-            if (rs != null){
+        try {
+            if (rs != null) {
                 rs.close();
             }
-            if (getStatement() != null){
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return POIs;
@@ -85,7 +84,7 @@ public class BrokerPOIs extends BrokerPpal {
     public modelo.dataManager.POI getPOIFromDB(int id) {
         modelo.dataManager.POI poi = new modelo.dataManager.POI();
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
-        ResultSet rs=null;
+        ResultSet rs = null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Pois WHERE id = " + id);
             if (rs.next()) {
@@ -103,6 +102,14 @@ public class BrokerPOIs extends BrokerPpal {
                 poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
 
             }
+
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
@@ -151,7 +158,7 @@ public class BrokerPOIs extends BrokerPpal {
                             BrokerMarca.getInstance().insertMarca(m);
                             //}
                         }
-                    }                    
+                    }
                 }
                 sePudo = true;
             }
@@ -159,15 +166,14 @@ public class BrokerPOIs extends BrokerPpal {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
         //ya la use, asique cierro ResultSets y Statements usados
-        try{
-            if (rs != null){
+        try {
+            if (rs != null) {
                 rs.close();
             }
-            if (getStatement() != null){
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -194,6 +200,10 @@ public class BrokerPOIs extends BrokerPpal {
             } else {
                 sePudo = false;
             }
+
+            if (getStatement() != null) {
+                getStatement().close();
+            }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
@@ -208,6 +218,10 @@ public class BrokerPOIs extends BrokerPpal {
             System.out.println("DELETE: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
+            }
+
+            if (getStatement() != null) {
+                getStatement().close();
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -226,7 +240,7 @@ public class BrokerPOIs extends BrokerPpal {
         // -> hacer el SELECT usando el objeto PreparedStatement
         try {
 
-            Campania unaCamp = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania); 
+            Campania unaCamp = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
 
             if (unaCamp != null) {
                 java.sql.Date fechaInicio = null;
@@ -269,6 +283,12 @@ public class BrokerPOIs extends BrokerPpal {
                     poisDeEstaCampania.add(poi);
                 }
                 //}
+                if (rs != null) {
+                    rs.close();
+                }
+                if (getStatement() != null) {
+                    getStatement().close();
+                }
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -280,10 +300,9 @@ public class BrokerPOIs extends BrokerPpal {
     //main de prueba
 /*    
     public static void main(String[] args) {
-        ArrayList a = BrokerPOIs.getInstance().getPOISDeUnaCampFromDB(2);
+    ArrayList a = BrokerPOIs.getInstance().getPOISDeUnaCampFromDB(2);
     }
-*/
-    
+     */
     //este queda??? ---> si, queda
     public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
@@ -331,20 +350,19 @@ public class BrokerPOIs extends BrokerPpal {
             }
         }
         //ya la use, asique cierro ResultSets y Statements usados
-        try{
-            if (rs != null){
+        try {
+            if (rs != null) {
                 rs.close();
             }
-            if (getStatement() != null){
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return poisDeEstaCampania;
     }
-    
+
     public int getCantPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         int cantPoisDeEstaCampania = 0;
         ResultSet rs = null;
@@ -359,7 +377,7 @@ public class BrokerPOIs extends BrokerPpal {
 /*  si quisieramos determinar los POIs de una campaña segun las fechas, este sería el código:
                             + "WHERE (idCampania= ? OR fechaHora  BETWEEN ? AND ? ) AND "
                     psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
-                    if (laCampania.getEstado() == 1  && laCampania.getFechaFin() != null) {//campania finalizada
+                    if (laCampania.getEstado() == 1 && laCampania.getFechaFin() != null) {//campania finalizada
                         psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
                     } else {
                         psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
@@ -378,18 +396,16 @@ public class BrokerPOIs extends BrokerPpal {
             }
         }
         //ya la use, asique cierro ResultSets y Statements usados
-        try{
-            if (rs != null){
+        try {
+            if (rs != null) {
                 rs.close();
             }
-            if (getStatement() != null){
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return cantPoisDeEstaCampania;
     }
-    
 }
