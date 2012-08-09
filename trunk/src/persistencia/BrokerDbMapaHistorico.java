@@ -147,7 +147,7 @@ public class BrokerDbMapaHistorico implements Runnable{
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),punto.getDescripcion());
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), 
                         modelo.gisModule.GeneradorKML.getInstance().conviertePOIaKml(punto,moverCamAestePoi));
-                preparedStatement.executeUpdate(); 
+                preparedStatement.executeUpdate();  
                 sePudo=true;
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
              }

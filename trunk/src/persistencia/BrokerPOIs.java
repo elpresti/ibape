@@ -300,7 +300,7 @@ public class BrokerPOIs extends BrokerPpal {
                             + "ORDER BY fechaHora ASC");
                     psSelect.setInt(1, idDeCampania);
                     psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
-                    if (laCampania.getEstado() == 1) {//campania finalizada
+                    if (laCampania.getEstado() == 0) {//campania finalizada
                         psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
                     } else {
                         psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
@@ -354,17 +354,19 @@ public class BrokerPOIs extends BrokerPpal {
                 if (laCampania != null) {
                     PreparedStatement psSelect = getConexion().prepareStatement(
                             "SELECT count() FROM Pois "
-                            + "WHERE (idCampania= ? "
-                            + "OR fechaHora "
-                            + "BETWEEN ? AND ? ) AND idCategoriaPoi=? ");
-                    psSelect.setInt(1, idDeCampania);
+                            + "WHERE idCampania= ? AND " 
+                            + "idCategoriaPoi=? ");                            
+/*  si quisieramos determinar los POIs de una campaña segun las fechas, este sería el código:
+                            + "WHERE (idCampania= ? OR fechaHora  BETWEEN ? AND ? ) AND "
                     psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
                     if (laCampania.getEstado() == 1  && laCampania.getFechaFin() != null) {//campania finalizada
                         psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
                     } else {
                         psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
                     }
-                    psSelect.setInt(4, idDeCatPois);
+*/
+                    psSelect.setInt(1, idDeCampania);
+                    psSelect.setInt(2, idDeCatPois);
                     System.out.println("Select : " + psSelect.toString());
                     rs = psSelect.executeQuery();
                     if (rs.next()) {
