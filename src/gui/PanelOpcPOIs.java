@@ -352,6 +352,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }//GEN-LAST:event_comboCategoriasActionPerformed
 
     private void btnAgregaPoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaPoiActionPerformed
+
         // Agrega POI:        
         if (comboCategorias.getItemCount() > 0 && campoDescripcionNuevoPoi.getText().length() > 2) {
             CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
@@ -364,11 +365,20 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAgregaPoiActionPerformed
 
     private void btnAgregaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaCategoriaActionPerformed
+        
+        //verif si esta repetido
+        boolean unico = true;
+        int i = 0;
+        while (i < comboCategorias.getItemCount() && unico) {
+            if (comboCategorias.getItemAt(i).toString().toUpperCase().equals(campoDescripcionNuevoPoi.getText().toUpperCase())) {
+            unico=false;
+            }
+        }
         // Agrega Categoria POI:
-        if (campoNombreNuevaCat.getText().length() > 2) {        
-        controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText());
-        cargaGrillaCategoriaPOIS();
-        cargaComboCategorias();
+        if (unico && campoNombreNuevaCat.getText().length() > 2) {
+            controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText());
+            cargaGrillaCategoriaPOIS();
+            cargaComboCategorias();
         } else {
             JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido");
         }
@@ -492,7 +502,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         modeloTablaCategoriasPOI.addColumn("Acciones");
         //Cuerpo
         ArrayList a = new ArrayList();
-        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {            
+        for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
             a.add(cP.getId());
             a.add(cP.getTitulo());
             a.add(cP.getPathIcono());
@@ -540,7 +550,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
             }*/
             ArrayList a = new ArrayList();
-            for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {                
+            for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
                 a.add(p.getId());
                 a.add(p.getFechaHora());
                 a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
