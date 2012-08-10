@@ -94,6 +94,8 @@ public class OperacionesBasicas {
     public static void main(String[] args){
 
         int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
+        ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas();
+        //OperacionesBasicas.getInstance().getMarcas(imgSoloMarcas);
 
 //        //Cargamos  la imagen en un objeto BufferImage
 //        OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
@@ -110,6 +112,7 @@ public class OperacionesBasicas {
 //        imgProcesada = segmentacion.Bordes(imgProcesada);
 //        //grabamos la imagen en disco
 //        getInstance().grabarImagen(imgProcesada);
+
     }
 
     
@@ -144,8 +147,10 @@ public class OperacionesBasicas {
         BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
         getInstance().grabarImagen(imgConFondo,"imgs\\imagenConFondo.tmp");
         getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondo.tmp");
-        getInstance().grabarImagen(eliminaHoras(imgConFondo),"imgs\\imagenSinHoras.tmp");
-
+        BufferedImage imagenconfondo =eliminaHoras(imgConFondo);
+        getInstance().grabarImagen(imagenconfondo,"imgs\\imagenSinHoras.tmp");
+        setImgProcesada(imagenconfondo);
+        //setImgProcesada();
         int prom = promedio(fondo);
         //buscaMarcas(fondo)
 
@@ -403,18 +408,18 @@ public class OperacionesBasicas {
         return img;
     }
 
-    public ArrayList<modelo.dataManager.Marca> buscaMarcas(ArrayList<Integer> fondo){
-        ArrayList<modelo.dataManager.Marca> marcas = new ArrayList<modelo.dataManager.Marca>();
-        //Recorremos la imagen de arriba hacia abajo y de izqierda a derecha en busqueda de las marcas. Para esto haremos lo siguiente:
-            //Obtenemso el valor RGB del pixel que esta en x = 0,y=imagen.getAlto()
-            //Si ese valor RGB es blanco, leo el valor RGB del pixel que esta en x=0,y=y-1
-            //Si ese valor RGB no es blanco y >= fondo[x], hay marca
-            //Esto lo repetimos en un while de una condicion:
-                //1:No haber encontrado el borde (Vble booleana)
-         //Esto  lo repetimos hasta llegar a x = imagen.getAncho() incluido
-        return marcas;
-
-    }
+//    public ArrayList<modelo.dataManager.Marca> buscaMarcas(ArrayList<Integer> fondo){
+//        ArrayList<modelo.dataManager.Marca> marcas = new ArrayList<modelo.dataManager.Marca>();
+//        //Recorremos la imagen de arriba hacia abajo y de izqierda a derecha en busqueda de las marcas. Para esto haremos lo siguiente:
+//            //Obtenemso el valor RGB del pixel que esta en x = 0,y=imagen.getAlto()
+//            //Si ese valor RGB es blanco, leo el valor RGB del pixel que esta en x=0,y=y-1
+//            //Si ese valor RGB no es blanco y >= fondo[x], hay marca
+//            //Esto lo repetimos en un while de una condicion:
+//                //1:No haber encontrado el borde (Vble booleana)
+//         //Esto  lo repetimos hasta llegar a x = imagen.getAncho() incluido
+//        return marcas;
+//
+//    }
     /**
      * @return the imagenOriginal
      */
@@ -462,13 +467,15 @@ public class OperacionesBasicas {
         BufferedImage img = getImgProcesada();
         Point point = new Point();
 
-        for (int contAncho = 0; contAncho <= img.getWidth(); contAncho++) {
 
-            for (int contAlto= img.getHeight(); contAlto >=0; contAlto--){
+
+        for (int contAncho = 1; contAncho < img.getWidth(); contAncho++) {
+
+            for (int contAlto= img.getHeight()-1; contAlto >0; contAlto--){
                 point.setLocation(contAncho, contAlto);
-                if ((hayBlancoDondeEstoy(img, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
+                ArrayList<Point> coordMarca = new ArrayList<Point>();
+                    if ((hayBlancoDondeEstoy(img, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
                     int i=0;
-                    ArrayList<Point> coordMarca = new ArrayList();
                     coordMarca.add(point);
                     while (i<coordMarca.size()){
                         escaneoADerecha(coordMarca.get(i),coordMarca);
@@ -477,31 +484,27 @@ public class OperacionesBasicas {
                         escaneoAArriba(coordMarca.get(i),coordMarca);
                         i++;
                     }
+                Marca marca= new Marca();
+                marca.setCoordMarca(coordMarca);
+                marcas.add(marca);
 
                 }
-            }
-            Marca marca= new Marca();
-  //          marca.setCoordMarca(coordMarca);
-            marcas.add(marca);
-
-
-
+                
+           }
+         
         }
-
-
-
 
         return marcas;
     }
 
-    public boolean perteneceAMarcaExistente(Point point,ArrayList marcas){
+    public boolean perteneceAMarcaExistente(Point point,ArrayList<Marca> marcas){
         boolean encontro = false;
         int pos = marcas.size()-1;
         while ((pos>=0) &&(! encontro)){
-    //        ArrayList<Point> emma = marcas.get(pos);
-    //        if (emma.contains(point)){
+            ArrayList<Point> coordMarca = marcas.get(pos).getCoordMarca();
+            if (coordMarca.contains(point)){
                 encontro=true;
-    //        }
+            }
             pos--;
         }
 
@@ -509,24 +512,45 @@ public class OperacionesBasicas {
 
     }
 
-    public void escaneoADerecha(Point point,ArrayList coordMarcas){
+    public void escaneoADerecha(Point point,ArrayList coordMarca){
         int posDer = (int) (point.getX() + 1);
-   //     while (hayBlancoDondeEstoy(imgProcesada, posDer, point.getY())){
-            
-  //      }
+
+        while (hayBlancoDondeEstoy(imgProcesada, posDer,(int) point.getY()) &&(!coordMarca.contains(point))) {
+            point.setLocation(posDer, point.getY());
+            coordMarca.add(point);
+            posDer++;
+        }
 
     }
 
-    public void escaneoAIzquierda(Point point,ArrayList coordMarcas){
+    public void escaneoAIzquierda(Point point,ArrayList coordMarca){
+        int posIzq = (int) (point.getX() - 1);
 
+        while (hayBlancoDondeEstoy(imgProcesada, posIzq,(int) point.getY()) &&(!coordMarca.contains(point))) {
+            point.setLocation(posIzq, point.getY());
+            coordMarca.add(point);
+            posIzq--;
+        }
     }
 
-    public void escaneoAAbajo(Point point,ArrayList coordMarcas){
+    public void escaneoAAbajo(Point point,ArrayList coordMarca){
+        int posAba = (int) (point.getY() + 1);
 
+        while (hayBlancoDondeEstoy(imgProcesada,(int) point.getX(),posAba) &&(!coordMarca.contains(point))) {
+            point.setLocation(point.getX(),posAba);
+            coordMarca.add(point);
+            posAba++;
+        }
     }
 
-    public void escaneoAArriba(Point point,ArrayList coordMarcas){
+    public void escaneoAArriba(Point point,ArrayList coordMarca){
+          int posArr = (int) (point.getY() - 1);
 
+        while (hayBlancoDondeEstoy(imgProcesada,(int) point.getX(),posArr) &&(!coordMarca.contains(point))) {
+            point.setLocation(point.getX(),posArr);
+            coordMarca.add(point);
+            posArr--;
+        }
     }
     
     public ArrayList<modelo.dataManager.Marca> getMarcas(BufferedImage imgSoloMarcas){
@@ -554,6 +578,7 @@ public class OperacionesBasicas {
         setImgProcesada(eliminaHoras(getImgProcesada()));
         getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinHoras.tmp");
         //buscaMarcas(fondo)
+        BufferedImage emma = getImgProcesada();
                 
         return marcas;
     }
