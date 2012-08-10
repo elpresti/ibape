@@ -5,9 +5,12 @@
 package controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.gisModule.Browser;
@@ -269,4 +272,33 @@ public class ControllerPpal {
                 + "serie\n Pruebe de iniciar IBAPE ejecutando "+archOS, "Problemas para capturar datos", JOptionPane.ERROR_MESSAGE);
     }
 
+      
+    public void vaciarJTable(DefaultTableModel dTM) {
+        dTM.setColumnCount(0);
+        while (dTM.getRowCount() > 0) {
+            dTM.removeRow(0);
+        }
+        //dTM.setRowCount(0);
+    }
+
+    public void ocultarColJTable(JTable tabla, int indice) {
+        tabla.getColumnModel().getColumn(indice).setMaxWidth(0);
+        tabla.getColumnModel().getColumn(indice).setMinWidth(0);
+        tabla.getColumnModel().getColumn(indice).setPreferredWidth(0);
+        tabla.getColumnModel().getColumn(indice).setResizable(false);
+    }
+
+    public Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Object[] fila = new Object[cantCols]; //creamos la fila
+        for (int i = 0; i < unObjeto.size(); i++) {
+            if (unObjeto.get(i) != null) {
+                fila[i] = String.valueOf(unObjeto.get(i));
+            } else {
+                fila[i] = "";
+            }
+        }
+        return fila;
+    }
+    
 }
