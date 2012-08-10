@@ -11,6 +11,7 @@
 package gui;
 
 import controllers.ControllerLance;
+import controllers.ControllerPpal;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
@@ -28,6 +29,7 @@ import persistencia.Logueador;
 public class PanelFinalizarLance extends javax.swing.JPanel {
 
     static PanelFinalizarLance unicaInstancia;
+    private DefaultTableModel modeloTablaCajones = new DefaultTableModel();
 
     /** Creates new form PanelFinalizarLance */
     private PanelFinalizarLance() {
@@ -313,11 +315,16 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         unCajon.setCantidad(Integer.parseInt(campoCajones.getText()));
         ControllerLance.getInstance().addCajon(unCajon);
 
-        Object fila[] = new Object[3];
-        fila[0] = unaEsp.getId();//idespecie
-        fila[1] = campoCajones.getText();
-        fila[2] = "acciones";
+        
+        int cantCols = 3;
+        ArrayList a = new ArrayList();
+        a.add(unaEsp.getId());//idespecie
+        a.add(campoCajones.getText());
+        a.add("acciones");
         //insertar la fila    
+        modeloTablaCajones.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
+        a.clear();
+        tablaCajones.setModel(modeloTablaCajones);              
         } else {
             JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
         }
@@ -360,9 +367,6 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         return unicaInstancia;
     }
 
-    public void cargaComboEspecies(ArrayList<String> arr) {
-    }
-
     //main de prueba 
     /*
     public static void main(String[] args) {
@@ -376,11 +380,14 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     }*/
      
     private void inicializador() {
-        cargaEspecies();
-        controllers.ControllerLance.getInstance();
+        cargaComboEspecies();
+        ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);
+        modeloTablaCajones.addColumn("# Cajones");
+        modeloTablaCajones.addColumn("Especie");
+        modeloTablaCajones.addColumn("Acciones");
     }
 
-    private void cargaEspecies() {
+    private void cargaComboEspecies() {
         try {
             comboEspecies.removeAllItems();
             for (Especie i : controllers.ControllerLance.getInstance().getListadoEspecies()) {

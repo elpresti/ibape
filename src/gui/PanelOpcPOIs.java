@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerPpal;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -459,7 +460,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //DefaultTableModel dm = (DefaultTableModel) tablaCategorias.getModel(); 
         //modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
         //tablaCategorias.setModel(modeloTablaCategoriasPOI);
-         BrokerPOIs.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
+         ControllerPpal.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
         //dm.setRowCount(0);
         int cantCols = 4;
         //Cabecera
@@ -480,12 +481,12 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             a.add(cP.getTitulo());
             a.add(cP.getPathIcono());
             a.add("Acciones");
-            modeloTablaCategoriasPOI.addRow(BrokerPOIs.getInstance().agregaUnaFilaGenerica(cantCols, a));
+            modeloTablaCategoriasPOI.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
             a.clear();
         }
         tablaCategorias.setModel(modeloTablaCategoriasPOI);
         //escondo la columna ID 
-        BrokerPOIs.getInstance().ocultarColJTable(tablaCategorias, 0);
+        ControllerPpal.getInstance().ocultarColJTable(tablaCategorias, 0);
     }
 
     private void cargaGrillaPOIS() {
@@ -493,7 +494,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
             //modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
             //tablaPois.setModel(modeloTablaPOIS);
-            BrokerPOIs.getInstance().vaciarJTable(modeloTablaPOIS);
+            ControllerPpal.getInstance().vaciarJTable(modeloTablaPOIS);
             //dm.setRowCount(0);
             int cantCols = 6;
             //Cabecera
@@ -527,7 +528,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 a.add(coordenadas);
                 a.add(p.getDescripcion());
                 a.add("Acciones");
-                modeloTablaPOIS.addRow(BrokerPOIs.getInstance().agregaUnaFilaGenerica(cantCols, a));
+                modeloTablaPOIS.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
                 a.clear();
             }
         } catch (Exception e) {
@@ -535,6 +536,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
         tablaPois.setModel(modeloTablaPOIS);
         //escondo la columna ID 
-        BrokerPOIs.getInstance().ocultarColJTable(tablaPois, 0);
+        ControllerPpal.getInstance().ocultarColJTable(tablaPois, 0);
     }
 }
