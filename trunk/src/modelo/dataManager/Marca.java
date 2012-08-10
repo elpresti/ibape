@@ -4,6 +4,9 @@
  */
 package modelo.dataManager;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 /**
  *
  * @author Sebastian
@@ -14,6 +17,7 @@ public class Marca {
     private String areaFisica;
     private int id;
     private int idPois;
+    private ArrayList<Point> coordMarca;
     
     public Marca(){        
     }
@@ -84,5 +88,19 @@ public class Marca {
         // el método devuelve un Date con la fecha y hora del pixel x solicitado, o null si no lo encuentra
         
         return latEstimada;
+    }
+
+    /**
+     * @return the coordMarca
+     */
+    public ArrayList<Point> getCoordMarca() {
+        return coordMarca;
+    }
+
+    /**
+     * @param coordMarca the coordMarca to set
+     */
+    public void setCoordMarca(ArrayList<Point> coordMarca) {
+        this.coordMarca = coordMarca;
     }
 }
