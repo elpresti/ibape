@@ -23,7 +23,7 @@ public class ControllerLance {
 
     static ControllerLance unicaInstancia;
     private int estadoLance; //1=en curso 0=sin lance
-    private ArrayList<Cajon> listadoCajones = null; //los cajones de la campania actual, se podrian asignar a un lance o no
+    private ArrayList<Cajon> listadoCajones = new ArrayList(); //los cajones de la campania actual, se podrian asignar a un lance o no
     public ArrayList<Especie> listadoEspecies = BrokerEspecie.getInstance().getEspeciesFromDB(); //listado de las especies guardadas, mas facil para mostrar/guardar
 
     public static ControllerLance getInstance() {

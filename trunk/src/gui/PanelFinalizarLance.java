@@ -307,24 +307,26 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (Integer.parseInt(campoCajones.getText())>0 && comboEspecies.getSelectedIndex() != -1) {
+        if (!campoCajones.getText().isEmpty() && Integer.parseInt(campoCajones.getText())>0 && comboEspecies.getSelectedIndex() >= 0) {
         Cajon unCajon = new Cajon();
-        unCajon.setIdLance(BrokerLance.getInstance().getIdLanceActual());
+        unCajon.setIdLance(/*BrokerLance.getInstance().getIdLanceActual()*/1);
         Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
         unCajon.setIdEspecie(unaEsp.getId());
-        unCajon.setCantidad(Integer.parseInt(campoCajones.getText()));
-        ControllerLance.getInstance().addCajon(unCajon);
+        unCajon.setCantidad(Integer.valueOf(campoCajones.getText()));
+        ControllerLance.getInstance().addCajon(unCajon); //quedan en una lista
 
         
-        int cantCols = 3;
+        int cantCols = 4;
         ArrayList a = new ArrayList();
-        a.add(unaEsp.getId());//idespecie
-        a.add(campoCajones.getText());
+        a.add(unCajon.getIdLance());
+        a.add(unCajon.getCantidad());
+        a.add(unaEsp.getNombre()/*unCajon.getIdEspecie()*/);
         a.add("acciones");
         //insertar la fila    
         modeloTablaCajones.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
         a.clear();
         tablaCajones.setModel(modeloTablaCajones);              
+        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
         } else {
             JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
         }
@@ -376,12 +378,12 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     //cargaEspecies();
     elFrame.add(a);
     elFrame.setVisible(true);
-    
-    }*/
-     
+    }
+     */
     private void inicializador() {
         cargaComboEspecies();
         ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);
+        modeloTablaCajones.addColumn("idLance");
         modeloTablaCajones.addColumn("# Cajones");
         modeloTablaCajones.addColumn("Especie");
         modeloTablaCajones.addColumn("Acciones");
