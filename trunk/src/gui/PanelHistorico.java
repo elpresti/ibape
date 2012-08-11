@@ -519,7 +519,7 @@ public class PanelHistorico extends javax.swing.JPanel {
             tablaCatPois.getColumnModel().getColumn(2).setResizable(true);
             tablaCatPois.getColumnModel().getColumn(2).setCellRenderer(new IconRenderer());
             //seteo los checkboxes
-            tablaCatPois.getColumn(1).setCellRenderer(new CheckBoxRenderer());
+            tablaCatPois.getColumn(1).setCellRenderer((TableCellRenderer)new CheckBoxRenderer());
             tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditor(new JCheckBox()));
             //ajusto la columna de cantidad de puntos
             tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(30);

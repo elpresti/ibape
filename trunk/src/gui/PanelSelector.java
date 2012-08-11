@@ -276,7 +276,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
 private void lnkNavegacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkNavegacionActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelNavegacion.getInstance());
-    PanelNavegacion.getInstance().seteaBotonesMapa();
+    controllers.ControllerNavegacion.getInstance().actualizaDatosEnGui();    
 }//GEN-LAST:event_lnkNavegacionActionPerformed
 
 private void lnkHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkHistoricoActionPerformed

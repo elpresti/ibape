@@ -10,14 +10,35 @@
  */
 package gui;
 
+import controllers.ControllerCampania;
+import controllers.ControllerNavegacion;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.image.BufferedImage;
 import modelo.dataManager.Punto;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import modelo.dataManager.CategoriaPoi;
 import persistencia.BrokerDbMapa;
+
+
 
 /**
  *
@@ -26,7 +47,9 @@ import persistencia.BrokerDbMapa;
 public class PanelNavegacion extends javax.swing.JPanel implements java.util.Observer {
     static PanelNavegacion unicaInstancia;
     private Punto punto = Punto.getInstance();
-
+    private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
+    private String txtBtnGraficarDatos;
+    
     /** Creates new form PanelNavegacion */
     private PanelNavegacion() {
         initComponents();
@@ -102,14 +125,14 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblTxtDatosMapa = new java.awt.Label();
         chkRecorrido = new javax.swing.JCheckBox();
         chkConCamara = new javax.swing.JCheckBox();
-        chkPois = new javax.swing.JCheckBox();
-        lblTxtTabla = new java.awt.Label();
+        chkPoisTodos = new javax.swing.JCheckBox();
+        lblTxtTablaCatPois = new java.awt.Label();
         panelTablaPOIs = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tablaCategorias = new org.jdesktop.swingx.JXTable();
+        tablaCatPois = new org.jdesktop.swingx.JXTable();
         panelBtnActualizaMapa = new org.jdesktop.swingx.JXPanel();
-        btnActualizarMapa = new javax.swing.JButton();
         panelBtnActualizar = new javax.swing.JPanel();
+        btnGraficarDatos = new javax.swing.JButton();
         btnIniciarMapaNav = new javax.swing.JButton();
         btnDetenerMapaNav = new javax.swing.JButton();
 
@@ -123,7 +146,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelTitulo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
         lblTituloNavegacion.setText("Navegación");
-        lblTituloNavegacion.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTituloNavegacion.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblTituloNavegacion.setOpaque(true);
         panelTitulo.add(lblTituloNavegacion);
 
@@ -153,7 +176,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelTituloDatos.setPreferredSize(new java.awt.Dimension(480, 30));
         panelTituloDatos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        lblDatosNavegacion.setFont(new java.awt.Font("Dialog", 1, 14));
+        lblDatosNavegacion.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         lblDatosNavegacion.setText("Datos recibidos de los dispositivos:");
         panelTituloDatos.add(lblDatosNavegacion);
 
@@ -172,38 +195,38 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelGps.setLayout(new java.awt.GridLayout(4, 2));
 
         lblTxtFechaHora.setAlignment(java.awt.Label.RIGHT);
-        lblTxtFechaHora.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtFechaHora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtFechaHora.setText("Fecha y hora: ");
         panelGps.add(lblTxtFechaHora);
 
-        lblFechaHora.setFont(new java.awt.Font("Arial", 0, 14));
+        lblFechaHora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFechaHora.setText("---");
         panelGps.add(lblFechaHora);
 
         lblTxtLatitud.setAlignment(java.awt.Label.RIGHT);
-        lblTxtLatitud.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtLatitud.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtLatitud.setText("Latitud: ");
         panelGps.add(lblTxtLatitud);
 
-        lblLatitud.setFont(new java.awt.Font("Arial", 0, 14));
+        lblLatitud.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblLatitud.setText("---");
         panelGps.add(lblLatitud);
 
         lblTxtLongitud.setAlignment(java.awt.Label.RIGHT);
-        lblTxtLongitud.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtLongitud.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtLongitud.setText("Longitud: ");
         panelGps.add(lblTxtLongitud);
 
-        lblLongitud.setFont(new java.awt.Font("Arial", 0, 14));
+        lblLongitud.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblLongitud.setText("---");
         panelGps.add(lblLongitud);
 
         lblTxtRumbo.setAlignment(java.awt.Label.RIGHT);
-        lblTxtRumbo.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtRumbo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtRumbo.setText("Rumbo: ");
         panelGps.add(lblTxtRumbo);
 
-        lblRumbo.setFont(new java.awt.Font("Arial", 0, 14));
+        lblRumbo.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblRumbo.setText("---");
         panelGps.add(lblRumbo);
 
@@ -216,29 +239,29 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelSonda.setLayout(new java.awt.GridLayout(4, 2));
 
         lblTxtVelocidad.setAlignment(java.awt.Label.RIGHT);
-        lblTxtVelocidad.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtVelocidad.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtVelocidad.setText("Velocidad: ");
         panelSonda.add(lblTxtVelocidad);
 
-        lblVelocidad.setFont(new java.awt.Font("Arial", 0, 14));
+        lblVelocidad.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblVelocidad.setText("---");
         panelSonda.add(lblVelocidad);
 
         lblTxtTemp.setAlignment(java.awt.Label.RIGHT);
-        lblTxtTemp.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtTemp.setText("Temperatura: ");
         panelSonda.add(lblTxtTemp);
 
-        lblTemp.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTemp.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTemp.setText("---");
         panelSonda.add(lblTemp);
 
         lblTxtProf.setAlignment(java.awt.Label.RIGHT);
-        lblTxtProf.setFont(new java.awt.Font("Arial", 0, 14));
+        lblTxtProf.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblTxtProf.setText("Profundidad: ");
         panelSonda.add(lblTxtProf);
 
-        lblProf.setFont(new java.awt.Font("Arial", 0, 14));
+        lblProf.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblProf.setText("---");
         panelSonda.add(lblProf);
 
@@ -326,7 +349,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
             .addGroup(panelImgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panelImgSinProcesarLayout.createSequentialGroup()
                     .addComponent(imgSinProcesar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(5, Short.MAX_VALUE)))
         );
 
         panelImgs.add(panelImgSinProcesar);
@@ -377,7 +400,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelTituloResul.setOpaque(false);
         panelTituloResul.setPreferredSize(new java.awt.Dimension(230, 30));
 
-        lblTituloResultados.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblTituloResultados.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         lblTituloResultados.setText("Resultados del procesamiento:");
         panelTituloResul.add(lblTituloResultados);
 
@@ -393,7 +416,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblTxtCantMarcas.setText("Marcas encontradas: ");
         panelCantMarcas.add(lblTxtCantMarcas);
 
-        lblCantMarcas.setFont(new java.awt.Font("Dialog", 0, 14));
+        lblCantMarcas.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         lblCantMarcas.setText("3");
         panelCantMarcas.add(lblCantMarcas);
 
@@ -456,7 +479,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelTituloMapa.setPreferredSize(new java.awt.Dimension(480, 40));
 
         lblTitulo.setAlignment(java.awt.Label.CENTER);
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblTitulo.setText("Mapa");
         panelTituloMapa.add(lblTitulo);
 
@@ -486,14 +509,14 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         });
         panelDatosMapa.add(chkConCamara);
 
-        chkPois.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        chkPois.setText("Puntos de Interes (POI)");
-        panelDatosMapa.add(chkPois);
+        chkPoisTodos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkPoisTodos.setText("Puntos de Interes (POI)");
+        panelDatosMapa.add(chkPoisTodos);
 
-        lblTxtTabla.setAlignment(java.awt.Label.CENTER);
-        lblTxtTabla.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
-        lblTxtTabla.setText("Seleccione las categorias de POIs que desea ver en el mapa");
-        panelDatosMapa.add(lblTxtTabla);
+        lblTxtTablaCatPois.setAlignment(java.awt.Label.CENTER);
+        lblTxtTablaCatPois.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        lblTxtTablaCatPois.setText("Seleccione las categorias de POIs que desea ver en el mapa");
+        panelDatosMapa.add(lblTxtTablaCatPois);
 
         panelMapa.add(panelDatosMapa);
 
@@ -506,7 +529,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         jScrollPane3.setMinimumSize(new java.awt.Dimension(480, 150));
         jScrollPane3.setPreferredSize(new java.awt.Dimension(480, 150));
 
-        tablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
+        tablaCatPois.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -532,10 +555,10 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tablaCategorias);
-        tablaCategorias.getColumnModel().getColumn(0).setMinWidth(40);
-        tablaCategorias.getColumnModel().getColumn(0).setPreferredWidth(40);
-        tablaCategorias.getColumnModel().getColumn(0).setMaxWidth(40);
+        jScrollPane3.setViewportView(tablaCatPois);
+        tablaCatPois.getColumnModel().getColumn(0).setMinWidth(40);
+        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(40);
+        tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(40);
 
         panelTablaPOIs.add(jScrollPane3);
 
@@ -543,11 +566,6 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         panelBtnActualizaMapa.setMinimumSize(new java.awt.Dimension(480, 40));
         panelBtnActualizaMapa.setPreferredSize(new java.awt.Dimension(480, 40));
-
-        btnActualizarMapa.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnActualizarMapa.setText("Actualizar configuracion de mapa");
-        panelBtnActualizaMapa.add(btnActualizarMapa);
-
         panelMapa.add(panelBtnActualizaMapa);
 
         panelTodo.add(panelMapa);
@@ -560,7 +578,16 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelBtnActualizar.setMinimumSize(new java.awt.Dimension(480, 40));
         panelBtnActualizar.setPreferredSize(new java.awt.Dimension(480, 40));
 
-        btnIniciarMapaNav.setFont(new java.awt.Font("Tahoma", 1, 12));
+        btnGraficarDatos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnGraficarDatos.setText("Graficar Datos");
+        btnGraficarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGraficarDatosActionPerformed(evt);
+            }
+        });
+        panelBtnActualizar.add(btnGraficarDatos);
+
+        btnIniciarMapaNav.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnIniciarMapaNav.setText("Iniciar Mapa Navegación");
         btnIniciarMapaNav.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -569,7 +596,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         });
         panelBtnActualizar.add(btnIniciarMapaNav);
 
-        btnDetenerMapaNav.setFont(new java.awt.Font("Tahoma", 1, 12));
+        btnDetenerMapaNav.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnDetenerMapaNav.setText("Detener Mapa Navegación");
         btnDetenerMapaNav.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -615,12 +642,37 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
       {  persistencia.BrokerDbMapa.getInstance().setConCamara(false);   }
 }//GEN-LAST:event_chkConCamaraActionPerformed
 
+    private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
+        if (ControllerCampania.getInstance().getIdCampaniaEnCurso()>=0){
+            if (getChkRecorrido().isSelected() || (chkPoisTodos.isSelected() && getCategoriasSeleccionadas().size()>0) ){                
+                setTxtBtnGraficarDatos(btnGraficarDatos.getText());
+                btnGraficarDatos.setText("Transfiriendo datos...");
+                habilitaBtnGraficarDatos(false);
+                int retardo= 0; //sin retardo
+                if (btnIniciarMapaNav.isEnabled() && btnIniciarMapaNav.isVisible()){
+                    btnIniciarMapaNavActionPerformed(null);//si no se ha hecho click en iniciar Mapa historico previamente, lo hago
+                    retardo=5000;//5 segundos de retardo para graficar xq estba el webserver cerrado
+                }
+                else{
+                    retardo=4000;//4 segundos de retardo para que lea la DB el browser
+                }
+                ControllerNavegacion.getInstance().graficarDatos(retardo);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "No ha elegido que datos de la campaña en curso desea graficar");
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "No hay ninguna campaña en curso. Inicie una");
+        }
+    }//GEN-LAST:event_btnGraficarDatosActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnActualizarMapa;
     private javax.swing.JButton btnDetenerMapaNav;
+    private javax.swing.JButton btnGraficarDatos;
     private javax.swing.JButton btnIniciarMapaNav;
     private javax.swing.JCheckBox chkConCamara;
-    private javax.swing.JCheckBox chkPois;
+    private javax.swing.JCheckBox chkPoisTodos;
     private javax.swing.JCheckBox chkRecorrido;
     private org.jdesktop.swingx.JXImageView imgProcesada;
     private org.jdesktop.swingx.JXImageView imgSinProcesar;
@@ -647,7 +699,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private java.awt.Label lblTxtProf;
     private java.awt.Label lblTxtProfPromMarcas;
     private java.awt.Label lblTxtRumbo;
-    private java.awt.Label lblTxtTabla;
+    private java.awt.Label lblTxtTablaCatPois;
     private java.awt.Label lblTxtTemp;
     private java.awt.Label lblTxtVelocidad;
     private java.awt.Label lblVelocidad;
@@ -677,7 +729,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JPanel panelTituloMapa;
     private javax.swing.JPanel panelTituloResul;
     private org.jdesktop.swingx.JXPanel panelTodo;
-    private org.jdesktop.swingx.JXTable tablaCategorias;
+    private org.jdesktop.swingx.JXTable tablaCatPois;
     // End of variables declaration//GEN-END:variables
  
     public static PanelNavegacion getInstance() {
@@ -732,4 +784,212 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
     }
   
+    public void inicializaTablaCategoriasPois() {
+        if (controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso()>=0){
+            TableModelCatPoisHistorico tableModelCatPois = (TableModelCatPoisHistorico)cargaGrillaCategoriaPOIS();        
+            tablaCatPois.setModel(tableModelCatPois);
+            //resize la columna Elejir
+            tablaCatPois.getColumnModel().getColumn(1).setMinWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
+            //escondo la columna Iconos
+            tablaCatPois.getColumnModel().getColumn(2).setMinWidth(33); 
+            tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(33); 
+            tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(33);
+            tablaCatPois.getColumnModel().getColumn(2).setResizable(true);
+            tablaCatPois.getColumnModel().getColumn(2).setCellRenderer(new IconRenderer());
+            //seteo los checkboxes
+            tablaCatPois.getColumn(1).setCellRenderer((TableCellRenderer)new CheckBoxRenderer());
+            tablaCatPois.getColumn(1).setCellEditor(new CheckBoxEditorNavegacion(new JCheckBox()));
+            //ajusto la columna de cantidad de puntos
+            tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(30);
+            tablaCatPois.getColumnModel().getColumn(4).setMinWidth(30); 
+            tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(30); 
+            
+            habilitaBtnGraficarDatos(false); 
+            chkPoisTodos.setSelected(false);
+            getChkRecorrido().setSelected(false);
+            if (tableModelCatPois.getRowCount()==0){            
+                tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se encontraron POIs para la campaña seleccionada..."});
+                habilitaChkTodosLosPois(false);
+                //escondo la columna de cantidad de puntos
+                tablaCatPois.getColumnModel().getColumn(4).setMaxWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(4).setMinWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(0);
+                //escondo la columna Iconos
+                tablaCatPois.getColumnModel().getColumn(2).setMinWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(0);
+
+                //habilitaPanelTablaCatPois(false);
+                //habilitaBtnGraficarDatos(false);
+            }
+            else{
+                habilitaChkTodosLosPois(true);
+                //habilitaPanelTablaCatPois(true);
+                //habilitaBtnGraficarDatos(true);
+            }
+        }
+        else{
+                //escondo la columna ELEJIR
+                tablaCatPois.getColumnModel().getColumn(1).setMinWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(0); 
+                tablaCatPois.getColumnModel().getColumn(1).setResizable(false);
+                DefaultTableModel modelo = (DefaultTableModel)tablaCatPois.getModel();
+                modelo.setRowCount(0);//vacío la tabla de categorias de POis
+                setCategoriasSeleccionadas(new ArrayList()); //inicializo el vector de categorias seleccionadas                
+                modelo.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se ha seleccionado ninguna campaña..."});
+                tablaCatPois.setModel(modelo); 
+                habilitaChkTodosLosPois(false);
+        }
+        //escondo la columna ID 
+        tablaCatPois.getColumnModel().getColumn(0).setMinWidth(0); 
+        tablaCatPois.getColumnModel().getColumn(0).setMaxWidth(0); 
+        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(0); 
+        tablaCatPois.getColumnModel().getColumn(0).setResizable(false);        
+  }
+
+    public TableModel cargaGrillaCategoriaPOIS() {
+        setCategoriasSeleccionadas(new ArrayList()); //inicializo en vacío el vector de categorias seleccionadas
+        TableModelCatPoisHistorico dm = new TableModelCatPoisHistorico();
+        //Cabecera
+        String[] encabezado = new String[5];
+        encabezado[0] = "Id";
+        encabezado[1] = "Elejir";        
+        encabezado[2] = "Icono";
+        encabezado[3] = "Nombre de la categoria";
+        encabezado[4] = "#Puntos";
+        dm.setColumnIdentifiers(encabezado);
+        //Cuerpo
+        for (CategoriaPoi cP : controllers.ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(
+                modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso().getId())) {
+            Object[] fila = new Object[5]; //creamos la fila
+            fila[0]=cP.getId(); //en la columna 0 va el ID
+            fila[1]=new JCheckBox(); //en la columna 1 va el CheckBox
+            if (modelo.dataCapture.Sistema.getInstance().pathIconoEsValido(cP.getPathIcono())){
+                //fila[2]=new JLabel(new ImageIcon(Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()));//en la columna 2 va el Icono
+                //--- resize Icon
+                Image source = new ImageIcon(modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()).getImage();
+                BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = (Graphics2D)image.getGraphics();
+                g2d.drawImage(source, 0, 0, null);
+                g2d.dispose();
+                //-------------
+                fila[2]=modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image);//en la columna 2 va el Icono
+            }
+            else{
+                JLabel lblSinIcono = new JLabel("No Icon");
+                lblSinIcono.setFont(new Font("Arial", Font.PLAIN, 8));
+                fila[2]=lblSinIcono;
+            }
+            fila[3]=cP.getTitulo();//en la columna 3 va el Nombre de la categoria de POI 
+            fila[4]=controllers.ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(
+                    modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso().getId(),cP.getId());
+            dm.addRow(fila);
+        }
+        return dm;
+    }
+
+    /**
+     * @return the categoriasSeleccionadas
+     */
+    public ArrayList<Integer> getCategoriasSeleccionadas() {
+        return categoriasSeleccionadas;
+    }
+
+    /**
+     * @param categoriasSeleccionadas the categoriasSeleccionadas to set
+     */
+    public void setCategoriasSeleccionadas(ArrayList<Integer> categoriasSeleccionadas) {
+        this.categoriasSeleccionadas = categoriasSeleccionadas;
+    }
+
+    public Integer getIdCatPoiFromRow(int row) {
+        int idSeleccionado=-1;
+        if (row>=0){
+            idSeleccionado = Integer.parseInt(tablaCatPois.getModel().getValueAt(row, 0).toString());
+        }
+        return idSeleccionado;
+    }
+
+    /**
+     * @return the chkRecorrido
+     */
+    public javax.swing.JCheckBox getChkRecorrido() {
+        return chkRecorrido;
+    }
+
+    /**
+     * @param chkRecorrido the chkRecorrido to set
+     */
+    public void setChkRecorrido(javax.swing.JCheckBox chkRecorrido) {
+        this.chkRecorrido = chkRecorrido;
+    }
+
+    public void habilitaPanelTablaCatPois(boolean estado){
+        lblTxtTablaCatPois.setEnabled(estado);
+        tablaCatPois.setEnabled(estado);
+    }
+
+    public void habilitaChkTodosLosPois(boolean estado){
+        chkPoisTodos.setEnabled(estado);
+    }
+
+    public void habilitaChkRecorrido(boolean estado){
+            getChkRecorrido().setEnabled(estado);
+    }
+
+    public void habilitaBtnGraficarDatos(boolean estado){
+        btnGraficarDatos.setEnabled(estado);
+    }
+
+    public void restauraBtnGraficarDatos() {
+        btnGraficarDatos.setText(getTxtBtnGraficarDatos());
+        habilitaBtnGraficarDatos(true);
+    }
+
+    /**
+     * @return the txtBtnGraficarDatos
+     */
+    public String getTxtBtnGraficarDatos() {
+        return txtBtnGraficarDatos;
+    }
+
+    /**
+     * @param txtBtnGraficarDatos the txtBtnGraficarDatos to set
+     */
+    public void setTxtBtnGraficarDatos(String txtBtnGraficarDatos) {
+        this.txtBtnGraficarDatos = txtBtnGraficarDatos;
+    }
+
 }
+/*  clases y metodos que cargan y controlan los CHECKBOXES en la TABLA CATEGORIA DE POIS */ 
+class CheckBoxEditorNavegacion extends DefaultCellEditor implements ItemListener {
+  private JCheckBox button;
+  public CheckBoxEditorNavegacion(JCheckBox checkBox) {
+    super(checkBox);
+  }
+  public Component getTableCellEditorComponent(JTable table,Object value,boolean isSelected,int row,int column) {
+    if (value==null) return null;
+    button = (JCheckBox)value;
+    button.addItemListener(this);
+    if (!button.isSelected()){ //trabaja con la lógica invertida, porque el evento lo captura antes de dejarlo seleccionado
+        PanelNavegacion.getInstance().getCategoriasSeleccionadas().add(PanelNavegacion.getInstance().getIdCatPoiFromRow(row));
+    }
+    else{
+        PanelNavegacion.getInstance().getCategoriasSeleccionadas().remove(PanelNavegacion.getInstance().getIdCatPoiFromRow(row));
+    }
+    return (Component)value;
+  }
+  public Object getCellEditorValue() {
+    button.removeItemListener(this);
+    return button;
+  }
+  public void itemStateChanged(ItemEvent e) {    
+    super.fireEditingStopped();
+  }
+}
+
+

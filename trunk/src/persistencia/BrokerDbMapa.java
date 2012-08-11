@@ -10,11 +10,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.dataManager.Punto;
 import javax.swing.JOptionPane;
+import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.POI;
+import modelo.dataManager.PuntoHistorico;
     
     
     
@@ -723,6 +728,143 @@ public class BrokerDbMapa implements Runnable{
      */
     public void setConCamara(boolean conCamara) {
         this.conCamara = conCamara;
+    }
+
+    public boolean cargarPoisDeCamp(ArrayList<Integer> categoriasSeleccionadas) {
+        boolean sePudo= false;
+        try{
+            int i = 0;
+            while (i<categoriasSeleccionadas.size()){
+                ArrayList<modelo.dataManager.POI> poisDeCiertaCategoria = BrokerPOIs.getInstance().getPOISDeUnaCampSegunCatPoi(
+                        AdministraCampanias.getInstance().getCampaniaEnCurso().getId(), categoriasSeleccionadas.get(i));
+                if (poisDeCiertaCategoria.size()>0){
+                    int w = 0;
+                    while (w<poisDeCiertaCategoria.size()-1){
+                        insertPoi(poisDeCiertaCategoria.get(w),false);
+                        w++;
+                    }
+                    insertPoi(poisDeCiertaCategoria.get(w),true);
+                }
+                i++;
+            }
+            sePudo=true;
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+
+    private boolean insertPoi(POI punto, boolean moverCamAestePoi) {
+        boolean sePudo=false;
+        try {     
+             if (dbLista() && punto != null){
+                PreparedStatement preparedStatement = getConnection()
+                .prepareStatement("INSERT INTO "+getDbName()+"."+getTableName()+
+                        " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                preparedStatement.setTimestamp(Integer.valueOf(getCampoFECHApos()), 
+                        new Timestamp(punto.getFechaHora().getTime()));
+                preparedStatement.setString(Integer.valueOf(getCampoLATITUDpos()), String.valueOf(punto.getLatitud()));
+                preparedStatement.setString(Integer.valueOf(getCampoLONGITUDpos()), String.valueOf(punto.getLongitud()));
+                preparedStatement.setString(Integer.valueOf(getCampoPROFUNDIDADpos()), "");//String.valueOf(punto.getProfundidad()));
+                preparedStatement.setString(Integer.valueOf(getCampoVELOCIDADpos()), "");//String.valueOf(punto.getVelocidad()));
+                preparedStatement.setString(Integer.valueOf(getCampoTEMPAGUApos()), "");//String.valueOf(punto.getTempAgua()));
+                preparedStatement.setString(Integer.valueOf(getCampoOBJETOpos()), "POI Navegacion");
+                preparedStatement.setBoolean(Integer.valueOf(getCampoLEIDOpos()), false);
+                preparedStatement.setString(Integer.valueOf(getCampoCOMENTARIOSpos()),punto.getDescripcion());
+                preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), 
+                        modelo.gisModule.GeneradorKML.getInstance().conviertePOIaKml(punto,moverCamAestePoi));
+                preparedStatement.executeUpdate();  
+                setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                sePudo=true;
+             }
+        }
+        catch(Exception e) {
+            System.out.println(e);
+        }
+        return sePudo;
+    }
+
+    public boolean cargarRecorridoDeCamp() {
+        boolean sePudo=true;
+        int idCamp= controllers.ControllerCampania.getInstance().getIdCampaniaEnCurso();
+        if (idCamp>=0){
+            modelo.dataManager.Campania campElegida = BrokerCampania.getInstance().getCampaniaFromDb(idCamp);
+            BrokerHistorico.setReadCampania(campElegida);
+            ArrayList<PuntoHistorico> puntos = new ArrayList();
+            if (campElegida.getFechaFin() != null){
+                puntos = BrokerHistoricoPunto.getInstance().getPuntos( 
+                        campElegida.getFechaInicio(),campElegida.getFechaFin());
+            }
+            else{
+                puntos = BrokerHistoricoPunto.getInstance().getPuntos(
+                        campElegida.getFechaInicio(),Calendar.getInstance().getTime());
+            }
+            int i=0;
+            sePudo = insertRecorrido(puntos);
+        }
+        return sePudo;
+    }
+
+    private boolean insertRecorrido(ArrayList<PuntoHistorico> puntos) {
+        boolean sePudo=false;
+        try {     
+             if (dbLista() && puntos.size()>0){
+                PreparedStatement preparedStatement = getConnection()
+                .prepareStatement("INSERT INTO "+getDbName()+"."+getTableName()+
+                        " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                preparedStatement.setTimestamp(Integer.valueOf(getCampoFECHApos()), 
+                        new Timestamp(puntos.get(0).getFechaYhora().getTime()));
+                preparedStatement.setString(Integer.valueOf(getCampoLATITUDpos()), String.valueOf(puntos.get(0).getLatitud()));
+                preparedStatement.setString(Integer.valueOf(getCampoLONGITUDpos()), String.valueOf(puntos.get(0).getLongitud()));
+                preparedStatement.setString(Integer.valueOf(getCampoPROFUNDIDADpos()), String.valueOf(puntos.get(0).getProfundidad()));
+                preparedStatement.setString(Integer.valueOf(getCampoVELOCIDADpos()), String.valueOf(puntos.get(0).getVelocidad()));
+                preparedStatement.setString(Integer.valueOf(getCampoTEMPAGUApos()), String.valueOf(puntos.get(0).getTempAgua()));
+                preparedStatement.setString(Integer.valueOf(getCampoOBJETOpos()), "RECORRIDO Navegacion");
+                preparedStatement.setBoolean(Integer.valueOf(getCampoLEIDOpos()), false);
+                preparedStatement.setString(Integer.valueOf(getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
+                preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), 
+                        modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos));
+                preparedStatement.executeUpdate(); 
+                setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                sePudo=true;
+             }
+             return sePudo;
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            return sePudo;
+        }
+    }
+
+    public boolean vaciaMapaNavegacion() {
+        boolean sePudo=false;
+        try {     
+             if (dbLista()){
+                PreparedStatement preparedStatement = getConnection()
+                .prepareStatement("INSERT INTO "+getDbName()+"."+getTableName()+
+                        " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                preparedStatement.setTimestamp(Integer.valueOf(getCampoFECHApos()), 
+                        new Timestamp(Calendar.getInstance().getTime().getTime()));
+                preparedStatement.setString(Integer.valueOf(getCampoLATITUDpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getCampoLONGITUDpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getCampoPROFUNDIDADpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getCampoVELOCIDADpos()), "0");
+                preparedStatement.setString(Integer.valueOf(getCampoTEMPAGUApos()), "0");
+                preparedStatement.setString(Integer.valueOf(getCampoOBJETOpos()), "vaciarMapa()");
+                preparedStatement.setBoolean(Integer.valueOf(getCampoLEIDOpos()), false);
+                preparedStatement.setString(Integer.valueOf(getCampoCOMENTARIOSpos()),"");
+                preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), "");
+                preparedStatement.executeUpdate();
+                setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                sePudo=true;
+             }             
+        }
+        catch(Exception e) {
+            System.out.println(e);
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
     }
     
     
