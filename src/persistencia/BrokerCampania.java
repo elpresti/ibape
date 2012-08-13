@@ -58,9 +58,8 @@ public class BrokerCampania extends BrokerPpal{
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
-        }   
-        //ya la use, asique cierro ResultSets y Statements usados
-        try{
+        }           
+        try{//ya la use, asique cierro ResultSets y Statements usados
             if (rs != null){
                 rs.close();
             }
