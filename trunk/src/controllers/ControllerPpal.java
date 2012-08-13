@@ -43,6 +43,8 @@ public class ControllerPpal {
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
         controllers.ControllerCampania.getInstance();
+        controllers.ControllerAlertas.getInstance().accionesAlIniciar();        
+        modelo.alertas.AdministraAlertas.getInstance();
         if (AdministraCampanias.getInstance().cargaUltimaCampaniaPausada()){ 
             gui.PanelOpcCampanias.getInstance().setGuiCampaniaIniciada();
             gui.PanelOpcCampanias.getInstance().setGuiCampaniaPausada();

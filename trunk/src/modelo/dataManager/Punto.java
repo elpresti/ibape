@@ -167,7 +167,7 @@ public class Punto extends Observable{
         if (this.profundidad != profundidad){
             this.profundidad = profundidad;
             setChanged();
-            notifyObservers(1);
+            notifyObservers(controllers.ControllerAlertas.getIndexProfundidad());
             seModifico=true;
         }
         return seModifico;
