@@ -165,7 +165,7 @@ public class BrokerDbMapa implements Runnable{
         boolean b=false;
         try{
               ResultSet rs1=getStatement().executeQuery("SELECT * FROM "+getTableName());
-              getStatement().execute("TRUNCATE TABLE "+getTableName());
+              //getStatement().execute("TRUNCATE TABLE "+getTableName());
               b=true;
               return(b);
             }    	
@@ -776,6 +776,7 @@ public class BrokerDbMapa implements Runnable{
                         modelo.gisModule.GeneradorKML.getInstance().conviertePOIaKml(punto,moverCamAestePoi));
                 preparedStatement.executeUpdate();  
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                preparedStatement.close();
                 sePudo=true;
              }
         }
@@ -827,6 +828,7 @@ public class BrokerDbMapa implements Runnable{
                         modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos));
                 preparedStatement.executeUpdate(); 
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                preparedStatement.close();
                 sePudo=true;
              }
              return sePudo;
@@ -837,6 +839,7 @@ public class BrokerDbMapa implements Runnable{
         }
     }
 
+    
     public boolean vaciaMapaNavegacion() {
         boolean sePudo=false;
         try {     
@@ -857,6 +860,7 @@ public class BrokerDbMapa implements Runnable{
                 preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), "");
                 preparedStatement.executeUpdate();
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                preparedStatement.close();
                 sePudo=true;
              }             
         }

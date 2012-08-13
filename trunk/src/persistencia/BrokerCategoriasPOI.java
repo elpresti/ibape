@@ -27,7 +27,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
 
     public boolean vaciaTabla() {
         boolean sePudo = false;
-        System.out.println("TRUNCATE TABLE CategoriasPoi");
+        System.out.println("codigo pendiente de: TRUNCATE TABLE CategoriasPoi");
         return sePudo;
     }
 
