@@ -127,7 +127,7 @@ public class BrokerAlertas extends BrokerPpal{
         boolean sePudo = false;
         String sqlQuery="";
         try {
-            /*
+            
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
@@ -137,12 +137,21 @@ public class BrokerAlertas extends BrokerPpal{
                     sePudo = true;
                 }else{sePudo=false;}
              
-             */
-                
+             
+            /*    
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(2,'Profundidad','mts')";
+            +"(2,'','')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+            */    
+            sqlQuery = "INSERT INTO Variables"
+            + "(id,nombre,unidad)"
+            + "VALUES"
+            +"(2,'Cantidad de Marcas','marcas')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -151,7 +160,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(3,'Cantidad de Marcas','marcas')";
+            +"(3,'Latitud','ggmmss')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -160,7 +169,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(4,'Latitud','ggmmss')";
+            +"(4,'Longitud','ggmmss')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -169,16 +178,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(5,'Longitud','ggmmss')";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}
-                
-            sqlQuery = "INSERT INTO Variables"
-            + "(id,nombre,unidad)"
-            + "VALUES"
-            +"(6,'Velocidad','km/h')";
+            +"(5,'Velocidad','km/h')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -188,7 +188,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(7,'Rumbo','')";
+            +"(6,'Rumbo','')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -198,7 +198,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(8,'Velocidad Agua','km/h')";
+            +"(7,'Velocidad Agua','km/h')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -207,7 +207,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(9,'Temperatura Agua','grados C')";
+            +"(8,'Temperatura Agua','grados C')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -216,7 +216,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(10,'Fecha','ddmmaaaa')";
+            +"(9,'Fecha','ddmmaaaa')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -225,7 +225,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO Variables"
             + "(id,nombre,unidad)"
             + "VALUES"
-            +"(11,'Hora','hhmmss')";
+            +"(10,'Hora','hhmmss')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -439,7 +439,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(6,2)";
+            +"(7,2)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -455,14 +455,7 @@ public class BrokerAlertas extends BrokerPpal{
                     sePudo = true;
                 }else{sePudo=false;}
                 
-            sqlQuery = "INSERT INTO RelacionesXVariables"
-            + "(idVariable,idRelacion)"
-            + "VALUES"
-            +"(9,2)";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}     
+    
                 
                
             sqlQuery = "INSERT INTO RelacionesXVariables"
@@ -513,7 +506,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(6,3)";
+            +"(7,3)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -530,14 +523,7 @@ public class BrokerAlertas extends BrokerPpal{
                     sePudo = true;
                 }else{sePudo=false;}
                 
-            sqlQuery = "INSERT INTO RelacionesXVariables"
-            + "(idVariable,idRelacion)"
-            + "VALUES"
-            +"(9,3)";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}   
+  
                 
 
             sqlQuery = "INSERT INTO RelacionesXVariables"
@@ -588,7 +574,7 @@ public class BrokerAlertas extends BrokerPpal{
             sqlQuery = "INSERT INTO RelacionesXVariables"
             + "(idVariable,idRelacion)"
             + "VALUES"
-            +"(6,4)";
+            +"(7,4)";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
@@ -622,14 +608,6 @@ public class BrokerAlertas extends BrokerPpal{
                     sePudo = true;
                 }else{sePudo=false;}
                 
-            sqlQuery = "INSERT INTO RelacionesXVariables"
-            + "(idVariable,idRelacion)"
-            + "VALUES"
-            +"(11,4)";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}
                 
             }catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -655,7 +633,7 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
             if(alerta.getCondiciones()!=null){
                         sqlQuery ="Update Alertas "
                         + "SET estado='"+alerta.isEstado()+"', "
-                        + "mensaje="+alerta.getMensaje()+", "
+                        + "mensaje='"+alerta.getMensaje()+"', "
                         + "flagsAcciones="+alerta.getFlagsAcciones()+", "
                         + "titulo='"+alerta.getTitulo()+"' WHERE "
                         + "id="+alerta.getId();

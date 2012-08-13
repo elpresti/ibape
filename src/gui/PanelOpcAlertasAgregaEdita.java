@@ -604,7 +604,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         estado="Activada";
         }
         if (!PanelOpcAlertas.getInstance().isModificandoAlerta()){
-            if (controllers.ControllerAlertas.getInstance().nuevaAlerta(campoNombre.getText(), "Mensaje" , estado,controllers.ControllerAlertas.getInstance().getCondicionesAct())) {
+            if (controllers.ControllerAlertas.getInstance().nuevaAlerta(campoNombre.getText(), controllers.ControllerAlertas.getInstance().creaMensaje() , estado,controllers.ControllerAlertas.getInstance().getCondicionesAct())) {
                 JOptionPane.showMessageDialog(null, "Alerta guardada correctamente");
                 btnVolverActionPerformed(null);
             } else {
@@ -612,7 +612,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             }
         }
             else{
-                if (controllers.ControllerAlertas.getInstance().modificarAlerta(controllers.ControllerAlertas.getInstance().getAlertaAct().getId(),campoNombre.getText(), "Mensaje" , estado,controllers.ControllerAlertas.getInstance().getCondicionesAct())) {
+                if (controllers.ControllerAlertas.getInstance().modificarAlerta(controllers.ControllerAlertas.getInstance().getAlertaAct().getId(),campoNombre.getText(), controllers.ControllerAlertas.getInstance().creaMensaje() , estado,controllers.ControllerAlertas.getInstance().getCondicionesAct())) {
                 JOptionPane.showMessageDialog(null, "Alerta guardada correctamente");
                 btnVolverActionPerformed(null);
                 } else {
@@ -915,7 +915,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void cargaComboRelacion() {
                 
         //Obtengo todas las relaciones de la BD
-        if (!modificandoCondicion){
+        if ((!modificandoCondicion) && (!varRelCargadas)){
         ControllerAlertas.getInstance().leeRelacionesDB(controllers.ControllerAlertas.getInstance().getVariableAct().getId());
         relaciones = controllers.ControllerAlertas.getInstance().getRelaciones();
  
@@ -951,7 +951,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             jLabel2.setEnabled(false);
             lblValMax.setEnabled(false);
             Condicion condicionAct=controllers.ControllerAlertas.getInstance().getCondicionAct();
-            if (condicionAct!=null){
+            if ((condicionAct!=null) && (isModificandoCondicion())){
             jTextField1.setText(Float.toString(condicionAct.getValorMinimo()));
             }
             
@@ -963,7 +963,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             lblValMax.setEnabled(true);
             jTextField2.setEnabled(true);
             Condicion condicionAct=controllers.ControllerAlertas.getInstance().getCondicionAct();
-            if (condicionAct!=null){
+            if ((condicionAct!=null)&& (isModificandoCondicion())){
                 jTextField1.setText(Float.toString(condicionAct.getValorMinimo()));
                 jTextField2.setText(Float.toString(condicionAct.getValorMaximo()));                      
             }

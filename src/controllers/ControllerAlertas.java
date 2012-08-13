@@ -4,6 +4,10 @@
  */
 package controllers;
 
+import gui.PanelAlertaActiva;
+import gui.PanelSelector;
+import gui.VentanaIbape;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -27,6 +31,16 @@ import persistencia.Logueador;
  */
 public class ControllerAlertas implements Observer{
     static ControllerAlertas unicaInstancia;
+
+    /**
+     * @return the indexProfundidad
+     */
+    public static int getIndexProfundidad() {
+        return indexProfundidad;
+    }
+
+
+    
     private ArrayList<Variable> variables;
     private ArrayList<Relacion> relaciones;
     private ArrayList<Condicion> condicionesAct=new ArrayList<Condicion>();
@@ -40,6 +54,8 @@ public class ControllerAlertas implements Observer{
     private AdministraAlertas administraAlertas=modelo.alertas.AdministraAlertas.getInstance();
     private ArrayList<Alerta> alertasEnFuncionamiento= new ArrayList<Alerta>();
     private ArrayList<Alerta> alertasActivadas= new ArrayList<Alerta>();
+    private boolean estadoAlertas=AdministraAlertas.getInstance().isEstadoAlertas();
+    private static int indexProfundidad=1;
    
     public static ControllerAlertas getInstance() {
        if (unicaInstancia == null)
@@ -48,11 +64,7 @@ public class ControllerAlertas implements Observer{
     }
 
     private ControllerAlertas(){
-        
-        administraAlertas.addObserver(this);
-        punto.addObserver(this);
-        sonda.addObserver(this);
-        alertasOn();
+
         
 
         //gui.PanelOpcConfiguracion.getInstance();
@@ -144,8 +156,10 @@ public class ControllerAlertas implements Observer{
             alerta.setCondiciones(condiciones);
             if (modelo.alertas.AdministraAlertas.getInstance().modificarAlerta(alerta)) {             
                 gui.PanelOpcAlertas.getInstance().cargaGrillaAlertas();
+                alertasOn();
                 sePudo=true;                
             }
+            
         }
         return sePudo;
     }
@@ -156,8 +170,7 @@ public class ControllerAlertas implements Observer{
         try {
             Element raizConfiguracionIbape= BrokerConfig.getInstance().getDocBrokerConfig().getRootElement();
             Element parametros=raizConfiguracionIbape.getChild("Parametros");        
-            gui.PanelOpcAlertas.getInstance().getChkAlertas().setSelected(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
-            modelo.alertas.AdministraAlertas.getInstance().setEstadoAlertas(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
+            setEstadoAlertas(parametros.getChild("PanelAlertas").getAttribute("Estado").getBooleanValue());
             sePudo=true;
             }
         catch (Exception e) 
@@ -166,16 +179,17 @@ public class ControllerAlertas implements Observer{
     }    
 
     public void setEstadoAlertas(boolean estado) {
-        if (estado){
-            persistencia.BrokerConfig.getInstance().actualizaDatosPanelAlertas("true");
+        
+        modelo.alertas.AdministraAlertas.getInstance().setEstadoAlertas(estado);   
+        persistencia.BrokerConfig.getInstance().actualizaDatosPanelAlertas(String.valueOf(estado));
+        estadoAlertas=estado;
+        if (estado){   
             gui.PanelOpcAlertas.getInstance().habilitaTablaAlertas();
-            
-        }else {
-            persistencia.BrokerConfig.getInstance().actualizaDatosPanelAlertas("false");
+        } else {
             gui.PanelOpcAlertas.getInstance().deshabilitaTablaAlertas();
         }
         persistencia.BrokerConfig.getInstance().guardaConfiguracion();
-        modelo.alertas.AdministraAlertas.getInstance().setEstadoAlertas(estado);               
+                    
     }
 
     public boolean leeRelacionesDB(int index) {
@@ -365,7 +379,7 @@ public class ControllerAlertas implements Observer{
     public void update(Observable o, Object arg) {
       
       if (o == punto){
-          if (arg.equals(1)){
+          if (arg.equals(indexProfundidad)){
               analizaActivacionesProfundidad(); 
           }
           
@@ -405,23 +419,28 @@ public class ControllerAlertas implements Observer{
         while ((i<alertasEnFuncionamiento.size())){
             condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
             int f=0;
-            activacionAnt=alertasEnFuncionamiento.get(i).isEstado();
+            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
             activacion=false;
             while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var profundidad
-                if ((condiciones.get(f).getIdVariable()==1)){
+                if ((condiciones.get(f).getIdVariable()==indexProfundidad)){
                     activacion=analizaCondiciones(condiciones);
                 }
                 f++;
             }
+            Alerta al=alertasEnFuncionamiento.get(i);
+            Timestamp fecha=modelo.dataManager.Punto.getInstance().getFechaYhora();
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
-                }else{
-                    alertasActivadas.add(alertasEnFuncionamiento.get(i));
+                }else{                   
+                    alertasActivadas.add(al);                   
+                    PanelAlertaActiva panelAlertaActiva=new PanelAlertaActiva(al.getTitulo(),al.getMensaje(),fecha.toString()); 
+                    VentanaIbape.getInstance().ponerEnPanelDerecho(panelAlertaActiva);
+                    
                 }
             }else{
                 if (activacionAnt){
-                    alertasActivadas.remove(alertasEnFuncionamiento.get(i));
+                    alertasActivadas.remove(al);
                 }else{
                     //Alerta continua desactivada
                 }
@@ -436,7 +455,7 @@ public class ControllerAlertas implements Observer{
         boolean cumpleTodo=true;
         while ((f<condiciones.size()) && (cumpleTodo)){
                 Condicion c=condiciones.get(f);
-                if ((c.getIdVariable()==1)){
+                if ((c.getIdVariable()==indexProfundidad)){
                     cumpleTodo=cumpleTodo && cumpleCondicionProfundidad(c);
                 f++;
             }
@@ -478,6 +497,44 @@ public class ControllerAlertas implements Observer{
                     }
         return cumpleTodo;
         }
+
+    public void accionesAlIniciar() {
+        leeDocYseteaPanelOpcAlertas();               
+        administraAlertas.addObserver(this);
+        punto.addObserver(this);
+        sonda.addObserver(this);
+        alertasOn();
+    }
+    
+
+    private boolean existeAlertaActiva(Alerta a) {
+        boolean existe=false;
+        int i=0;
+        while ((i<alertasActivadas.size())){
+            if (alertasActivadas.get(i).getId()==a.getId()){
+                existe=true;
+            }
+            i++;
+        }
+        return existe;
+    }
+
+    public boolean getEstadoAlertas() {
+        return estadoAlertas;
+    }
+
+    public String creaMensaje() {
+        String mensaje="";
+        int f=0;
+        while (f<condicionesAct.size()){
+                Condicion c=condicionesAct.get(f);
+                mensaje=mensaje+" - "+c.getDescripcion();
+                f++;
+            }
+        return mensaje;
+          
+        }
+    
     }
 
 

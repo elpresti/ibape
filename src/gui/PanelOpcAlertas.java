@@ -44,7 +44,6 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         initComponents();        
         add(panelAgregaEdita);
         inicializador();
-        panelAgregaEdita.setVisible(false);
     }
 
     /** This method is called from within the constructor to
@@ -102,7 +101,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelOpcionesAlertas.setPreferredSize(new java.awt.Dimension(500, 60));
         panelOpcionesAlertas.setLayout(new java.awt.GridLayout(2, 1));
 
-        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14));
+        chkAlertas.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkAlertas.setLabel("Usar Alertas");
         chkAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -257,10 +256,7 @@ private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
  
 }//GEN-LAST:event_btnModificarActionPerformed
-
-private void tablaAlertasActionPerformed(java.awt.event.ActionEvent evt){
-    
-}   
+  
 
 private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
     String txtPregunta = "Está por eliminar una alerta del disco, está usted seguro?";
@@ -273,6 +269,7 @@ private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 private void chkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkAlertasActionPerformed
         ControllerAlertas cAlertas=ControllerAlertas.getInstance();
         cAlertas.setEstadoAlertas(this.getChkAlertas().isSelected());
+        tablaAlertas.setEnabled(this.getChkAlertas().isSelected());
 }//GEN-LAST:event_chkAlertasActionPerformed
 
 private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaAlertasMouseClicked
@@ -419,9 +416,8 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         tablaAlertas.setModel(modeloTabla);
         cargaIconosDeBotones();
         cargaGrillaAlertas();        
-        
-        controlaPanelAccionesAlerta();
- 
+        controlaPanelAccionesAlerta(); 
+        chkAlertas.setSelected(controllers.ControllerAlertas.getInstance().getEstadoAlertas());
     }
 
     public void vaciaTabla() {                
