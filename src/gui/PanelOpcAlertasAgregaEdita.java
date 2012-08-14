@@ -708,6 +708,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         //btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
         //btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
         btnInsertar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-insertar.png"));
+        //btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("imgs//iconos//tabla-icono-insertar.png"))); // NOI18N
     }
     
     public static PanelOpcAlertasAgregaEdita getInstance() {

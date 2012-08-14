@@ -41,7 +41,7 @@ public class BrokerAlertas extends BrokerPpal{
         int idAlerta=0;
         int idCondicion=0;
         String sqlQuery="";
-        ResultSet rs;
+        ResultSet rs=null;
         try {                                
             String titulo=null;
             if (alerta.getTitulo()!=null) {
@@ -119,6 +119,17 @@ public class BrokerAlertas extends BrokerPpal{
                 }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
@@ -236,6 +247,15 @@ public class BrokerAlertas extends BrokerPpal{
             }catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        try{//ya la use, asique cierro Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+
         return sePudo;
     }
    
@@ -281,6 +301,14 @@ public class BrokerAlertas extends BrokerPpal{
                 
             }catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
@@ -612,6 +640,14 @@ public class BrokerAlertas extends BrokerPpal{
             }catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
     
@@ -623,7 +659,7 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
         int idAlerta=0;
         int idCondicion=0;
         String sqlQuery="";
-        ResultSet rs;
+        ResultSet rs=null;
         try {                                
             String titulo=null;
             if (alerta.getTitulo()!=null) {
@@ -708,6 +744,17 @@ public boolean updateAlerta(modelo.alertas.Alerta alerta){
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
 
@@ -724,14 +771,22 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }        
-        
+        try{//ya la use, asique cierro Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
 
    public ArrayList<modelo.alertas.Alerta> getAlertasFromDB(){
         ArrayList<modelo.alertas.Alerta> alertas = new ArrayList();        
+        ResultSet rs = null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Alertas");
+            rs = getStatement().executeQuery("SELECT * FROM Alertas");
 
             while (rs.next()) {    
                 modelo.alertas.Alerta alerta = new modelo.alertas.Alerta();
@@ -754,20 +809,28 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
                     a.setCondiciones(condiciones);
                 }  
             }
-            rs.close();
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         } 
-        
-
-        
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return alertas;
     }
    
       public ArrayList<modelo.alertas.Condicion> getCondicionesFromDB(int idAlerta){
-        ArrayList<modelo.alertas.Condicion> condiciones = new ArrayList();        
+        ArrayList<modelo.alertas.Condicion> condiciones = new ArrayList();
+        ResultSet rs=null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Condiciones WHERE idAlerta="+idAlerta+"");
+            rs = getStatement().executeQuery("SELECT * FROM Condiciones WHERE idAlerta="+idAlerta+"");
 
             while (rs.next()) {    
                 modelo.alertas.Condicion condicion = new modelo.alertas.Condicion(rs.getInt("id"),rs.getInt("idVariable"),rs.getInt("idRelacion"),rs.getFloat("valor1"),rs.getFloat("valor2"),rs.getString("descripcion"));
@@ -776,14 +839,25 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }        
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return condiciones;
     }
 
     public ArrayList<Variable> getVariablesFromDB() {
         ArrayList<modelo.alertas.Variable> variables = new ArrayList();
-        
+        ResultSet rs=null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Variables");
+            rs = getStatement().executeQuery("SELECT * FROM Variables");
             while (rs.next()) {       
                 modelo.alertas.Variable variable = new modelo.alertas.Variable();
                 // Get the data from the row using the column name
@@ -794,15 +868,26 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
-        }        
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return variables;
     }
 
     public ArrayList<Relacion> getRelacionesFromDB(int index) {
         ArrayList<modelo.alertas.Relacion> relaciones = new ArrayList();
-        
+        ResultSet rs = null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Relaciones r inner join RelacionesXVariables rv on r.id=rv.idRelacion WHERE rv.idVariable="+index+"");
+            rs = getStatement().executeQuery("SELECT * FROM Relaciones r inner join RelacionesXVariables rv on r.id=rv.idRelacion WHERE rv.idVariable="+index+"");
             while (rs.next()) {       
                 modelo.alertas.Relacion relacion= new modelo.alertas.Relacion();
                 // Get the data from the row using the column name
@@ -813,7 +898,18 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
-        }        
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return relaciones;
     }
     
