@@ -433,6 +433,9 @@
                             </Component>
                             <Component class="org.jdesktop.swingx.JXHyperlink" name="btnInsertar">
                               <Properties>
+                                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                                  <Image iconType="3" name="/imgs/tabla-icono-insertar.png"/>
+                                </Property>
                                 <Property name="text" type="java.lang.String" value=""/>
                                 <Property name="toolTipText" type="java.lang.String" value="Eliminar campa&#xf1;a"/>
                                 <Property name="horizontalAlignment" type="int" value="0"/>
