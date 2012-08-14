@@ -374,6 +374,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             if (comboCategorias.getItemAt(i).toString().toUpperCase().equals(campoDescripcionNuevoPoi.getText().toUpperCase())) {
             unico=false;
             }
+            i++;
         }
         // Agrega Categoria POI:
         if (unico && campoNombreNuevaCat.getText().length() > 2) {
