@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
+import modelo.gisModule.Browser;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
 
@@ -60,7 +61,7 @@ public class ControllerNavegacion {
     }
 
     public void graficarDatos(int retardo) {
-        GraficaDatosHistoricos grafica = new GraficaDatosHistoricos();
+        GraficaDatosNavegacion grafica = new GraficaDatosNavegacion();
         grafica.retardo=retardo;
         grafica.start();
     }
@@ -74,6 +75,49 @@ public class ControllerNavegacion {
     public void restauraBtnGraficarDatos(){
         PanelNavegacion.getInstance().restauraBtnGraficarDatos();
     }
+    
+    public boolean iniciaServerYabreBrowser(){
+        boolean sePudo=false;
+        try{
+            if (!(BrokerDbMapa.getInstance().isUsarMapaNavegacion())) {
+                modelo.gisModule.WebServer.getInstance().start();
+                if (BrokerDbMapa.getInstance().disparaEjecucion()) {
+                    BrokerDbMapa.getInstance().setUsarMapaNavegacion(true);
+                    //do what you want to do before sleeping
+                    //Thread.currentThread().sleep(2000);//sleep for 2000 ms --> ya se hace dentro del Broker
+                    //do what you want to do after sleeptig
+                    abreBrowserConMapaNavegacion();
+                    sePudo=true;
+                }
+            }
+        }
+        catch(Exception e){
+            //If this thread was intrrupted by nother thread
+            persistencia.Logueador.getInstance().agregaAlLog(e.toString());
+            }
+        return sePudo;
+    }
+    
+    public boolean detieneServerYcierraBrowser(){
+        boolean sePudo=false;
+        try {                    
+            BrokerDbMapa.getInstance().setUsarMapaNavegacion(false);            
+            if (modelo.gisModule.WebServer.getInstance().cerrarWebServer() && 
+                modelo.gisModule.Browser.getInstance().cerrarBrowserPortable() &&
+                persistencia.BrokerDbMapa.getInstance().detieneEjecucion()){
+                sePudo=true;
+            }
+        }
+        catch (Exception e)
+            { System.out.println(e.toString());
+              Logueador.getInstance().agregaAlLog(e.toString()); }
+        return sePudo;
+    }
+
+    private void abreBrowserConMapaNavegacion() {
+        modelo.gisModule.Browser.getInstance().setUrlTemp(Browser.getInstance().getUrl());
+        modelo.gisModule.Browser.getInstance().start();
+    }
 
 }
 class GraficaDatosNavegacion implements Runnable{
@@ -83,7 +127,8 @@ class GraficaDatosNavegacion implements Runnable{
         try{
             thGraficar.sleep(retardo);
             ControllerNavegacion.getInstance().vaciaMapaNavegacion();
-            if (gui.PanelNavegacion.getInstance().getCategoriasSeleccionadas().size()>0){
+            if (gui.PanelNavegacion.getInstance().getChkPoisTodos().isSelected() && 
+                    gui.PanelNavegacion.getInstance().getCategoriasSeleccionadas().size()>0){
                 ControllerNavegacion.getInstance().cargaPoisEnMapa(modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso().getId(),
                         gui.PanelNavegacion.getInstance().getCategoriasSeleccionadas());
             }

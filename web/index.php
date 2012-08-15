@@ -36,7 +36,24 @@
 function consultaYmuestra() {
 	ConsultaDatos();	
 	//pasaUltimoPuntoAmapa();
-	cargaUltimoKml();
+	var inputLastID = document.getElementById('campoLastID');
+	var inputLastObjeto = document.getElementById('campoLastObjeto');
+	if ((inputLastID != null) && (inputLastID.value >= 0)){
+		if ((inputLastObjeto != null) && (inputLastObjeto.value == "vaciarMapa()")){
+			vaciarMapa();
+		}
+		else{ cargaUltimoKml(); }
+		
+	}
+}
+
+function vaciarMapa(){
+//remove all features from map
+  var features = ge.getFeatures();
+  while (features.getLastChild() != null)
+  {
+    features.removeChild(features.getLastChild());
+  }
 }
 
 function pasaUltimoPuntoAmapa() {
