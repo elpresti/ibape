@@ -373,7 +373,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         String txtOriginal = btnDetenerMapaHistorico.getText();
         btnDetenerMapaHistorico.setText("Cerrando...");
         btnDetenerMapaHistorico.setEnabled(false);
-        if (!(controllers.ControllerPpal.getInstance().detieneServerYcierraBrowser())){
+        if (!(controllers.ControllerNavegacion.getInstance().detieneServerYcierraBrowser())){
             JOptionPane.showMessageDialog(this, "Hubo un error al detener el Servidor Web o el Navegador");
         }
         btnDetenerMapaHistorico.setText(txtOriginal);

@@ -100,45 +100,6 @@ public class ControllerPpal {
         sePudo=sePudo && BrokerConfig.getInstance().guardaConfiguracion();
         return sePudo;
     }
-
-    public boolean iniciaServerYabreBrowser(){
-        boolean sePudo=false;
-        try{
-            if (!(BrokerDbMapa.getInstance().isUsarMapaNavegacion())) {
-                modelo.gisModule.WebServer.getInstance().start();
-                if (BrokerDbMapa.getInstance().disparaEjecucion()) {
-                    BrokerDbMapa.getInstance().setUsarMapaNavegacion(true);
-                    //do what you want to do before sleeping
-                    //Thread.currentThread().sleep(2000);//sleep for 2000 ms --> ya se hace dentro del Broker
-                    //do what you want to do after sleeptig
-                    modelo.gisModule.Browser.getInstance().setUrlTemp(Browser.getInstance().getUrl());
-                    modelo.gisModule.Browser.getInstance().start();
-                    sePudo=true;
-                }
-            }
-        }
-        catch(Exception e){
-            //If this thread was intrrupted by nother thread
-            persistencia.Logueador.getInstance().agregaAlLog(e.toString());
-            }
-        return sePudo;
-    }
-    
-    public boolean detieneServerYcierraBrowser(){
-        boolean sePudo=false;
-        try {                    
-            BrokerDbMapa.getInstance().setUsarMapaNavegacion(false);            
-            if (modelo.gisModule.WebServer.getInstance().cerrarWebServer() && 
-                modelo.gisModule.Browser.getInstance().cerrarBrowserPortable() &&
-                persistencia.BrokerDbMapa.getInstance().detieneEjecucion()){
-                sePudo=true;
-            }
-        }
-        catch (Exception e)
-            { System.out.println(e.toString());
-              Logueador.getInstance().agregaAlLog(e.toString()); }
-        return sePudo;
-    }
     
     public boolean conectaYleeDelGps(){
         boolean sePudo=false;       

@@ -53,15 +53,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
     /** Creates new form PanelNavegacion */
     private PanelNavegacion() {
         initComponents();
-        seteaBotonesMapa();
-        chkConCamaraActionPerformed(null);
-        punto.addObserver(this);
-        try {
-            imgSinProcesar.setImage(new File("imgs/img1.jpg"));
-            imgProcesada.setImage(new File("imgs/img1-proc.jpg"));
-        } catch (IOException ex) {
-            Logger.getLogger(PanelNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -497,6 +489,11 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRecorrido.setText("Recorrido");
+        chkRecorrido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkRecorridoActionPerformed(evt);
+            }
+        });
         panelDatosMapa.add(chkRecorrido);
 
         chkConCamara.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -511,6 +508,11 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         chkPoisTodos.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkPoisTodos.setText("Puntos de Interes (POI)");
+        chkPoisTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkPoisTodosActionPerformed(evt);
+            }
+        });
         panelDatosMapa.add(chkPoisTodos);
 
         lblTxtTablaCatPois.setAlignment(java.awt.Label.CENTER);
@@ -612,7 +614,7 @@ private void btnIniciarMapaNavActionPerformed(java.awt.event.ActionEvent evt) {/
     String txtOriginal = btnIniciarMapaNav.getText();
     btnIniciarMapaNav.setText("Abriendo...");
     btnIniciarMapaNav.setEnabled(false);
-    if (!(controllers.ControllerPpal.getInstance().iniciaServerYabreBrowser())){
+    if (!(controllers.ControllerNavegacion.getInstance().iniciaServerYabreBrowser())){
         JOptionPane.showMessageDialog(this, "Hubo un error al iniciar el Servidor Web ó el Navegador");
     }
     btnIniciarMapaNav.setText(txtOriginal);
@@ -625,7 +627,7 @@ private void btnDetenerMapaNavActionPerformed(java.awt.event.ActionEvent evt) {/
     String txtOriginal = btnDetenerMapaNav.getText();
     btnDetenerMapaNav.setText("Cerrando...");
     btnDetenerMapaNav.setEnabled(false);
-    if (!(controllers.ControllerPpal.getInstance().detieneServerYcierraBrowser())){
+    if (!(controllers.ControllerNavegacion.getInstance().detieneServerYcierraBrowser())){
         JOptionPane.showMessageDialog(this, "Hubo un error al detener el Servidor Web o el Navegador");
     }    
     btnDetenerMapaNav.setText(txtOriginal);
@@ -644,7 +646,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
         if (ControllerCampania.getInstance().getIdCampaniaEnCurso()>=0){
-            if (getChkRecorrido().isSelected() || (chkPoisTodos.isSelected() && getCategoriasSeleccionadas().size()>0) ){                
+            if (getChkRecorrido().isSelected() || (getChkPoisTodos().isSelected() && getCategoriasSeleccionadas().size()>0) ){                
                 setTxtBtnGraficarDatos(btnGraficarDatos.getText());
                 btnGraficarDatos.setText("Transfiriendo datos...");
                 habilitaBtnGraficarDatos(false);
@@ -666,6 +668,32 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             JOptionPane.showMessageDialog(null, "No hay ninguna campaña en curso. Inicie una");
         }
     }//GEN-LAST:event_btnGraficarDatosActionPerformed
+
+    private void chkRecorridoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRecorridoActionPerformed
+        if (getChkRecorrido().isSelected()){
+            habilitaBtnGraficarDatos(true);
+        }
+        else{
+            if (!chkPoisTodos.isSelected()){
+                habilitaBtnGraficarDatos(false);
+            }
+        }
+    }//GEN-LAST:event_chkRecorridoActionPerformed
+
+    private void chkPoisTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodosActionPerformed
+        if ((getChkPoisTodos().isSelected()) || (getChkRecorrido().isSelected())){
+            habilitaBtnGraficarDatos(true);
+        }
+        else{
+            habilitaBtnGraficarDatos(false);
+        }
+        if (getChkPoisTodos().isSelected()){
+            habilitaPanelTablaCatPois(true);            
+        }
+        else{
+            habilitaPanelTablaCatPois(false);
+        }
+    }//GEN-LAST:event_chkPoisTodosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetenerMapaNav;
@@ -808,7 +836,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             tablaCatPois.getColumnModel().getColumn(4).setPreferredWidth(30); 
             
             habilitaBtnGraficarDatos(false); 
-            chkPoisTodos.setSelected(false);
+            getChkPoisTodos().setSelected(false);
             getChkRecorrido().setSelected(false);
             if (tableModelCatPois.getRowCount()==0){            
                 tableModelCatPois.addRow(new Object[]{-1,new JCheckBox(),new JLabel(),"No se encontraron POIs para la campaña seleccionada..."});
@@ -934,7 +962,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     }
 
     public void habilitaChkTodosLosPois(boolean estado){
-        chkPoisTodos.setEnabled(estado);
+        getChkPoisTodos().setEnabled(estado);
     }
 
     public void habilitaChkRecorrido(boolean estado){
@@ -964,6 +992,39 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         this.txtBtnGraficarDatos = txtBtnGraficarDatos;
     }
 
+    private void inicializador() {
+        habilitaPanelTablaCatPois(false);
+        seteaBotonesMapa();
+        tablaCatPois.setRowHeight(30);
+        chkConCamaraActionPerformed(null);
+        punto.addObserver(this);
+        inicializaProcDeImgs();
+    }
+
+    private void inicializaProcDeImgs() {
+        try {
+            imgSinProcesar.setImage(new File("imgs/img1.jpg"));
+            imgProcesada.setImage(new File("imgs/img1-proc.jpg"));
+        } catch (IOException ex) {
+            Logger.getLogger(PanelNavegacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * @return the chkPoisTodos
+     */
+    public javax.swing.JCheckBox getChkPoisTodos() {
+        return chkPoisTodos;
+    }
+
+    /**
+     * @param chkPoisTodos the chkPoisTodos to set
+     */
+    public void setChkPoisTodos(javax.swing.JCheckBox chkPoisTodos) {
+        this.chkPoisTodos = chkPoisTodos;
+    }
+
+
 }
 /*  clases y metodos que cargan y controlan los CHECKBOXES en la TABLA CATEGORIA DE POIS */ 
 class CheckBoxEditorNavegacion extends DefaultCellEditor implements ItemListener {
@@ -991,5 +1052,3 @@ class CheckBoxEditorNavegacion extends DefaultCellEditor implements ItemListener
     super.fireEditingStopped();
   }
 }
-
-
