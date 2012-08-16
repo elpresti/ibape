@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Marca {
     private double profundidad;
-    private String areaImagen;
+    private int areaImagen;
     private String areaFisica;
     private int id;
     private int idPois;
@@ -39,14 +39,14 @@ public class Marca {
     /**
      * @return the areaImagen
      */
-    public String getAreaImagen() {
+    public int getAreaImagen() {
         return areaImagen;
     }
 
     /**
      * @param areaImagen the areaImagen to set
      */
-    public void setAreaImagen(String areaImagen) {
+    public void setAreaImagen(int areaImagen) {
         this.areaImagen = areaImagen;
     }
 
@@ -102,5 +102,19 @@ public class Marca {
      */
     public void setCoordMarca(ArrayList<Point> coordMarca) {
         this.coordMarca = coordMarca;
+    }
+
+    /**
+     * @return the areaFisica
+     */
+    public String getAreaFisica() {
+        return areaFisica;
+    }
+
+    /**
+     * @param areaFisica the areaFisica to set
+     */
+    public void setAreaFisica(String areaFisica) {
+        this.areaFisica = areaFisica;
     }
 }

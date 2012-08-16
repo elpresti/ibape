@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Point;
-import java.util.Arrays;
 import modelo.dataManager.Marca;
 
 
@@ -465,6 +464,7 @@ public class OperacionesBasicas {
     public ArrayList<Marca> buscaMarcas(){
         ArrayList<Marca> marcas = new ArrayList();
         BufferedImage img = getImgProcesada();
+
         Point point = new Point();
 
 
@@ -472,11 +472,11 @@ public class OperacionesBasicas {
         for (int contAncho = 1; contAncho < img.getWidth(); contAncho++) {
 
             for (int contAlto= img.getHeight()-1; contAlto >0; contAlto--){
-                point.setLocation(contAncho, contAlto);
-                ArrayList<Point> coordMarca = new ArrayList<Point>();
+                point.setLocation(contAncho, contAlto);             
                     if ((hayBlancoDondeEstoy(img, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
+                    ArrayList<Point> coordMarca = new ArrayList<Point>();
                     int i=0;
-                    coordMarca.add(point);
+                    coordMarca.add(new Point(contAncho,contAlto));
                     while (i<coordMarca.size()){
                         escaneoADerecha(coordMarca.get(i),coordMarca);
                         escaneoAIzquierda(coordMarca.get(i),coordMarca);
@@ -486,6 +486,7 @@ public class OperacionesBasicas {
                     }
                 Marca marca= new Marca();
                 marca.setCoordMarca(coordMarca);
+                marca.setAreaImagen(coordMarca.size());
                 marcas.add(marca);
 
                 }
@@ -514,42 +515,44 @@ public class OperacionesBasicas {
 
     public void escaneoADerecha(Point point,ArrayList coordMarca){
         int posDer = (int) (point.getX() + 1);
-
-        while (hayBlancoDondeEstoy(imgProcesada, posDer,(int) point.getY()) &&(!coordMarca.contains(point))) {
-            point.setLocation(posDer, point.getY());
-            coordMarca.add(point);
+        Point point2 = new Point(posDer,(int) point.getY());
+        while (hayBlancoDondeEstoy(imgProcesada, posDer,(int) point2.getY()) &&(!coordMarca.contains(point2))) {
+            coordMarca.add(new Point(posDer,(int) point2.getY()));
             posDer++;
+            point2.setLocation(posDer, point2.getY());
         }
 
     }
 
     public void escaneoAIzquierda(Point point,ArrayList coordMarca){
         int posIzq = (int) (point.getX() - 1);
-
-        while (hayBlancoDondeEstoy(imgProcesada, posIzq,(int) point.getY()) &&(!coordMarca.contains(point))) {
-            point.setLocation(posIzq, point.getY());
-            coordMarca.add(point);
+        Point point2=new Point(posIzq, (int) point.getY());
+        while (hayBlancoDondeEstoy(imgProcesada, posIzq,(int) point2.getY()) &&(!coordMarca.contains(point2))) {
+            coordMarca.add(new Point(posIzq,(int) point2.getY()));
             posIzq--;
+            point2.setLocation(posIzq, point2.getY());
         }
+
     }
 
     public void escaneoAAbajo(Point point,ArrayList coordMarca){
         int posAba = (int) (point.getY() + 1);
-
-        while (hayBlancoDondeEstoy(imgProcesada,(int) point.getX(),posAba) &&(!coordMarca.contains(point))) {
-            point.setLocation(point.getX(),posAba);
-            coordMarca.add(point);
+        Point point2= new Point((int)point.getX(),posAba);
+        while (hayBlancoDondeEstoy(imgProcesada,(int) point2.getX(),posAba) &&(!coordMarca.contains(point2))) {
+            coordMarca.add(new Point((int)point2.getX(),posAba));
             posAba++;
+            point2.setLocation(point2.getX(),posAba);
         }
+
     }
 
     public void escaneoAArriba(Point point,ArrayList coordMarca){
           int posArr = (int) (point.getY() - 1);
-
-        while (hayBlancoDondeEstoy(imgProcesada,(int) point.getX(),posArr) &&(!coordMarca.contains(point))) {
-            point.setLocation(point.getX(),posArr);
-            coordMarca.add(point);
+          Point point2 = new Point((int)point.getX(),posArr);
+        while (hayBlancoDondeEstoy(imgProcesada,(int) point2.getX(),posArr) &&(!coordMarca.contains(point2))) {
+            coordMarca.add(new Point((int)point2.getX(),posArr));
             posArr--;
+            point2.setLocation(point2.getX(),posArr);
         }
     }
     
