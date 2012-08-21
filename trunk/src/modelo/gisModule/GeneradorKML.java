@@ -65,7 +65,7 @@ public class GeneradorKML {
             }
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             salida=salida
-            +"<Placemark>"// id=tramo+"+strFechaYhoraPrimero+" - "+strFechaYhoraUltimo+">"
+            +"<Placemark id=\"recorrido\">"// id=tramo+"+strFechaYhoraPrimero+" - "+strFechaYhoraUltimo+">"
                 +"<name>"+sdf.format(puntos.get(0).getFechaYhora())+"  -  "+sdf.format(puntos.get(puntos.size()-1).getFechaYhora())+"</name>"
                 +"<visibility>1</visibility>" 
                 +"<description>Recorrido entre "+sdf.format(puntos.get(0).getFechaYhora())+"  -  "+sdf.format(puntos.get(puntos.size()-1).getFechaYhora())+"</description>"

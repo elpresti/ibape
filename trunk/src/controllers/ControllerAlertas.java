@@ -377,7 +377,7 @@ public class ControllerAlertas implements Observer{
     }
 
     public void update(Observable o, Object arg) {
-      
+/*      
       if (o == punto){
           if (arg.equals(indexProfundidad)){
               analizaActivacionesProfundidad(); 
@@ -392,7 +392,7 @@ public class ControllerAlertas implements Observer{
               if (o == administraAlertas){
                
               }
-
+*/
     }
 
     private void alertasOn() {

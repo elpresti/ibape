@@ -493,7 +493,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         if (idCampaniaElegida>=0){
             this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());                        
             habilitaChkRecorrido(true);
-            setTxtCantidadDePuntosDeCampElegida(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(this.idCampaniaElegida));            
+            setTxtCantidadDePuntosDeCampElegida(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(this.idCampaniaElegida));
         }
         else
           { this.idCampaniaElegida = idCampaniaElegida; 

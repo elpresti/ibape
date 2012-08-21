@@ -38,6 +38,7 @@ public class ControllerNavegacion {
     }
 
     public void actualizaDatosEnGui() {
+        PanelNavegacion.getInstance().actualizaRecorrido();
         PanelNavegacion.getInstance().inicializaTablaCategoriasPois(); 
         PanelNavegacion.getInstance().seteaBotonesMapa();
     }

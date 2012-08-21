@@ -112,6 +112,14 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
         }
+        try{//ya la use, asique cierro Statements usados
+            if (getPsInsert() != null){
+                getPsInsert().close();psInsert = null;
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
     
@@ -140,6 +148,14 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
         }
+        try{//ya la use, asique cierro Statements usados
+            if (getPsInsert() != null){
+                getPsInsert().close();psInsert = null;
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
     
@@ -166,6 +182,14 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        try{//ya la use, asique cierro Statements usados
+            if (getPsUpdate() != null){
+                getPsUpdate().close();psUpdate = null;
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
     
@@ -179,6 +203,14 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro Statements usados
+            if (getPsDelete() != null){
+                getPsDelete().close();psDelete = null;
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
@@ -228,7 +260,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 rs.close();
             }
             if (getReadStatement() != null){
-                getStatement().close();
+                getReadStatement().close();setReadStatement(null);
             }
         }
         catch(Exception e){
@@ -248,17 +280,17 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
      * @return the psInsert
      */
     public PreparedStatement getPsInsert() {
-        if (psInsert == null){
-            try {
-                setPsInsert(getConexion().prepareStatement(
-                            "INSERT INTO Puntos "
-                            + " (fechaYhora,latitud,longitud,altitud,velocidad,rumbo,profundidad,velocidadAgua,tempAgua) "
-                            + " VALUES "            
-                            +" (?,?,?,?,?,?,?,?,?) ",
-                            PreparedStatement.RETURN_GENERATED_KEYS));
-            } catch (SQLException ex) {
-                Logueador.getInstance().agregaAlLog(ex.toString());
-            }
+        try {
+            if (psInsert == null){
+                    setPsInsert(getConexion().prepareStatement(
+                                "INSERT INTO Puntos "
+                                + " (fechaYhora,latitud,longitud,altitud,velocidad,rumbo,profundidad,velocidadAgua,tempAgua) "
+                                + " VALUES "            
+                                +" (?,?,?,?,?,?,?,?,?) ",
+                                PreparedStatement.RETURN_GENERATED_KEYS));
+            }  
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return psInsert;
     }
@@ -274,8 +306,8 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
      * @return the psUpdate
      */
     public PreparedStatement getPsUpdate() {
-        if (psUpdate == null){
-            try {
+        try {
+            if (psUpdate == null || psUpdate.isClosed()){
                 setPsUpdate(getConexion().prepareStatement(
                         "UPDATE Puntos "
                         + "SET fechaYhora = ?, "
@@ -288,9 +320,9 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                             +" velocidadAgua = ?, "
                             +" tempAgua = ? "            
                             +" WHERE id = ? "));
-            } catch (SQLException ex) {
-                Logueador.getInstance().agregaAlLog(ex.toString());
             }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return psUpdate;
     }
@@ -306,14 +338,14 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
      * @return the psDelete
      */
     public PreparedStatement getPsDelete() {
-        if (psDelete == null){
-            try {
+        try {
+            if (psDelete == null || psDelete.isClosed()){
                 setPsDelete(getConexion().prepareStatement(
                             "DELETE FROM Puntos "
                             + "WHERE id = ?"));
-            } catch (SQLException ex) {
-                Logueador.getInstance().agregaAlLog(ex.toString());
             }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
         }
         return psDelete;
     }
@@ -327,15 +359,26 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
 
     public int getIdUltimoInsert(){
         int ultimoId=0;
+        ResultSet rs = null;
         try {            
             // Se obtiene la clave generada
-            ResultSet rs = getPsInsert().getGeneratedKeys();
+            rs = getPsInsert().getGeneratedKeys();
             while (rs.next()) {            
                 ultimoId = rs.getInt(1);            
             }
-            rs.close();
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados
+            if (rs != null){
+                rs.close();
+            }
+            if (getPsInsert() != null){
+                getPsInsert().close();psInsert = null;
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return ultimoId;        
     }

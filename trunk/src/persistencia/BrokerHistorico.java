@@ -350,6 +350,14 @@ public abstract class BrokerHistorico implements Runnable{
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
         }
+        try{//ya la use, asique cierro Statements usados
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
 
@@ -376,6 +384,14 @@ public abstract class BrokerHistorico implements Runnable{
             + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo=true;
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        try{//ya la use, asique cierro Statements usados
+            if (getStatement() != null){
+                getStatement().close();
+            }
         }
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
@@ -443,7 +459,15 @@ public abstract class BrokerHistorico implements Runnable{
         catch (Exception e)
             { Logueador.getInstance().agregaAlLog(e.toString()); 
               sePudo=false;  
-            }                
+            }
+        try{//ya la use, asique cierro Statements usados
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }    
 
