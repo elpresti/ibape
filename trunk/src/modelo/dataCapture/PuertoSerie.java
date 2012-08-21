@@ -145,7 +145,7 @@ public void sentenceRead(SentenceEvent event) {
        seModifico=seModifico | getPunto().setLatHemisf(String.valueOf(rmc.getPosition().getLatHemisphere().toChar()));
        seModifico=seModifico | getPunto().setLongitud(rmc.getPosition().getLongitude());
        seModifico=seModifico | getPunto().setLonHemisf(String.valueOf(rmc.getPosition().getLonHemisphere().toChar()));
-     //seModifico=seModifico | getPunto().setVelocidad(rmc.getSpeed()); //esta velocidad solo la devuelve en nudos
+       //seModifico=seModifico | getPunto().setVelocidad(rmc.getSpeed()); //esta velocidad solo la devuelve en nudos
        seModifico=seModifico | getPunto().setRumbo(rmc.getCourse());
        if (seModifico && bmn.isUsarMapaNavegacion()){
            persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());

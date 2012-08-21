@@ -486,7 +486,7 @@ public class OperacionesBasicas {
                     }
                 Marca marca= new Marca();
                 marca.setCoordMarca(coordMarca);
-                marca.setAreaImagen(coordMarca.size());
+                //marca.setAreaImagen(coordMarca.size());
                 marcas.add(marca);
 
                 }
