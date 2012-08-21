@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Marca {
     private double profundidad;
-    private int areaImagen;
+    private String areaImagen;
     private String areaFisica;
     private int id;
     private int idPois;
@@ -34,20 +34,6 @@ public class Marca {
      */
     public void setProfundidad(double profundidad) {
         this.profundidad = profundidad;
-    }
-
-    /**
-     * @return the areaImagen
-     */
-    public int getAreaImagen() {
-        return areaImagen;
-    }
-
-    /**
-     * @param areaImagen the areaImagen to set
-     */
-    public void setAreaImagen(int areaImagen) {
-        this.areaImagen = areaImagen;
     }
 
     public double calculaProf() {
@@ -116,5 +102,19 @@ public class Marca {
      */
     public void setAreaFisica(String areaFisica) {
         this.areaFisica = areaFisica;
+    }
+
+    /**
+     * @return the areaImagen
+     */
+    public String getAreaImagen() {
+        return areaImagen;
+    }
+
+    /**
+     * @param areaImagen the areaImagen to set
+     */
+    public void setAreaImagen(String areaImagen) {
+        this.areaImagen = areaImagen;
     }
 }

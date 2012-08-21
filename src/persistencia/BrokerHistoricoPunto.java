@@ -93,8 +93,8 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 if (pto.getFechaYhora() != null){ 
                     getPsInsert().setLong(1, pto.getFechaYhora().getTime());
                 }
-                getPsInsert().setDouble(2,pto.getLatitud());//guardamos la latitud en Grados Decimales
-                getPsInsert().setDouble(3,pto.getLongitud());//guardamos la longitud en Grados Decimales --> Valor decimal = grados + (minutos/60) + (y 3600 segundos)
+                getPsInsert().setDouble(2,pto.getLatConNegativo());//guardamos la latitud en Grados Decimales
+                getPsInsert().setDouble(3,pto.getLonConNegativo());//guardamos la longitud en Grados Decimales --> Valor decimal = grados + (minutos/60) + (y 3600 segundos)
                 getPsInsert().setDouble(4,pto.getAltitud());
                 getPsInsert().setDouble(5,pto.getVelocidad());
                 getPsInsert().setDouble(6,pto.getRumbo());
