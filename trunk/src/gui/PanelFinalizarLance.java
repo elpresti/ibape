@@ -17,7 +17,10 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Cajon;
+import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.Especie;
+import persistencia.BrokerCajon;
+import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerEspecie;
 import persistencia.BrokerLance;
 import persistencia.Logueador;
@@ -29,7 +32,21 @@ import persistencia.Logueador;
 public class PanelFinalizarLance extends javax.swing.JPanel {
 
     static PanelFinalizarLance unicaInstancia;
-    private DefaultTableModel modeloTablaCajones = new DefaultTableModel();
+    private DefaultTableModel modeloTablaCajones = new javax.swing.table.DefaultTableModel(
+            new Object[][]{},
+            new String[]{
+                "idLance", "# Cajones", "Especie", "Acciones"
+            }) {
+
+        Class[] types = new Class[]{
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+        };
+
+        @Override
+        public Class getColumnClass(int columnIndex) {
+            return types[columnIndex];
+        }
+    };
 
     /** Creates new form PanelFinalizarLance */
     private PanelFinalizarLance() {
@@ -67,6 +84,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelSuceso = new org.jdesktop.swingx.JXPanel();
         lblSuceso = new org.jdesktop.swingx.JXLabel();
         comboSuceso = new javax.swing.JComboBox();
+        jButton2 = new javax.swing.JButton();
         panelComentarios = new org.jdesktop.swingx.JXPanel();
         lblComentarios = new org.jdesktop.swingx.JXLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -119,17 +137,14 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
         tablaCajones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "# Cajones", "Especie", "Acciones"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, true
@@ -241,7 +256,6 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelSuceso.setMaximumSize(new java.awt.Dimension(500, 50));
         panelSuceso.setMinimumSize(new java.awt.Dimension(500, 50));
         panelSuceso.setPreferredSize(new java.awt.Dimension(500, 50));
-        panelSuceso.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 15));
 
         lblSuceso.setText("Suceso ocurrido");
         lblSuceso.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -253,6 +267,14 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         comboSuceso.setMinimumSize(new java.awt.Dimension(200, 20));
         comboSuceso.setPreferredSize(new java.awt.Dimension(200, 20));
         panelSuceso.add(comboSuceso);
+
+        jButton2.setText("accion");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        panelSuceso.add(jButton2);
 
         panelMedio.add(panelSuceso, java.awt.BorderLayout.CENTER);
 
@@ -284,7 +306,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
         panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnGuardarLance.setText("Guardar lance");
         btnGuardarLance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -303,41 +325,49 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
         // TODO add your handling code here:
         controllers.ControllerLance.getInstance().guardaLance();
+
     }//GEN-LAST:event_btnGuardarLanceActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (!campoCajones.getText().isEmpty() && Integer.parseInt(campoCajones.getText())>0 && comboEspecies.getSelectedIndex() >= 0) {
-        Cajon unCajon = new Cajon();
-        unCajon.setIdLance(/*BrokerLance.getInstance().getIdLanceActual()*/1);
-        Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
-        unCajon.setIdEspecie(unaEsp.getId());
-        unCajon.setCantidad(Integer.valueOf(campoCajones.getText()));
-        ControllerLance.getInstance().addCajon(unCajon); //quedan en una lista
+        if (!campoCajones.getText().isEmpty() && Integer.valueOf(campoCajones.getText()) > 0 && comboEspecies.getSelectedIndex() > -1) {
+            Cajon unCajon = new Cajon();
+            unCajon.setIdLance(/*BrokerLance.getInstance().getIdLanceActual()*/1);
+            Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
+            unCajon.setIdEspecie(unaEsp.getId());
+            unCajon.setCantidad(Integer.valueOf(campoCajones.getText()));
+            ControllerLance.getInstance().addCajon(unCajon); //quedan en una lista
 
-        
-        int cantCols = 4;
-        ArrayList a = new ArrayList();
-        a.add(unCajon.getIdLance());
-        a.add(unCajon.getCantidad());
-        a.add(unaEsp.getNombre()/*unCajon.getIdEspecie()*/);
-        a.add("acciones");
-        //insertar la fila    
-        modeloTablaCajones.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
-        a.clear();
-        tablaCajones.setModel(modeloTablaCajones);              
-        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
+            cargaGrillaCajones();
+            //    int cantCols = 4;
+            //    ArrayList a = new ArrayList();
+            //    a.add(unCajon.getIdLance());
+            //    a.add(unCajon.getCantidad());
+            //    a.add(unaEsp.getNombre()/*unCajon.getIdEspecie()*/);
+            //    a.add("false");
+            //    //insertar la fila 
+            //    modeloTablaCajones.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
+            //    a.clear();
+            //    tablaCajones.setModel(modeloTablaCajones);
+            //    ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
         } else {
             JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        eliminarCajon();
+        //modificarCajon();
+    }//GEN-LAST:event_jButton2ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarLance;
     private javax.swing.JTextField campoCajones;
     private javax.swing.JComboBox comboEspecies;
     private javax.swing.JComboBox comboSuceso;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXLabel lblCantCajones;
@@ -370,23 +400,25 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     }
 
     //main de prueba 
-    /*
     public static void main(String[] args) {
-    javax.swing.JFrame elFrame = new javax.swing.JFrame();
-    elFrame.setSize(500, 500);
-    PanelFinalizarLance a = new PanelFinalizarLance();
-    //cargaEspecies();
-    elFrame.add(a);
-    elFrame.setVisible(true);
+        javax.swing.JFrame elFrame = new javax.swing.JFrame();
+        elFrame.setSize(500, 500);
+        PanelFinalizarLance a = new PanelFinalizarLance();
+        //cargaEspecies();
+        elFrame.add(a);
+        elFrame.setVisible(true);
     }
-     */
+
     private void inicializador() {
         cargaComboEspecies();
-        ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);
+        cargaComboSuceso();
+        /*ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);
         modeloTablaCajones.addColumn("idLance");
         modeloTablaCajones.addColumn("# Cajones");
         modeloTablaCajones.addColumn("Especie");
         modeloTablaCajones.addColumn("Acciones");
+        tablaCajones.setModel(modeloTablaCajones);
+        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);*/
     }
 
     private void cargaComboEspecies() {
@@ -400,28 +432,78 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         }
     }
 
-    public ArrayList<Cajon> getCajones() {
-        //------------
-        for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-        }
-
-        //------------
-        ArrayList<Cajon> listaCajones = null;
-        Cajon unCajon = new Cajon();
-        for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-            unCajon.setIdLance(0); //que lance?
-            //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
-            //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
-            listaCajones.add(unCajon);
-        }
-        return listaCajones;
+    /*public ArrayList<Cajon> getCajones() {
+    //------------
+    for (int i = 0; i < tablaCajones.getRowCount(); i++) {
     }
-
+    
+    //------------
+    ArrayList<Cajon> listaCajones = null;
+    Cajon unCajon = new Cajon();
+    for (int i = 0; i < tablaCajones.getRowCount(); i++) {
+    unCajon.setIdLance(0); //que lance?
+    //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
+    //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
+    listaCajones.add(unCajon);
+    }
+    return listaCajones;
+    }*/
     public String getComentarios() {
         if (!txtComentarios.getText().isEmpty()) {
             return txtComentarios.getText();
         } else {
             return "";
         }
+    }
+
+    private void cargaComboSuceso() {
+        try {
+            comboSuceso.removeAllItems();
+            for (CategoriaPoi i : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
+                comboSuceso.addItem(i);
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+    }
+
+    private void eliminarCajon() {
+        if (JOptionPane.showConfirmDialog(null,
+                "Desea eliminar los cajones seleccionados?",
+                "Eliminar cajones",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE) == 0) {
+            for (int i = 0; i < tablaCajones.getRowCount(); i++) {
+                if ((Boolean) tablaCajones.getValueAt(i, tablaCajones.getColumnCount(false)-1)) {
+                    ControllerLance.getInstance().borrarCajon((Cajon) tablaCajones.getValueAt(i, 0));
+                }
+            }
+        }
+        cargaGrillaCajones();
+    }
+
+    private void modificarCajon() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void cargaGrillaCajones() {
+        int cantCols = 4;
+        Cajon unCajon;
+        ArrayList a = new ArrayList();
+        modeloTablaCajones.setRowCount(0);//vacia la tabla
+        //ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);//da exeption
+        ArrayList<Cajon> b = ControllerLance.getInstance().getListadoCajones();
+        for (int i = 0; i < b.size(); i++/*BrokerCajon.getInstance().getCajonesLanceFromDB(ALLBITS)*/) {
+            a.add(b.get(i));//<--Aca esta el objeto -muestra idLance
+            a.add(b.get(i).getCantidad());
+            a.add(BrokerEspecie.getInstance().getEspecieFromDB(b.get(i).getIdEspecie()).getNombre()/*unCajon.getIdEspecie()*/);
+            a.add("false");
+            //insertar la fila 
+            modeloTablaCajones.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
+            a.clear();
+
+        }
+        tablaCajones.setModel(modeloTablaCajones);
+        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
     }
 }

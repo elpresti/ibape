@@ -38,19 +38,7 @@ public class ControllerLance {
     }
 
     public void addCajon(Cajon unCajon) {
-        listadoCajones.add(unCajon);
-    }
-
-    private void guardaCajones(ArrayList<Cajon> cajones, int nroLance) {
-        //de donde sacaria el nro de lance al que pertenece= o selecciono un lance, recupero el id y guardo
-        //los cajones o no asigno a cada lance, va todo en la campania ->lo hago sin idLance ahora
-        try {
-            for (Cajon i : cajones) {
-                i.setIdLance(nroLance);
-                BrokerCajon.getInstance().insertCajon(i);
-            }
-        } catch (Exception e) {
-        }
+        getListadoCajones().add(unCajon);
     }
 
     public void iniciaLance() {
@@ -64,9 +52,22 @@ public class ControllerLance {
             unLance.setfYHIni(p.getFechaYhora());
         }
     }
-
+       
+    private void guardaCajones(ArrayList<Cajon> cajones, int nroLance) {
+        //de donde sacaria el nro de lance al que pertenece= o selecciono un lance, recupero el id y guardo
+        //los cajones o no asigno a cada lance, va todo en la campania ->lo hago sin idLance ahora
+        try {
+            for (Cajon i : cajones) {
+                i.setIdLance(nroLance);
+                BrokerCajon.getInstance().insertCajon(i);
+            }
+        } catch (Exception e) {
+        }
+    }
+   
     public void guardaLance() {
-        guardaCajones(PanelFinalizarLance.getInstance().getCajones(), BrokerLance.getInstance().getIdLanceActual());
+        guardaCajones(getListadoCajones(), BrokerLance.getInstance().getIdLanceActual());
+        
     }
 
     public void finalizarLance() {
@@ -77,6 +78,7 @@ public class ControllerLance {
             unLance.setPosFinLat(p.getLatitud());
             unLance.setPosFinLon(p.getLongitud());
             unLance.setfYHFin(p.getFechaYhora());
+            //Cual es la diferencia entre guardar lance y finalizar lance?
             unLance.setComentarios(PanelFinalizarLance.getInstance().getComentarios());
         }
     }
@@ -95,27 +97,15 @@ public class ControllerLance {
         this.estadoLance = estadoLance;
     }
 
-    public DefaultTableModel arraylstToTableModel(ArrayList lista) {
-        /*String columna[] = new String[]{"Columna1", "Columna2", "Columna3"};
-         DefaultTableModel dtmEjemplo = new DefaultTableModel(null, columna);
-        
-         //crs = rs
+    public void borrarCajon(Cajon unCajon) {
+        getListadoCajones().remove(unCajon);
+    }
 
-        Object datos[] = new Object[3]; //Numero de columnas de la tabla
-
-        try {
-            while (crs.next()) {
-                for (int i = 0; i < 3; i++) {
-                    datos[i] = crs.getObject(i + 1);
-                }
-                dtmEjemplo.addRow(datos);
-            }
-
-            crs.close();
-        } catch (Exception e) {
-        }
-        return dtmEjemplo;*/
-        return null;
+    /**
+     * @return the listadoCajones
+     */
+    public ArrayList<Cajon> getListadoCajones() {
+        return listadoCajones;
     }
 
 }

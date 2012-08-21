@@ -163,5 +163,9 @@ public class POI {
     public void setCategoria(CategoriaPoi categoria) {
         this.categoria = categoria;
     }
-        
+
+    @Override
+    public String toString() {
+        return "" + getId();
+    }
 }

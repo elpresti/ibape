@@ -7,6 +7,7 @@ package persistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import modelo.dataManager.Especie;
 
 /**
  *
@@ -47,7 +48,7 @@ public class BrokerEspecie extends BrokerPpal {
     }
 
     public modelo.dataManager.Especie getEspecieFromDB(int id) {
-        modelo.dataManager.Especie esp = null;
+        modelo.dataManager.Especie esp = new Especie();
         try {
             ResultSet rs = getStatement().executeQuery("SELECT * FROM Especies WHERE id= " + id);
             if (rs.next()) {

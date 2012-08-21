@@ -188,10 +188,12 @@ public class BrokerPOIs extends BrokerPpal {
             if (poi.getPathImg() != null) {
                 PathImg = "'" + poi.getPathImg() + "'";
             }
-
-            sqlQuery = "UPDATE Pois SET"
+            sqlQuery = "UPDATE Pois SET "
                     + "pathImg= " + PathImg + ", "
-                    + "categoria=" + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/ + ", "
+                    + "posLat= " + poi.getLatitud() + ", "
+                    + "posLon= " + poi.getLongitud() + ", "
+                    + "idCategoriaPOI=" + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/ + ", "
+                    + "descripcion= '" + poi.getDescripcion() + "' "
                     + " WHERE "
                     + "id=" + poi.getId();
             System.out.println("update: " + sqlQuery);

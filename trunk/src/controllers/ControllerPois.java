@@ -55,21 +55,21 @@ public class ControllerPois {
         return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
     }
 
-    public void agregaPOI(int idCategoriaPOI, String descripcion) {
-       if(AdministraCampanias.getInstance().getCampaniaEnCurso()!=null){
-        modelo.dataManager.POI p = new POI();
-        p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
-        p.setIdCategoriaPOI(idCategoriaPOI);
-        p.setLatitud(Punto.getInstance().getLatitud());
-        p.setLongitud(Punto.getInstance().getLongitud());
-        p.setDescripcion(descripcion);
-        p.setMarcas(null);//ver
-        p.setPathImg("VER ruta a la imagen(ControllerPOIS.agregaPOI)");//ver
-        p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
-        BrokerPOIs.getInstance().insertPOI(p);
-       }else{
-           JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
-       }
+    public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud) {
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+            modelo.dataManager.POI p = new POI();
+            p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
+            p.setIdCategoriaPOI(idCategoriaPOI);
+            p.setLatitud(latitud);
+            p.setLongitud(longitud);
+            p.setDescripcion(descripcion);
+            p.setMarcas(null);//ver
+            p.setPathImg("VER ruta a la imagen(ControllerPOIS.agregaPOI)");//ver
+            p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
+            BrokerPOIs.getInstance().insertPOI(p);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
+        }
     }
 
     public void agregaCategoriaPOI(String titulo) {
@@ -77,5 +77,21 @@ public class ControllerPois {
         cP.setTitulo(titulo);
         cP.setPathIcono("VER null en el broker");
         BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
+    }
+
+    public void eliminaPOI(POI unPoi) {
+        if (!BrokerPOIs.getInstance().deletePOI(unPoi)) {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar el POI " + unPoi.getId());
+        } else {
+            System.out.println("Poi eliminado: " + unPoi.getId());
+        }
+    }
+
+    public void modificaPOI(POI unPoi) {
+        if (!BrokerPOIs.getInstance().updatePOI(unPoi)) {
+            JOptionPane.showMessageDialog(null, "No se pudo modificar el POI " + unPoi.getId());
+        } else {
+            System.out.println("Poi modificado: " + unPoi.getId());
+        }
     }
 }

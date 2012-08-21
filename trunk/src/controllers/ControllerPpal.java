@@ -23,23 +23,23 @@ import persistencia.Logueador;
  * @author Sebastian
  */
 public class ControllerPpal {
-    static ControllerPpal unicaInstancia;    
-    private ControllerConfig contConfig=ControllerConfig.getInstance();
-    
-    public void accionesAlSalir(){
-        if (BrokerDbMapa.getInstance().isUsarMapaNavegacion() || modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
-            modelo.gisModule.WebServer.getInstance().cerrarWebServer();        
-            modelo.gisModule.Browser.getInstance().cerrarBrowserPortable();            
-        } 
-        controllers.ControllerPpal.getInstance().guardarConfigPanelConfig(); 
-        if ( (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) && 
-             (AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado() == 1) ){
+    static ControllerPpal unicaInstancia;
+    private ControllerConfig contConfig = ControllerConfig.getInstance();
+
+    public void accionesAlSalir() {
+        if (BrokerDbMapa.getInstance().isUsarMapaNavegacion() || modelo.gisModule.WebServer.getInstance().isWebServerEncendido()) {
+            modelo.gisModule.WebServer.getInstance().cerrarWebServer();
+            modelo.gisModule.Browser.getInstance().cerrarBrowserPortable();
+        }
+        controllers.ControllerPpal.getInstance().guardarConfigPanelConfig();
+        if ((AdministraCampanias.getInstance().getCampaniaEnCurso() != null)
+                && (AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado() == 1)) {
             controllers.ControllerCampania.getInstance().setEstadoCampaniaEnCurso(2); //si hay alguna campania en curso, la pauso
         }
     }
-    
-    public void accionesAlIniciar(){
-        controllers.ControllerConfig.getInstance().inicializaConexiones();        
+
+    public void accionesAlIniciar() {
+        controllers.ControllerConfig.getInstance().inicializaConexiones();
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
         controllers.ControllerCampania.getInstance();
@@ -50,72 +50,74 @@ public class ControllerPpal {
             gui.PanelOpcCampanias.getInstance().setGuiCampaniaPausada();
             gui.PanelOpcCampanias.getInstance().cargarDatosDeCampaniaEnCurso();
             gui.PanelOpcCampanias.getInstance().marcaCampaniaEnCurso();
-        }        
-    }
-    
-    public static ControllerPpal getInstance() {
-       if (unicaInstancia == null)
-          unicaInstancia = new ControllerPpal();       
-       return unicaInstancia;
+        }
     }
 
-    public boolean guardarConfigPanelConfig(){
-        boolean sePudo=true;
+    public static ControllerPpal getInstance() {
+        if (unicaInstancia == null) {
+            unicaInstancia = new ControllerPpal();
+        }
+        return unicaInstancia;
+    }
+
+    public boolean guardarConfigPanelConfig() {
+        boolean sePudo = true;
         gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();
         gui.PanelOpcCampanias c = gui.PanelOpcCampanias.getInstance();
-        String comboPuertoGPS="";
-        if (p.getComboPuertoGps().getSelectedItem() != null){
+        String comboPuertoGPS = "";
+        if (p.getComboPuertoGps().getSelectedItem() != null) {
             comboPuertoGPS = p.getComboPuertoGps().getSelectedItem().toString();
         }
-        String comboPuertoSONDA="";
-        if (p.getComboPuertoSonda().getSelectedItem() != null){
+        String comboPuertoSONDA = "";
+        if (p.getComboPuertoSonda().getSelectedItem() != null) {
             comboPuertoSONDA = p.getComboPuertoSonda().getSelectedItem().toString();
-        }        
-        sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Gps(
-                String.valueOf(p.getChkEstadoGps().isSelected()), 
-                comboPuertoGPS, 
-                p.getComboVelocidadGps().getSelectedItem().toString(), 
-                p.getComboBitsDatosGps().getSelectedItem().toString(), 
+        }
+        sePudo = sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Gps(
+                String.valueOf(p.getChkEstadoGps().isSelected()),
+                comboPuertoGPS,
+                p.getComboVelocidadGps().getSelectedItem().toString(),
+                p.getComboBitsDatosGps().getSelectedItem().toString(),
                 p.getComboParidadGps().getSelectedItem().toString(),
                 String.valueOf(p.getChkAutoConectaGps().isSelected()));
-        sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Sonda(
-                String.valueOf(p.getChkEstadoSonda().isSelected()), 
+        sePudo = sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Sonda(
+                String.valueOf(p.getChkEstadoSonda().isSelected()),
                 comboPuertoSONDA,
-                p.getComboVelocidadSonda().getSelectedItem().toString(), 
-                p.getComboBitsDatosSonda().getSelectedItem().toString(), 
+                p.getComboVelocidadSonda().getSelectedItem().toString(),
+                p.getComboBitsDatosSonda().getSelectedItem().toString(),
                 p.getComboParidadSonda().getSelectedItem().toString(),
                 String.valueOf(p.getChkAutoConectaSonda().isSelected()));
-        sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Lan(
-                String.valueOf(p.getChkEstadoLan().isSelected()), 
+        sePudo = sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Lan(
+                String.valueOf(p.getChkEstadoLan().isSelected()),
                 p.getCampoRutaHistorico().getText(),
                 String.valueOf(p.getChkAutoConectaLan().isSelected()));
-        sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Unidades(
-                p.getComboDistancia().getSelectedItem().toString(), 
-                p.getComboVelocidad().getSelectedItem().toString(), 
+        sePudo = sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Unidades(
+                p.getComboDistancia().getSelectedItem().toString(),
+                p.getComboVelocidad().getSelectedItem().toString(),
                 p.getComboTemp().getSelectedItem().toString());
-        sePudo=sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Historico(
-                String.valueOf(c.getChkHistoricoGpsSonda().isSelected()), 
-                String.valueOf(c.getChkHistoricoPeces().isSelected()), 
+        sePudo = sePudo && BrokerConfig.getInstance().actualizaDatosPanelConfig_Historico(
+                String.valueOf(c.getChkHistoricoGpsSonda().isSelected()),
+                String.valueOf(c.getChkHistoricoPeces().isSelected()),
                 String.valueOf(c.getChkHistoricoSondaSets().isSelected()));
-        sePudo=sePudo && BrokerConfig.getInstance().guardaConfiguracion();
+        sePudo = sePudo && BrokerConfig.getInstance().guardaConfiguracion();
         return sePudo;
     }
     
     public boolean conectaYleeDelGps(){
         boolean sePudo=false;       
         try {
-            gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();        
+            gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();
             modelo.dataCapture.Gps gps = modelo.dataCapture.Gps.getInstance();
             //seteamos el puerto
             String puertoGps = String.valueOf(p.getComboPuertoGps().getSelectedItem());
             String nroCom;
-            if (!(puertoGps.indexOf(":")== -1)){
+            if (!(puertoGps.indexOf(":") == -1)) {
                 nroCom = puertoGps.substring(0, puertoGps.indexOf(":"));
-            }            
-            else { nroCom = puertoGps; }
-            nroCom = nroCom.replace("COM","").trim();        
+            } else {
+                nroCom = puertoGps;
+            }
+            nroCom = nroCom.replace("COM", "").trim();
             gps.setNroCom(Integer.valueOf(nroCom));
-            
+
             //seteamos la velocidad del puerto
             Integer velocidadGps = Integer.valueOf(String.valueOf(p.getComboVelocidadGps().getSelectedItem()));
             gps.setVelocidadCom(velocidadGps);
@@ -123,48 +125,47 @@ public class ControllerPpal {
             Integer bitsDatosGps = Integer.valueOf(String.valueOf(p.getComboBitsDatosGps().getSelectedItem()));
             gps.setBitsDeDatosCom(bitsDatosGps);
             //seteamos los bits de paridad
-            if (String.valueOf(p.getComboParidadGps().getSelectedItem()).equals("Impar"))
-                { gps.setBitsParidadCom(1); }
-            else
-                if (String.valueOf(p.getComboParidadGps().getSelectedItem()).equals("Par"))
-                    { gps.setBitsParidadCom(2); }
-                else
-                    { gps.setBitsParidadCom(0); }    
+            if (String.valueOf(p.getComboParidadGps().getSelectedItem()).equals("Impar")) {
+                gps.setBitsParidadCom(1);
+            } else if (String.valueOf(p.getComboParidadGps().getSelectedItem()).equals("Par")) {
+                gps.setBitsParidadCom(2);
+            } else {
+                gps.setBitsParidadCom(0);
+            }
             //disparamos la lectura del puerto
             gps.disparaLectura();
-            sePudo=true;
-        }
-        catch (Exception e) {
+            sePudo = true;
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
-    
-    public boolean detenerLecturaGps(){
+
+    public boolean detenerLecturaGps() {
         boolean sePudo = false;
-        try{
+        try {
             modelo.dataCapture.Gps.getInstance().detieneLectura();
-            sePudo=true;
-        }
-        catch (Exception e){
+            sePudo = true;
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
-        }                        
+        }
         return sePudo;
     }
-    
-    public boolean conectaYleeDeLaSonda(){
-        boolean sePudo=false;       
+
+    public boolean conectaYleeDeLaSonda() {
+        boolean sePudo = false;
         try {
-            gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();        
+            gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();
             modelo.dataCapture.Sonda sonda = modelo.dataCapture.Sonda.getInstance();
             //seteamos el puerto
             String puertoSonda = String.valueOf(p.getComboPuertoSonda().getSelectedItem());
             String nroCom;
-            if (!(puertoSonda.indexOf(":")== -1)){
+            if (!(puertoSonda.indexOf(":") == -1)) {
                 nroCom = puertoSonda.substring(0, puertoSonda.indexOf(":"));
-            }            
-            else { nroCom = puertoSonda; }
-            nroCom = nroCom.replace("COM","").trim();        
+            } else {
+                nroCom = puertoSonda;
+            }
+            nroCom = nroCom.replace("COM", "").trim();
             sonda.setNroCom(Integer.valueOf(nroCom));
             //seteamos la velocidad del puerto
             Integer velocidadSonda = Integer.valueOf(String.valueOf(p.getComboVelocidadSonda().getSelectedItem()));
@@ -173,51 +174,47 @@ public class ControllerPpal {
             Integer bitsDatosSonda = Integer.valueOf(String.valueOf(p.getComboBitsDatosSonda().getSelectedItem()));
             sonda.setBitsDeDatosCom(bitsDatosSonda);
             //seteamos los bits de paridad
-            if (String.valueOf(p.getComboParidadSonda().getSelectedItem()).equals("Impar"))
-                { sonda.setBitsParidadCom(1); }
-            else
-                if (String.valueOf(p.getComboParidadSonda().getSelectedItem()).equals("Par"))
-                    { sonda.setBitsParidadCom(2); }
-                else
-                    { sonda.setBitsParidadCom(0); }    
+            if (String.valueOf(p.getComboParidadSonda().getSelectedItem()).equals("Impar")) {
+                sonda.setBitsParidadCom(1);
+            } else if (String.valueOf(p.getComboParidadSonda().getSelectedItem()).equals("Par")) {
+                sonda.setBitsParidadCom(2);
+            } else {
+                sonda.setBitsParidadCom(0);
+            }
             //disparamos la lectura del puerto
             sonda.disparaLectura();
-            sePudo=true;
-        }
-        catch (Exception e) {
+            sePudo = true;
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        return sePudo;
-    }
-    
-    public boolean detenerLecturaSonda(){
-        boolean sePudo = false;
-        try{
-            modelo.dataCapture.Sonda.getInstance().detieneLectura();
-            sePudo=true;
-        }
-        catch (Exception e){
-            Logueador.getInstance().agregaAlLog(e.toString());
-        }                        
         return sePudo;
     }
 
-    public boolean abrirWebServer(){
-        boolean sePudo=false;
-        try{
-            if (!modelo.gisModule.WebServer.getInstance().isWebServerEncendido()){
-                modelo.gisModule.WebServer.getInstance().start();
-                sePudo=true;
-            }
-            else{
-                sePudo=true;
-            }
-        }
-        catch(Exception e){
+    public boolean detenerLecturaSonda() {
+        boolean sePudo = false;
+        try {
+            modelo.dataCapture.Sonda.getInstance().detieneLectura();
+            sePudo = true;
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
-    }    
+    }
+
+    public boolean abrirWebServer() {
+        boolean sePudo = false;
+        try {
+            if (!modelo.gisModule.WebServer.getInstance().isWebServerEncendido()) {
+                modelo.gisModule.WebServer.getInstance().start();
+                sePudo = true;
+            } else {
+                sePudo = true;
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
 
     public void msgReiniciarAplicacion() {
         JOptionPane.showMessageDialog(null, "Fue necesario inicializar IBAPE, ahora debe reiniciar la aplicación");
@@ -225,17 +222,15 @@ public class ControllerPpal {
 
     public void msgNoSePudoCopiarArchivosNecesarios() {
         String archOS;
-        if (Sistema.getInstance().is64bOS()){
+        if (Sistema.getInstance().is64bOS()) {
             archOS = "run64b.bat";
-        }
-        else{
+        } else {
             archOS = "run32b.bat";
         }
         JOptionPane.showMessageDialog(null, "No se pudieron copiar los archivos necesarios para recibir datos por puerto "
-                + "serie\n Pruebe de iniciar IBAPE ejecutando "+archOS, "Problemas para capturar datos", JOptionPane.ERROR_MESSAGE);
+                + "serie\n Pruebe de iniciar IBAPE ejecutando " + archOS, "Problemas para capturar datos", JOptionPane.ERROR_MESSAGE);
     }
 
-      
     public void vaciarJTable(DefaultTableModel dTM) {
         dTM.setColumnCount(0);
         while (dTM.getRowCount() > 0) {
@@ -251,17 +246,24 @@ public class ControllerPpal {
         tabla.getColumnModel().getColumn(indice).setResizable(false);
     }
 
-    public Object[] agregaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
+    public Object[] creaUnaFilaGenerica(int cantCols, ArrayList unObjeto) {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Object[] fila = new Object[cantCols]; //creamos la fila
         for (int i = 0; i < unObjeto.size(); i++) {
             if (unObjeto.get(i) != null) {
-                fila[i] = String.valueOf(unObjeto.get(i));
+                if (unObjeto.get(i).toString().equalsIgnoreCase("false")) {
+                    fila[i] = false;
+                } else {
+                    if (unObjeto.get(i).toString().equalsIgnoreCase("true")) {
+                        fila[i] = true;
+                    } else {
+                        fila[i] = unObjeto.get(i);
+                    }
+                }
             } else {
                 fila[i] = "";
             }
         }
         return fila;
     }
-    
 }
