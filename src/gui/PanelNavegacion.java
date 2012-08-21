@@ -115,7 +115,9 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblTitulo = new java.awt.Label();
         panelDatosMapa = new javax.swing.JPanel();
         lblTxtDatosMapa = new java.awt.Label();
+        panelRecorrido = new org.jdesktop.swingx.JXPanel();
         chkRecorrido = new javax.swing.JCheckBox();
+        lblCantPuntosRecorrido = new org.jdesktop.swingx.JXLabel();
         chkConCamara = new javax.swing.JCheckBox();
         chkPoisTodos = new javax.swing.JCheckBox();
         lblTxtTablaCatPois = new java.awt.Label();
@@ -487,6 +489,8 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblTxtDatosMapa.setText(" Datos mostrados en el mapa:");
         panelDatosMapa.add(lblTxtDatosMapa);
 
+        panelRecorrido.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 2));
+
         chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkRecorrido.setText("Recorrido");
         chkRecorrido.addActionListener(new java.awt.event.ActionListener() {
@@ -494,7 +498,13 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
                 chkRecorridoActionPerformed(evt);
             }
         });
-        panelDatosMapa.add(chkRecorrido);
+        panelRecorrido.add(chkRecorrido);
+
+        lblCantPuntosRecorrido.setForeground(new java.awt.Color(0, 204, 51));
+        lblCantPuntosRecorrido.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
+        panelRecorrido.add(lblCantPuntosRecorrido);
+
+        panelDatosMapa.add(panelRecorrido);
 
         chkConCamara.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkConCamara.setSelected(true);
@@ -708,6 +718,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private java.awt.Label lblCantMarcas;
+    private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido;
     private java.awt.Label lblDatosNavegacion;
     private java.awt.Label lblFechaHora;
     private java.awt.Label lblLatitud;
@@ -746,6 +757,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JPanel panelListaMarcas;
     private org.jdesktop.swingx.JXPanel panelMapa;
     private javax.swing.JPanel panelProfPromMarcas;
+    private org.jdesktop.swingx.JXPanel panelRecorrido;
     private javax.swing.JPanel panelRelleno1;
     private javax.swing.JPanel panelRelleno2;
     private javax.swing.JPanel panelResultadosImgs;
@@ -942,6 +954,15 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         return idSeleccionado;
     }
 
+    private void setTxtCantidadDePuntos(int cantPuntos) {
+        if (cantPuntos>=0){
+            lblCantPuntosRecorrido.setText("Recorrido compuesto por "+cantPuntos+" puntos");
+        }
+        else{
+            lblCantPuntosRecorrido.setText("");
+        }
+    }
+    
     /**
      * @return the chkRecorrido
      */
@@ -1022,6 +1043,17 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
      */
     public void setChkPoisTodos(javax.swing.JCheckBox chkPoisTodos) {
         this.chkPoisTodos = chkPoisTodos;
+    }
+
+    public void actualizaRecorrido() {
+        if (ControllerCampania.getInstance().getIdCampaniaEnCurso()>=0){
+            habilitaChkRecorrido(true);
+            setTxtCantidadDePuntos(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(ControllerCampania.getInstance().getIdCampaniaEnCurso()));
+        }
+        else{
+            habilitaChkRecorrido(false);
+            setTxtCantidadDePuntos(-1);
+        }
     }
 
 

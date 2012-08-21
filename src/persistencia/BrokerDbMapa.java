@@ -97,7 +97,7 @@ public class BrokerDbMapa implements Runnable{
              return sePudo;
         }
         catch(Exception e) {
-            System.out.println(e);
+            Logueador.getInstance().agregaAlLog(e.toString());
             return sePudo;
         }
     }
@@ -215,9 +215,9 @@ public class BrokerDbMapa implements Runnable{
                 +"LONGITUD VARCHAR(30) NOT NULL, "
                 +"VELOCIDAD VARCHAR(30) NOT NULL, "
                 +"PROFUNDIDAD VARCHAR(30) NOT NULL, " 
-                +"OBJETO VARCHAR(40) NOT NULL, "   
-                +"TEMPAGUA VARCHAR(40) NOT NULL, "   
-                +"COMENTARIOS VARCHAR(400) NOT NULL, "
+                +"OBJETO VARCHAR(40), "   
+                +"TEMPAGUA VARCHAR(40), "   
+                +"COMENTARIOS VARCHAR(400), "
                 +"LEIDO BOOLEAN NOT NULL DEFAULT 0, "
                 +"KML TEXT NOT NULL, "
                 +" PRIMARY KEY (ID)"
@@ -780,8 +780,8 @@ public class BrokerDbMapa implements Runnable{
                 sePudo=true;
              }
         }
-        catch(Exception e) {
-            System.out.println(e);
+        catch(Exception e) {            
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
@@ -824,19 +824,18 @@ public class BrokerDbMapa implements Runnable{
                 preparedStatement.setString(Integer.valueOf(getCampoOBJETOpos()), "RECORRIDO Navegacion");
                 preparedStatement.setBoolean(Integer.valueOf(getCampoLEIDOpos()), false);
                 preparedStatement.setString(Integer.valueOf(getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
-                preparedStatement.setString(Integer.valueOf(getCampoKMLpos()), 
+                preparedStatement.setString(Integer.valueOf(getCampoKMLpos()),
                         modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos));
                 preparedStatement.executeUpdate(); 
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
                 preparedStatement.close();
                 sePudo=true;
              }
-             return sePudo;
         }
         catch(Exception e) {
-            System.out.println(e);
-            return sePudo;
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
+        return sePudo;        
     }
 
     
@@ -865,7 +864,6 @@ public class BrokerDbMapa implements Runnable{
              }             
         }
         catch(Exception e) {
-            System.out.println(e);
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
