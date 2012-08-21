@@ -10,8 +10,10 @@
  */
 package gui;
 
+import controllers.ControllerNavegacion;
 import controllers.ControllerPpal;
 import java.util.ArrayList;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -28,10 +30,40 @@ import persistencia.BrokerPpal;
 public class PanelOpcPOIs extends javax.swing.JPanel {
 
     static PanelOpcPOIs unicaInstancia;
-    private DefaultTableModel modeloTablaPOIS = new DefaultTableModel();
-    private DefaultTableModel modeloTablaCategoriasPOI = new DefaultTableModel();
+    private boolean modificandoPOI;
+    private DefaultTableModel modeloTablaPOIS = new javax.swing.table.DefaultTableModel(
+            new Object[][]{},
+            new String[]{
+                "id", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion", "Acciones"
+            }) {
 
+        Class[] types = new Class[]{
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+        };
+
+        @Override
+        public Class getColumnClass(int columnIndex) {
+            return types[columnIndex];
+        }
+    };
+    private DefaultTableModel modeloTablaCategoriasPOI = new javax.swing.table.DefaultTableModel(
+            new Object[][]{},
+            new String[]{
+                "id", "Nombre de Categoria", "Icono", "Acciones"
+            }) {
+
+        Class[] types = new Class[]{
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+        };
+
+        @Override
+        public Class getColumnClass(int columnIndex) {
+            return types[columnIndex];
+        }
+    };
     ;
+    private boolean agregandoPOI;
+    private POI tempPOI;
 
     /** Creates new form PanelOpcPOIs */
     private PanelOpcPOIs() {
@@ -58,7 +90,21 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelTablaPois = new org.jdesktop.swingx.JXPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaPois = new org.jdesktop.swingx.JXTable();
-        panelAgregaPoi = new org.jdesktop.swingx.JXPanel();
+        panelSur = new org.jdesktop.swingx.JXPanel();
+        panelAccionesCampElegida = new org.jdesktop.swingx.JXPanel();
+        lblAccionesCampania = new org.jdesktop.swingx.JXLabel();
+        panelAcciones = new org.jdesktop.swingx.JXPanel();
+        btnModificar = new org.jdesktop.swingx.JXHyperlink();
+        btnGuardar = new org.jdesktop.swingx.JXHyperlink();
+        btnEliminar = new org.jdesktop.swingx.JXHyperlink();
+        btnInsertar = new org.jdesktop.swingx.JXHyperlink();
+        panelDatosPoi = new org.jdesktop.swingx.JXPanel();
+        panelLatitud = new org.jdesktop.swingx.JXPanel();
+        lblLatitud = new org.jdesktop.swingx.JXLabel();
+        campoLatitud = new javax.swing.JTextField();
+        panelLongitud = new org.jdesktop.swingx.JXPanel();
+        lblLongitud = new org.jdesktop.swingx.JXLabel();
+        campoLongitud = new javax.swing.JTextField();
         panelCatNuevoPoi = new org.jdesktop.swingx.JXPanel();
         lblCategoria = new org.jdesktop.swingx.JXLabel();
         comboCategorias = new javax.swing.JComboBox();
@@ -103,9 +149,9 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
         panelTodo.add(panelTitulo);
 
-        panelPois.setMaximumSize(new java.awt.Dimension(500, 350));
-        panelPois.setMinimumSize(new java.awt.Dimension(500, 350));
-        panelPois.setPreferredSize(new java.awt.Dimension(500, 350));
+        panelPois.setMaximumSize(new java.awt.Dimension(500, 450));
+        panelPois.setMinimumSize(new java.awt.Dimension(500, 450));
+        panelPois.setPreferredSize(new java.awt.Dimension(500, 450));
         panelPois.setLayout(new java.awt.BorderLayout());
 
         panelPoisTitulo.setMaximumSize(new java.awt.Dimension(500, 30));
@@ -119,31 +165,31 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
         panelPois.add(panelPoisTitulo, java.awt.BorderLayout.NORTH);
 
-        panelTablaPois.setMaximumSize(new java.awt.Dimension(500, 300));
-        panelTablaPois.setMinimumSize(new java.awt.Dimension(500, 300));
-        panelTablaPois.setPreferredSize(new java.awt.Dimension(500, 300));
+        panelTablaPois.setMaximumSize(new java.awt.Dimension(500, 200));
+        panelTablaPois.setMinimumSize(new java.awt.Dimension(500, 200));
+        panelTablaPois.setPreferredSize(new java.awt.Dimension(500, 200));
         panelTablaPois.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 300));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 300));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 300));
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 250));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 250));
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 200));
 
         tablaPois.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion", "Acciones"
+                "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -157,23 +203,105 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tablaPois);
         tablaPois.getColumnModel().getColumn(0).setMinWidth(70);
         tablaPois.getColumnModel().getColumn(0).setPreferredWidth(70);
-        tablaPois.getColumnModel().getColumn(4).setMinWidth(60);
-        tablaPois.getColumnModel().getColumn(4).setPreferredWidth(60);
-        tablaPois.getColumnModel().getColumn(4).setMaxWidth(60);
 
         panelTablaPois.add(jScrollPane1);
 
         panelPois.add(panelTablaPois, java.awt.BorderLayout.CENTER);
 
-        panelAgregaPoi.setMaximumSize(new java.awt.Dimension(500, 50));
-        panelAgregaPoi.setMinimumSize(new java.awt.Dimension(500, 50));
-        panelAgregaPoi.setPreferredSize(new java.awt.Dimension(500, 50));
-        panelAgregaPoi.setLayout(new java.awt.BorderLayout());
+        panelSur.setMaximumSize(new java.awt.Dimension(500, 150));
+        panelSur.setMinimumSize(new java.awt.Dimension(500, 150));
+        panelSur.setPreferredSize(new java.awt.Dimension(500, 200));
 
-        panelCatNuevoPoi.setMaximumSize(new java.awt.Dimension(200, 500));
-        panelCatNuevoPoi.setMinimumSize(new java.awt.Dimension(200, 500));
-        panelCatNuevoPoi.setPreferredSize(new java.awt.Dimension(200, 500));
-        panelCatNuevoPoi.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
+        panelAccionesCampElegida.setMaximumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setMinimumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelAccionesCampElegida.setLayout(new java.awt.GridLayout(1, 2));
+
+        lblAccionesCampania.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAccionesCampania.setText("Acciones sobre la campaña elegida:");
+        lblAccionesCampania.setFont(new java.awt.Font("Tahoma", 0, 14));
+        panelAccionesCampElegida.add(lblAccionesCampania);
+
+        panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
+        btnModificar.setText("");
+        btnModificar.setToolTipText("Modificar campaña");
+        btnModificar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnModificar);
+
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-guardar.png"))); // NOI18N
+        btnGuardar.setText("");
+        btnGuardar.setToolTipText("Guardar cambios");
+        btnGuardar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnGuardar);
+
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-eliminar.png"))); // NOI18N
+        btnEliminar.setText("");
+        btnEliminar.setToolTipText("Eliminar campaña");
+        btnEliminar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnEliminar);
+
+        btnInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-insertar.png"))); // NOI18N
+        btnInsertar.setText("");
+        btnInsertar.setToolTipText("Eliminar campaña");
+        btnInsertar.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnInsertar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertarActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnInsertar);
+
+        panelAccionesCampElegida.add(panelAcciones);
+
+        panelSur.add(panelAccionesCampElegida);
+
+        panelDatosPoi.setMaximumSize(new java.awt.Dimension(500, 150));
+        panelDatosPoi.setMinimumSize(new java.awt.Dimension(500, 150));
+        panelDatosPoi.setPreferredSize(new java.awt.Dimension(500, 150));
+        panelDatosPoi.setLayout(new java.awt.GridLayout(5, 1));
+
+        lblLatitud.setText("Latitud ");
+        lblLatitud.setFont(new java.awt.Font("Tahoma", 0, 12));
+        panelLatitud.add(lblLatitud);
+
+        campoLatitud.setMaximumSize(new java.awt.Dimension(100, 20));
+        campoLatitud.setMinimumSize(new java.awt.Dimension(100, 20));
+        campoLatitud.setPreferredSize(new java.awt.Dimension(100, 20));
+        panelLatitud.add(campoLatitud);
+
+        panelDatosPoi.add(panelLatitud);
+
+        lblLongitud.setText("Longitud");
+        lblLongitud.setFont(new java.awt.Font("Tahoma", 0, 12));
+        panelLongitud.add(lblLongitud);
+
+        campoLongitud.setMaximumSize(new java.awt.Dimension(100, 20));
+        campoLongitud.setMinimumSize(new java.awt.Dimension(100, 20));
+        campoLongitud.setPreferredSize(new java.awt.Dimension(100, 20));
+        panelLongitud.add(campoLongitud);
+
+        panelDatosPoi.add(panelLongitud);
+
+        panelCatNuevoPoi.setMaximumSize(new java.awt.Dimension(500, 30));
+        panelCatNuevoPoi.setMinimumSize(new java.awt.Dimension(500, 30));
+        panelCatNuevoPoi.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblCategoria.setText("Categoria");
         lblCategoria.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -191,28 +319,26 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         });
         panelCatNuevoPoi.add(comboCategorias);
 
-        panelAgregaPoi.add(panelCatNuevoPoi, java.awt.BorderLayout.WEST);
+        panelDatosPoi.add(panelCatNuevoPoi);
 
-        panelDescripNuevoPoi.setMaximumSize(new java.awt.Dimension(250, 500));
-        panelDescripNuevoPoi.setMinimumSize(new java.awt.Dimension(250, 500));
-        panelDescripNuevoPoi.setPreferredSize(new java.awt.Dimension(250, 500));
-        panelDescripNuevoPoi.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
+        panelDescripNuevoPoi.setMaximumSize(new java.awt.Dimension(500, 30));
+        panelDescripNuevoPoi.setMinimumSize(new java.awt.Dimension(500, 30));
+        panelDescripNuevoPoi.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblDescripciónNuevoPoi.setText("Descripción");
         lblDescripciónNuevoPoi.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelDescripNuevoPoi.add(lblDescripciónNuevoPoi);
 
-        campoDescripcionNuevoPoi.setMaximumSize(new java.awt.Dimension(140, 20));
-        campoDescripcionNuevoPoi.setMinimumSize(new java.awt.Dimension(140, 20));
-        campoDescripcionNuevoPoi.setPreferredSize(new java.awt.Dimension(140, 20));
+        campoDescripcionNuevoPoi.setMaximumSize(new java.awt.Dimension(200, 20));
+        campoDescripcionNuevoPoi.setMinimumSize(new java.awt.Dimension(200, 20));
+        campoDescripcionNuevoPoi.setPreferredSize(new java.awt.Dimension(200, 20));
         panelDescripNuevoPoi.add(campoDescripcionNuevoPoi);
 
-        panelAgregaPoi.add(panelDescripNuevoPoi, java.awt.BorderLayout.CENTER);
+        panelDatosPoi.add(panelDescripNuevoPoi);
 
         panelBtnAgregaPoi.setMaximumSize(new java.awt.Dimension(80, 500));
         panelBtnAgregaPoi.setMinimumSize(new java.awt.Dimension(80, 500));
         panelBtnAgregaPoi.setPreferredSize(new java.awt.Dimension(80, 500));
-        panelBtnAgregaPoi.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 13));
 
         btnAgregaPoi.setText("Agrega POI");
         btnAgregaPoi.setAutoscrolls(true);
@@ -227,9 +353,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         });
         panelBtnAgregaPoi.add(btnAgregaPoi);
 
-        panelAgregaPoi.add(panelBtnAgregaPoi, java.awt.BorderLayout.EAST);
+        panelDatosPoi.add(panelBtnAgregaPoi);
 
-        panelPois.add(panelAgregaPoi, java.awt.BorderLayout.SOUTH);
+        panelSur.add(panelDatosPoi);
+
+        panelPois.add(panelSur, java.awt.BorderLayout.SOUTH);
 
         panelTodo.add(panelPois);
 
@@ -262,20 +390,20 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
         tablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
             },
             new String [] {
-                "Nombre de Categoria", "Icono", "Acciones"
+                "Nombre de Categoria", "Icono"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -290,9 +418,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         tablaCategorias.getColumnModel().getColumn(1).setMinWidth(50);
         tablaCategorias.getColumnModel().getColumn(1).setPreferredWidth(50);
         tablaCategorias.getColumnModel().getColumn(1).setMaxWidth(50);
-        tablaCategorias.getColumnModel().getColumn(2).setMinWidth(100);
-        tablaCategorias.getColumnModel().getColumn(2).setPreferredWidth(100);
-        tablaCategorias.getColumnModel().getColumn(2).setMaxWidth(50);
 
         panelTablaCategorias.add(jScrollPane2);
 
@@ -353,26 +478,40 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }//GEN-LAST:event_comboCategoriasActionPerformed
 
     private void btnAgregaPoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaPoiActionPerformed
-
-        // Agrega POI:        
-        if (comboCategorias.getItemCount() > 0 && campoDescripcionNuevoPoi.getText().length() > 2) {
-            CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
-            controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText());
-            cargaGrillaPOIS();
+        //Boton de aceptar
+       /* // Agrega/inserta POI:
+        if (comboCategorias.getSelectedIndex() != -1 && campoDescripcionNuevoPoi.getText().length() > 2) {
+        CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
+        //tendria q pasar lat y long ahora
+        controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Integer.valueOf(campoLatitud.getText()), Integer.valueOf(campoLongitud.getText())); //son double pero no hay double.valueof
+        //cargaGrillaPOIS();
         } else {
-            JOptionPane.showMessageDialog(null, "No se selecciono una categoria o el nombre no es valido");
+        JOptionPane.showMessageDialog(null, "No se selecciono una categoria o el nombre no es valido");
         }
-
+         */
+        //modifica POI
+        if (modificandoPOI) {
+            POI unPOI = getTempPOI();
+            unPOI.setLatitud(Double.valueOf(campoLatitud.getText()));
+            unPOI.setLongitud(Double.valueOf(campoLongitud.getText()));
+            CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
+            unPOI.setIdCategoriaPOI(cP.getId());
+            unPOI.setDescripcion(campoDescripcionNuevoPoi.getText());
+            controllers.ControllerPois.getInstance().modificaPOI(unPOI);
+            setModificandoPOI(false);
+            habilitaPanelDatosPOIs(false);
+        }
+        cargaGrillaPOIS();
     }//GEN-LAST:event_btnAgregaPoiActionPerformed
 
     private void btnAgregaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregaCategoriaActionPerformed
-        
+
         //verif si esta repetido
         boolean unico = true;
         int i = 0;
         while (i < comboCategorias.getItemCount() && unico) {
             if (comboCategorias.getItemAt(i).toString().toUpperCase().equals(campoDescripcionNuevoPoi.getText().toUpperCase())) {
-            unico=false;
+                unico = false;
             }
             i++;
         }
@@ -385,32 +524,117 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido");
         }
     }//GEN-LAST:event_btnAgregaCategoriaActionPerformed
+
+    private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {
+        //INSERTA un POI
+        habilitaPanelDatosPOIs(true);
+
+
+
+        /*Este es el codigo de resgistra POI
+         * habilitaPanelDatosPOIs(true);
+        campoLatitud.setText(String.valueOf(ControllerNavegacion.getInstance().getLatitudActual()));
+        campoLatitud.setEnabled(false);//no lo puedo modificar
+        campoLongitud.setText(String.valueOf(ControllerNavegacion.getInstance().getLongitudActual()));
+        campoLongitud.setEnabled(false);//no lo puedo modificar
+        //controlaPanelNuevaCondicion(true);
+        setModificandoPOI(false);*/
+
+    }
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {
+        habilitaPanelDatosPOIs(true);
+        setModificandoPOI(true);
+        btnEliminar.setEnabled(false);
+        btnInsertar.setEnabled(false);
+        //cargo la fila seleccionada en el formulario
+        int i = 0;
+        while (!(Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1) && i < tablaPois.getRowCount() - 1) {
+            i++;
+        }
+        if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
+            POI unPOI = (POI) tablaPois.getValueAt(i, 0);
+            campoLatitud.setText(String.valueOf(unPOI.getLatitud()));
+            campoLongitud.setText(String.valueOf(unPOI.getLongitud()));
+            comboCategorias.setSelectedItem(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(unPOI.getIdCategoriaPOI()));
+            campoDescripcionNuevoPoi.setText(unPOI.getDescripcion());
+            setTempPOI(unPOI);
+        } else {
+            habilitaPanelDatosPOIs(false);
+            setModificandoPOI(false);
+            JOptionPane.showMessageDialog(null, "Seleccione un POI primero");
+        }
+
+        /*setGuiModificarFilaElegida();
+        setModificandoCampania(true);
+        controlaPanelAccionesCampania();*/
+    }
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {
+        //ver Hay que sacar el boton de abajo y pasar el codigo aca me parece
+        /*
+        if (guardarCampaniaModificada()) {
+        setModificandoCampania(false);
+        controlaPanelAccionesCampania();
+        lblNuevaCampania.setText("Nueva Campaña:");
+        cargarDatosDeCampaniaEnCurso();
+        }*/
+    }
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {
+        if (JOptionPane.showConfirmDialog(null,
+                "Desea eliminar los POIs seleccionados?",
+                "Eliminar POIs",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE) == 0) {
+            for (int i = 0; i < tablaPois.getRowCount(); i++) {
+                if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
+                    controllers.ControllerPois.getInstance().eliminaPOI((POI) tablaPois.getValueAt(i, 0));
+                }
+            }
+        }
+        cargaGrillaPOIS();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregaCategoria;
     private javax.swing.JButton btnAgregaPoi;
+    private org.jdesktop.swingx.JXHyperlink btnEliminar;
+    private org.jdesktop.swingx.JXHyperlink btnGuardar;
+    private org.jdesktop.swingx.JXHyperlink btnInsertar;
+    private org.jdesktop.swingx.JXHyperlink btnModificar;
     private javax.swing.JTextField campoDescripcionNuevoPoi;
+    private javax.swing.JTextField campoLatitud;
+    private javax.swing.JTextField campoLongitud;
     private javax.swing.JTextField campoNombreNuevaCat;
     private javax.swing.JComboBox comboCategorias;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private org.jdesktop.swingx.JXLabel lblAccionesCampania;
     private org.jdesktop.swingx.JXLabel lblCategoria;
     private org.jdesktop.swingx.JXLabel lblDescripciónNuevoPoi;
+    private org.jdesktop.swingx.JXLabel lblLatitud;
+    private org.jdesktop.swingx.JXLabel lblLongitud;
     private org.jdesktop.swingx.JXLabel lblNombreNuevaCat;
     private org.jdesktop.swingx.JXLabel lblTitulo;
     private org.jdesktop.swingx.JXLabel lblTituloTablaCategorias;
     private org.jdesktop.swingx.JXLabel lblTituloTablaPois;
+    private org.jdesktop.swingx.JXPanel panelAcciones;
+    private org.jdesktop.swingx.JXPanel panelAccionesCampElegida;
     private org.jdesktop.swingx.JXPanel panelAgregaCategoria;
-    private org.jdesktop.swingx.JXPanel panelAgregaPoi;
     private org.jdesktop.swingx.JXPanel panelBtnAgregaCategoria;
     private org.jdesktop.swingx.JXPanel panelBtnAgregaPoi;
     private org.jdesktop.swingx.JXPanel panelCatNuevoPoi;
     private org.jdesktop.swingx.JXPanel panelCatTitulo;
     private org.jdesktop.swingx.JXPanel panelCategoriaPois;
+    private org.jdesktop.swingx.JXPanel panelDatosPoi;
     private org.jdesktop.swingx.JXPanel panelDescripNuevoPoi;
+    private org.jdesktop.swingx.JXPanel panelLatitud;
+    private org.jdesktop.swingx.JXPanel panelLongitud;
     private org.jdesktop.swingx.JXPanel panelNombreNuevaCat;
     private org.jdesktop.swingx.JXPanel panelPois;
     private org.jdesktop.swingx.JXPanel panelPoisTitulo;
+    private org.jdesktop.swingx.JXPanel panelSur;
     private org.jdesktop.swingx.JXPanel panelTablaCategorias;
     private org.jdesktop.swingx.JXPanel panelTablaPois;
     private org.jdesktop.swingx.JXPanel panelTitulo;
@@ -431,6 +655,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             cargaGrillaPOIS();
             cargaGrillaCategoriaPOIS();
             cargaComboCategorias();
+            habilitaPanelDatosPOIs(false);
             //obtengo ide del selected recuperando el objeto:
             //CategoriaPoi s = (CategoriaPoi) comboCategorias.getSelectedItem();
             //s.getId();
@@ -438,17 +663,17 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             System.out.println(e);
         }
     }
-    /*  //main de prueba
-    
+    //main de prueba
+
     public static void main(String[] args) {
-    javax.swing.JFrame elFrame = new javax.swing.JFrame();
-    elFrame.setSize(500, 500);
-    PanelOpcPOIs a = new PanelOpcPOIs();
-    //cargaEspecies();
-    elFrame.add(a);
-    elFrame.setVisible(true);
-    }*/
-    
+        javax.swing.JFrame elFrame = new javax.swing.JFrame();
+        elFrame.setSize(500, 500);
+        PanelOpcPOIs a = new PanelOpcPOIs();
+        //cargaEspecies();
+        elFrame.add(a);
+        elFrame.setVisible(true);
+    }
+
     private void cargaComboCategorias() {
         //carga combo
         comboCategorias.removeAllItems();
@@ -461,7 +686,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //DefaultTableModel dm = (DefaultTableModel) tablaCategorias.getModel(); 
         //modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
         //tablaCategorias.setModel(modeloTablaCategoriasPOI);
-         ControllerPpal.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
+        //---ControllerPpal.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
         //dm.setRowCount(0);
         int cantCols = 4;
         //Cabecera
@@ -471,18 +696,18 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         encabezado[2] = "Icono";
         encabezado[3] = "Acciones";
         dm.setColumnIdentifiers(encabezado);*/
-        modeloTablaCategoriasPOI.addColumn("id");
+        /*modeloTablaCategoriasPOI.addColumn("id");
         modeloTablaCategoriasPOI.addColumn("Nombre de la categoria");
         modeloTablaCategoriasPOI.addColumn("Icono");
-        modeloTablaCategoriasPOI.addColumn("Acciones");
+        modeloTablaCategoriasPOI.addColumn("Acciones");*/
         //Cuerpo
         ArrayList a = new ArrayList();
         for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
             a.add(cP.getId());
-            a.add(cP.getTitulo());
+            a.add(cP); //<-- Aca esta el objeto entero
             a.add(cP.getPathIcono());
-            a.add("Acciones");
-            modeloTablaCategoriasPOI.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
+            a.add("false");
+            modeloTablaCategoriasPOI.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
             a.clear();
         }
         tablaCategorias.setModel(modeloTablaCategoriasPOI);
@@ -495,7 +720,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
             //modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
             //tablaPois.setModel(modeloTablaPOIS);
-            ControllerPpal.getInstance().vaciarJTable(modeloTablaPOIS);
+            //---ControllerPpal.getInstance().vaciarJTable(modeloTablaPOIS);
+            modeloTablaPOIS.setRowCount(0);//vacia la tabla
             //dm.setRowCount(0);
             int cantCols = 6;
             //Cabecera
@@ -509,27 +735,28 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             modeloTablaPOIS.setColumnCount(cantCols-1);
             modeloTablaPOIS.setColumnIdentifiers(encabezado);*/
             // modeloTablaPOIS.setColumnCount(cantCols);
-            modeloTablaPOIS.addColumn("id");
+            /*modeloTablaPOIS.addColumn("id");
             modeloTablaPOIS.addColumn("Fecha y Hora");
             modeloTablaPOIS.addColumn("Categoria");
             modeloTablaPOIS.addColumn("Coordenadas");
             modeloTablaPOIS.addColumn("Descripcion");
-            modeloTablaPOIS.addColumn("Acciones");
+            modeloTablaPOIS.addColumn("Acciones");*/
 
             //Cuerpo
-        /*for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
+
+            /*for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
             dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
             }*/
             ArrayList a = new ArrayList();
             for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-                a.add(p.getId());
+                a.add(p); //agrega el objeto POI, pero muestra el id
                 a.add(p.getFechaHora());
                 a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
                 String coordenadas = String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud());
                 a.add(coordenadas);
                 a.add(p.getDescripcion());
-                a.add("Acciones");
-                modeloTablaPOIS.addRow(ControllerPpal.getInstance().agregaUnaFilaGenerica(cantCols, a));
+                a.add("false");
+                modeloTablaPOIS.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
                 a.clear();
             }
         } catch (Exception e) {
@@ -539,4 +766,71 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //escondo la columna ID 
         ControllerPpal.getInstance().ocultarColJTable(tablaPois, 0);
     }
+
+    /**
+     * @return the modificandoPOI
+     */
+    public boolean isModificandoPOI() {
+        return modificandoPOI;
+    }
+
+    /**
+     * @param modificandoPOI the modificandoPOI to set
+     */
+    public void setModificandoPOI(boolean modificandoPOI) {
+        this.modificandoPOI = modificandoPOI;
+    }
+
+    private void habilitaPanelDatosPOIs(boolean estado) {
+        campoLatitud.setEnabled(estado);
+        campoLongitud.setEnabled(estado);
+        campoDescripcionNuevoPoi.setEnabled(estado);
+        campoNombreNuevaCat.setEnabled(estado);
+        lblLatitud.setEnabled(estado);
+        lblLongitud.setEnabled(estado);
+        lblCategoria.setEnabled(estado);
+        lblDescripciónNuevoPoi.setEnabled(estado);
+        btnAgregaPoi.setEnabled(estado);
+        //Limpio
+        campoLatitud.setText("");
+        campoLongitud.setText("");
+        campoNombreNuevaCat.setText("");
+        //si lo deshabilito habilito la barra
+        if (!estado) {
+            btnEliminar.setEnabled(!estado);
+            btnInsertar.setEnabled(!estado);
+            btnModificar.setEnabled(!estado);
+            btnGuardar.setEnabled(!estado);
+        }
+    }
+
+    /**
+     * @return the tempPOI
+     */
+    public POI getTempPOI() {
+        return tempPOI;
+    }
+
+    /**
+     * @param tempPOI the tempPOI to set
+     */
+    public void setTempPOI(POI tempPOI) {
+        this.tempPOI = tempPOI;
+    }
 }
+
+
+/*
+            if (metodoEscaneaIconos()>0){
+ * while que carga el combo{
+                //--- resize Icon
+                Image source = new ImageIcon(modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()).getImage();
+                BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = (Graphics2D)image.getGraphics();
+                g2d.drawImage(source, 0, 0, null);
+                g2d.dispose();
+                //-------------
+                combo.addItem(modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image));//en la columna 2 va el Icono
+            }
+ }
+ */

@@ -48,7 +48,7 @@ public class BrokerCajon extends BrokerPpal {
         return cajones;
     }
 
-        public ArrayList<modelo.dataManager.Cajon> getCajonesLanceFromDB(int idLance) {
+    public ArrayList<modelo.dataManager.Cajon> getCajonesLanceFromDB(int idLance) {
         ArrayList<modelo.dataManager.Cajon> cajones = new ArrayList();
         try {
             ResultSet rs = getStatement().executeQuery("SELECT * FROM Cajones WHERE idLance = " + idLance);
@@ -65,14 +65,14 @@ public class BrokerCajon extends BrokerPpal {
         }
         return cajones;
     }
-    
+
     public modelo.dataManager.Cajon getCajonFromDB(int id) {
         modelo.dataManager.Cajon cajon = null;
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
         ResultSet rs;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Cajones WHERE id = " + id);
-            if (rs != null) {
+            if (rs.next()) {
                 // Get the data from the row using the column name
                 cajon.setIdLance(rs.getInt("idLance"));
                 cajon.setIdEspecie(rs.getInt("idEspecie"));
@@ -83,8 +83,8 @@ public class BrokerCajon extends BrokerPpal {
         }
         return cajon;
     }
-    
-       public boolean insertCajon(modelo.dataManager.Cajon cajon) {
+
+    public boolean insertCajon(modelo.dataManager.Cajon cajon) {
         boolean sePudo = false;
         String sqlQuery = "";
         ResultSet rs;
@@ -92,7 +92,7 @@ public class BrokerCajon extends BrokerPpal {
             sqlQuery = "INSERT INTO Cajones "
                     + "(idLance, idEspecie, cantidad) "
                     + "VALUES "
-                    + "(" +cajon.getIdLance() + "," +cajon.getIdEspecie()+ ","+cajon.getCantidad() + ")";
+                    + "(" + cajon.getIdLance() + "," + cajon.getIdEspecie() + "," + cajon.getCantidad() + ")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
@@ -120,6 +120,5 @@ public class BrokerCajon extends BrokerPpal {
 
         return sePudo;
     }
-
 //Sin update, borrar y agregar solamente
 }

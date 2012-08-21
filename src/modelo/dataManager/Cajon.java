@@ -55,4 +55,9 @@ public class Cajon {
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
+    
+    @Override
+    public String toString() {
+        return ""+getIdLance();//String.valueOf(this.idLance);//VER esta para probar
+    }
 }

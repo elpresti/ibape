@@ -10,31 +10,30 @@ import javax.swing.JOptionPane;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.gisModule.Browser;
+import modelo.dataManager.Punto;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
-
-
 
 /**
  *
  * @author Sebastian
  */
 public class ControllerNavegacion {
+
     private static ControllerNavegacion unicaInstancia;
-    
-    private ControllerNavegacion(){
+
+    private ControllerNavegacion() {
         inicializador();
     }
-    
+
     public static ControllerNavegacion getInstance() {
-        if (unicaInstancia == null){
+        if (unicaInstancia == null) {
             unicaInstancia = new ControllerNavegacion();
         }
         return unicaInstancia;
     }
 
     private void inicializador() {
-
     }
 
     public void actualizaDatosEnGui() {
@@ -42,15 +41,15 @@ public class ControllerNavegacion {
         PanelNavegacion.getInstance().inicializaTablaCategoriasPois(); 
         PanelNavegacion.getInstance().seteaBotonesMapa();
     }
-    
+
     public void cargaPoisEnMapa(int idCampaniaElegida, ArrayList<Integer> categoriasSeleccionadas) {
-        if (!BrokerDbMapa.getInstance().cargarPoisDeCamp(categoriasSeleccionadas)){
+        if (!BrokerDbMapa.getInstance().cargarPoisDeCamp(categoriasSeleccionadas)) {
             JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa de Navegación");
         }
     }
 
     public ArrayList<CategoriaPoi> getCatPOISDeUnaCampFromDB(int idCampaniaElegida) {
-        return  persistencia.BrokerCategoriasPOI.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaElegida);
+        return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaElegida);
     }
 
     public Object getCantPOISDeUnaCampSegunCatPoi(int idCampaniaElegida, int idCategoria) {
@@ -63,17 +62,17 @@ public class ControllerNavegacion {
 
     public void graficarDatos(int retardo) {
         GraficaDatosNavegacion grafica = new GraficaDatosNavegacion();
-        grafica.retardo=retardo;
+        grafica.retardo = retardo;
         grafica.start();
     }
 
     public void cargaRecorridoEnMapaNavegacion() {
-        if (!BrokerDbMapa.getInstance().cargarRecorridoDeCamp()){
+        if (!BrokerDbMapa.getInstance().cargarRecorridoDeCamp()) {
             JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa de Navegación");
         }
     }
 
-    public void restauraBtnGraficarDatos(){
+    public void restauraBtnGraficarDatos() {
         PanelNavegacion.getInstance().restauraBtnGraficarDatos();
     }
     
@@ -115,17 +114,27 @@ public class ControllerNavegacion {
         return sePudo;
     }
 
+    public double getLatitudActual() {
+        return Punto.getInstance().getLatitud();
+    }
+
+    public double getLongitudActual() {
+        return Punto.getInstance().getLongitud();
+    }
     private void abreBrowserConMapaNavegacion() {
         modelo.gisModule.Browser.getInstance().setUrlTemp(Browser.getInstance().getUrl());
         modelo.gisModule.Browser.getInstance().start();
     }
 
 }
-class GraficaDatosNavegacion implements Runnable{
+
+class GraficaDatosNavegacion implements Runnable {
+
     Thread thGraficar;
     public int retardo;
-    public void run() { 
-        try{
+
+    public void run() {
+        try {
             thGraficar.sleep(retardo);
             ControllerNavegacion.getInstance().vaciaMapaNavegacion();
             if (gui.PanelNavegacion.getInstance().getChkPoisTodos().isSelected() && 
@@ -133,16 +142,16 @@ class GraficaDatosNavegacion implements Runnable{
                 ControllerNavegacion.getInstance().cargaPoisEnMapa(modelo.dataManager.AdministraCampanias.getInstance().getCampaniaEnCurso().getId(),
                         gui.PanelNavegacion.getInstance().getCategoriasSeleccionadas());
             }
-            if (gui.PanelNavegacion.getInstance().getChkRecorrido().isSelected()){
+            if (gui.PanelNavegacion.getInstance().getChkRecorrido().isSelected()) {
                 ControllerNavegacion.getInstance().cargaRecorridoEnMapaNavegacion();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         ControllerNavegacion.getInstance().restauraBtnGraficarDatos();
         thGraficar = null;
     }
+
     public void start() {
         if (thGraficar == null) {
             thGraficar = new Thread(this);
