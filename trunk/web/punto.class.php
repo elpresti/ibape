@@ -40,7 +40,7 @@ class Punto{
 		
         function mostrar_puntos(){
 				if($this->con->conectar()==true){				
-						return mysql_query("SELECT * FROM PUNTOS WHERE LEIDO=false ORDER BY ID DESC");
+						return mysql_query("SELECT * FROM PUNTOS WHERE LEIDO=false ORDER BY ID ASC LIMIT 0,1");
 				}
         }		
 

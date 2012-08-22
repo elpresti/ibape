@@ -825,7 +825,7 @@ public class BrokerDbMapa implements Runnable{
                 preparedStatement.setBoolean(Integer.valueOf(getCampoLEIDOpos()), false);
                 preparedStatement.setString(Integer.valueOf(getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
                 preparedStatement.setString(Integer.valueOf(getCampoKMLpos()),
-                        modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos));
+                        modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKmlGxTrack(true,puntos));
                 preparedStatement.executeUpdate(); 
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
                 preparedStatement.close();

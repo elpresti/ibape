@@ -91,6 +91,80 @@ public class GeneradorKML {
         return salida;
     }
 
+    public String conviertePuntosARecorridoKmlGxTrack(boolean conCamara, ArrayList<modelo.dataManager.PuntoHistorico> puntos) {
+            String salida = "";        
+        if (puntos.size()>0){            
+            //Cosas pendientes de incluir:
+                // - Miniatura imagen de la sonda
+                // - Cantidad de marcas encontradas
+                // - Alertas (todas)
+
+            //Preset de camara 1 = vista aerea trasera:
+            //Longitud:getLonConNegativo()*1.00003  Latitud:getLatConNegativo()*1.00006  altitude:50  heading:35  tilt:75
+            //Preset de camara 2 = vista aerea lateral derecha:
+            //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
+            // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671); 
+            salida=
+            "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">"
+            +"<Document>"
+                +"<name>Codigo KML</name>"
+                +"<Style id=\"yellowLineGreenPoly\">"
+                   +"<LineStyle>"
+                     +"<color>7f00ffff</color>"
+                     +"<width>4</width>"
+                   +"</LineStyle>"
+                   +"<PolyStyle>"
+                   +   "<color>7f00ff00</color>"
+                   +"</PolyStyle>"
+                +"</Style>";
+/*                    
+            if (conCamara){
+            salida=salida
+                +"<Camera>"
+                +"<longitude>"+(puntos.get(puntos.size()-1).getLongitud()*0.99999)+"</longitude>"
+                +"<latitude>"+(puntos.get(puntos.size()-1).getLatitud()*1.00005)+"</latitude>"
+                +"<altitude>50</altitude>"
+                +"<heading>0</heading>"   //gira el ojo a la derecha (positivo) a la izquierda (negativo) 
+                +"<tilt>70</tilt>" //angulo de vision del ojo. 0= vista vertical a la tirra (desde arriba), 75=vista con 75° de inclinacion
+                +"</Camera>";        
+            }
+*/
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+            SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdfHora = new SimpleDateFormat("HH:mm:ss");
+            salida=salida
+            +"<Placemark id=\"recorridoGxTrack\">"// id=tramo+"+strFechaYhoraPrimero+" - "+strFechaYhoraUltimo+">"
+                +"<name>"+sdf.format(puntos.get(0).getFechaYhora())+"  -  "+sdf.format(puntos.get(puntos.size()-1).getFechaYhora())+"</name>"
+//                +"<visibility>1</visibility>" 
+//                +"<description>Recorrido entre "+sdf.format(puntos.get(0).getFechaYhora())+"  -  "+sdf.format(puntos.get(puntos.size()-1).getFechaYhora())+"</description>"
+                +"<styleUrl>#yellowLineGreenPoly</styleUrl>"
+                +"<gx:Track>"
+                  +"<altitudeMode>absolute</altitudeMode>";                      
+            int i=0;
+            while (i<puntos.size()){
+                salida+="<when>"+sdfFecha.format(puntos.get(i).getFechaYhora())+"T"+sdfHora.format(puntos.get(i).getFechaYhora())+"Z</when>";
+                i++;
+            }
+            i=0;
+            while (i<puntos.size()){
+                salida+="<gx:coord>"+puntos.get(i).getLongitud()+" "+puntos.get(i).getLatitud()+" 0"+"</gx:coord>";
+                i++;
+            }
+            salida+=
+                    "<Model  id=\"model_2\">"
+                    +"<Link>"
+                    +"<href>imgs/pesqueroGrande.dae</href>"
+                    +"</Link>"
+                    +"</Model>"
+                    +"</gx:Track>";
+            salida+="</Placemark>"
+            +"</Document>"                
+
+            +"</kml>";    
+        }        
+        return salida;
+    }
+    
     public String getKmlStylesFromCatPois(ArrayList<POI> pois){
         String salida="";
         ArrayList<String> categorias=new ArrayList();
