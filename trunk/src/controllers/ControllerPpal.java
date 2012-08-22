@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -23,6 +24,7 @@ import persistencia.Logueador;
  * @author Sebastian
  */
 public class ControllerPpal {
+
     static ControllerPpal unicaInstancia;
     private ControllerConfig contConfig = ControllerConfig.getInstance();
 
@@ -43,9 +45,9 @@ public class ControllerPpal {
         persistencia.BrokerCampania.getInstance();
         controllers.ControllerHistorico.getInstance();
         controllers.ControllerCampania.getInstance();
-        controllers.ControllerAlertas.getInstance().accionesAlIniciar();        
+        controllers.ControllerAlertas.getInstance().accionesAlIniciar();
         modelo.alertas.AdministraAlertas.getInstance();
-        if (AdministraCampanias.getInstance().cargaUltimaCampaniaPausada()){ 
+        if (AdministraCampanias.getInstance().cargaUltimaCampaniaPausada()) {
             gui.PanelOpcCampanias.getInstance().setGuiCampaniaIniciada();
             gui.PanelOpcCampanias.getInstance().setGuiCampaniaPausada();
             gui.PanelOpcCampanias.getInstance().cargarDatosDeCampaniaEnCurso();
@@ -101,9 +103,9 @@ public class ControllerPpal {
         sePudo = sePudo && BrokerConfig.getInstance().guardaConfiguracion();
         return sePudo;
     }
-    
-    public boolean conectaYleeDelGps(){
-        boolean sePudo=false;       
+
+    public boolean conectaYleeDelGps() {
+        boolean sePudo = false;
         try {
             gui.PanelOpcConfiguracion p = gui.PanelOpcConfiguracion.getInstance();
             modelo.dataCapture.Gps gps = modelo.dataCapture.Gps.getInstance();
@@ -265,5 +267,20 @@ public class ControllerPpal {
             }
         }
         return fila;
+    }
+
+    public ArrayList<String> listadoIconosCatPOI() {
+        String rutaIconos = modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois();
+        File dir = new File(rutaIconos);
+        ArrayList listRutaIconos = new ArrayList();
+        String[] chld = dir.list();
+        if (chld == null) {
+            System.out.println("La ruta no existe o no se puede acceder.");
+        } else {
+            for (int i = 0; i < chld.length; i++) {
+                listRutaIconos.add(rutaIconos+chld[i]);
+            }
+        }
+        return listRutaIconos;
     }
 }
