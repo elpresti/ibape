@@ -484,11 +484,10 @@ public class OperacionesBasicas {
                         escaneoAArriba(coordMarca.get(i),coordMarca);
                         i++;
                     }
-                Marca marca= new Marca();
                     if (coordMarca.size()>30){
                          Marca marca= new Marca();
                          marca.setCoordMarca(coordMarca);
-                         marca.setAreaImagen(coordMarca.size());
+                         marca.setAreaImagen(String.valueOf(coordMarca.size()));
                          marcas.add(marca);
                         }
                     }
