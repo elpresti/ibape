@@ -117,6 +117,8 @@ public class PanelHistorico extends javax.swing.JPanel {
         panelCampanias.setMinimumSize(new java.awt.Dimension(500, 200));
         panelCampanias.setPreferredSize(new java.awt.Dimension(500, 200));
 
+        jScrollPane1.setPreferredSize(new java.awt.Dimension(492, 192));
+
         tablaCampanias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -139,6 +141,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         tablaCampanias.setMinimumSize(new java.awt.Dimension(500, 200));
         tablaCampanias.setPreferredScrollableViewportSize(new java.awt.Dimension(500, 200));
         tablaCampanias.setPreferredSize(new java.awt.Dimension(500, 200));
+        tablaCampanias.setShowGrid(true);
         jScrollPane1.setViewportView(tablaCampanias);
         tablaCampanias.getColumnModel().getColumn(0).setMinWidth(0);
         tablaCampanias.getColumnModel().getColumn(0).setPreferredWidth(0);

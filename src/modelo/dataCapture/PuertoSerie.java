@@ -116,10 +116,10 @@ public void sentenceRead(SentenceEvent event) {
     boolean seModifico=false;    
     if (s.getSentenceId().equals("GLL"))
     {  GLLSentence gll= (GLLSentence) s;
-       seModifico=seModifico | getPunto().setLatitud(gll.getPosition().getLatitude());
        seModifico=seModifico | getPunto().setLatHemisf(String.valueOf(gll.getPosition().getLatHemisphere().toChar()));
-       seModifico=seModifico | getPunto().setLongitud(gll.getPosition().getLongitude());
+       seModifico=seModifico | getPunto().setLatitud(gll.getPosition().getLatitude());
        seModifico=seModifico | getPunto().setLonHemisf(String.valueOf(gll.getPosition().getLonHemisphere().toChar()));
+       seModifico=seModifico | getPunto().setLongitud(gll.getPosition().getLongitude());
        if (seModifico && bmn.isUsarMapaNavegacion()){
           persistencia.BrokerDbMapa.getInstance().insert(punto.getInstance());
        }
@@ -141,10 +141,10 @@ public void sentenceRead(SentenceEvent event) {
     else
     if (s.getSentenceId().equals("RMC"))
     {  RMCSentence rmc= (RMCSentence) s;
-       seModifico=seModifico | getPunto().setLatitud(rmc.getPosition().getLatitude());
        seModifico=seModifico | getPunto().setLatHemisf(String.valueOf(rmc.getPosition().getLatHemisphere().toChar()));
-       seModifico=seModifico | getPunto().setLongitud(rmc.getPosition().getLongitude());
+       seModifico=seModifico | getPunto().setLatitud(rmc.getPosition().getLatitude());
        seModifico=seModifico | getPunto().setLonHemisf(String.valueOf(rmc.getPosition().getLonHemisphere().toChar()));
+       seModifico=seModifico | getPunto().setLongitud(rmc.getPosition().getLongitude());
        //seModifico=seModifico | getPunto().setVelocidad(rmc.getSpeed()); //esta velocidad solo la devuelve en nudos
        seModifico=seModifico | getPunto().setRumbo(rmc.getCourse());
        if (seModifico && bmn.isUsarMapaNavegacion()){
