@@ -485,11 +485,13 @@ public class OperacionesBasicas {
                         i++;
                     }
                 Marca marca= new Marca();
-                marca.setCoordMarca(coordMarca);
-                //marca.setAreaImagen(coordMarca.size());
-                marcas.add(marca);
-
-                }
+                    if (coordMarca.size()>30){
+                         Marca marca= new Marca();
+                         marca.setCoordMarca(coordMarca);
+                         marca.setAreaImagen(coordMarca.size());
+                         marcas.add(marca);
+                        }
+                    }
                 
            }
          
