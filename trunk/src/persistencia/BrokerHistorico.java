@@ -142,11 +142,11 @@ public abstract class BrokerHistorico implements Runnable{
     
     public void closeDbConnection() {   
         try {
-                if (getStatement() != null) {
+                if (statement != null) {
                         getStatement().close();
                 }
 
-                if (getConexion() != null) {
+                if (conexion != null) {
                         getConexion().close();
                 }
         } catch (Exception e) {
