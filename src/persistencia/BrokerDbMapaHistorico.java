@@ -114,8 +114,11 @@ public class BrokerDbMapaHistorico implements Runnable{
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "RECORRIDO Historico");
                 preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
                 preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), 
-                        modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos));
+                String kml = "";
+                //kml += modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos);
+                kml +=modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKmlGxTrack(true,puntos);
+                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), kml);
+                
                 preparedStatement.executeUpdate(); 
                 sePudo=true;
                 setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
