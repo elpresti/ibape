@@ -298,20 +298,29 @@ public class LanSonda extends java.util.Observable implements Runnable {
                         ArrayList<File> archivosNuevos = getArchivosNuevos();
                         setFyhUltimaLecturaRemota(Calendar.getInstance().getTime());
                         if (archivosNuevos.size()>0){
-                            copiarArchivosRemotos(archivosNuevos);
-                            if (hayArchivoCsv(archivosNuevos)){
-                                persistencia.BrokerHistoricoSondaSet.getInstance().actualizaSondaSetsActual(getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getCsvFileName());
-                                if (persistencia.BrokerHistoricoSondaSet.getInstance().isGuardaDatosSondaSets()){
-                                    if (!(guardaSondaSets(getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getCsvFileName()))){
-                                        Logueador.getInstance().agregaAlLog("No se pudieron guardar los últimos Presets leidos de la Sonda");
+                            if (copiarArchivosRemotos(archivosNuevos)){
+                                int i = 0;
+                                String rutaAcsv =null;
+                                while (i<archivosNuevos.size()){
+                                    if (archivosNuevos.get(i).getName().toLowerCase().contains(".jpg")){//si el archivo nuevo es un JPG
+                                        rutaAcsv = Csv.getInstance().getCsvFromJpg(archivosNuevos.get(i).getName().toLowerCase()); //busco su DAT y genero el CSV
+                                        if (rutaAcsv != null && rutaAcsv.length()>0){
+                                            persistencia.BrokerHistoricoSondaSet.getInstance().actualizaSondaSetsActual(rutaAcsv);//actualizo con los nuevos valores leidos la instancia en memoria de la clase SondaSet
+                                            if (persistencia.BrokerHistoricoSondaSet.getInstance().isGuardaDatosSondaSets()){
+                                                if (!(guardaSondaSets(rutaAcsv))){ //si está habilitado el logueo de SondaSets, guardo los cambios en la dbHistorico de esta campania
+                                                    Logueador.getInstance().agregaAlLog("No se pudieron guardar los últimos Presets leidos de la Sonda");
+                                                }
+                                            }
+                                        }
+                                        /*
+                                        if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
+                                            persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
+                                        }
+                                        */
                                     }
+                                    i++;
                                 }
                             }
-                            /*
-                            if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
-                                persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
-                            }
-                             */
                         }
                         setEstadoConexion(2);
                         Thread.sleep(30000); //dispara la rutina de chequeo cada XX segundos

@@ -5,6 +5,7 @@
 package modelo.dataCapture;
 
 import com.csvreader.CsvReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.SondaSet;
 import modelo.dataManager.SondaSetHistorico;
 import persistencia.Logueador;
@@ -243,7 +245,7 @@ public class Csv {
         return datosPixelX;
     }
 
-    private String getCsvFromJpg(String rutaJpg) {
+    public String getCsvFromJpg(String rutaJpg) {
         String rutaAcsv= null;
         try{
             String idJpg = getIdFromFileName(rutaJpg);
@@ -261,14 +263,26 @@ public class Csv {
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
         }
+        //rutaAcsv=getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getCsvFileName();
         return rutaAcsv;
     }
 
     private boolean creaCarpetaTmpYcopiaArchivos(String idJpg) {
         boolean sePudo=false;
-        //crear una carpeta temporal con el ID del JPG recibido dentro
-        //poner en esta carpeta el EXE del conversor DATaCSV,
-        //poner el DAT que corresponda al JPG recivido
+        try {
+            //crear una carpeta temporal con el ID del JPG recibido dentro
+            if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
+                String rutaHistoricoCampania = LanSonda.getInstance().getCarpetaHistoricoLocal();
+                rutaHistoricoCampania += "/"+AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico();
+                File carpetaTmp = new File(rutaHistoricoCampania);
+                carpetaTmp.createNewFile();
+                //poner el DAT que corresponda al JPG recivido                    
+                //poner el DAT que corresponda al JPG recivido
+
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Csv.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return sePudo;
     }
 
