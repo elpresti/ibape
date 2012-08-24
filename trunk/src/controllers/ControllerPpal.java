@@ -4,11 +4,16 @@
  */
 package controllers;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -252,6 +257,7 @@ public class ControllerPpal {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Object[] fila = new Object[cantCols]; //creamos la fila
         for (int i = 0; i < unObjeto.size(); i++) {
+            //System.out.println(unObjeto.get(i).getClass().toString());
             if (unObjeto.get(i) != null) {
                 if (unObjeto.get(i).toString().equalsIgnoreCase("false")) {
                     fila[i] = false;
@@ -259,7 +265,21 @@ public class ControllerPpal {
                     if (unObjeto.get(i).toString().equalsIgnoreCase("true")) {
                         fila[i] = true;
                     } else {
-                        fila[i] = unObjeto.get(i);
+                        if (unObjeto.get(i).getClass().toString().equals("class javax.swing.ImageIcon")) {
+                            fila[i] = new ImageIcon(unObjeto.get(i).toString());
+/*
+                            //--- resize Icon
+                            Image source = new ImageIcon(unObjeto.get(i).toString()).getImage();
+                            BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                            Graphics2D g2d = (Graphics2D) image.getGraphics();
+                            g2d.drawImage(source, 0, 0, null);
+                            g2d.dispose();
+                            //-------------
+                            fila[i] = modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image);//en la columna 2 va el Icono
+*/
+                        } else {
+                            fila[i] = unObjeto.get(i);
+                        }
                     }
                 }
             } else {
@@ -271,16 +291,28 @@ public class ControllerPpal {
 
     public ArrayList<String> listadoIconosCatPOI() {
         String rutaIconos = modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois();
+
         File dir = new File(rutaIconos);
-        ArrayList listRutaIconos = new ArrayList();
+        ArrayList<String> listRutaIconos = new ArrayList();
         String[] chld = dir.list();
+
+        //filtrado
+        FilenameFilter filter = new FilenameFilter() {
+
+            public boolean accept(File dir, String name) {
+                return name.endsWith("png");
+            }
+        };
+        chld = dir.list(filter);
+
         if (chld == null) {
             System.out.println("La ruta no existe o no se puede acceder.");
         } else {
             for (int i = 0; i < chld.length; i++) {
-                listRutaIconos.add(rutaIconos+chld[i]);
+                listRutaIconos.add(rutaIconos + chld[i]);
             }
         }
+
         return listRutaIconos;
     }
 }

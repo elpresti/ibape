@@ -12,6 +12,7 @@ package gui;
 
 import controllers.ControllerNavegacion;
 import controllers.ControllerPpal;
+import controllers.RenderCombo;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -37,6 +38,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     static PanelOpcPOIs unicaInstancia;
     private boolean modificandoPOI;
+    private boolean modificandoCatPOI;
     private DefaultTableModel modeloTablaPOIS = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
@@ -69,7 +71,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     };
     ;
     
-    private boolean agregandoPOI;
     private POI tempPOI;
     private CategoriaPoi tempCatPOI;
 
@@ -321,7 +322,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblCategoria.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelCatNuevoPoi.add(lblCategoria);
 
-        comboCategorias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboCategorias.setFont(new java.awt.Font("Tahoma", 0, 12));
         comboCategorias.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Red rota", "Buen Abadejo", "Fondo rocoso" }));
         comboCategorias.setMaximumSize(new java.awt.Dimension(130, 20));
         comboCategorias.setMinimumSize(new java.awt.Dimension(130, 20));
@@ -409,10 +410,10 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaCategorias.setMaximumSize(new java.awt.Dimension(500, 100));
-        tablaCategorias.setMinimumSize(new java.awt.Dimension(500, 100));
-        tablaCategorias.setPreferredScrollableViewportSize(new java.awt.Dimension(500, 100));
-        tablaCategorias.setPreferredSize(new java.awt.Dimension(500, 100));
+        tablaCategorias.setMaximumSize(new java.awt.Dimension(500, 200));
+        tablaCategorias.setMinimumSize(new java.awt.Dimension(500, 200));
+        tablaCategorias.setPreferredScrollableViewportSize(new java.awt.Dimension(500, 200));
+        tablaCategorias.setPreferredSize(new java.awt.Dimension(500, 200));
         jScrollPane2.setViewportView(tablaCategorias);
         tablaCategorias.getColumnModel().getColumn(1).setMinWidth(50);
         tablaCategorias.getColumnModel().getColumn(1).setPreferredWidth(50);
@@ -532,7 +533,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void btnModificarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCatPOIActionPerformed
         habilitaPanelDatosCatPOIs(true);
-        //setModificandoCatPOI(true);
+        setModificandoCatPOI(true);
         btnEliminaCatPOI.setEnabled(false);
         btnInsertarCatPOI.setEnabled(false);
         btnModificarCatPOI.setEnabled(false);
@@ -549,14 +550,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             setTempCatPOI(unaCatPOI);
         } else {
             habilitaPanelDatosCatPOIs(false);
-            //setModificandoCatPOI(false);
+            setModificandoCatPOI(false);
             JOptionPane.showMessageDialog(null, "Seleccione una Categoria de POI primero");
         }
     }//GEN-LAST:event_btnModificarCatPOIActionPerformed
 
     private void btnGuardarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCatPOIActionPerformed
-
-        //verif si esta repetido
+//verif si esta repetido
         boolean unico = true;
         int i = 0;
         while (i < comboCategorias.getItemCount() && unico) {
@@ -565,22 +565,44 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             }
             i++;
         }
-        // Agrega Categoria POI:
-        if (unico && campoNombreNuevaCat.getText().length() > 2) {
-            controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText());
-            cargaGrillaCategoriaPOIS();
-            cargaComboCategorias();
-        } else {
-            JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido");
+
+        if (modificandoCatPOI && unico) {
+        } else {//nuevo
+            // Agrega Categoria POI:
+            if (unico && campoNombreNuevaCat.getText().length() > 2) {
+                controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText(), comboIconoCatPoi.getSelectedItem().toString());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido");
+            }
         }
+        cargaGrillaCategoriaPOIS();
+        cargaComboCategorias();
     }//GEN-LAST:event_btnGuardarCatPOIActionPerformed
 
     private void btnEliminaCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaCatPOIActionPerformed
-        // TODO add your handling code here:
+        if (JOptionPane.showConfirmDialog(null,
+                "Desea eliminar las Categorias de POIs seleccionadas?",
+                "Eliminar Categorias de POIs",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE) == 0) {
+            for (int i = 0; i < tablaCategorias.getRowCount(); i++) {
+                if ((Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1)) {
+                    controllers.ControllerPois.getInstance().eliminaCategoriaPOI((CategoriaPoi) tablaCategorias.getValueAt(i, 1));
+                }
+            }
+        }
+        cargaGrillaCategoriaPOIS();
+        cargaComboCategorias();
     }//GEN-LAST:event_btnEliminaCatPOIActionPerformed
 
     private void btnInsertarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarCatPOIActionPerformed
-        // TODO add your handling code here:
+        // Inserta nueva cat. poi
+        habilitaPanelDatosCatPOIs(true);
+        btnModificarCatPOI.setEnabled(false);
+        btnEliminaCatPOI.setEnabled(false);
+        btnInsertarCatPOI.setEnabled(false);
+        btnGuardarCatPOI.setEnabled(true);
     }//GEN-LAST:event_btnInsertarCatPOIActionPerformed
 
     private void btnInsertarPOIActionPerformed(java.awt.event.ActionEvent evt) {
@@ -627,6 +649,15 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }
 
     private void btnGuardarPOIActionPerformed(java.awt.event.ActionEvent evt) {
+        if (Double.valueOf(campoLatitud.getText()) == 0) {
+            JOptionPane.showMessageDialog(null, "La latitud no puede ser igual a 0");
+            return;
+        }
+        if (Double.valueOf(campoLongitud.getText()) == 0) {
+            JOptionPane.showMessageDialog(null, "La longitud no puede ser igual a 0");
+            return;
+        }
+
         if (modificandoPOI) {
             //modifica POI
             POI unPOI = getTempPOI();
@@ -763,6 +794,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //tablaCategorias.setModel(modeloTablaCategoriasPOI);
         //---ControllerPpal.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
         //dm.setRowCount(0);
+        modeloTablaCategoriasPOI.setRowCount(0);
         int cantCols = 4;
         //Cabecera
         /*String[] encabezado = new String[4];
@@ -780,7 +812,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
             a.add(cP.getId());
             a.add(cP); //<-- Titulo, Aca esta el objeto entero
-            a.add(cP.getPathIcono());
+            a.add(new ImageIcon(cP.getPathIcono())); // me hace el toString aunque le pase el objeto ¬¬
             a.add("false");
             modeloTablaCategoriasPOI.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
             a.clear();
@@ -826,6 +858,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
                 a.add(p); //agrega el objeto POI, pero muestra el id
                 a.add(p.getFechaHora());
+                //cuando no esta la categoria explota
                 a.add(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
                 String coordenadas = String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud());
                 a.add(coordenadas);
@@ -897,14 +930,10 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //carga combo iconos   
         comboIconoCatPoi.removeAllItems();
         for (String rutaIcono : ControllerPpal.getInstance().listadoIconosCatPOI()) {
-            Image source = new ImageIcon(rutaIcono).getImage();
-            BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g2d = (Graphics2D) image.getGraphics();
-            g2d.drawImage(source, 0, 0, null);
-            g2d.dispose();
-            //comboIconoCatPoi.addItem(modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image));//en la columna 2 va el Icono
-            comboIconoCatPoi.addItem(new ImageIcon(rutaIcono));
+            comboIconoCatPoi.addItem(rutaIcono); //si no agrego elementos no hace el render
         }
+        RenderCombo rc = new RenderCombo();
+        comboIconoCatPoi.setRenderer(rc);
     }
 
     private void habilitaPanelDatosCatPOIs(boolean estado) {
@@ -935,6 +964,20 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
      */
     public void setTempCatPOI(CategoriaPoi tempCatPOI) {
         this.tempCatPOI = tempCatPOI;
+    }
+
+    /**
+     * @return the modificandoCatPOI
+     */
+    public boolean isModificandoCatPOI() {
+        return modificandoCatPOI;
+    }
+
+    /**
+     * @param modificandoCatPOI the modificandoCatPOI to set
+     */
+    public void setModificandoCatPOI(boolean modificandoCatPOI) {
+        this.modificandoCatPOI = modificandoCatPOI;
     }
 }
 

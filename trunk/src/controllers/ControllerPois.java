@@ -72,10 +72,10 @@ public class ControllerPois {
         }
     }
 
-    public void agregaCategoriaPOI(String titulo) {
+    public void agregaCategoriaPOI(String titulo, String path) {
         modelo.dataManager.CategoriaPoi cP = new CategoriaPoi();
         cP.setTitulo(titulo);
-        cP.setPathIcono("VER null en el broker");
+        cP.setPathIcono(path);
         BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
     }
 
@@ -92,6 +92,14 @@ public class ControllerPois {
             JOptionPane.showMessageDialog(null, "No se pudo modificar el POI " + unPoi.getId());
         } else {
             System.out.println("Poi modificado: " + unPoi.getId());
+        }
+    }
+
+    public void eliminaCategoriaPOI(CategoriaPoi unaCategoriaPoi) {
+        if (!BrokerCategoriasPOI.getInstance().deleteCategoriaPOI(unaCategoriaPoi)) {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar la categoria POI " + unaCategoriaPoi.getId());
+        } else {
+            System.out.println("CatPoi eliminado: " + unaCategoriaPoi.getId());
         }
     }
 }
