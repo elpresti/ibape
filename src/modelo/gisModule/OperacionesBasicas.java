@@ -26,6 +26,7 @@ public class OperacionesBasicas {
     private Detector detector;
     private BufferedImage imagenOriginal;
     private BufferedImage imgProcesada;
+    private BufferedImage imgConFondo;
     private int ancho;
     private int alto;
     private Colores color = new Colores();
@@ -92,9 +93,15 @@ public class OperacionesBasicas {
    
     public static void main(String[] args){
 
-        int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
-        ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas();
-        //OperacionesBasicas.getInstance().getMarcas(imgSoloMarcas);
+         int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
+         ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas();
+         BufferedImage imgConMarcas = getInstance().dibujaMarcasDetectadas(getInstance().imgProcesada,marcas);
+         getInstance().grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
+         BufferedImage imgConMarcasRellena = getInstance().rellenaMarcasDetectadas(imgConMarcas, marcas);
+         getInstance().grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
+         BufferedImage imgCOnFondoYMarcasRellenas = getInstance().rellenaMarcasDetectadas(getInstance().getImgConFondo(), marcas);
+         getInstance().grabarImagen(imgCOnFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
+         //OperacionesBasicas.getInstance().getMarcas(imgSoloMarcas);
 
 //        //Cargamos  la imagen en un objeto BufferImage
 //        OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
@@ -144,11 +151,19 @@ public class OperacionesBasicas {
         int fondo[] = new int[967];
         fondo = buscaFondo(imgProcesada);
         BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
+
         getInstance().grabarImagen(imgConFondo,"imgs\\imagenConFondo.tmp");
+        BufferedImage imagensinhoras = eliminaHoras(imgConFondo);
+        getInstance().grabarImagen(imagensinhoras,"imgs\\imagenSinHoras.tmp");
+        try {
+            setImgConFondo(ImageIO.read(new File("imgs\\imagenSinHoras.tmp")));
+        } catch (IOException ex) {
+            Logger.getLogger(OperacionesBasicas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       // setImgConFondo();
         getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondo.tmp");
-        BufferedImage imagenconfondo =eliminaHoras(imgConFondo);
-        getInstance().grabarImagen(imagenconfondo,"imgs\\imagenSinHoras.tmp");
-        setImgProcesada(imagenconfondo);
+ 
+        setImgProcesada(imgConFondo);
         //setImgProcesada();
         int prom = promedio(fondo);
         //buscaMarcas(fondo)
@@ -471,7 +486,7 @@ public class OperacionesBasicas {
 
         for (int contAncho = 1; contAncho < img.getWidth(); contAncho++) {
 
-            for (int contAlto= img.getHeight()-1; contAlto >0; contAlto--){
+            for (int contAlto= img.getHeight()-1; contAlto >350; contAlto--){
                 point.setLocation(contAncho, contAlto);             
                     if ((hayBlancoDondeEstoy(img, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
                     ArrayList<Point> coordMarca = new ArrayList<Point>();
@@ -490,8 +505,7 @@ public class OperacionesBasicas {
                          marca.setAreaImagen(String.valueOf(coordMarca.size()));
                          marcas.add(marca);
                         }
-                    }
-                
+                    }                
            }
          
         }
@@ -522,7 +536,6 @@ public class OperacionesBasicas {
             posDer++;
             point2.setLocation(posDer, point2.getY());
         }
-
     }
 
     public void escaneoAIzquierda(Point point,ArrayList coordMarca){
@@ -533,7 +546,6 @@ public class OperacionesBasicas {
             posIzq--;
             point2.setLocation(posIzq, point2.getY());
         }
-
     }
 
     public void escaneoAAbajo(Point point,ArrayList coordMarca){
@@ -544,7 +556,6 @@ public class OperacionesBasicas {
             posAba++;
             point2.setLocation(point2.getX(),posAba);
         }
-
     }
 
     public void escaneoAArriba(Point point,ArrayList coordMarca){
@@ -556,36 +567,99 @@ public class OperacionesBasicas {
             point2.setLocation(point2.getX(),posArr);
         }
     }
-    
-    public ArrayList<modelo.dataManager.Marca> getMarcas(BufferedImage imgSoloMarcas){
-        ArrayList<modelo.dataManager.Marca> marcas = new ArrayList();
-        // -- metodo pendiente --        
 
-        //Leemos la imagen con obtenerImagen()
-        //OperacionesBasicas.getInstance().obtenerImagen(rutaImg);
-        //Creamos los filtros para la imagen con la clase Filtros
-        Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
-        BufferedImage imgProcesada = filtros.erode(getImagenOriginal());
+     public BufferedImage dibujaMarcasDetectadas(BufferedImage imgOriginal, ArrayList<Marca> marcas){
+         BufferedImage imgConMarcas = imgOriginal;
+         int colorRojo = new Color (255,0,0).getRGB();
+         marcas.get(1).getCoordMarca().get(1);
+         for (Marca m : marcas) {
+              int i=0;
+              while (i<m.getCoordMarca().size()){
+                 if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX()+1, (int) m.getCoordMarca().get(i).getY())) {
+                    imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX()+1, (int) m.getCoordMarca().get(i).getY(),colorRojo);
+                    }
+                    else{
+                        if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX()-1, (int) m.getCoordMarca().get(i).getY())) {
+                        imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX()-1, (int) m.getCoordMarca().get(i).getY(),colorRojo);
+                        }
+                        else{
+                            if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()+1)) {
+                            imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()+1,colorRojo);
+                            }
+                            else{
+                            if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()-1)) {
+                            imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()-1,colorRojo);
+                            }
+                           }
+                          }
+                         }
+                        i++;}
+             }
+         return imgConMarcas;
 
-        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
-        imgProcesada = filtros.dilate(imgProcesada);
+     }
 
-        getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+         public BufferedImage rellenaMarcasDetectadas(BufferedImage imgOriginal, ArrayList<Marca> marcas){
+         BufferedImage imgConMarcasRellena = imgOriginal;
+         int colorRojo = new Color (255,0,0).getRGB();
+         marcas.get(1).getCoordMarca().get(1);
+         for (Marca m : marcas) {
+              int i=0;
+              while (i<m.getCoordMarca().size()){
+                   imgConMarcasRellena.setRGB((int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY(),colorRojo);
+                   i++;}
+             }
+         return imgConMarcasRellena;
 
-        int fondo[] = new int[967];
-        fondo = buscaFondo(imgProcesada);
-        //new ArrayList(Arrays.asList(fondo));
-        setImgProcesada(dibujaFondo(imgProcesada, fondo)); //guarda la imagen con fondo
-        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenConFondo.tmp"); //la guarda en disco
-        setImgProcesada(eliminaFondo(getImgProcesada(), fondo));
-        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinFondo.tmp");
-        setImgProcesada(eliminaHoras(getImgProcesada()));
-        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinHoras.tmp");
-        //buscaMarcas(fondo)
-        BufferedImage emma = getImgProcesada();
-                
-        return marcas;
-    }
+     }
+
+
+
+//    public ArrayList<modelo.dataManager.Marca> getMarcas(BufferedImage imgSoloMarcas){
+//        ArrayList<modelo.dataManager.Marca> marcas = new ArrayList();
+//         -- metodo pendiente --
+//
+//        Leemos la imagen con obtenerImagen()
+//        OperacionesBasicas.getInstance().obtenerImagen(rutaImg);
+//        Creamos los filtros para la imagen con la clase Filtros
+//        Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
+//        BufferedImage imgProcesada = filtros.erode(getImagenOriginal());
+//
+//        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+//        imgProcesada = filtros.dilate(imgProcesada);
+//
+//        getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+//
+//        int fondo[] = new int[967];
+//        fondo = buscaFondo(imgProcesada);
+//        new ArrayList(Arrays.asList(fondo));
+//        setImgProcesada(dibujaFondo(imgProcesada, fondo)); //guarda la imagen con fondo
+//        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenConFondo.tmp"); //la guarda en disco
+//        setImgProcesada(eliminaFondo(getImgProcesada(), fondo));
+//        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinFondo.tmp");
+//        setImgProcesada(eliminaHoras(getImgProcesada()));
+//        getInstance().grabarImagen(getImgProcesada(),"imgs\\imagenSinHoras.tmp");
+//        buscaMarcas(fondo)
+//        BufferedImage emma = getImgProcesada();
+//
+//        return marcas;
+//
+//     y tambien pensaba q habría q hacer un método tipo el q pintaba de rojo el fondo, pero para las marcas... estaria bueno q la firma sea:
+//     dibujaMarcasDetectadas(BufferedImage imgConMarcas, ArrayList<Marca> marcas):BufferedImage
+//     yo:  bien
+//     Sebastian:  si queres copialo y pegalo por ahi para hacer luego
+//     Sebastian ha introducido texto.
+//
+//     estoy pensando y, como el fondo es variable, para calcular el limite superior hasta el cual leer habría q hacer un método
+//     Enviado a la(s) 23:30 del miércoles
+//     Sebastian:  la firma podría ser getLimiteSuperiorAanalizar(BufferedImage imgConMarcas, ArrayList fondo):ArrayList
+//     el ArrayList q devuelve sería limite superior hasta el cual analizar
+//     yo:  con el promedio y algo mas?
+//     promedio entre el margen superior de la imagen y el fondo por ahora...
+//
+//
+//
+//    }
 
     /**
      * @return the imgProcesada
@@ -606,6 +680,20 @@ public class OperacionesBasicas {
      */
     public Colores getColor() {
         return color;
+    }
+
+    /**
+     * @return the imgConFondo
+     */
+    public BufferedImage getImgConFondo() {
+        return imgConFondo;
+    }
+
+    /**
+     * @param imgConFondo the imgConFondo to set
+     */
+    public void setImgConFondo(BufferedImage imgConFondo) {
+        this.imgConFondo = imgConFondo;
     }
 
 }
