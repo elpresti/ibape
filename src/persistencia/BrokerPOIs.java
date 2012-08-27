@@ -410,4 +410,44 @@ public class BrokerPOIs extends BrokerPpal {
         }
         return cantPoisDeEstaCampania;
     }
+
+    public ArrayList<modelo.dataManager.POI> getPOISFromDBSegunCat(int idCategoriaPOI) {
+        ArrayList<modelo.dataManager.POI> POIs = new ArrayList();
+        ResultSet rs = null;
+        try {
+            rs = getStatement().executeQuery("SELECT * FROM Pois WHERE idCategoriaPoi="+idCategoriaPOI);
+            while (rs.next()) {
+                modelo.dataManager.POI poi = new modelo.dataManager.POI();
+                // Get the data from the row using the column name
+                poi.setId(rs.getInt("id"));
+                poi.setLatitud(rs.getDouble("posLat"));
+                poi.setLongitud(rs.getDouble("posLon"));
+                poi.setFechaHora(rs.getDate("fechaHora"));
+                poi.setPathImg(rs.getString("pathImg"));
+                poi.setIdCampania(rs.getInt("idCampania"));
+                poi.setDescripcion(rs.getString("descripcion"));
+
+                //poi.setCategoria(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(rs.getInt("idcategoriapoi")));
+                poi.setIdCategoriaPOI(rs.getInt("idCategoriaPoi"));
+                //ver if null
+                poi.setMarcas(BrokerMarca.getInstance().getMarcasPOIFromDB(rs.getInt("id")));
+
+                POIs.add(poi);
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return POIs;
+    }
 }
