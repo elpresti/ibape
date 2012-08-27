@@ -55,7 +55,7 @@ public class ControllerPois {
         return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
     }
 
-    public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud) {
+    public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud, String pathImgSonda) {
         if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
             modelo.dataManager.POI p = new POI();
             p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
@@ -64,7 +64,7 @@ public class ControllerPois {
             p.setLongitud(longitud);
             p.setDescripcion(descripcion);
             p.setMarcas(null);//ver
-            p.setPathImg("VER ruta a la imagen(ControllerPOIS.agregaPOI)");//ver
+            p.setPathImg("editar en controllerPOI -pathImgSonda");//ver
             p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
             BrokerPOIs.getInstance().insertPOI(p);
         } else {
@@ -101,5 +101,9 @@ public class ControllerPois {
         } else {
             System.out.println("CatPoi eliminado: " + unaCategoriaPoi.getId());
         }
+    }
+
+    public boolean isCategoriaPOILibre(int idCategoriaPOI) {
+        return BrokerPOIs.getInstance().getPOISFromDBSegunCat(idCategoriaPOI).isEmpty();
     }
 }
