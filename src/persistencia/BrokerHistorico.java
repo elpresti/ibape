@@ -249,7 +249,7 @@ public abstract class BrokerHistorico implements Runnable{
         this.dbFileName = dbName;
     }
     
-    private String getCampaignFolderName(int id) {
+    public String getCampaignFolderName(int id) {
         return "camp"+id;
     }
 

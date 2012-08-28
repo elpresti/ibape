@@ -129,10 +129,8 @@ public class ControllerNavegacion {
 }
 
 class GraficaDatosNavegacion implements Runnable {
-
     Thread thGraficar;
     public int retardo;
-
     public void run() {
         try {
             thGraficar.sleep(retardo);
@@ -151,7 +149,6 @@ class GraficaDatosNavegacion implements Runnable {
         ControllerNavegacion.getInstance().restauraBtnGraficarDatos();
         thGraficar = null;
     }
-
     public void start() {
         if (thGraficar == null) {
             thGraficar = new Thread(this);

@@ -5,16 +5,14 @@
 package modelo.dataCapture;
 
 import com.csvreader.CsvReader;
+import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
-import modelo.dataManager.SondaSet;
 import modelo.dataManager.SondaSetHistorico;
 import persistencia.Logueador;
 
@@ -249,8 +247,8 @@ public class Csv {
         String rutaAcsv= null;
         try{
             String idJpg = getIdFromFileName(rutaJpg);
-            if (creaCarpetaTmpYcopiaArchivos(idJpg)){
-                if (disparaEjecucionConversor(idJpg)){
+            if (copiaConversor() && verificaQueEsteElDAT(rutaJpg)){
+                if (disparaEjecucionConversor(idJpg,rutaJpg)){
                     if (modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal() != null){
                         //poner en rutaAcsv la ruta a valores.txt
                         rutaAcsv = modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal();
@@ -267,29 +265,43 @@ public class Csv {
         return rutaAcsv;
     }
 
-    private boolean creaCarpetaTmpYcopiaArchivos(String idJpg) {
+    private boolean copiaConversor() {
         boolean sePudo=false;
         try {
-            //crear una carpeta temporal con el ID del JPG recibido dentro
-            if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){
-                String rutaHistoricoCampania = LanSonda.getInstance().getCarpetaHistoricoLocal();
-                rutaHistoricoCampania += "/"+AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico();
-                File carpetaTmp = new File(rutaHistoricoCampania);
-                carpetaTmp.createNewFile();
-                //poner el DAT que corresponda al JPG recivido                    
-                //poner el DAT que corresponda al JPG recivido
-
+            //verifico si el ejecutable del conversor ya fue copiado a la carpeta de esta campaña, sino lo copio
+            if ((AdministraCampanias.getInstance().getCampaniaEnCurso() != null) &&
+                    (AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico() != null)){
+                String rutaDirCampania = LanSonda.getInstance().getCarpetaHistoricoLocal();
+                rutaDirCampania += "\\"+AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico();
+                File conversorEnHistorico = new File(rutaDirCampania+"\\convDatToCsv.exe");
+                if (conversorEnHistorico.exists()){
+                    sePudo=true;
+                }
+                else{ //si no estaba, lo copio
+                    String rutaFromConversor = "\\SoftExterno\\convDatToCsv.exe";
+                    String rutaToConversor = rutaDirCampania+"\\convDatToCsv.exe";
+                    if (Sistema.getInstance().copy(rutaFromConversor, rutaToConversor)){
+                        sePudo=true;
+                    }
+                    else{
+                        Logueador.getInstance().agregaAlLog("No se pudieron copiar el conversorDatAcsv y el DAT");
+                    }
+                }
             }
-        } catch (IOException ex) {
-            Logger.getLogger(Csv.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("copiaConversor(): "+e.toString());
         }
         return sePudo;
     }
 
-    private boolean disparaEjecucionConversor(String idJpg) {
+    private boolean disparaEjecucionConversor(String idJpg, String rutaJpg) {
         boolean sePudo=false;
-        //ejecutar el conversor pasandole el ID del JPG
-        //esperar que genere valores.txt y corroborar que tenga contenido (ej: file.size()>50kb)
+        //ejecuta como un Thread el conversor pasandole el ID del JPG
+        ConversorDAT2CSV conversor = new ConversorDAT2CSV();
+        conversor.setFileId(idJpg);
+        conversor.setRutaJpg(rutaJpg);
+        conversor.start();
+        sePudo=true;
         return sePudo;
     }
 
@@ -300,4 +312,65 @@ public class Csv {
         return idJpg;
     }
 
+    private boolean verificaQueEsteElDAT(String rutaJpg) {
+        boolean estaElDat=false;
+        if (rutaJpg != null && rutaJpg.length()>3 && rutaJpg.toLowerCase().contains(".jpg")){
+            String rutaDat = rutaJpg.toLowerCase().replace(".jpg", ".dat");
+            File archivoDat = new File(rutaDat);
+            if (archivoDat.exists()){
+                estaElDat = true;
+            }
+        }
+        return estaElDat;
+    }
+
+
+}
+
+
+class ConversorDAT2CSV implements Runnable {
+    Thread thConversor;
+    String fileId;
+    String rutaJpg;
+    public void run() {
+        try {
+            String rutaConvDeCampania = System.getProperty("user.dir")+LanSonda.getInstance().getCarpetaHistoricoLocal();
+            rutaConvDeCampania += "\\"+AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico();
+            if (Sistema.getInstance().is64bOS()){
+                rutaConvDeCampania += "\\convDatToCsv32b.exe "+this.fileId; //tenemos solo la version para 32b!
+            }
+            else{
+                rutaConvDeCampania += "\\convDatToCsv32b.exe "+this.fileId;
+            }
+            Runtime.getRuntime().exec(rutaConvDeCampania);
+            thConversor.sleep(3000);//espero 3 segundos a q se ejecute el conversor y genere el CSV
+            //chequeo si se generó
+            String rutaAcsv=rutaConvDeCampania.replace("convDatToCsv32b.exe "+this.fileId, "valores.txt");
+            File archivoCsv = new File(rutaAcsv);
+            if (archivoCsv.exists() && archivoCsv.length()>(50*1024)){ //si existe y genero un archivo valido (>50kb), lo renombro
+                File archivoCsvRenombrado = new File(rutaAcsv.replace("valores.txt", rutaJpg.replace(".jpg", ".csv")));
+                archivoCsv.renameTo(archivoCsvRenombrado);
+                //disparo la lectura del CSV pasando su filename por parametro
+            }
+            else{
+                Logueador.getInstance().agregaAlLog("Error: Se ejecutó el ConversorDAT2CSV, pero no ha generado el CSV esperado");
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("DisparaEjecucionConversor(): "+e.toString());
+        }
+        thConversor = null;
+    }
+    public void start() {
+        if (thConversor == null) {
+            thConversor = new Thread(this);
+            thConversor.setPriority(Thread.MIN_PRIORITY);
+            thConversor.start();
+        }
+    }
+    void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
+    void setRutaJpg(String rutaJpg) {
+        this.rutaJpg = rutaJpg;
+    }
 }
