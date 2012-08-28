@@ -150,7 +150,7 @@ public class Sistema {
         return sePudo;
     }
 
-    private boolean copy(String from, String to) {
+    public boolean copy(String from, String to) {
         boolean sePudo=false;
         int BUFFER_SIZE = 2048;
         byte[] buffer = new byte[BUFFER_SIZE];
