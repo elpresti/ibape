@@ -312,7 +312,6 @@ public class ControllerPpal {
                 listRutaIconos.add(rutaIconos + chld[i]);
             }
         }
-
         return listRutaIconos;
     }
 }

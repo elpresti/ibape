@@ -16,6 +16,8 @@ import controllers.ControllerPpal;
 import controllers.RenderCombo;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
@@ -25,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
 import persistencia.BrokerCategoriasPOI;
@@ -216,6 +219,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaPois.setEditable(false);
         jScrollPane1.setViewportView(tablaPois);
         tablaPois.getColumnModel().getColumn(0).setMinWidth(70);
         tablaPois.getColumnModel().getColumn(0).setPreferredWidth(70);
@@ -300,6 +304,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         campoLatitud.setMaximumSize(new java.awt.Dimension(100, 20));
         campoLatitud.setMinimumSize(new java.awt.Dimension(100, 20));
         campoLatitud.setPreferredSize(new java.awt.Dimension(100, 20));
+        campoLatitud.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoLatitudKeyPressed(evt);
+            }
+        });
         panelLatitud.add(campoLatitud);
 
         panelDatosPoi.add(panelLatitud);
@@ -381,8 +390,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelTablaCategorias.setPreferredSize(new java.awt.Dimension(500, 200));
         panelTablaCategorias.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        jScrollPane2.setMaximumSize(new java.awt.Dimension(500, 200));
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(500, 200));
         jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 200));
 
         tablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
@@ -510,9 +517,9 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblIconoCatPoi.setText("Icono");
         panelNombreNuevaCat.add(lblIconoCatPoi);
 
-        comboIconoCatPoi.setMaximumSize(new java.awt.Dimension(130, 20));
-        comboIconoCatPoi.setMinimumSize(new java.awt.Dimension(130, 20));
-        comboIconoCatPoi.setPreferredSize(new java.awt.Dimension(130, 20));
+        comboIconoCatPoi.setMaximumSize(new java.awt.Dimension(50, 25));
+        comboIconoCatPoi.setMinimumSize(new java.awt.Dimension(50, 25));
+        comboIconoCatPoi.setPreferredSize(new java.awt.Dimension(50, 25));
         panelNombreNuevaCat.add(comboIconoCatPoi);
 
         panelAgregaCategoria.add(panelNombreNuevaCat);
@@ -570,7 +577,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         } else {//nuevo
             // Agrega Categoria POI:
             if (unico && campoNombreNuevaCat.getText().length() > 2) {
-                controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText(), comboIconoCatPoi.getSelectedItem().toString());
+                ImageIcon unIcono = (ImageIcon) comboIconoCatPoi.getSelectedItem();
+                controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText(), unIcono.getDescription());
             } else {
                 JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido");
             }
@@ -588,7 +596,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 JOptionPane.WARNING_MESSAGE) == 0) {
             for (int i = 0; i < tablaCategorias.getRowCount(); i++) {
                 if ((Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1)) {
-                    CategoriaPoi unaCatPOI =(CategoriaPoi) tablaCategorias.getValueAt(i, 1);
+                    CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(i, 1);
                     if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
                         ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
                     } else {
@@ -610,13 +618,21 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnGuardarCatPOI.setEnabled(true);
     }//GEN-LAST:event_btnInsertarCatPOIActionPerformed
 
+    private void campoLatitudKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoLatitudKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoLatitudKeyPressed
+
     private void btnInsertarPOIActionPerformed(java.awt.event.ActionEvent evt) {
         //INSERTA un POI
-        habilitaPanelDatosPOIs(true);
-        btnModificarPOI.setEnabled(false);
-        btnEliminarPOI.setEnabled(false);
-        btnInsertarPOI.setEnabled(false);
-        btnGuardarPOI.setEnabled(true);
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+            habilitaPanelDatosPOIs(true);
+            btnModificarPOI.setEnabled(false);
+            btnEliminarPOI.setEnabled(false);
+            btnInsertarPOI.setEnabled(false);
+            btnGuardarPOI.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
+        }
         /*Este es el codigo de resgistra POI
          * habilitaPanelDatosPOIs(true);
         campoLatitud.setText(String.valueOf(ControllerNavegacion.getInstance().getLatitudActual()));
@@ -654,16 +670,24 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }
 
     private void btnGuardarPOIActionPerformed(java.awt.event.ActionEvent evt) {
+        if (campoLatitud.getText().substring(campoLatitud.getText().indexOf(".") + 1).contains(".")) {
+            JOptionPane.showMessageDialog(null, "Latitud incorrecta");
+            return;
+        }
+        if (campoLongitud.getText().substring(campoLongitud.getText().indexOf(".") + 1).contains(".")) {
+            JOptionPane.showMessageDialog(null, "Longitud incorrecta");
+            return;
+        }
+        if (campoDescripcionNuevoPoi.getText().length() < 3) {
+            JOptionPane.showMessageDialog(null, "La descripcion no es valida");
+            return;
+        }
         if (campoLatitud.getText().isEmpty() || Double.valueOf(campoLatitud.getText()) == 0) {
             JOptionPane.showMessageDialog(null, "La latitud no puede ser igual a 0");
             return;
         }
         if (campoLongitud.getText().isEmpty() || Double.valueOf(campoLongitud.getText()) == 0) {
             JOptionPane.showMessageDialog(null, "La longitud no puede ser igual a 0");
-            return;
-        }
-        if (campoDescripcionNuevoPoi.getText().length() < 3) {
-            JOptionPane.showMessageDialog(null, "La descripcion no es valida");
             return;
         }
 
@@ -774,6 +798,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             cargaComboIconosCategorias();
             habilitaPanelDatosPOIs(false);
             habilitaPanelDatosCatPOIs(false);
+            //validadores de los campos
+            Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
+            campoLatitud.addKeyListener(obj_teclas);
+            campoLongitud.addKeyListener(obj_teclas);
+
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -821,6 +850,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
             a.add(cP.getId());
             a.add(cP); //<-- Titulo, Aca esta el objeto entero
+            /*
+            Image img = new ImageIcon(cP.getPathIcono()).getImage();
+            Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+            ImageIcon unIcono = new ImageIcon(newimg);
+            */
             a.add(new ImageIcon(cP.getPathIcono())); // me hace el toString aunque le pase el objeto ¬¬
             a.add("false");
             modeloTablaCategoriasPOI.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
@@ -939,10 +973,15 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //carga combo iconos   
         comboIconoCatPoi.removeAllItems();
         for (String rutaIcono : ControllerPpal.getInstance().listadoIconosCatPOI()) {
-            comboIconoCatPoi.addItem(rutaIcono); //si no agrego elementos no hace el render
+            Image img = new ImageIcon(rutaIcono).getImage();
+            Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
+            ImageIcon unIcono = new ImageIcon(newimg);
+            unIcono.setDescription(rutaIcono);
+            comboIconoCatPoi.addItem(unIcono);
+            //comboIconoCatPoi.addItem(rutaIcono); //si no agrego elementos no hace el render
         }
-        RenderCombo rc = new RenderCombo();
-        comboIconoCatPoi.setRenderer(rc);
+        //RenderCombo rc = new RenderCombo();
+        //comboIconoCatPoi.setRenderer(rc);
     }
 
     private void habilitaPanelDatosCatPOIs(boolean estado) {
@@ -987,6 +1026,24 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
      */
     public void setModificandoCatPOI(boolean modificandoCatPOI) {
         this.modificandoCatPOI = modificandoCatPOI;
+    }
+
+    class Cls_ManejoTeclas extends KeyAdapter {
+
+        public void keyTyped(KeyEvent ke) {
+            char loc_caracter = ke.getKeyChar();
+            /*
+            if(((loc_caracter < '0') || (loc_caracter > '9' )) && (loc_caracter != KeyEvent.VK_BACK_SPACE) &&
+            ((loc_caracter < 'a' ) || (loc_caracter > 'z')) &&
+            ((loc_caracter < 'A' ) || (loc_caracter > 'Z')) &&
+            (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.') && (loc_caracter != '_'))
+            ke.consume();
+             */
+            if (((loc_caracter < '0') || (loc_caracter > '9')) && (loc_caracter != KeyEvent.VK_BACK_SPACE)
+                    && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.')) {
+                ke.consume();
+            }
+        }
     }
 }
 /*
