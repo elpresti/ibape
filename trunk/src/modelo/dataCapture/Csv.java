@@ -16,6 +16,8 @@ import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.SondaSetHistorico;
 import persistencia.Logueador;
 
+
+
 /**
  *
  * @author Sebastian
@@ -24,6 +26,8 @@ public class Csv {
     private static Csv unicaInstancia;
     private String ultimoCsvLeido;
     private String csvFileName;
+    private String conversorFileName;
+    private String sevenZLibFileName;
     private static final byte NRO_COL_FRECUENCIA=0;
     private static final byte NRO_COL_GANANCIA=1;
     private static final byte NRO_COL_STC=2;
@@ -178,6 +182,14 @@ public class Csv {
 
     private void inicializador() {
         setCsvFileName("valores.txt");
+        if (Sistema.getInstance().is64bOS()){
+            setConversorFileName("consola.exe"); //tenemos solo la version para 32b!
+            setSevenZLibFileName("7z.exe");
+        }
+        else{
+            setConversorFileName("consola.exe");
+            setSevenZLibFileName("7z.exe");
+        }
     }
     
     public DatosPixelX getDatosDeUnPixelX(String rutaJpg,int pixelX){
@@ -248,14 +260,19 @@ public class Csv {
         try{
             String idJpg = getIdFromFileName(rutaJpg);
             if (copiaConversor() && verificaQueEsteElDAT(rutaJpg)){
-                if (disparaEjecucionConversor(idJpg,rutaJpg)){
+                if (disparaEjecucionConversor(idJpg,rutaJpg)){ 
+                    Thread.currentThread().sleep(5000);//espero 5 segundos
                     if (modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal() != null){
-                        //poner en rutaAcsv la ruta a valores.txt
-                        rutaAcsv = modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal();
-                        rutaAcsv += "\\"+idJpg;                        
-                        rutaAcsv += "\\"+getCsvFileName();
+                        String rutaTmp =modelo.dataCapture.LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+rutaJpg.toLowerCase().replace(".jpg", ".csv");
+                        File archivoCsv = new File(rutaTmp);
+                        if (archivoCsv.exists()){
+                            rutaAcsv = rutaTmp;
+                        }
                     }
                 }
+            }
+            else{
+                Logueador.getInstance().agregaAlLog("Error! getCsvFromJpg(): No se pudo copiar el conversor o no se encuentra el DAT para el JPG");
             }
         }
         catch(Exception e){
@@ -272,19 +289,34 @@ public class Csv {
             if ((AdministraCampanias.getInstance().getCampaniaEnCurso() != null) &&
                     (AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico() != null)){
                 String rutaDirCampania = LanSonda.getInstance().getCarpetaHistoricoLocal();
-                rutaDirCampania += "\\"+AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico();
-                File conversorEnHistorico = new File(rutaDirCampania+"\\convDatToCsv.exe");
+                //chequeo si está el ejecutable
+                File conversorEnHistorico = new File(rutaDirCampania+"\\"+getConversorFileName());
                 if (conversorEnHistorico.exists()){
                     sePudo=true;
                 }
                 else{ //si no estaba, lo copio
-                    String rutaFromConversor = "\\SoftExterno\\convDatToCsv.exe";
-                    String rutaToConversor = rutaDirCampania+"\\convDatToCsv.exe";
+                    String rutaFromConversor = "SoftExterno\\"+getConversorFileName();
+                    String rutaToConversor = rutaDirCampania+"\\"+getConversorFileName();
                     if (Sistema.getInstance().copy(rutaFromConversor, rutaToConversor)){
                         sePudo=true;
                     }
                     else{
-                        Logueador.getInstance().agregaAlLog("No se pudieron copiar el conversorDatAcsv y el DAT");
+                        Logueador.getInstance().agregaAlLog("No se pudo copiar el conversorDatAcsv");
+                    }
+                }
+                //chequeo si está la libreria de 7Zip
+                File sevenZLibEnHistorico = new File(rutaDirCampania+"\\"+getSevenZLibFileName());
+                if (sevenZLibEnHistorico.exists()){
+                    sePudo=true;
+                }
+                else{ //si no estaba, lo copio
+                    String rutaFromSevenZ = "SoftExterno\\"+getSevenZLibFileName();
+                    String rutaToSevenZ = rutaDirCampania+"\\"+getSevenZLibFileName();
+                    if (Sistema.getInstance().copy(rutaFromSevenZ, rutaToSevenZ)){
+                        sePudo=true;
+                    }
+                    else{
+                        Logueador.getInstance().agregaAlLog("No se pudo copiar la libreria 7z");
                     }
                 }
             }
@@ -308,14 +340,14 @@ public class Csv {
     private String getIdFromFileName(String rutaJpg) {
         // obtengo el ID del filename del JPG
         String idJpg = rutaJpg.substring(rutaJpg.indexOf("-")+1); // le saco el primer guion
-        idJpg = idJpg.substring(0, rutaJpg.indexOf("-")); //obtengo sus primeros 4 digitos q representan el ID
+        idJpg = idJpg.substring(0, idJpg.indexOf("-")); //obtengo sus primeros 4 digitos q representan el ID
         return idJpg;
     }
 
     private boolean verificaQueEsteElDAT(String rutaJpg) {
         boolean estaElDat=false;
         if (rutaJpg != null && rutaJpg.length()>3 && rutaJpg.toLowerCase().contains(".jpg")){
-            String rutaDat = rutaJpg.toLowerCase().replace(".jpg", ".dat");
+            String rutaDat = LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+rutaJpg.toLowerCase().replace(".jpg", ".dat");
             File archivoDat = new File(rutaDat);
             if (archivoDat.exists()){
                 estaElDat = true;
@@ -324,28 +356,47 @@ public class Csv {
         return estaElDat;
     }
 
+    /**
+     * @return the conversorFileName
+     */
+    public String getConversorFileName() {
+        return conversorFileName;
+    }
+
+    /**
+     * @param conversorFileName the conversorFileName to set
+     */
+    public void setConversorFileName(String conversorFileName) {
+        this.conversorFileName = conversorFileName;
+    }
+
+    /**
+     * @return the sevenZLibFileName
+     */
+    public String getSevenZLibFileName() {
+        return sevenZLibFileName;
+    }
+
+    /**
+     * @param sevenZLibFileName the sevenZLibFileName to set
+     */
+    public void setSevenZLibFileName(String sevenZLibFileName) {
+        this.sevenZLibFileName = sevenZLibFileName;
+    }
+
 
 }
-
-
 class ConversorDAT2CSV implements Runnable {
     Thread thConversor;
     String fileId;
     String rutaJpg;
     public void run() {
-        try {
-            String rutaConvDeCampania = System.getProperty("user.dir")+LanSonda.getInstance().getCarpetaHistoricoLocal();
-            rutaConvDeCampania += "\\"+AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico();
-            if (Sistema.getInstance().is64bOS()){
-                rutaConvDeCampania += "\\convDatToCsv32b.exe "+this.fileId; //tenemos solo la version para 32b!
-            }
-            else{
-                rutaConvDeCampania += "\\convDatToCsv32b.exe "+this.fileId;
-            }
-            Runtime.getRuntime().exec(rutaConvDeCampania);
+        try { 
+            String rutaConvDeCampania = LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName();
+            Runtime.getRuntime().exec(rutaConvDeCampania+" "+this.fileId); //llamamos al ejecutable pasandole como argumento el ID del archivo leido
             thConversor.sleep(3000);//espero 3 segundos a q se ejecute el conversor y genere el CSV
             //chequeo si se generó
-            String rutaAcsv=rutaConvDeCampania.replace("convDatToCsv32b.exe "+this.fileId, "valores.txt");
+            String rutaAcsv=rutaConvDeCampania.replace(Csv.getInstance().getConversorFileName(), "valores.txt");
             File archivoCsv = new File(rutaAcsv);
             if (archivoCsv.exists() && archivoCsv.length()>(50*1024)){ //si existe y genero un archivo valido (>50kb), lo renombro
                 File archivoCsvRenombrado = new File(rutaAcsv.replace("valores.txt", rutaJpg.replace(".jpg", ".csv")));

@@ -323,8 +323,8 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
                 modelo.dataManager.SondaSet.getInstance().setUsadoDesde(ultimoSsh.getUsadoDesde());
                 modelo.dataManager.SondaSet.getInstance().setUsadoHasta(ultimoSsh.getUsadoHasta());
                 modelo.dataManager.SondaSet.getInstance().setVelPantalla(ultimoSsh.getVelPantalla());
+                sePudo=true;
             } 
-            sePudo=true;
         }
         catch (Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
