@@ -39,6 +39,61 @@ public class ControllerAlertas implements Observer{
         return indexProfundidad;
     }
 
+    /**
+     * @return the indexCantDeMarcas
+     */
+    public static int getIndexCantDeMarcas() {
+        return indexCantDeMarcas;
+    }
+
+    /**
+     * @return the indexLatitud
+     */
+    public static int getIndexLatitud() {
+        return indexLatitud;
+    }
+
+    /**
+     * @return the indexLongitud
+     */
+    public static int getIndexLongitud() {
+        return indexLongitud;
+    }
+
+    /**
+     * @return the indexVelocidad
+     */
+    public static int getIndexVelocidad() {
+        return indexVelocidad;
+    }
+
+    /**
+     * @return the indexRumbo
+     */
+    public static int getIndexRumbo() {
+        return indexRumbo;
+    }
+
+    /**
+     * @return the indexVelocidadAgua
+     */
+    public static int getIndexVelocidadAgua() {
+        return indexVelocidadAgua;
+    }
+
+    /**
+     * @return the indexTempAgua
+     */
+    public static int getIndexTempAgua() {
+        return indexTempAgua;
+    }
+
+    public static int getIndexFechaYhora() {
+        return indexFechaYhora;
+    }
+
+
+
 
     
     private ArrayList<Variable> variables;
@@ -56,6 +111,15 @@ public class ControllerAlertas implements Observer{
     private ArrayList<Alerta> alertasActivadas= new ArrayList<Alerta>();
     private boolean estadoAlertas=AdministraAlertas.getInstance().isEstadoAlertas();
     private static int indexProfundidad=1;
+    private static int indexCantDeMarcas=2;
+    private static int indexLatitud=3;
+    private static int indexLongitud=4;
+    private static int indexVelocidad=5;
+    private static int indexRumbo=6;
+    private static int indexVelocidadAgua=7;
+    private static int indexTempAgua=8;
+    private static int indexFechaYhora=9;
+    
    
     public static ControllerAlertas getInstance() {
        if (unicaInstancia == null)
@@ -203,7 +267,7 @@ public class ControllerAlertas implements Observer{
         return sePudo;
     }
 
-    public void agregaCondicionAct(int idProvCondicion,int idRelacion,int idVariable,float valMin, float valMax,String descripcion){
+    public void agregaCondicionAct(int idProvCondicion,int idRelacion,int idVariable,String valMin, String valMax,String descripcion){
     
     if (condicionesAct!=null){
         boolean encontro=false;    
@@ -383,6 +447,22 @@ public class ControllerAlertas implements Observer{
       if (o == punto){
           if (index==indexProfundidad){
               analizaActivacionesProfundidad(); 
+          }else if (index==indexCantDeMarcas){
+              analizaActivacionesCantDeMarcas();
+          }else if (index==indexLatitud){
+              analizaActivacionesLatitud();
+          }else if (index==indexLongitud){
+              analizaActivacionesLongitud();
+          }else if (index==indexVelocidad){
+              analizaActivacionesVelocidad();
+          }else if (index==indexRumbo){
+              analizaActivacionesRumbo();
+          }else if (index==indexVelocidadAgua){
+              analizaActivacionesvelocidadAgua();
+          }else if (index==indexTempAgua){
+              analizaActivacionesTempAgua();
+          }else if (index==indexFechaYhora){
+              analizaActivacionesFechaYhora();
           }
           
       }
@@ -456,12 +536,27 @@ public class ControllerAlertas implements Observer{
         int f=0;
         boolean cumpleTodo=true;
         while ((f<condiciones.size()) && (cumpleTodo)){
-                Condicion c=condiciones.get(f);
+            Condicion c=condiciones.get(f);
                 if ((c.getIdVariable()==indexProfundidad)){
-                    cumpleTodo=cumpleTodo && cumpleCondicionProfundidad(c);
-                f++;
-            }
-          
+                    cumpleTodo=cumpleTodo && cumpleCondicionProfundidad(c);               
+                }else if((c.getIdVariable()==indexCantDeMarcas)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionCantDeMarcas(c);
+                }else if((c.getIdVariable()==indexLatitud)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionLatitud(c);
+                }else if((c.getIdVariable()==indexLongitud)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionLongitud(c);
+                }else if((c.getIdVariable()==indexVelocidad)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionVelocidad(c);
+                }else if((c.getIdVariable()==indexRumbo)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionRumbo(c);
+                }else if((c.getIdVariable()==indexVelocidadAgua)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionVelocidadAgua(c);
+                }else if((c.getIdVariable()==indexTempAgua)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionTemperaturaAgua(c);
+                }else if((c.getIdVariable()==indexFechaYhora)) {
+                    cumpleTodo=cumpleTodo && cumpleCondicionFechaYhora(c);
+                }
+            f++;
         }
         return cumpleTodo;
     }
@@ -469,34 +564,34 @@ public class ControllerAlertas implements Observer{
     private boolean cumpleCondicionProfundidad(Condicion c) {
         boolean cumpleTodo=true;
         if (c.getIdRelacion()==1){
-                        if (c.getValorMinimo()==punto.getProfundidad()){
+                        if ((Float.parseFloat(c.getValorMinimo())==punto.getProfundidad())){
                             cumpleTodo=cumpleTodo && true;
                         }else{
                             cumpleTodo=cumpleTodo && false;
                         }
                     }else{
                         if (c.getIdRelacion()==2){
-                            if (c.getValorMinimo()<=punto.getProfundidad()){
+                            if (Float.parseFloat(c.getValorMinimo())<=punto.getProfundidad()){
                                 cumpleTodo=cumpleTodo && true;
                             }else{
                                 cumpleTodo=cumpleTodo && false;
                             }
                         }else{
                             if (c.getIdRelacion()==3){
-                                if (c.getValorMinimo()>=punto.getProfundidad()){
+                                if (Float.parseFloat(c.getValorMinimo())>=punto.getProfundidad()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
                                 }
                             }else{
-                                if (c.getValorMinimo()<=punto.getProfundidad() && c.getValorMaximo()>=punto.getProfundidad()){
+                                if (Float.parseFloat(c.getValorMinimo())<=punto.getProfundidad() && Float.parseFloat(c.getValorMaximo())>=punto.getProfundidad()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
                                 }
                             }   
                         }
-                    }
+        }
         return cumpleTodo;
         }
 
@@ -536,6 +631,202 @@ public class ControllerAlertas implements Observer{
         return mensaje;
           
         }
+
+    private boolean cumpleCondicionCantDeMarcas(Condicion c) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private boolean cumpleCondicionLatitud(Condicion c) {
+    boolean cumpleTodo=true;
+        if (c.getIdRelacion()==1){
+                        if ((Double.parseDouble(c.getValorMinimo())==punto.getLatitud())){
+                            cumpleTodo=cumpleTodo && true;
+                        }else{
+                            cumpleTodo=cumpleTodo && false;
+                        }
+                    }else{
+                        if (c.getIdRelacion()==2){
+                            if (Double.parseDouble(c.getValorMinimo())<=punto.getLatitud()){
+                                cumpleTodo=cumpleTodo && true;
+                            }else{
+                                cumpleTodo=cumpleTodo && false;
+                            }
+                        }else{
+                            if (c.getIdRelacion()==3){
+                                if (Double.parseDouble(c.getValorMinimo())>=punto.getLatitud()){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }else{
+                                if (Double.parseDouble(c.getValorMinimo())<=punto.getLatitud() && Double.parseDouble(c.getValorMaximo())>=punto.getLatitud()){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }   
+                        }
+        }
+        return cumpleTodo;
+    }
+
+    private boolean cumpleCondicionLongitud(Condicion c) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private boolean cumpleCondicionFechaYhora(Condicion c) {
+        boolean cumpleTodo=true;
+        if (c.getIdRelacion()==9){
+                        if ((Timestamp.valueOf(c.getValorMinimo())==punto.getFechaYhora())){
+                            cumpleTodo=cumpleTodo && true;
+                        }else{
+                            cumpleTodo=cumpleTodo && false;
+                        }
+                    }else{
+                        if (c.getIdRelacion()==2){
+                            if (Timestamp.valueOf(c.getValorMinimo()).before((punto.getFechaYhora()))){
+                                cumpleTodo=cumpleTodo && true;
+                            }else{
+                                cumpleTodo=cumpleTodo && false;
+                            }
+                        }else{
+                            if (c.getIdRelacion()==3){
+                                if (Timestamp.valueOf(c.getValorMinimo()).after((punto.getFechaYhora()))){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }else{
+                                if ((Timestamp.valueOf(c.getValorMinimo()).before((punto.getFechaYhora()))) && (Timestamp.valueOf(c.getValorMaximo()).after((punto.getFechaYhora())))){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }   
+                        }
+        }
+        return cumpleTodo;
+    }
+
+
+    private boolean cumpleCondicionTemperaturaAgua(Condicion c) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private boolean cumpleCondicionVelocidadAgua(Condicion c) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private boolean cumpleCondicionRumbo(Condicion c) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private boolean cumpleCondicionVelocidad(Condicion c) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void analizaActivacionesLatitud() {
+        ArrayList<Condicion> condiciones;
+        boolean activacion;
+        boolean activacionAnt;
+        int i = 0;
+        while ((i<alertasEnFuncionamiento.size())){
+            condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
+            int f=0;
+            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
+            activacion=false;
+            while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var Latitud
+                if ((condiciones.get(f).getIdVariable()==indexLatitud)){
+                    activacion=analizaCondiciones(condiciones);
+                }
+                f++;
+            }
+            Alerta al=alertasEnFuncionamiento.get(i);
+            double latitud=modelo.dataManager.Punto.getInstance().getLatitud();
+            if (activacion){
+                if (activacionAnt){
+                    //Alerta continua activada
+                }else{                   
+                    alertasActivadas.add(al);                   
+                    PanelAlertaActiva panelAlertaActiva=new PanelAlertaActiva(al.getTitulo(),al.getMensaje(),Double.toString(latitud)); 
+                    VentanaIbape.getInstance().ponerEnPanelDerecho(panelAlertaActiva);
+                    
+                }
+            }else{
+                if (activacionAnt){
+                    alertasActivadas.remove(al);
+                }else{
+                    //Alerta continua desactivada
+                }
+            }
+            i++;
+        }
+
+    }
+
+    private void analizaActivacionesLongitud() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void analizaActivacionesVelocidad() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void analizaActivacionesRumbo() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void analizaActivacionesvelocidadAgua() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void analizaActivacionesTempAgua() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    private void analizaActivacionesFechaYhora() {
+        ArrayList<Condicion> condiciones;
+        boolean activacion;
+        boolean activacionAnt;
+        int i = 0;
+        while ((i<alertasEnFuncionamiento.size())){
+            condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
+            int f=0;
+            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
+            activacion=false;
+            while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var fechaYhora
+                if ((condiciones.get(f).getIdVariable()==indexFechaYhora)){
+                    activacion=analizaCondiciones(condiciones);
+                }
+                f++;
+            }
+            Alerta al=alertasEnFuncionamiento.get(i);
+            Timestamp fecha=modelo.dataManager.Punto.getInstance().getFechaYhora();
+            if (activacion){
+                if (activacionAnt){
+                    //Alerta continua activada
+                }else{                   
+                    alertasActivadas.add(al);                   
+                    PanelAlertaActiva panelAlertaActiva=new PanelAlertaActiva(al.getTitulo(),al.getMensaje(),fecha.toString()); 
+                    VentanaIbape.getInstance().ponerEnPanelDerecho(panelAlertaActiva);
+                    
+                }
+            }else{
+                if (activacionAnt){
+                    alertasActivadas.remove(al);
+                }else{
+                    //Alerta continua desactivada
+                }
+            }
+            i++;
+        }
+
+    }
+
+    private void analizaActivacionesCantDeMarcas() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
     
 
 

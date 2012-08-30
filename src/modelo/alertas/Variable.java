@@ -14,6 +14,8 @@ public class Variable {
     private int id;
     private String nombre;
     private String unidad;
+    private String ejemplo;
+    
 
     /**
      * @return the nombre
@@ -58,5 +60,19 @@ public class Variable {
      */
     public void setUnidad(String aUnidad) {
         unidad = aUnidad;
+    }
+
+    /**
+     * @return the ejemplo
+     */
+    public String getEjemplo() {
+        return ejemplo;
+    }
+
+    /**
+     * @param ejemplo the ejemplo to set
+     */
+    public void setEjemplo(String ejemplo) {
+        this.ejemplo = ejemplo;
     }
 }

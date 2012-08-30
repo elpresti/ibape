@@ -12,7 +12,10 @@ package gui;
 
 import controllers.ControllerAlertas;
 import java.awt.Color;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -85,7 +88,7 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelTablaCondiciones = new org.jdesktop.swingx.JXPanel();
         scrollTablaCondiciones = new javax.swing.JScrollPane();
         tablaCondiciones = new org.jdesktop.swingx.JXTable();
-        panelAccionesCampElegida = new org.jdesktop.swingx.JXPanel();
+        panelAccionesCondicion = new org.jdesktop.swingx.JXPanel();
         lblAccionesCondicion = new org.jdesktop.swingx.JXLabel();
         panelAcciones = new org.jdesktop.swingx.JXPanel();
         btnModificar = new org.jdesktop.swingx.JXHyperlink();
@@ -111,12 +114,16 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoValMin = new org.jdesktop.swingx.JXPanel();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         panelValMax = new org.jdesktop.swingx.JXPanel();
         panelLblValMax = new org.jdesktop.swingx.JXPanel();
         lblValMax = new org.jdesktop.swingx.JXLabel();
         panelCampoValMax = new org.jdesktop.swingx.JXPanel();
         jTextField2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         panelBtnAgrega = new org.jdesktop.swingx.JXPanel();
         btnAgregar = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
@@ -270,15 +277,15 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
 
         panelTablaCondiciones.add(scrollTablaCondiciones);
 
-        panelAccionesCampElegida.setMaximumSize(new java.awt.Dimension(450, 30));
-        panelAccionesCampElegida.setMinimumSize(new java.awt.Dimension(450, 30));
-        panelAccionesCampElegida.setPreferredSize(new java.awt.Dimension(450, 30));
-        panelAccionesCampElegida.setLayout(new java.awt.GridLayout(1, 2));
+        panelAccionesCondicion.setMaximumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCondicion.setMinimumSize(new java.awt.Dimension(450, 30));
+        panelAccionesCondicion.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelAccionesCondicion.setLayout(new java.awt.GridLayout(1, 2));
 
         lblAccionesCondicion.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesCondicion.setText("Acciones condición seleccionada");
         lblAccionesCondicion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        panelAccionesCampElegida.add(lblAccionesCondicion);
+        panelAccionesCondicion.add(lblAccionesCondicion);
 
         panelAcciones.setMinimumSize(new java.awt.Dimension(62, 17));
         panelAcciones.setPreferredSize(new java.awt.Dimension(62, 17));
@@ -317,9 +324,9 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         });
         panelAcciones.add(btnInsertar);
 
-        panelAccionesCampElegida.add(panelAcciones);
+        panelAccionesCondicion.add(panelAcciones);
 
-        panelTablaCondiciones.add(panelAccionesCampElegida);
+        panelTablaCondiciones.add(panelAccionesCondicion);
 
         panelMedio.add(panelTablaCondiciones);
 
@@ -404,8 +411,8 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelComboRelacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jComboBox2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jComboBox2.setMaximumSize(new java.awt.Dimension(150, 23));
-        jComboBox2.setMinimumSize(new java.awt.Dimension(150, 23));
+        jComboBox2.setMaximumSize(new java.awt.Dimension(160, 23));
+        jComboBox2.setMinimumSize(new java.awt.Dimension(160, 23));
         jComboBox2.setPreferredSize(new java.awt.Dimension(150, 23));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -437,11 +444,22 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoValMin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField1.setMaximumSize(new java.awt.Dimension(150, 23));
-        jTextField1.setMinimumSize(new java.awt.Dimension(150, 23));
+        jTextField1.setMaximumSize(new java.awt.Dimension(160, 23));
+        jTextField1.setMinimumSize(new java.awt.Dimension(160, 23));
         jTextField1.setPreferredSize(new java.awt.Dimension(150, 23));
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
         panelCampoValMin.add(jTextField1);
         panelCampoValMin.add(jLabel3);
+
+        jLabel6.setText(" ->");
+        panelCampoValMin.add(jLabel6);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        panelCampoValMin.add(jLabel4);
 
         panelValMin.add(panelCampoValMin);
 
@@ -466,11 +484,17 @@ public class PanelOpcAlertasAgregaEdita extends javax.swing.JPanel {
         panelCampoValMax.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField2.setMaximumSize(new java.awt.Dimension(150, 23));
-        jTextField2.setMinimumSize(new java.awt.Dimension(150, 23));
+        jTextField2.setMaximumSize(new java.awt.Dimension(160, 23));
+        jTextField2.setMinimumSize(new java.awt.Dimension(160, 23));
         jTextField2.setPreferredSize(new java.awt.Dimension(150, 23));
         panelCampoValMax.add(jTextField2);
         panelCampoValMax.add(jLabel2);
+
+        jLabel7.setText(" ->");
+        panelCampoValMax.add(jLabel7);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        panelCampoValMax.add(jLabel5);
 
         panelValMax.add(panelCampoValMax);
 
@@ -625,6 +649,10 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
   
 }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private org.jdesktop.swingx.JXHyperlink btnEliminar;
@@ -639,6 +667,10 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private org.jdesktop.swingx.JXLabel lblAccionesCondicion;
@@ -651,7 +683,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private org.jdesktop.swingx.JXLabel lblValMin;
     private org.jdesktop.swingx.JXLabel lblVariable;
     private org.jdesktop.swingx.JXPanel panelAcciones;
-    private org.jdesktop.swingx.JXPanel panelAccionesCampElegida;
+    private org.jdesktop.swingx.JXPanel panelAccionesCondicion;
     private org.jdesktop.swingx.JXPanel panelAgregaEdita;
     private org.jdesktop.swingx.JXPanel panelBtnAgrega;
     private org.jdesktop.swingx.JXPanel panelCampoNombre;
@@ -708,7 +740,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void cargaIconosDeBotones() {
         //btnModificar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-editar.png"));
         //btnEliminar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-eliminar.png"));
-        btnInsertar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-insertar.png"));
+        //btnInsertar.setIcon(new javax.swing.ImageIcon("imgs//iconos//tabla-icono-insertar.png"));
         //btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("imgs//iconos//tabla-icono-insertar.png"))); // NOI18N
     }
     
@@ -947,34 +979,50 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         
         if (controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores()==1){
             //panelValMax.disable();            
-            lblValMin.setText("Valor");
-            lblValMax.setText("Valor");       
-            jTextField2.setEnabled(false);
-            jLabel2.setEnabled(false);
-            lblValMax.setEnabled(false);
+
+    
+                jTextField2.setEnabled(false);
+                jLabel2.setEnabled(false);//Corresponde a valor Max
+                jLabel5.setEnabled(false);//Corresponde a valor Max
+                jLabel7.setEnabled(false);//Corresponde a valor Max
+                lblValMax.setEnabled(false);
+                lblValMin.setText("Valor");
+                lblValMax.setText("Valor");   
+                jLabel3.setEnabled(true);//Corresponde a valor Min
+                jLabel4.setEnabled(true);//Corresponde a valor Min
+                jLabel6.setEnabled(true);//Corresponde a valor Min
+
+ 
             Condicion condicionAct=controllers.ControllerAlertas.getInstance().getCondicionAct();
             if ((condicionAct!=null) && (isModificandoCondicion())){
-            jTextField1.setText(Float.toString(condicionAct.getValorMinimo()));
+                jTextField1.setText(condicionAct.getValorMinimo());
             }
             
         }else{
-            lblValMin.setText("Valor mínimo");
-            lblValMax.setText("Valor máximo");
-            //panelValMax.enable();
-            jLabel2.setEnabled(true);
-            lblValMax.setEnabled(true);
-            jTextField2.setEnabled(true);
+
+    
+                jTextField2.setEnabled(true);
+                jLabel2.setEnabled(true);//Corresponde a ValMax
+                jLabel5.setEnabled(true);//Corresponde a ValMax
+                jLabel7.setEnabled(true);//Corresponde a ValMax
+                lblValMax.setEnabled(true);
+                lblValMin.setText("Valor");
+                lblValMax.setText("Valor");       
+                lblValMax.setEnabled(true);
+
+
             Condicion condicionAct=controllers.ControllerAlertas.getInstance().getCondicionAct();
             if ((condicionAct!=null)&& (isModificandoCondicion())){
-                jTextField1.setText(Float.toString(condicionAct.getValorMinimo()));
-                jTextField2.setText(Float.toString(condicionAct.getValorMaximo()));                      
+                jTextField1.setText(condicionAct.getValorMinimo());
+                jTextField2.setText(condicionAct.getValorMaximo());                      
             }
 
             
         }
         jLabel2.setText(controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad());
         jLabel3.setText(controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad());
-        
+        jLabel4.setText(controllers.ControllerAlertas.getInstance().getVariableAct().getEjemplo());
+        jLabel5.setText(controllers.ControllerAlertas.getInstance().getVariableAct().getEjemplo());
     }
 
     private void cambioVariableAct() {
@@ -987,6 +1035,8 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     public void agregaCondicionTabla(){
         
+        if (validaCamposCondicion()){
+        
         if (isModificandoCondicion()){
                    
             int filaSeleccionada = tablaCondiciones.getSelectedRow();
@@ -995,38 +1045,59 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             
             int cantValores=controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores();
             String descripcion="";
-            Float valorMin= new Float(jTextField1.getText());
-        
+            String valorMin= jTextField1.getText();
+            
             if (cantValores==1){
-            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();
-            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, -1, descripcion);    
-            }else{
-            Float valorMax= new Float(jTextField2.getText());
-            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad()+" y "+jTextField2.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();             
-            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, valorMax, descripcion);    
-            }
+                if (controllers.ControllerAlertas.getInstance().getVariableAct().getId()==9){
+                    descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" ";
+                    controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, "", descripcion);  
+                }else{
+                    descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();
+                    controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, "", descripcion);          
+                }
+                }else{
+                String valorMax= jTextField2.getText();
+                if (controllers.ControllerAlertas.getInstance().getVariableAct().getId()==9){
+                    descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" y "+jTextField2.getText()+"";             
+                    controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, valorMax, descripcion);    
+            
+                }else{
+                    descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad()+" y "+jTextField2.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();             
+                    controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, valorMax, descripcion);         
+                }
+                }
             modeloTabla.setValueAt(descripcion,filaSeleccionada,NRO_COL_DESCRIPCION);
             idProvCondicion=backIdProvCondicion+1;
             
-                }else{
+                }else{//No se esta modificando una condicion (Nueva)
             
                     int cantValores=controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores();
                     String descripcion="";
-                    Float valorMin= new Float(jTextField1.getText());
+                    String valorMin= jTextField1.getText();
 
                     if (cantValores==1){
-                        descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();
-                        controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, -1, descripcion);
-
+                        if (controllers.ControllerAlertas.getInstance().getVariableAct().getId()==9){//Variable Fecha
+                            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" ";
+                            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, "", descripcion);  
+                        }else{
+                            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();
+                            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, "", descripcion);          
+                        }
                     }else{
-                        Float valorMax= new Float(jTextField2.getText());
-                        descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad()+" y "+jTextField2.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();     
-                        controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(),valorMin, valorMax, descripcion);    
+                        String valorMax= jTextField2.getText();
+                        if (controllers.ControllerAlertas.getInstance().getVariableAct().getId()==9){
+                            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" y "+jTextField2.getText()+"";             
+                            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, valorMax, descripcion);    
+
+                        }else{
+                            descripcion=""+controllers.ControllerAlertas.getInstance().getVariableAct().getNombre()+" "+controllers.ControllerAlertas.getInstance().getRelacionAct().getDescripcion()+" "+jTextField1.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad()+" y "+jTextField2.getText()+" "+controllers.ControllerAlertas.getInstance().getVariableAct().getUnidad();             
+                            controllers.ControllerAlertas.getInstance().agregaCondicionAct(idProvCondicion,controllers.ControllerAlertas.getInstance().getRelacionAct().getId(), controllers.ControllerAlertas.getInstance().getVariableAct().getId(), valorMin, valorMax, descripcion);         
+                        }
                     }
                     agregaUnaFilaCondicion(idProvCondicion,descripcion);
                     idProvCondicion=idProvCondicion+1;
         }
-        
+    }    
         
     }
 
@@ -1045,6 +1116,10 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         lblVariable.setVisible(b);
         jLabel3.setVisible(b);
         jLabel2.setVisible(b);
+        jLabel4.setVisible(b);
+        jLabel5.setVisible(b);
+        jLabel6.setVisible(b);
+        jLabel7.setVisible(b);
         btnAgregar.setVisible(b);
     }
 
@@ -1070,8 +1145,54 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
         return camposRequeridos;
     }
+    
+        private boolean validaCamposCondicion() {
+        
+        boolean camposRequeridos = true;
+        
+        
+            int cantValores=controllers.ControllerAlertas.getInstance().getRelacionAct().getCantValores();        
+            if (cantValores==1){
+                if (controllers.ControllerAlertas.getInstance().getVariableAct().getId()==9){
+                    if (!validaFormatoFechaYhora(jTextField1.getText())){
+                        camposRequeridos=false;
+                    }
+                }else{
+                    if (jTextField1.getText().length()<=0){
+                        camposRequeridos=false;
+                    }
+                }     
+            }else{
+                String valorMax= jTextField2.getText();
+                if (controllers.ControllerAlertas.getInstance().getVariableAct().getId()==9){
+                    if (!validaFormatoFechaYhora(jTextField1.getText()) || !validaFormatoFechaYhora(jTextField2.getText())  ){
+                        camposRequeridos=false;
+                    }
+                }else{
+                    if (jTextField1.getText().length()<=0 || jTextField2.getText().length()<=0){
+                        camposRequeridos=false;
+                    }
+                }        
+            } // (cantValores==1)
+  
+                   
+        if (!(camposRequeridos)) {
+            JOptionPane.showMessageDialog(null, "Error! Revise valores necesarios para guardar una Alerta");
+        }
+        return camposRequeridos;
+      
+    }
 
-
+        private static boolean validaFormatoFechaYhora(String fecha_intro){  
+            try {  
+                
+                SimpleDateFormat formato_correcto = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+                Date fecha_bien = formato_correcto.parse(fecha_intro);   
+            } catch (ParseException e) {  
+                return false;  
+            }  
+            return true;  
+        }
 
     
 }
