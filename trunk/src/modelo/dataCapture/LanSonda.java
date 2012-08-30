@@ -305,14 +305,6 @@ public class LanSonda extends java.util.Observable implements Runnable {
                                     while (i<archivosNuevos.size()){
                                         if (archivosNuevos.get(i).getName().toLowerCase().contains(".jpg")){//si el archivo nuevo es un JPG
                                             rutaAcsv = Csv.getInstance().getCsvFromJpg(archivosNuevos.get(i).getName().toLowerCase()); //busco su DAT y genero el CSV
-                                            if (rutaAcsv != null && rutaAcsv.length()>0){
-                                                persistencia.BrokerHistoricoSondaSet.getInstance().actualizaSondaSetsActual(rutaAcsv);//actualizo con los nuevos valores leidos la instancia en memoria de la clase SondaSet
-                                                if (persistencia.BrokerHistoricoSondaSet.getInstance().isGuardaDatosSondaSets()){
-                                                    if (!(guardaSondaSets(rutaAcsv))){ //si está habilitado el logueo de SondaSets, guardo los cambios en la dbHistorico de esta campania
-                                                        Logueador.getInstance().agregaAlLog("No se pudieron guardar los últimos Presets leidos de la Sonda");
-                                                    }
-                                                }
-                                            }
                                             /*
                                             if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
                                                 persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
@@ -426,10 +418,9 @@ public class LanSonda extends java.util.Observable implements Runnable {
         return filesInDirectory;
     }
     
-    public boolean guardaSondaSets(String rutaCsv){
+    public boolean guardaSondaSets(ArrayList<SondaSetHistorico> sondaSetsLeidos){
         boolean sePudo = false;
         try{
-            ArrayList<SondaSetHistorico> sondaSetsLeidos = Csv.getInstance().getSondaSetsFromCsv(rutaCsv);
             for (int i = 0; i<sondaSetsLeidos.size();i++){
                 BrokerHistoricoSondaSet.getInstance().insertSondaSet(sondaSetsLeidos.get(i));
             }

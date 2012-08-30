@@ -14,6 +14,8 @@ import java.util.Observable;
 public class SondaSet extends Observable{
     private Date usadoDesde;
     private Date usadoHasta;
+    private int pixelXdesde;
+    private int pixelXhasta;
     private int frecuencia; // LOW/1=MID/HIGH (rango de valores posibles: 0-255)
     private int ganancia; // (rango de valores posibles: 0-255)
     private int stc; // STC (Valor de Ganancia variable) (rango de valores posibles: 0-255)
@@ -186,6 +188,34 @@ public class SondaSet extends Observable{
      */
     public void setUsadoHasta(Date usadoHasta) {
         this.usadoHasta = usadoHasta;
+    }
+
+    /**
+     * @return the pixelXdesde
+     */
+    public int getPixelXdesde() {
+        return pixelXdesde;
+    }
+
+    /**
+     * @param pixelXdesde the pixelXdesde to set
+     */
+    public void setPixelXdesde(int pixelXdesde) {
+        this.pixelXdesde = pixelXdesde;
+    }
+
+    /**
+     * @return the pixelXhasta
+     */
+    public int getPixelXhasta() {
+        return pixelXhasta;
+    }
+
+    /**
+     * @param pixelXhasta the pixelXhasta to set
+     */
+    public void setPixelXhasta(int pixelXhasta) {
+        this.pixelXhasta = pixelXhasta;
     }
 
 

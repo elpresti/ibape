@@ -6,12 +6,16 @@ package modelo.dataCapture;
 
 import com.csvreader.CsvReader;
 import com.mysql.jdbc.jdbc2.optional.SuspendableXAConnection;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.SondaSetHistorico;
 import persistencia.Logueador;
@@ -38,17 +42,17 @@ public class Csv {
     private static final byte NRO_COL_EXPANDER=7;
     private static final byte NRO_COL_UNIDAD=8;
     //private static final byte NRO_COL_UNIDAD_MEDIDA=9;
-    private static final byte NRO_COL_HORA=9;
-    private static final byte NRO_COL_LATITUD=10;
-    private static final byte NRO_COL_EO=11;
-    private static final byte NRO_COL_LONGITUD=12;
-    private static final byte NRO_COL_NS=13;
-    private static final byte NRO_COL_VELOCIDAD=14;
-    private static final byte NRO_COL_RUMBO=15;
-    private static final byte NRO_COL_FECHA=16;
-    private static final byte NRO_COL_VELOCIDADPROM=17;
-    private static final byte NRO_COL_PROFUNDIDAD=18;
-    private static final byte NRO_COL_TEMPERATURA=19;    
+    private static final byte NRO_COL_HORA=10;
+    private static final byte NRO_COL_LATITUD=11;
+    private static final byte NRO_COL_EO=12;
+    private static final byte NRO_COL_LONGITUD=13;
+    private static final byte NRO_COL_NS=14;
+    private static final byte NRO_COL_VELOCIDAD=15;
+    private static final byte NRO_COL_RUMBO=16;
+    private static final byte NRO_COL_FECHA=17;
+    private static final byte NRO_COL_VELOCIDADPROM=18;
+    private static final byte NRO_COL_PROFUNDIDAD=19;
+    private static final byte NRO_COL_TEMPERATURA=20;    
     
     private Csv(){
         inicializador();
@@ -63,11 +67,12 @@ public class Csv {
 
     public ArrayList<SondaSetHistorico> getSondaSetsFromCsv(String rutaCsv){
         ArrayList<SondaSetHistorico> sshDistintos = new ArrayList();
+        int cantErroresLectura=0;
         try {            
             CsvReader sondaSets = new CsvReader(rutaCsv);
             try {                 
                  SondaSetHistorico ssAnterior = new SondaSetHistorico();
-                 int i=0;
+                 int pixelX=0;
                  int frecuenciaLeida;
                  int gananciaLeida;
                  int stcLeido;
@@ -80,53 +85,66 @@ public class Csv {
                  Date fechaYhoraLeida;
                  while (sondaSets.readRecord()) {
                     if (sondaSets.getColumnCount()>1) {
-                        frecuenciaLeida = Integer.parseInt(sondaSets.get(NRO_COL_FRECUENCIA).trim());
-                        gananciaLeida = Integer.parseInt(sondaSets.get(NRO_COL_GANANCIA).trim());
-                        stcLeido = Integer.parseInt(sondaSets.get(NRO_COL_STC).trim());
-                        lwLeido = Integer.parseInt(sondaSets.get(NRO_COL_LW).trim());
-                        gsLeido = Integer.parseInt(sondaSets.get(NRO_COL_GS).trim());
-                        escalaLeida = Integer.parseInt(sondaSets.get(NRO_COL_ESCALA).trim());
-                        expanderLeido = Integer.parseInt(sondaSets.get(NRO_COL_EXPANDER).trim());
-                        shiftLeido = Integer.parseInt(sondaSets.get(NRO_COL_SHIFT).trim());
-                        unidadLeida = Integer.parseInt(sondaSets.get(NRO_COL_UNIDAD).trim());
-                        fechaYhoraLeida = armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),
-                                    Integer.parseInt(sondaSets.get(NRO_COL_HORA).trim()));                        
-                        if (frecuenciaLeida != ssAnterior.getFrecuencia() || 
-                            gananciaLeida != ssAnterior.getGanancia() || 
-                            stcLeido != ssAnterior.getStc() || 
-                            lwLeido != ssAnterior.getLineaBlanca() || 
-                            gsLeido != ssAnterior.getVelPantalla() || 
-                            escalaLeida != ssAnterior.getEscala() || 
-                            expanderLeido != ssAnterior.getExpander() ||                                 
-                            shiftLeido != ssAnterior.getShift() || 
-                            unidadLeida != ssAnterior.getUnidadDeEscala()
-                                ){  
-                            SondaSetHistorico unSondaSet = new SondaSetHistorico();
-                            unSondaSet.setFrecuencia(frecuenciaLeida);
-                            unSondaSet.setGanancia(gananciaLeida);
-                            unSondaSet.setStc(stcLeido);
-                            unSondaSet.setLineaBlanca(lwLeido);
-                            unSondaSet.setVelPantalla(gsLeido);
-                            unSondaSet.setEscala(escalaLeida);
-                            unSondaSet.setShift(shiftLeido);
-                            unSondaSet.setExpander(expanderLeido);
-                            unSondaSet.setUnidadDeEscala(unidadLeida);
-                            unSondaSet.setUsadoDesde(fechaYhoraLeida);
-                            unSondaSet.setUsadoHasta(fechaYhoraLeida);
-                            sshDistintos.add(unSondaSet);
-                            ssAnterior = unSondaSet;
+                        try{
+                            frecuenciaLeida = Integer.parseInt(sondaSets.get(NRO_COL_FRECUENCIA).trim());
+                            gananciaLeida = Integer.parseInt(sondaSets.get(NRO_COL_GANANCIA).trim());
+                            stcLeido = Integer.parseInt(sondaSets.get(NRO_COL_STC).trim());
+                            lwLeido = Integer.parseInt(sondaSets.get(NRO_COL_LW).trim());
+                            gsLeido = Integer.parseInt(sondaSets.get(NRO_COL_GS).trim());
+                            escalaLeida = Integer.parseInt(sondaSets.get(NRO_COL_ESCALA).trim());
+                            expanderLeido = Integer.parseInt(sondaSets.get(NRO_COL_EXPANDER).trim());
+                            shiftLeido = Integer.parseInt(sondaSets.get(NRO_COL_SHIFT).trim());
+                            unidadLeida = Integer.parseInt(sondaSets.get(NRO_COL_UNIDAD).trim());
+                            fechaYhoraLeida = armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),
+                                        Integer.parseInt(sondaSets.get(NRO_COL_HORA).trim()));
+                            if (frecuenciaLeida != ssAnterior.getFrecuencia() || 
+                                gananciaLeida != ssAnterior.getGanancia() || 
+                                stcLeido != ssAnterior.getStc() || 
+                                lwLeido != ssAnterior.getLineaBlanca() || 
+                                gsLeido != ssAnterior.getVelPantalla() || 
+                                escalaLeida != ssAnterior.getEscala() || 
+                                expanderLeido != ssAnterior.getExpander() ||                                 
+                                shiftLeido != ssAnterior.getShift() || 
+                                unidadLeida != ssAnterior.getUnidadDeEscala()
+                                    ){  
+                                SondaSetHistorico unSondaSet = new SondaSetHistorico();
+                                unSondaSet.setFrecuencia(frecuenciaLeida);
+                                unSondaSet.setGanancia(gananciaLeida);
+                                unSondaSet.setStc(stcLeido);
+                                unSondaSet.setLineaBlanca(lwLeido);
+                                unSondaSet.setVelPantalla(gsLeido);
+                                unSondaSet.setEscala(escalaLeida);
+                                unSondaSet.setShift(shiftLeido);
+                                unSondaSet.setExpander(expanderLeido);
+                                unSondaSet.setUnidadDeEscala(unidadLeida);
+                                unSondaSet.setUsadoDesde(fechaYhoraLeida);
+                                unSondaSet.setUsadoHasta(fechaYhoraLeida);
+                                unSondaSet.setPixelXdesde(pixelX);
+                                unSondaSet.setPixelXhasta(pixelX);
+                                sshDistintos.add(unSondaSet);
+                                ssAnterior = unSondaSet;
+                            }
+                            else
+                            {   
+                                sshDistintos.get(sshDistintos.size()-1).setUsadoHasta(fechaYhoraLeida);
+                                sshDistintos.get(sshDistintos.size()-1).setPixelXhasta(pixelX);
+                            }
+                        }catch(Exception e){
+                            cantErroresLectura++;
                         }
-                        else
-                        {   sshDistintos.get(sshDistintos.size()-1).setUsadoHasta(fechaYhoraLeida);      }
                     }
-                    i++;
+                    pixelX++;
                  }
                  sondaSets.close();
-            } catch (IOException ex) {
-                Logueador.getInstance().agregaAlLog(ex.toString());
+            } catch (Exception ex) {
+                Logueador.getInstance().agregaAlLog("Error al leer archivo CSV: "+ex.toString());
+                sondaSets.close();
             }                        
         } catch (FileNotFoundException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        if (cantErroresLectura>0){
+            Logueador.getInstance().agregaAlLog("Ocurrieron "+cantErroresLectura+" errores en la lectura del ultimo CSV");
         }
         return sshDistintos;
     }
@@ -391,21 +409,36 @@ class ConversorDAT2CSV implements Runnable {
     String fileId;
     String rutaJpg;
     public void run() {
-        try { 
-            String rutaConvDeCampania = LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName();
-            Runtime.getRuntime().exec(rutaConvDeCampania+" "+this.fileId); //llamamos al ejecutable pasandole como argumento el ID del archivo leido
-            thConversor.sleep(3000);//espero 3 segundos a q se ejecute el conversor y genere el CSV
-            //chequeo si se generó
-            String rutaAcsv=rutaConvDeCampania.replace(Csv.getInstance().getConversorFileName(), "valores.txt");
-            File archivoCsv = new File(rutaAcsv);
-            if (archivoCsv.exists() && archivoCsv.length()>(50*1024)){ //si existe y genero un archivo valido (>50kb), lo renombro
-                File archivoCsvRenombrado = new File(rutaAcsv.replace("valores.txt", rutaJpg.replace(".jpg", ".csv")));
-                archivoCsv.renameTo(archivoCsvRenombrado);
-                //disparo la lectura del CSV pasando su filename por parametro
-            }
-            else{
-                Logueador.getInstance().agregaAlLog("Error: Se ejecutó el ConversorDAT2CSV, pero no ha generado el CSV esperado");
-            }
+        try {
+            String rutaConvDeCampania = System.getProperty("user.dir")+"\\"+LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName();
+            String comando = rutaConvDeCampania+" "+this.fileId;
+            //Runtime.getRuntime().exec(comando); //llamamos al ejecutable pasandole como argumento el ID del archivo leido
+            if (armarBatDeEjecucion(comando)){
+               Process procesoConversor = Runtime.getRuntime().exec("cmd.exe /C " + rutaConvDeCampania.toLowerCase().replace(".exe",".bat"));
+               if (eliminarBatDeEjecucion(rutaConvDeCampania.toLowerCase().replace(".exe",".bat"))){
+                  thConversor.sleep(3000);//espero 3 segundos a q se ejecute el conversor y genere el CSV
+                  //chequeo si se generó
+                  String rutaAcsv=rutaConvDeCampania.replace(Csv.getInstance().getConversorFileName(), "valores.txt");
+                  File archivoCsv = new File(rutaAcsv);
+                  if (archivoCsv.exists() && archivoCsv.length()>(50*1024)){ //si existe y genero un archivo valido (>50kb), lo renombro
+                      File archivoCsvRenombrado = new File(rutaAcsv.replace("valores.txt", rutaJpg.replace(".jpg", ".csv")));
+                      archivoCsv.renameTo(archivoCsvRenombrado);
+                      //disparo la lectura del CSV pasando su filename por parametro
+                      if (!(persistencia.BrokerHistoricoSondaSet.getInstance().actualizaSondaSets(archivoCsvRenombrado.getAbsolutePath()))){
+                         Logueador.getInstance().agregaAlLog("Hubieron errores al leer el CSV/actualizar/guardar los SondaSets");
+                      }
+                  }
+                  else{
+                      Logueador.getInstance().agregaAlLog("Error: Se ejecutó el ConversorDAT2CSV, pero no ha generado el CSV esperado");
+                  }
+               }
+               else{
+                   Logueador.getInstance().agregaAlLog("Error: no se pudo eliminarBatDeEjecucion()");
+               }
+           }
+           else{
+               Logueador.getInstance().agregaAlLog("Error: no se pudo armarBatDeEjecucion()");
+           }
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog("DisparaEjecucionConversor(): "+e.toString());
         }
@@ -423,5 +456,36 @@ class ConversorDAT2CSV implements Runnable {
     }
     void setRutaJpg(String rutaJpg) {
         this.rutaJpg = rutaJpg;
+    }
+
+    private boolean armarBatDeEjecucion(String comando) {
+        boolean sePudo=false;
+        try {
+            String rutaBat = comando.substring(0, comando.indexOf(" ")).replace(".exe", ".bat");
+            BufferedWriter writer = new BufferedWriter(
+                new FileWriter(rutaBat,true));
+            writer.write(comando) ;
+            writer.close();
+            sePudo=true;
+        } catch (Exception ex) {
+            Logueador.getInstance().agregaAlLog("armarBatDeEjecucion(): "+ex.toString());
+        }
+        return sePudo;
+    }
+
+    private boolean eliminarBatDeEjecucion(String rutaBat) {
+        boolean sePudo=false;
+        try {
+            File archivoBat = new File(rutaBat);
+            if (archivoBat.exists() && archivoBat.delete()){
+                sePudo=true;
+            }
+            else{
+                Logueador.getInstance().agregaAlLog("eliminarBatDeEjecucion: No se encontro el BAT o no se pudo eliminar");
+            }
+        } catch (Exception ex) {
+            Logueador.getInstance().agregaAlLog("eliminarBatDeEjecucion(): "+ex.toString());
+        }
+        return sePudo;
     }
 }

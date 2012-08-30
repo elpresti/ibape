@@ -370,8 +370,10 @@ public abstract class BrokerHistorico implements Runnable{
         try {
             String codigoCreacion = "CREATE TABLE SondaSets ("
             + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
-            + "  usadoDesde         TIMESTAMP," //LOW/MID/HIGH
-            + "  usadoHasta         TIMESTAMP," //LOW/MID/HIGH
+            + "  usadoDesde         TIMESTAMP," 
+            + "  usadoHasta         TIMESTAMP," 
+            + "  pixelXdesde        integer," 
+            + "  pixelXhasta        integer,"                     
             + "  frecuencia         integer," //LOW/MID/HIGH
             + "  ganancia           integer,"
             + "  stc                integer," //STC (Valor de Ganancia variable)
