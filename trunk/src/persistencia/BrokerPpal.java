@@ -208,8 +208,8 @@ public abstract class BrokerPpal {
         try {
             String codigoCreacion = "CREATE TABLE Condiciones ("
                     + "  id          integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    + "  valor1      float(50) NOT NULL,"
-                    + "  valor2      float(50) NOT NULL,"
+                    + "  valor1      nvarchar(50) NOT NULL,"
+                    + "  valor2      nvarchar(50) NOT NULL,"
                     + "  idVariable  integer NOT NULL,"
                     + "  idAlerta    integer NOT NULL,"
                     + "  idRelacion  integer NOT NULL,"
@@ -601,7 +601,8 @@ public abstract class BrokerPpal {
             String codigoCreacion = "CREATE TABLE Variables ("
                     + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     + "  nombre             nvarchar(100) NOT NULL,"
-                    + "  unidad             nvarchar(100) NOT NULL"
+                    + "  unidad             nvarchar(100) NOT NULL,"
+                    + "  ejemplo            nvarchar(100) NOT NULL"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo = true;

@@ -47,8 +47,16 @@ public class Punto extends Observable{
     /**
      * @param fechaYhora the fechaYhora to set
      */
-    public void setFechaYhora(java.sql.Timestamp fechaYhora) {
+    public boolean setFechaYhora(java.sql.Timestamp fechaYhora) {
         this.fechaYhora = fechaYhora;
+        boolean seModifico=false;         
+        if (this.fechaYhora != fechaYhora){
+            this.fechaYhora = fechaYhora;
+            setChanged();
+            notifyObservers(controllers.ControllerAlertas.getIndexFechaYhora());
+            seModifico=true;
+        }
+        return seModifico;
     }
 
     /**

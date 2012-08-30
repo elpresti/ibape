@@ -10,8 +10,8 @@ package modelo.alertas;
  */
 
 public class Condicion {
-    private float valorMinimo;
-    private float valorMaximo;
+    private String valorMinimo;
+    private String valorMaximo;
     private String descripcion;
     private int id;
     private int idVariable;
@@ -21,11 +21,11 @@ public class Condicion {
     /**
      * @return the valorMinimo
      */
-    public float getValorMinimo() {
+    public String getValorMinimo() {
         return valorMinimo;
     }
     
-    public Condicion(int id,int idVariable,int idRelacion,float valorMinimo,float valorMaximo,String descripcion){
+    public Condicion(int id,int idVariable,int idRelacion,String valorMinimo,String valorMaximo,String descripcion){
         
         this.id=id;
         this.idRelacion=idRelacion;
@@ -39,21 +39,21 @@ public class Condicion {
     /**
      * @param aValorMinimo the valorMinimo to set
      */
-    public void setValorMinimo(float aValorMinimo) {
+    public void setValorMinimo(String aValorMinimo) {
         valorMinimo = aValorMinimo;
     }
 
     /**
      * @return the valorMaximo
      */
-    public float getValorMaximo() {
+    public String getValorMaximo() {
         return valorMaximo;
     }
 
     /**
      * @param aValorMaximo the valorMaximo to set
      */
-    public void setValorMaximo(float aValorMaximo) {
+    public void setValorMaximo(String aValorMaximo) {
         valorMaximo = aValorMaximo;
     }
 

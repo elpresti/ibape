@@ -6,12 +6,13 @@ package modelo.dataManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Observable;
 
 /**
  *
  * @author Sebastian
  */
-public class POI {
+public class POI extends Observable{
 
     private int id;
     private int idCategoriaPOI;
