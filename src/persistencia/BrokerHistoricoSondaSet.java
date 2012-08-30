@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import modelo.dataCapture.Csv;
+import modelo.dataCapture.LanSonda;
 import modelo.dataManager.SondaSetHistorico;
 
 /**
@@ -68,6 +69,8 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
              getPsInsert().setInt(9,sondaSetNuevo.getShift());
              getPsInsert().setInt(10,sondaSetNuevo.getExpander());
              getPsInsert().setInt(11,sondaSetNuevo.getUnidadDeEscala());
+             getPsInsert().setInt(12,sondaSetNuevo.getPixelXdesde());
+             getPsInsert().setInt(13,sondaSetNuevo.getPixelXhasta());
              System.out.println("Insert SSH: "+getPsInsert().toString());
              if (getPsInsert().executeUpdate() > 0) {
                 ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(2);
@@ -98,7 +101,9 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
             getPsUpdate().setInt(9,sondaSetModificado.getStc());
             getPsUpdate().setInt(10,sondaSetModificado.getUnidadDeEscala());
             getPsUpdate().setInt(11,sondaSetModificado.getVelPantalla());
-            getPsUpdate().setInt(12,sondaSetModificado.getId());
+            getPsUpdate().setInt(12,sondaSetModificado.getPixelXdesde());
+            getPsUpdate().setInt(13,sondaSetModificado.getPixelXhasta());
+            getPsUpdate().setInt(14,sondaSetModificado.getId());
             
             System.out.println("UPDATE SSH: "+getPsUpdate().toString());
             if (getPsUpdate().executeUpdate() > 0) {
@@ -148,6 +153,8 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
                 ssHistorico.setUnidadDeEscala(rs.getInt("unidadDeEscala"));
                 ssHistorico.setUsadoDesde(rs.getTimestamp("usadoDesde"));
                 ssHistorico.setUsadoHasta(rs.getTimestamp("usadoHasta"));
+                ssHistorico.setPixelXdesde(rs.getInt("pixelXdesde"));
+                ssHistorico.setPixelXhasta(rs.getInt("pixelXhasta"));
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -191,6 +198,8 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
                 ssHistorico.setUnidadDeEscala(rs.getInt("unidadDeEscala"));
                 ssHistorico.setUsadoDesde(rs.getTimestamp("usadoDesde"));
                 ssHistorico.setUsadoHasta(rs.getTimestamp("usadoHasta"));
+                ssHistorico.setPixelXdesde(rs.getInt("pixelXdesde"));
+                ssHistorico.setPixelXhasta(rs.getInt("pixelXhasta"));
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -225,9 +234,9 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
             try {
                 setPsInsert(getConexion().prepareStatement(
                             "INSERT INTO SondaSets "
-                            + " (usadoDesde,usadoHasta,frecuencia,ganancia,stc,lineaBlanca,velPantalla,escala,shift,expander,unidad) "
+                            + " (usadoDesde,usadoHasta,frecuencia,ganancia,stc,lineaBlanca,velPantalla,escala,shift,expander,unidad,pixelXdesde,pixelXhasta) "
                             + " VALUES "            
-                            +" (?,?,?,?,?,?,?,?,?,?,?) ",
+                            +" (?,?,?,?,?,?,?,?,?,?,?,?,?) ",
                             PreparedStatement.RETURN_GENERATED_KEYS));
             } catch (SQLException ex) {
                 Logueador.getInstance().agregaAlLog(ex.toString());
@@ -261,7 +270,9 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
                             +" shift = ?, "
                             +" stc = ?, "
                             +" unidad = ?, "
-                            +" velPantalla = ? "
+                            +" velPantalla = ?, "
+                            +" pixelXdesde = ?, "
+                            +" pixelXhasta= ? "
                             +" WHERE id = ? "));
             } catch (SQLException ex) {
                 Logueador.getInstance().agregaAlLog(ex.toString());
@@ -300,7 +311,9 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
         this.psDelete = psDelete;
     }
 
-    public boolean actualizaSondaSetsActual(String rutaCsv) {
+    public boolean actualizaSondaSets(String rutaCsv) {
+    //actualizo con los nuevos valores leidos la instancia en memoria de la clase SondaSet
+    //y en los guardo en la dbHistorico de la campaña, en caso q este activada esta opcion        
         boolean sePudo = false;
         try{
             ArrayList<SondaSetHistorico> ssh = Csv.getInstance().getSondaSetsFromCsv(rutaCsv);
@@ -322,9 +335,19 @@ public class BrokerHistoricoSondaSet extends BrokerHistorico {
                 modelo.dataManager.SondaSet.getInstance().setUnidadDeEscala(ultimoSsh.getUnidadDeEscala());
                 modelo.dataManager.SondaSet.getInstance().setUsadoDesde(ultimoSsh.getUsadoDesde());
                 modelo.dataManager.SondaSet.getInstance().setUsadoHasta(ultimoSsh.getUsadoHasta());
+                modelo.dataManager.SondaSet.getInstance().setPixelXdesde(ultimoSsh.getPixelXdesde());
+                modelo.dataManager.SondaSet.getInstance().setPixelXhasta(ultimoSsh.getPixelXhasta());
                 modelo.dataManager.SondaSet.getInstance().setVelPantalla(ultimoSsh.getVelPantalla());
-                sePudo=true;
-            } 
+                if (persistencia.BrokerHistoricoSondaSet.getInstance().isGuardaDatosSondaSets()){
+                   if (!(LanSonda.getInstance().guardaSondaSets(ssh))){ //si está habilitado el logueo de SondaSets, guardo los cambios en la dbHistorico de esta campania
+                      Logueador.getInstance().agregaAlLog("No se pudieron guardar los últimos Presets leidos de la Sonda");                      
+                   }else{
+                       sePudo=true;
+                   }
+                }else{
+                    sePudo=true;
+                }
+            }
         }
         catch (Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
