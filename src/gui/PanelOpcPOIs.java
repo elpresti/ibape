@@ -10,29 +10,27 @@
  */
 package gui;
 
-import controllers.ControllerNavegacion;
 import controllers.ControllerPois;
 import controllers.ControllerPpal;
-import controllers.RenderCombo;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
+import java.text.SimpleDateFormat;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
 import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerPOIs;
-import persistencia.BrokerPpal;
 
 /**
  *
@@ -46,11 +44,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaPOIS = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
-                "id", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion", "Acciones"
+                "id", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"//, "Acciones"
             }) {
 
         Class[] types = new Class[]{
-            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };
 
         @Override
@@ -61,11 +59,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaCategoriasPOI = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
-                "id", "Nombre de Categoria", "Icono", "Acciones"
+                "id", "Nombre de Categoria", "Icono"//, "Acciones"
             }) {
 
         Class[] types = new Class[]{
-            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };
 
         @Override
@@ -547,12 +545,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnModificarCatPOI.setEnabled(false);
         btnGuardarCatPOI.setEnabled(true);
         //cargo la fila seleccionada en el formulario
-        int i = 0;
-        while (!(Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1) && i < tablaCategorias.getRowCount() - 1) {
-            i++;
-        }
-        if ((Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1)) {
-            CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(i, 1);
+        if (tablaCategorias.getSelectedRowCount() != 0) {
+            CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(tablaCategorias.getSelectedRow(), 1);
             campoNombreNuevaCat.setText(unaCatPOI.getTitulo());
             //ver el icono
             setTempCatPOI(unaCatPOI);
@@ -561,52 +555,86 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             setModificandoCatPOI(false);
             JOptionPane.showMessageDialog(null, "Seleccione una Categoria de POI primero");
         }
+        /*int i = 0;
+        while (!(Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1) && i < tablaCategorias.getRowCount() - 1) {
+        i++;
+        }
+        if ((Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1)) {
+        CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(i, 1);
+        campoNombreNuevaCat.setText(unaCatPOI.getTitulo());
+        //ver el icono
+        setTempCatPOI(unaCatPOI);
+        } else {
+        habilitaPanelDatosCatPOIs(false);
+        setModificandoCatPOI(false);
+        JOptionPane.showMessageDialog(null, "Seleccione una Categoria de POI primero");
+        }*/
     }//GEN-LAST:event_btnModificarCatPOIActionPerformed
 
     private void btnGuardarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCatPOIActionPerformed
-//verif si esta repetido
+        if (campoNombreNuevaCat.getText().length() < 3) {
+            JOptionPane.showMessageDialog(null, "Descripcion incorrecta");
+            return;
+        }
+        //verif si esta repetido
         boolean unico = true;
         int i = 0;
         while (i < comboCategorias.getItemCount() && unico) {
-            if (comboCategorias.getItemAt(i).toString().toUpperCase().equals(campoDescripcionNuevoPoi.getText().toUpperCase())) {
+            if (comboCategorias.getItemAt(i).toString().toUpperCase().equals(campoNombreNuevaCat.getText().toUpperCase())) {
                 unico = false;
             }
             i++;
         }
         if (modificandoCatPOI && unico) {
+            //Modifica
+            CategoriaPoi unaCatPOI = getTempCatPOI();
+            unaCatPOI.setPathIcono(comboIconoCatPoi.getSelectedItem().toString());
+            unaCatPOI.setTitulo(campoNombreNuevaCat.getText());
+            controllers.ControllerPois.getInstance().modificaCategoriaPOI(tempCatPOI);
+            setModificandoCatPOI(false);
         } else {//nuevo
             // Agrega Categoria POI:
             if (unico && campoNombreNuevaCat.getText().length() > 2) {
                 ImageIcon unIcono = (ImageIcon) comboIconoCatPoi.getSelectedItem();
                 controllers.ControllerPois.getInstance().agregaCategoriaPOI(campoNombreNuevaCat.getText(), unIcono.getDescription());
             } else {
-                JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido");
+                JOptionPane.showMessageDialog(null, "El nombre  de la categoria no es valido o ya existe");
             }
         }
-        habilitaPanelDatosCatPOIs(true);
+        habilitaPanelDatosCatPOIs(false);
+        cargaGrillaPOIS();
         cargaGrillaCategoriaPOIS();
         cargaComboCategorias();
     }//GEN-LAST:event_btnGuardarCatPOIActionPerformed
 
     private void btnEliminaCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaCatPOIActionPerformed
-        if (JOptionPane.showConfirmDialog(null,
-                "Desea eliminar las Categorias de POIs seleccionadas?",
-                "Eliminar Categorias de POIs",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE) == 0) {
-            for (int i = 0; i < tablaCategorias.getRowCount(); i++) {
-                if ((Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1)) {
+        if (tablaCategorias.getSelectedRowCount() != 0) {
+            int[] listaCatPOIsSeleccionados = tablaCategorias.getSelectedRows();
+            if (JOptionPane.showConfirmDialog(null,
+                    "Desea eliminar " + listaCatPOIsSeleccionados.length + " Categorias de POIs seleccionados?",
+                    "Eliminar POIs",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE) == 0) {
+                int i = 0;
+                while (i < listaCatPOIsSeleccionados.length) {
                     CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(i, 1);
                     if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
                         ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
                     } else {
                         JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
                     }
+                    i++;
                 }
+                /*      
+                for (int i = 0; i < tablaPois.getRowCount(); i++) {
+                if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
+                controllers.ControllerPois.getInstance().eliminaPOI((POI) tablaPois.getValueAt(i, 0));
+                }
+                }*/
+                cargaGrillaCategoriaPOIS();
+                cargaComboCategorias();
             }
         }
-        cargaGrillaCategoriaPOIS();
-        cargaComboCategorias();
     }//GEN-LAST:event_btnEliminaCatPOIActionPerformed
 
     private void btnInsertarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarCatPOIActionPerformed
@@ -651,12 +679,24 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnModificarPOI.setEnabled(false);
         btnGuardarPOI.setEnabled(true);
         //cargo la fila seleccionada en el formulario
-        int i = 0;
+        /*int i = 0;
         while (!(Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1) && i < tablaPois.getRowCount() - 1) {
-            i++;
+        i++;
         }
         if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
-            POI unPOI = (POI) tablaPois.getValueAt(i, 0);
+        POI unPOI = (POI) tablaPois.getValueAt(i, 0);
+        campoLatitud.setText(String.valueOf(unPOI.getLatitud()));
+        campoLongitud.setText(String.valueOf(unPOI.getLongitud()));
+        comboCategorias.setSelectedItem(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(unPOI.getIdCategoriaPOI()));
+        campoDescripcionNuevoPoi.setText(unPOI.getDescripcion());
+        setTempPOI(unPOI);
+        } else {
+        habilitaPanelDatosPOIs(false);
+        setModificandoPOI(false);
+        JOptionPane.showMessageDialog(null, "Seleccione un POI primero");
+        }*/
+        if (tablaPois.getSelectedRowCount() != 0) {
+            POI unPOI = (POI) tablaPois.getValueAt(tablaPois.getSelectedRow(), 0);
             campoLatitud.setText(String.valueOf(unPOI.getLatitud()));
             campoLongitud.setText(String.valueOf(unPOI.getLongitud()));
             comboCategorias.setSelectedItem(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(unPOI.getIdCategoriaPOI()));
@@ -716,18 +756,27 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }
 
     private void btnEliminarPOIActionPerformed(java.awt.event.ActionEvent evt) {
-        if (JOptionPane.showConfirmDialog(null,
-                "Desea eliminar los POIs seleccionados?",
-                "Eliminar POIs",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE) == 0) {
-            for (int i = 0; i < tablaPois.getRowCount(); i++) {
-                if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
-                    controllers.ControllerPois.getInstance().eliminaPOI((POI) tablaPois.getValueAt(i, 0));
+        if (tablaPois.getSelectedRowCount() != 0) {
+            int[] listaPOIsSeleccionados = tablaPois.getSelectedRows();
+            if (JOptionPane.showConfirmDialog(null,
+                    "Desea eliminar " + listaPOIsSeleccionados.length + " POIs seleccionados?",
+                    "Eliminar POIs",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE) == 0) {
+                int i = 0;
+                while (i < listaPOIsSeleccionados.length) {
+                    controllers.ControllerPois.getInstance().eliminaPOI((POI) tablaPois.getValueAt(listaPOIsSeleccionados[i], 0));
+                    i++;
                 }
+                /*      
+                for (int i = 0; i < tablaPois.getRowCount(); i++) {
+                if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
+                controllers.ControllerPois.getInstance().eliminaPOI((POI) tablaPois.getValueAt(i, 0));
+                }
+                }*/
+                cargaGrillaPOIS();
             }
         }
-        cargaGrillaPOIS();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink btnEliminaCatPOI;
@@ -813,7 +862,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
         PanelOpcPOIs a = new PanelOpcPOIs();
-        //cargaEspecies();
         elFrame.add(a);
         elFrame.setVisible(true);
     }
@@ -827,39 +875,39 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }
 
     private void cargaGrillaCategoriaPOIS() {
-        //DefaultTableModel dm = (DefaultTableModel) tablaCategorias.getModel(); 
-        //modeloTablaCategoriasPOI = (DefaultTableModel) tablaCategorias.getModel();
-        //tablaCategorias.setModel(modeloTablaCategoriasPOI);
-        //---ControllerPpal.getInstance().vaciarJTable(modeloTablaCategoriasPOI);
-        //dm.setRowCount(0);
         modeloTablaCategoriasPOI.setRowCount(0);
         int cantCols = 4;
         //Cabecera
-        /*String[] encabezado = new String[4];
-        encabezado[0] = "id";
-        encabezado[1] = "Nombre de la categoria";
-        encabezado[2] = "Icono";
-        encabezado[3] = "Acciones";
-        dm.setColumnIdentifiers(encabezado);*/
         /*modeloTablaCategoriasPOI.addColumn("id");
         modeloTablaCategoriasPOI.addColumn("Nombre de la categoria");
         modeloTablaCategoriasPOI.addColumn("Icono");
         modeloTablaCategoriasPOI.addColumn("Acciones");*/
-        //Cuerpo
-        ArrayList a = new ArrayList();
+        //Cuerpo       
         for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
-            a.add(cP.getId());
-            a.add(cP); //<-- Titulo, Aca esta el objeto entero
-            /*
             Image img = new ImageIcon(cP.getPathIcono()).getImage();
             Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             ImageIcon unIcono = new ImageIcon(newimg);
-            */
-            a.add(new ImageIcon(cP.getPathIcono())); // me hace el toString aunque le pase el objeto ¬¬
-            a.add("false");
-            modeloTablaCategoriasPOI.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
-            a.clear();
+            /*
+            //--- resize Icon
+            Image source = new ImageIcon(cP.getPathIcono()).getImage();
+            BufferedImage image = new BufferedImage(source.getHeight(null), source.getWidth(null), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = (Graphics2D) image.getGraphics();
+            g2d.drawImage(source, 0, 0, null);
+            g2d.dispose();
+            //-------------
+             */
+
+            //------------------------------------------
+            modeloTablaCategoriasPOI.addRow(new Object[]{
+                        cP.getId(),
+                        cP,//<-- Titulo, Aca esta el objeto entero
+                        unIcono//,//modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image),//unIcono,//new ImageIcon(cP.getPathIcono()),
+                    //false
+                    });
+            //------------------------------------------
         }
+        //RenderTabla renderIconosTabla = new RenderTabla();
+        //tablaCategorias.setDefaultRenderer(ImageIcon.class, renderIconosTabla);
         tablaCategorias.setModel(modeloTablaCategoriasPOI);
         //escondo la columna ID 
         ControllerPpal.getInstance().ocultarColJTable(tablaCategorias, 0);
@@ -867,48 +915,26 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void cargaGrillaPOIS() {
         try {
-            //DefaultTableModel dm = (DefaultTableModel) tablaPois.getModel();
-            //modeloTablaPOIS = (DefaultTableModel) tablaPois.getModel();
-            //tablaPois.setModel(modeloTablaPOIS);
-            //---ControllerPpal.getInstance().vaciarJTable(modeloTablaPOIS);
             modeloTablaPOIS.setRowCount(0);//vacia la tabla
-            //dm.setRowCount(0);
             int cantCols = 6;
             //Cabecera
-            /*String[] encabezado = new String[6];
-            encabezado[0] = "id";
-            encabezado[1] = "Fecha y Hora";
-            encabezado[2] = "Categoria";
-            encabezado[3] = "Coordenadas";
-            encabezado[4] = "Descripcion";
-            encabezado[5] = "Acciones";
-            modeloTablaPOIS.setColumnCount(cantCols-1);
-            modeloTablaPOIS.setColumnIdentifiers(encabezado);*/
-            // modeloTablaPOIS.setColumnCount(cantCols);
             /*modeloTablaPOIS.addColumn("id");
             modeloTablaPOIS.addColumn("Fecha y Hora");
             modeloTablaPOIS.addColumn("Categoria");
             modeloTablaPOIS.addColumn("Coordenadas");
             modeloTablaPOIS.addColumn("Descripcion");
             modeloTablaPOIS.addColumn("Acciones");*/
-
             //Cuerpo
-
-            /*for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-            dm.addRow(agregaUnaFilaPOI(p.getId(), p.getFechaHora(), BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo(), p.getDescripcion(), p.getLatitud(), p.getLongitud()));
-            }*/
-            ArrayList a = new ArrayList();
+            SimpleDateFormat horaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
-                a.add(p); //agrega el objeto POI, pero muestra el id
-                a.add(p.getFechaHora());
-                //cuando no esta la categoria explota
-                a.add("" +/*<-me muestra el null*/ BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo());
-                String coordenadas = String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud());
-                a.add(coordenadas);
-                a.add(p.getDescripcion());
-                a.add("false");
-                modeloTablaPOIS.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
-                a.clear();
+                modeloTablaPOIS.addRow(new Object[]{
+                            p, //agrega el objeto POI, pero muestra el id
+                            horaCompleta.format(p.getFechaHora()),
+                            ("" +/*<-me muestra el null*/ BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo()),
+                            (String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud())),
+                            p.getDescripcion()//,
+                        //false
+                        });
             }
         } catch (Exception e) {
             System.out.println(e);
@@ -1043,6 +1069,18 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                     && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.')) {
                 ke.consume();
             }
+        }
+    }
+
+    class RenderTabla extends DefaultTableCellRenderer {
+
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+            JLabel etiqueta = new JLabel();
+            if (value instanceof ImageIcon) {
+                etiqueta.setIcon((ImageIcon) value);
+            }
+            return etiqueta;
         }
     }
 }
