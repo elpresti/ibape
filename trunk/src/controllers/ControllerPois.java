@@ -37,22 +37,6 @@ public class ControllerPois {
         return unicaInstancia;
     }
 
-    private Object[] agregaUnaFilaPOI(int id, Date fechaHora, String categoria, String descripcion, double latitud, double longitud) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Object[] fila = new Object[6]; //creamos la fila
-        fila[0] = String.valueOf(id); //ver el override de tosring y donde se guarda el objeto
-        if (fechaHora != null) {
-            fila[1] = sdf.format(fechaHora);
-        }
-        fila[2] = categoria;
-        String coordenadas = String.valueOf(latitud) + "," + String.valueOf(longitud);
-        fila[3] = coordenadas;
-        fila[4] = descripcion;
-        fila[5] = "";
-
-        return fila;
-    }
-
     public ArrayList<modelo.dataManager.CategoriaPoi> cargaCategoriasPOI() {
         return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
     }
@@ -128,5 +112,13 @@ public class ControllerPois {
             }
         }
         return listRutaIconos;
+    }
+
+    public void modificaCategoriaPOI(CategoriaPoi unaCatPOI) {
+        if (!BrokerCategoriasPOI.getInstance().updateCategoriaPOI(unaCatPOI)) {
+            JOptionPane.showMessageDialog(null, "No se pudo modificar la categoria POI " + unaCatPOI.getId());
+        } else {
+            System.out.println("CatPoi modificada: " + unaCatPOI.getId());
+        }
     }
 }

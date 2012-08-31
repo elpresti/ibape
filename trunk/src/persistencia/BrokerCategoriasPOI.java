@@ -164,9 +164,9 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         String sqlQuery = "";
         try {
             sqlQuery = "Update CategoriasPoi "
-                    + "SET titulo =" + categoriaPOI.getTitulo() + ", "
-                    + "pathIcono =" + categoriaPOI.getPathIcono() + ", "
-                    + " WHERE "
+                    + "SET titulo='" + categoriaPOI.getTitulo() + "', "
+                    + "pathIcono='" + categoriaPOI.getPathIcono() + "' "
+                    + "WHERE "
                     + "id=" + categoriaPOI.getId();
             System.out.println("Update CatPOI: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
