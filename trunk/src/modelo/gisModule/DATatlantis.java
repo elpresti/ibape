@@ -65,4 +65,47 @@ public class DATatlantis{
         return unicaInstancia;
     }
 
+    private void inicializador(){
+    }
+    
+    public ArrayList<SondaSet> leerDat(File fileDat){
+      ArrayList<SondaSet> sondaSets=new ArrayList();
+      try{
+        //Stream para leer archivo
+        FileInputStream inDat =FileInputStream(fileDat);
+        boolean todoOk=true;
+        int proximoByte;
+        proximoByte=avanzaNulos(inDat);
+        todoOk = todoOk && proximoByte != -1;
+        if (todoOk){
+          int byteLeido=proximoByte;
+          while (byteLeido>0){
+            
+          }        
+        }  
+        //se cierra archivo
+        fileDat.close();
+        sePudo=true;
+      }
+      catch(Exception e){
+        Logueador.getInstance().agregaLinea("Error leerDat(): "+e.toString());
+      }
+      return sePudo;
+    }
+    
+    public int avanzaNulos(FileInputStream inDat){
+      int ultimoNoNulo=-1;
+      try{
+        int byteLeido=inDat.read();
+        while(byteLeido!=-1 && byteLeido==0){//tiene q avanzar siempre q no sea EOF y haya nulos
+          byteLeido=inDat.read();
+        }
+        ultimoNoNulo=byteLeido;
+      }
+      catch(Exception e){
+        Logueador.getInstance().agregaLinea("Error avanzaNulos(): "+e.toString());
+      }
+      return sePudo;
+    }
+    
 }
