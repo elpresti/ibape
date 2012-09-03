@@ -14,6 +14,16 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.image.Raster;
+import java.awt.image.renderable.ParameterBlock;
+import java.lang.reflect.Array;
+import java.util.Iterator;
+import java.util.Vector;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
+import javax.media.jai.Histogram;
+import javax.media.jai.JAI;
+import javax.media.jai.PlanarImage;
 import modelo.dataManager.Marca;
 
 
@@ -30,6 +40,7 @@ public class OperacionesBasicas {
     private int ancho;
     private int alto;
     private Colores color = new Colores();
+    private int progresoProcesamiento; //0=sin procesar, 1=ya binarice, 2=ya erosioné y dilaté, 3=ya quite el fondo, 4=ya busque marcas, 5= ya las pinté, 6= fin de procesamiento...
 
 
     private OperacionesBasicas(){
@@ -91,42 +102,25 @@ public class OperacionesBasicas {
 	}
 
    
-    public static void main(String[] args){
-
-         int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay("imgs\\img1.jpg");
-         ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas();
-         BufferedImage imgConMarcas = getInstance().dibujaMarcasDetectadas(getInstance().imgProcesada,marcas);
-         getInstance().grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
-         BufferedImage imgConMarcasRellena = getInstance().rellenaMarcasDetectadas(imgConMarcas, marcas);
-         getInstance().grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
-         BufferedImage imgCOnFondoYMarcasRellenas = getInstance().rellenaMarcasDetectadas(getInstance().getImgConFondo(), marcas);
-         getInstance().grabarImagen(imgCOnFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
-         //OperacionesBasicas.getInstance().getMarcas(imgSoloMarcas);
-
-//        //Cargamos  la imagen en un objeto BufferImage
-//        OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
-//        //Creamos los filtro para esta imagen
-//        Filtros filtros = new Filtros(getInstance().getAncho(),getInstance().getAlto());
-//        //metodo con ancho de 550 recorta imagen
-//        //Filtros filtros = new Filtros(getInstance().getAncho(),550);
-//        //La erosionamos
-//        BufferedImage imgProcesada = filtros.erode(getInstance().getImagenOriginal());
-//        //Al resultado lo binarizamos con un umbral de 20
-//        imgProcesada = filtros.Binarizacion(imgProcesada, 20);
-//
-//        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
-//        imgProcesada = segmentacion.Bordes(imgProcesada);
-//        //grabamos la imagen en disco
-//        getInstance().grabarImagen(imgProcesada);
-
-    }
-
-    
-    public int cuantosPecesHay(String rutaImg){
-        int cantPeces = 0;
+    public static void main(String[] args) throws IOException{
 
         //Leemos la imagen con obtenerImagen()
-        OperacionesBasicas.getInstance().obtenerImagen(rutaImg);
+        OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
+        if (getInstance().imagenApta(getInstance().imagenOriginal)){
+             int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay(getInstance().imagenOriginal);
+             ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas();
+             BufferedImage imgConMarcas = getInstance().dibujaMarcasDetectadas(getInstance().imgProcesada,marcas);
+             getInstance().grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
+             BufferedImage imgConMarcasRellena = getInstance().rellenaMarcasDetectadas(imgConMarcas, marcas);
+             getInstance().grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
+             BufferedImage imgCOnFondoYMarcasRellenas = getInstance().rellenaMarcasDetectadas(getInstance().getImgConFondo(), marcas);
+             getInstance().grabarImagen(imgCOnFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
+             //OperacionesBasicas.getInstance().getMarcas(imgSoloMarcas);
+            }
+    }
+    public int cuantosPecesHay(BufferedImage imgOriginal){
+        int cantPeces = 0;
+        setProgresoProcesamiento(0); 
         //Creamos los filtros para la imagen con la clase Filtros
         Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
         //La erosionamos con Filtros.erode()
@@ -134,7 +128,9 @@ public class OperacionesBasicas {
 //        getInstance().grabarImagen(imgProcesada);
         //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20
         imgProcesada = filtros.Binarizacion(imgProcesada, 20);
+        setProgresoProcesamiento(1);
         imgProcesada = filtros.dilate(imgProcesada);
+        setProgresoProcesamiento(2);
 //        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
 //        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
@@ -148,7 +144,7 @@ public class OperacionesBasicas {
 
         //Armo el arreglo de la posicion del fondo en todo el ancho de la imagen.
        // ArrayList<Integer> fondo = buscaFondo(imgProcesada);
-        int fondo[] = new int[967];
+        int fondo[] = new int[imgOriginal.getWidth()];
         fondo = buscaFondo(imgProcesada);
         BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
 
@@ -165,7 +161,6 @@ public class OperacionesBasicas {
  
         setImgProcesada(imgConFondo);
         //setImgProcesada();
-        int prom = promedio(fondo);
         //buscaMarcas(fondo)
 
 
@@ -186,8 +181,20 @@ public class OperacionesBasicas {
 
                 int e = getColor().obtieneColor(img.getRGB(contAncho, contAlto));
                 if ((getColor().getColoresMap().get(e).equals("Negro"))) {
-                    noencontrofondo = false;
-
+//                    e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-1));
+//                    if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+//                        e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-2));
+//                        if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+//                           e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-3));
+//                           if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+//                               e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-4));
+//                               if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+                                    noencontrofondo = false;//verificar si es 0 el fondo y si lo es darle un rango mayor a
+                                                            //primer busqueda denuevo
+//                               }
+//                           }
+//                        }
+//                    }
                 }
                 contAlto--;
             }
@@ -363,21 +370,6 @@ public class OperacionesBasicas {
         }
     }
 
-    public int promedio(int[] fondo){
-        int cont = 1;       // contador
-        int suma = 0;    // suma
-
-
-        while (cont < fondo.length ) {
-            suma += suma+fondo[cont];
-            cont++;
-        }
-
-        // promedio
-        int promedio = suma / (cont-1);
-
-     return promedio;
-    }
 
     public BufferedImage dibujaFondo (BufferedImage img, int[] fondo){
          int cont = 0;      // contador
@@ -391,11 +383,11 @@ public class OperacionesBasicas {
 
     public BufferedImage eliminaFondo(BufferedImage img, int[] fondo){
         int colorNegro = new Color (0,0,0).getRGB();
-        ancho = img.getWidth();
+        ancho = img.getWidth()-1;
         alto = img.getHeight();
         int contAncho = 1;     
         int contAlto = alto - 2;   
-        while (contAncho<=966){
+        while (contAncho<=ancho){
              contAlto = alto - 2;
              while (contAlto >= fondo[contAncho] ) {
                 img.setRGB(contAncho, contAlto, colorNegro);
@@ -613,6 +605,91 @@ public class OperacionesBasicas {
 
      }
 
+         public boolean imagenApta(BufferedImage imgOriginal) throws IOException{
+            boolean esApta= false;
+////            ImageInputStream is = ImageIO.createImageInputStream(imgOriginal);
+////            Iterator iter = ImageIO.getImageReaders(is);
+////
+////            if (!iter.hasNext())
+////            {
+////                System.out.println("Cannot load the specified file "+ imgOriginal);
+////                System.exit(1);
+////            }
+////            ImageReader imageReader = (ImageReader)iter.next();
+////            imageReader.setInput(is);
+////            BufferedImage image = imageReader.read(0);
+//
+//            int height = imgOriginal.getHeight()-1;
+//            int width = imgOriginal.getWidth()-1;
+//     
+//
+//            Raster raster = imgOriginal.getRaster();
+//            int[][] bins;
+//            int colorAmarillo = new Color (255, 233, 0).getRGB();
+//            for(int i=2; i < width ; i++)
+//            {
+//                for(int j=2; j < height ; j++)
+//                {
+//                    if(imgOriginal.getRGB(i, j)==colorAmarillo)
+//                    {
+//                        bins[0][ raster.getSample(i,j, 0) ] ++;
+//                    }
+//                    else
+//                    {
+//                        bins[0][ raster.getSample(i,j, 0) ] ++;
+//                        bins[1][ raster.getSample(i,j, 1) ] ++;
+//                        bins[2][ raster.getSample(i,j, 2) ] ++;
+//                    }
+//                }
+//            }
+             // Set up the parameters for the Histogram object.
+//             int[] bins = {256, 256, 256};             // The number of bins.
+//             double[] low = {0.0D, 0.0D, 0.0D};        // The low value.
+//             double[] high = {256.0D, 256.0D, 256.0D}; // The high value.
+//
+//             // Construct the Histogram object.
+//             Histogram hist = new Histogram(bins, low, high);
+//
+//             // Create the parameter block.
+//             ParameterBlock pb = new ParameterBlock();
+//             pb.addSource(imgOriginal);         // Specify the source image
+//             pb.add(hist);                      // Specify the histogram
+//             pb.add(null);                      // No ROI
+//             pb.add(1);                         // Sampling
+//             pb.add(1);                         // periods
+//
+//             // periods
+//             // Perform the histogram operation.
+//             PlanarImage dst = (PlanarImage) JAI.create("histogram", pb);
+//
+//             // Retrieve the histogram data.
+//             hist = (Histogram) dst.getProperty("histogram");
+//
+//
+//             // Print 3-band hi Histogram.getNumBins()stogram.
+//             for (int i=0; i< hist.getNumBins(i); i++) {
+//                System.out.println(hist.getBinSize(0, i) + " " +
+//                                   hist.getBinSize(1, i) + " " +
+//                                   hist.getBinSize(2, i) + " ");
+//             }
+           // int colorAmarillo = new Color (255, 233, 0).getRGB();
+            int cont=0;
+            for (int contAncho = 1; contAncho < imgOriginal.getWidth(); contAncho++) {
+                 for (int contAlto= imgOriginal.getHeight()-1; contAlto >350; contAlto--){
+                    int e = getColor().obtieneColor(imgOriginal.getRGB(contAncho, contAlto));
+                    if ((getColor().getColoresMap().get(e).equals("Amarillo"))) {
+                        cont++;
+                    }
+                 }
+            }
+            if (cont!=8000){
+                esApta=true;
+            }
+         return esApta;
+         }
+         
+        
+
 
 
 //    public ArrayList<modelo.dataManager.Marca> getMarcas(BufferedImage imgSoloMarcas){
@@ -694,6 +771,20 @@ public class OperacionesBasicas {
      */
     public void setImgConFondo(BufferedImage imgConFondo) {
         this.imgConFondo = imgConFondo;
+    }
+
+    /**
+     * @return the progresoProcesamiento
+     */
+    public int getProgresoProcesamiento() {
+        return progresoProcesamiento;
+    }
+
+    /**
+     * @param progresoProcesamiento the progresoProcesamiento to set
+     */
+    public void setProgresoProcesamiento(int progresoProcesamiento) {
+        this.progresoProcesamiento = progresoProcesamiento;
     }
 
 }
