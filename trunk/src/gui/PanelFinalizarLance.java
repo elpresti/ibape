@@ -32,6 +32,8 @@ import persistencia.Logueador;
 public class PanelFinalizarLance extends javax.swing.JPanel {
 
     static PanelFinalizarLance unicaInstancia;
+    private boolean modificandoCajon;
+    private Cajon tempCajon;
     private DefaultTableModel modeloTablaCajones = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
@@ -72,6 +74,13 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelTabla = new org.jdesktop.swingx.JXPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCajones = new org.jdesktop.swingx.JXTable();
+        panelAccionesCajones = new org.jdesktop.swingx.JXPanel();
+        lblAccionesCajones = new org.jdesktop.swingx.JXLabel();
+        panelAcciones = new org.jdesktop.swingx.JXPanel();
+        btnModificarCajon = new org.jdesktop.swingx.JXHyperlink();
+        btnGuardarCajon = new org.jdesktop.swingx.JXHyperlink();
+        btnEliminarCajon = new org.jdesktop.swingx.JXHyperlink();
+        btnInsertarCajon = new org.jdesktop.swingx.JXHyperlink();
         panelEspecie = new org.jdesktop.swingx.JXPanel();
         panelCantCajones = new org.jdesktop.swingx.JXPanel();
         lblCantCajones = new org.jdesktop.swingx.JXLabel();
@@ -112,10 +121,9 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelMedio.setPreferredSize(new java.awt.Dimension(500, 420));
         panelMedio.setLayout(new java.awt.BorderLayout());
 
-        panelCajones.setMaximumSize(new java.awt.Dimension(500, 250));
-        panelCajones.setMinimumSize(new java.awt.Dimension(500, 250));
-        panelCajones.setPreferredSize(new java.awt.Dimension(500, 250));
-        panelCajones.setLayout(new java.awt.BorderLayout());
+        panelCajones.setMaximumSize(new java.awt.Dimension(500, 320));
+        panelCajones.setMinimumSize(new java.awt.Dimension(500, 320));
+        panelCajones.setPreferredSize(new java.awt.Dimension(500, 320));
 
         panelTituloTabla.setMaximumSize(new java.awt.Dimension(500, 30));
         panelTituloTabla.setMinimumSize(new java.awt.Dimension(500, 30));
@@ -126,10 +134,11 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelTituloTabla.add(lblTituloTabla);
 
-        panelCajones.add(panelTituloTabla, java.awt.BorderLayout.NORTH);
+        panelCajones.add(panelTituloTabla);
 
-        panelTabla.setMaximumSize(new java.awt.Dimension(500, 170));
-        panelTabla.setMinimumSize(new java.awt.Dimension(500, 170));
+        panelTabla.setMaximumSize(new java.awt.Dimension(500, 190));
+        panelTabla.setMinimumSize(new java.awt.Dimension(500, 190));
+        panelTabla.setPreferredSize(new java.awt.Dimension(500, 190));
 
         jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 170));
         jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 170));
@@ -170,24 +179,89 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelTabla.setLayout(panelTablaLayout);
         panelTablaLayout.setHorizontalGroup(
             panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
-            .addGroup(panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelTablaLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelTablaLayout.setVerticalGroup(
             panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 170, Short.MAX_VALUE)
-            .addGroup(panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelTablaLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(panelTablaLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelCajones.add(panelTabla, java.awt.BorderLayout.CENTER);
+        panelCajones.add(panelTabla);
+
+        panelAccionesCajones.setMaximumSize(new java.awt.Dimension(500, 30));
+        panelAccionesCajones.setMinimumSize(new java.awt.Dimension(500, 30));
+        panelAccionesCajones.setPreferredSize(new java.awt.Dimension(500, 30));
+
+        lblAccionesCajones.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblAccionesCajones.setText("Acciones sobre los cajones elegidos:");
+        lblAccionesCajones.setFont(new java.awt.Font("Tahoma", 0, 14));
+
+        panelAcciones.setMaximumSize(new java.awt.Dimension(184, 30));
+        panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+
+        btnModificarCajon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
+        btnModificarCajon.setText("");
+        btnModificarCajon.setToolTipText("Modificar");
+        btnModificarCajon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnModificarCajon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarCajonActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnModificarCajon);
+
+        btnGuardarCajon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-guardar.png"))); // NOI18N
+        btnGuardarCajon.setText("");
+        btnGuardarCajon.setToolTipText("Guardar cambios");
+        btnGuardarCajon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnGuardarCajon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarCajonActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnGuardarCajon);
+
+        btnEliminarCajon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-eliminar.png"))); // NOI18N
+        btnEliminarCajon.setText("");
+        btnEliminarCajon.setToolTipText("Eliminar");
+        btnEliminarCajon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnEliminarCajon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarCajonActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnEliminarCajon);
+
+        btnInsertarCajon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-insertar.png"))); // NOI18N
+        btnInsertarCajon.setText("");
+        btnInsertarCajon.setToolTipText("Agregar");
+        btnInsertarCajon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnInsertarCajon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertarCajonActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnInsertarCajon);
+
+        javax.swing.GroupLayout panelAccionesCajonesLayout = new javax.swing.GroupLayout(panelAccionesCajones);
+        panelAccionesCajones.setLayout(panelAccionesCajonesLayout);
+        panelAccionesCajonesLayout.setHorizontalGroup(
+            panelAccionesCajonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelAccionesCajonesLayout.createSequentialGroup()
+                .addComponent(lblAccionesCajones, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelAcciones, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        panelAccionesCajonesLayout.setVerticalGroup(
+            panelAccionesCajonesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblAccionesCajones, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(panelAcciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        panelCajones.add(panelAccionesCajones);
 
         panelEspecie.setMaximumSize(new java.awt.Dimension(500, 50));
         panelEspecie.setMinimumSize(new java.awt.Dimension(500, 50));
@@ -238,7 +312,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(80, 50));
         panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -249,7 +323,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
         panelEspecie.add(panelBtnAgregar);
 
-        panelCajones.add(panelEspecie, java.awt.BorderLayout.SOUTH);
+        panelCajones.add(panelEspecie);
 
         panelMedio.add(panelCajones, java.awt.BorderLayout.NORTH);
 
@@ -361,8 +435,61 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         eliminarCajon();
         //modificarCajon();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnModificarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCajonActionPerformed
+        habilitaPanelDatosCajones(true);
+        setModificandoCajon(true);
+        btnEliminarCajon.setEnabled(false);
+        btnInsertarCajon.setEnabled(false);
+        btnModificarCajon.setEnabled(false);
+        btnGuardarCajon.setEnabled(true);
+        //cargo la fila seleccionada en el formulario
+        if (tablaCajones.getSelectedRowCount() != 0) {
+            Cajon unCajon = (Cajon) tablaCajones.getValueAt(tablaCajones.getSelectedRow(), 0);
+            campoCajones.setText(String.valueOf(unCajon.getCantidad()));
+            //ver el icono
+            setTempCajon(unCajon);
+        } else {
+            habilitaPanelDatosCajones(false);
+            setModificandoCajon(false);
+            JOptionPane.showMessageDialog(null, "Seleccione un cajon primero");
+        }
+    }//GEN-LAST:event_btnModificarCajonActionPerformed
+
+    private void btnGuardarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCajonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarCajonActionPerformed
+
+    private void btnEliminarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCajonActionPerformed
+        if (tablaCajones.getSelectedRowCount() != 0) {
+            int[] listaCajonesSeleccionados = tablaCajones.getSelectedRows();
+            if (JOptionPane.showConfirmDialog(null,
+                    "Desea eliminar " + listaCajonesSeleccionados.length + " cajones seleccionados?",
+                    "Eliminar cajones",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE) == 0) {
+                int i = 0;
+                while (i < listaCajonesSeleccionados.length) {
+                    Cajon unCajon = (Cajon) tablaCajones.getValueAt(i, 0);
+                    ControllerLance.getInstance().borrarCajon(unCajon); //lo saca de la lista en memoria
+                    System.out.println("Se saco de la lista el cajon " + unCajon);
+                    //ControllerLance.getInstance().eliminaCajon(unCajon);
+                    i++;
+                }
+                cargaGrillaCajones();
+            }
+        }
+    }//GEN-LAST:event_btnEliminarCajonActionPerformed
+
+    private void btnInsertarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarCajonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInsertarCajonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXHyperlink btnEliminarCajon;
+    private org.jdesktop.swingx.JXHyperlink btnGuardarCajon;
     private javax.swing.JButton btnGuardarLance;
+    private org.jdesktop.swingx.JXHyperlink btnInsertarCajon;
+    private org.jdesktop.swingx.JXHyperlink btnModificarCajon;
     private javax.swing.JTextField campoCajones;
     private javax.swing.JComboBox comboEspecies;
     private javax.swing.JComboBox comboSuceso;
@@ -370,12 +497,15 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private org.jdesktop.swingx.JXLabel lblAccionesCajones;
     private org.jdesktop.swingx.JXLabel lblCantCajones;
     private org.jdesktop.swingx.JXLabel lblComentarios;
     private org.jdesktop.swingx.JXLabel lblEspecie;
     private org.jdesktop.swingx.JXLabel lblSuceso;
     private org.jdesktop.swingx.JXLabel lblTitulo;
     private org.jdesktop.swingx.JXLabel lblTituloTabla;
+    private org.jdesktop.swingx.JXPanel panelAcciones;
+    private org.jdesktop.swingx.JXPanel panelAccionesCajones;
     private org.jdesktop.swingx.JXPanel panelBtnAgregar;
     private org.jdesktop.swingx.JXPanel panelCajones;
     private org.jdesktop.swingx.JXPanel panelCantCajones;
@@ -412,13 +542,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private void inicializador() {
         cargaComboEspecies();
         cargaComboSuceso();
-        /*ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);
-        modeloTablaCajones.addColumn("idLance");
-        modeloTablaCajones.addColumn("# Cajones");
-        modeloTablaCajones.addColumn("Especie");
-        modeloTablaCajones.addColumn("Acciones");
-        tablaCajones.setModel(modeloTablaCajones);
-        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);*/
+       // habilitaPanelDatosCajones(false);
     }
 
     private void cargaComboEspecies() {
@@ -468,18 +592,18 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     }
 
     private void eliminarCajon() {
-        if (JOptionPane.showConfirmDialog(null,
+       /* if (JOptionPane.showConfirmDialog(null,
                 "Desea eliminar los cajones seleccionados?",
                 "Eliminar cajones",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE) == 0) {
             for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-                if ((Boolean) tablaCajones.getValueAt(i, tablaCajones.getColumnCount(false)-1)) {
+                if ((Boolean) tablaCajones.getValueAt(i, tablaCajones.getColumnCount(false) - 1)) {
                     ControllerLance.getInstance().borrarCajon((Cajon) tablaCajones.getValueAt(i, 0));
                 }
             }
         }
-        cargaGrillaCajones();
+        cargaGrillaCajones();*/
     }
 
     private void modificarCajon() {
@@ -505,5 +629,45 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         }
         tablaCajones.setModel(modeloTablaCajones);
         ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
+    }
+
+    private void habilitaPanelDatosCajones(boolean estado) {
+        campoCajones.setEnabled(estado);
+        campoCajones.setText("");
+        //si lo deshabilito habilito la barra
+        if (!estado) {
+            btnEliminarCajon.setEnabled(!estado);
+            btnInsertarCajon.setEnabled(!estado);
+            btnModificarCajon.setEnabled(!estado);
+            btnGuardarCajon.setEnabled(estado);
+        }
+    }
+
+    /**
+     * @return the modificandoCajon
+     */
+    public boolean isModificandoCajon() {
+        return modificandoCajon;
+    }
+
+    /**
+     * @param modificandoCajon the modificandoCajon to set
+     */
+    public void setModificandoCajon(boolean modificandoCajon) {
+        this.modificandoCajon = modificandoCajon;
+    }
+
+    /**
+     * @return the tempCajon
+     */
+    public Cajon getTempCajon() {
+        return tempCajon;
+    }
+
+    /**
+     * @param tempCajon the tempCajon to set
+     */
+    public void setTempCajon(Cajon tempCajon) {
+        this.tempCajon = tempCajon;
     }
 }
