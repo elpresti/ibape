@@ -68,20 +68,41 @@ public class DATatlantis{
     private void inicializador(){
     }
     
-    public ArrayList<SondaSet> leerDat(File fileDat){
-      ArrayList<SondaSet> sondaSets=new ArrayList();
+//http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
+    public ArrayList<SondaSetHistorico> leerDat(File fileDat){
+      ArrayList<SondaSetHistorico> sondaSets=new ArrayList();
       try{
         //Stream para leer archivo
         FileInputStream inDat =FileInputStream(fileDat);
         boolean todoOk=true;
         int proximoByte;
-        proximoByte=avanzaNulos(inDat);
+        ByteBuffer bb;
+        int byteLeido = avanzaNulos(inDat);
         todoOk = todoOk && proximoByte != -1;
         if (todoOk){
-          int byteLeido=proximoByte;
-          while (byteLeido>0){
-            
-          }        
+          SondaSetHistorico unSondaSetHistorico=new SondaSetHistorico();
+          if (byteLeido>0){//leo la variable desconocida nro 6, supongo q será de tipo int
+            bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
+            unSondaSet.setVarDesconocida6(bb.getInt());
+          }
+          byteLeido=avanzaNulos(inDat);
+          todoOk= todoOk && byteLeido != -1;
+          if (todoOk){//leo la variable desconocida nro 7, supongo q será de tipo int
+            bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
+            unSondaSet.setVarDesconocida7(bb.getInt());
+          }
+          byteLeido=avanzaNulos(inDat);
+          todoOk= todoOk && byteLeido != -1;
+          if (todoOk){//leo la variable FRECUENCIA, supongo q será de tipo int
+            bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
+            unSondaSet.setFrecuencia(bb.getInt());
+          }
+          byteLeido=avanzaNulos(inDat);
+          todoOk= todoOk && byteLeido != -1;
+          if (todoOk){//leo la variable GANANCIA, supongo q será de tipo int
+            bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
+            unSondaSet.setGanancia(bb.getInt());
+          }
         }  
         //se cierra archivo
         fileDat.close();
