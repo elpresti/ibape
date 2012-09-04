@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
@@ -548,27 +549,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         if (tablaCategorias.getSelectedRowCount() != 0) {
             CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(tablaCategorias.getSelectedRow(), 1);
             campoNombreNuevaCat.setText(unaCatPOI.getTitulo());
-            //ver el icono
+            //icono tiene q compara contra el description comboIconoCatPoi.setSelectedItem(unaCatPOI.getPathIcono());
             setTempCatPOI(unaCatPOI);
         } else {
             habilitaPanelDatosCatPOIs(false);
             setModificandoCatPOI(false);
             JOptionPane.showMessageDialog(null, "Seleccione una Categoria de POI primero");
         }
-        /*int i = 0;
-        while (!(Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1) && i < tablaCategorias.getRowCount() - 1) {
-        i++;
-        }
-        if ((Boolean) tablaCategorias.getValueAt(i, tablaCategorias.getColumnCount(false) - 1)) {
-        CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(i, 1);
-        campoNombreNuevaCat.setText(unaCatPOI.getTitulo());
-        //ver el icono
-        setTempCatPOI(unaCatPOI);
-        } else {
-        habilitaPanelDatosCatPOIs(false);
-        setModificandoCatPOI(false);
-        JOptionPane.showMessageDialog(null, "Seleccione una Categoria de POI primero");
-        }*/
     }//GEN-LAST:event_btnModificarCatPOIActionPerformed
 
     private void btnGuardarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCatPOIActionPerformed
@@ -585,7 +572,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             }
             i++;
         }
-        if (modificandoCatPOI && unico) {
+        if (modificandoCatPOI /*&& unico*/) {
             //Modifica
             CategoriaPoi unaCatPOI = getTempCatPOI();
             unaCatPOI.setPathIcono(comboIconoCatPoi.getSelectedItem().toString());
@@ -621,7 +608,22 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                     if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
                         ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
+                        //JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
+                        int seleccion = JOptionPane.showOptionDialog(
+                                null,
+                                "Existen POIs en alguna campaña con la categoria que se quiere eliminar, ¿que desea hacer con la categoria?",
+                                "Seleccione una opcion",
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                new Object[]{"Eliminar los POIs con dicha categoria", "Asignar otra categoria a los POIs dependientes"}, // null para YES, NO y CANCEL
+                                "Eliminar POIs con la categoria");
+                        if (seleccion == 0) {
+                            System.out.println("borro todo");
+                        }
+                        if (seleccion == 1) {
+                            System.out.println("asigno");
+                        }
                     }
                     i++;
                 }
@@ -851,7 +853,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
             campoLatitud.addKeyListener(obj_teclas);
             campoLongitud.addKeyListener(obj_teclas);
-
+            //Columna 2 de la tabla como iconos
+            tablaCategorias.getColumn(2).setMinWidth(33);
+            tablaCategorias.getColumn(2).setMaxWidth(33);
+            tablaCategorias.getColumn(2).setPreferredWidth(33);
+            tablaCategorias.getColumn(2).setCellRenderer(new IconRenderer());
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -884,24 +890,31 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         modeloTablaCategoriasPOI.addColumn("Acciones");*/
         //Cuerpo       
         for (CategoriaPoi cP : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
-            Image img = new ImageIcon(cP.getPathIcono()).getImage();
+            /*Image img = new ImageIcon(cP.getPathIcono()).getImage();
             Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             ImageIcon unIcono = new ImageIcon(newimg);
-            /*
-            //--- resize Icon
+             */
             Image source = new ImageIcon(cP.getPathIcono()).getImage();
-            BufferedImage image = new BufferedImage(source.getHeight(null), source.getWidth(null), BufferedImage.TYPE_INT_ARGB);
+            BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
             g2d.drawImage(source, 0, 0, null);
             g2d.dispose();
+            /*
+            //--- resize Icon
+            Image source = new ImageIcon(modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois()+cP.getPathIcono()).getImage();
+            BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = (Graphics2D)image.getGraphics();
+            g2d.drawImage(source, 0, 0, null);
+            g2d.dispose();
             //-------------
+            fila[2]=modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image);
              */
 
             //------------------------------------------
             modeloTablaCategoriasPOI.addRow(new Object[]{
                         cP.getId(),
                         cP,//<-- Titulo, Aca esta el objeto entero
-                        unIcono//,//modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image),//unIcono,//new ImageIcon(cP.getPathIcono()),
+                        modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(20, 20, image),//unIcono,//new ImageIcon(cP.getPathIcono()),
                     //false
                     });
             //------------------------------------------
@@ -1072,15 +1085,14 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
     }
 
-    class RenderTabla extends DefaultTableCellRenderer {
+    class IconRenderer implements TableCellRenderer {
 
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-                int row, int column) {
-            JLabel etiqueta = new JLabel();
-            if (value instanceof ImageIcon) {
-                etiqueta.setIcon((ImageIcon) value);
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (value == null) {
+                return null;
             }
-            return etiqueta;
+            return (Component) value;
         }
     }
 }
