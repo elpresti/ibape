@@ -14,9 +14,11 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
@@ -25,12 +27,20 @@ import persistencia.Logueador;
 
 
 
+
+
+
+
+/**
+Esta es una clase que hize, para leer archivos en bloques de bytes, espero te sirva. Saludos!
+*/
 /**
  *
  * @author Sebastian
  */
 public class DATatlantis{
     private static DATatlantis unicaInstancia;
+
     private String ultimoDatLeido;
     private String datFileName;
     private String conversorFileName;
@@ -70,6 +80,29 @@ public class DATatlantis{
 
     private void inicializador(){
     }
+
+    private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos(ArrayList valoresByteDeUnSsh) {
+        SondaSetHistorico ssh = new SondaSetHistorico();
+        
+        return ssh;
+    }
+    
+    private int getIntFromByteArray(byte[] byteArray){
+        int salida = 0;
+        try{
+            byte[] nro = new byte[] {0, 0, 0, 0, 0, 0, 0, 0};
+            for (int i=0;i<byteArray.length;i++){
+                nro[nro.length-i-1] = byteArray[i];
+            }            
+            ByteBuffer bb = ByteBuffer.wrap(nro);
+            long l =bb.getLong();
+            salida = (int)l;
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("getIntFromByteArray(): "+e.toString());
+        }
+        return salida;
+    }
+    
     
 //http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
 
@@ -147,20 +180,48 @@ public class DATatlantis{
       return ultimoNoNulo;
     }
 
+    private byte[] getValorEncontrado(FileReaderAsBlocks frab, byte valorLeido) {
+        ArrayList<Byte> valorEncontrado = new ArrayList<Byte>();
+        try{
+            valorEncontrado.add(valorLeido);
+            byte[] nuevoValorLeido = frab.readBytes();
+            while (!frab.isEOF() && nuevoValorLeido[0] != 0){
+                valorEncontrado.add(nuevoValorLeido[0]);
+                nuevoValorLeido = frab.readBytes();
+            }
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("getValorEncontrado(): "+e.toString());
+        }
+        byte[] data = new byte[valorEncontrado.size()];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = (byte) valorEncontrado.get(i);
+        }        
+        return data;
+    }
+    
     public static void main(String args[]){
         try{
             String ruta="D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357";
             // 1001 0010 1110 = 2350 / 3730
             //DATatlantis dat = new DATatlantis();
             //dat.leerDat("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357");
+            ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
             File archivo = new File(ruta);
             FileReaderAsBlocks frab = new FileReaderAsBlocks(archivo,1);
-            ArrayList valores = new ArrayList();
+            ArrayList<byte[]> valoresByteDeUnSs = new ArrayList<byte[]>();
             int i=0;
-            while (!frab.isEOF()){    
-                byte[] valorLeido = frab.readBytes();
-                if (valorLeido[0] != 0){
-                    valores.add(valorLeido);
+            while (!frab.isEOF()){
+                if (valoresByteDeUnSs.size()<29){ //cada sonda set se compone de 28 valores escritos consecutivamente
+                    byte[] byteLeido = frab.readBytes();
+                    byte[] valorEncontrado;
+                    if (byteLeido[0] != 0){
+                        valorEncontrado = DATatlantis.getInstance().getValorEncontrado(frab,byteLeido[0]);
+                        valoresByteDeUnSs.add(valorEncontrado);
+                    }
+                }else{
+                   int valor = DATatlantis.getInstance().getIntFromByteArray(valoresByteDeUnSs.get(14));
+                   sondaSets.add(DATatlantis.getInstance().getSondaSetHistoricoFromValoresLeidos(valoresByteDeUnSs));
+                   valoresByteDeUnSs = new ArrayList();
                 }
                 i++;
             }
@@ -169,13 +230,6 @@ public class DATatlantis{
         }
     }
 }
-
-
-
-
-/**
-Esta es una clase que hize, para leer archivos en bloques de bytes, espero te sirva. Saludos!
-*/
 /**
 *
 * @author Disegni
