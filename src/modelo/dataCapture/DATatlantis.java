@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -24,6 +25,11 @@ import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.PuntoHistorico;
 import modelo.dataManager.SondaSetHistorico;
+import net.sf.sevenzipjbinding.ISevenZipInArchive;
+import net.sf.sevenzipjbinding.SevenZip;
+import net.sf.sevenzipjbinding.SevenZipException;
+import net.sf.sevenzipjbinding.SevenZipNativeInitializationException;
+import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import persistencia.Logueador;
 
 
@@ -137,58 +143,36 @@ public class DATatlantis{
     
 //http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
 
-    public ArrayList<SondaSetHistorico> leerDat(String rutaFileDat){
-      File fileDat = new File(rutaFileDat);
-      ArrayList<SondaSetHistorico> sondaSets=new ArrayList();
-      try{
-        //Stream para leer archivo
-        FileInputStream inDat = new FileInputStream(fileDat);
-        boolean todoOk=true;
-        //int proximoByte=-1;
-        ByteBuffer bb;
-        byte[] buffer= new byte[1];
-        int byteLeido = avanzaNulos(inDat);
-        todoOk = todoOk && byteLeido != -1;
-        if (todoOk){
-          SondaSetHistorico unSsh = new SondaSetHistorico();
-          ArrayList nroLeido = new ArrayList();
-          int i=0;
-          while (byteLeido>-1){
-             nroLeido.add(byteLeido);
-             byteLeido=inDat.read();
-          }
-          while (byteLeido>0){//leo la variable desconocida nro 6, supongo q será de tipo int
-            //bb = ByteBuffer.wrap(nroLeido);
-            //unSsh.setVarDesconocida6(bb.getInt());
-          }
-          //byteLeido=avanzaNulos(inDat);
-          todoOk= todoOk && byteLeido != -1;
-          if (todoOk){//leo la variable desconocida nro 7, supongo q será de tipo int
-            //bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
-            //unSondaSet.setVarDesconocida7(bb.getInt());
-          }
-          byteLeido=avanzaNulos(inDat);
-          todoOk= todoOk && byteLeido != -1;
-          if (todoOk){//leo la variable FRECUENCIA, supongo q será de tipo int
-            //bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
-            //unSondaSet.setFrecuencia(bb.getInt());
-          }
-          byteLeido=avanzaNulos(inDat);
-          todoOk= todoOk && byteLeido != -1;
-          if (todoOk){//leo la variable GANANCIA, supongo q será de tipo int
-            //bb = ByteBuffer.wrap(new byte[] {0, 0, 0, byteLeido});
-            //unSondaSet.setGanancia(bb.getInt());
-          }
-          
-        }  
-        //se cierra archivo
-        //fileDat.close();
-        sondaSets=new ArrayList();
-      }
-      catch(Exception e){
-        Logueador.getInstance().agregaAlLog("Error leerDat(): "+e.toString());
-      }
-      return sondaSets;
+    public ArrayList leerDat(String rutaFileDat){
+        ArrayList valoresPorPixel = new ArrayList();
+        try{
+            File fileDat = new File(rutaFileDat);
+            ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
+            ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
+            FileReaderAsBlocks frab = new FileReaderAsBlocks(fileDat,1);
+            ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
+            int i=0;
+            while (!frab.isEOF()){
+                if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
+                    byte[] byteLeido = frab.readBytes();
+                    byte[] valorEncontrado;
+                    if (byteLeido[0] != 0){
+                        valorEncontrado = DATatlantis.getInstance().getValorEncontrado(frab,byteLeido[0]);
+                        parametrosByteDeUnPixel.add(valorEncontrado);
+                    }
+                }else{
+                   sondaSets.add(DATatlantis.getInstance().getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                   puntos.add(DATatlantis.getInstance().getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                   parametrosByteDeUnPixel = new ArrayList();
+                }
+                i++;
+            }
+            valoresPorPixel.add(sondaSets);
+            valoresPorPixel.add(puntos);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        return valoresPorPixel;
     }
     
     public int avanzaNulos(FileInputStream inDat){
@@ -243,39 +227,6 @@ public class DATatlantis{
         return calendario.getTime();
     }
     
-    public static void main(String args[]){
-        try{
-            String ruta="D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357";
-            // 1001 0010 1110 = 2350 / 3730
-            //DATatlantis dat = new DATatlantis();
-            //dat.leerDat("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357");
-            double valor = DATatlantis.getInstance().getLatEnGradosDecimalesFromString("2730.7201S");
-            ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
-            ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
-            File archivo = new File(ruta);
-            FileReaderAsBlocks frab = new FileReaderAsBlocks(archivo,1);
-            ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
-            int i=0;
-            while (!frab.isEOF()){
-                if (parametrosByteDeUnPixel.size()<29){ //cada sonda set se compone de 28 valores escritos consecutivamente
-                    byte[] byteLeido = frab.readBytes();
-                    byte[] valorEncontrado;
-                    if (byteLeido[0] != 0){
-                        valorEncontrado = DATatlantis.getInstance().getValorEncontrado(frab,byteLeido[0]);
-                        parametrosByteDeUnPixel.add(valorEncontrado);
-                    }
-                }else{
-                   sondaSets.add(DATatlantis.getInstance().getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                   puntos.add(DATatlantis.getInstance().getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                   parametrosByteDeUnPixel = new ArrayList();
-                }
-                i++;
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-    }
-
     public double getLatEnGradosDecimalesFromString(String stringFromByteArray) {
        String latitudStr = stringFromByteArray.substring(0,stringFromByteArray.length()-1);
        String latHemisf = stringFromByteArray.substring(stringFromByteArray.length()-1,stringFromByteArray.length());
@@ -298,58 +249,64 @@ public class DATatlantis{
         
 }
 class FileReaderAsBlocks {
+    FileInputStream _fileInput;
+    BufferedInputStream _stream;
+    int _longReaded; // ultima longitud de bytes leída
+    File _file;
+    int _blockLength; // tamaño del espacio de bytes
+    byte [] _block; // espacio de bytes de lectura
 
-/**
-* atributos de case para lectura de archivo
-*/
-FileInputStream _fileInput;
-BufferedInputStream _stream;
-int _longReaded; // ultima longitud de bytes leída
+    public FileReaderAsBlocks( File file , int blocksLength ) throws FileNotFoundException{
+        _file = file; //file, hace referencia al archivo que se leerá
+        _blockLength = blocksLength; //blocksLength, tamaño del bloque de lectura
+        _block = new byte[blocksLength];// se crea el espacio de bytes, en el que almacenarán las lecturas
+        _longReaded = 1;
+        open();
+    }
+    private void open() throws FileNotFoundException{
+        _fileInput = new FileInputStream(_file);//Se prepara el archivo para lectura
+        _stream = new BufferedInputStream(_fileInput);
+    }
+    public byte [] readBytes() throws IOException{
+        if(_longReaded > 0){
+            _longReaded = _stream.read(_block);
+            if(!(_longReaded > 0)){
+                close();
+                return new byte [0];
+            }
+        }
+        byte [] aux = new byte[_longReaded];
+        for (int i = 0; i < aux.length; i++) {
+            aux[i] = _block[i];
+        }
+        return aux;
+    }
+    public String readString() throws IOException{
+        return new String(readBytes(),"UTF8");
+    }
+    public boolean isEOF(){
+        return (_longReaded > 0)?false:true;
+    }
+    private void close() throws IOException{
+        _stream.close();
+    }
+}
 
-File _file;
-int _blockLength; // tamaño del espacio de bytes
-byte [] _block; // espacio de bytes de lectura
-/**
-* Constructor:
-* @param file, hace referencia al archivo que se leerá
-* @param blocksLength, tamaño del bloque de lectura
-*/
-
-public FileReaderAsBlocks( File file , int blocksLength ) throws FileNotFoundException{
-_file = file;
-_blockLength = blocksLength;
-// se crea el espacio de bytes, en el que almacenarán las lecturas
-_block = new byte[blocksLength];
-_longReaded = 1;
-open();
-}
-private void open() throws FileNotFoundException{
-//Se prepara el archivo para lectura
-_fileInput = new FileInputStream(_file);
-_stream = new BufferedInputStream(_fileInput);
-}
-public byte [] readBytes() throws IOException{
-if(_longReaded > 0){
-_longReaded = _stream.read(_block);
-if(!(_longReaded > 0)){
-close();
-return new byte [0];
-}
-}
-byte [] aux = new byte[_longReaded];
-for (int i = 0; i < aux.length; i++) {
-aux[i] = _block[i];
-
-}
-return aux;
-}
-public String readString() throws IOException{
-return new String(readBytes(),"UTF8");
-}
-public boolean isEOF(){
-return (_longReaded > 0)?false:true;
-}
-private void close() throws IOException{
-_stream.close();
-}
+class SevenZipJBindingInitCheck {
+    public static void main(String[] args) {
+        try {
+            SevenZip.initSevenZipFromPlatformJAR();
+            System.out.println("7-Zip-JBinding library was initialized");
+        } catch (SevenZipNativeInitializationException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void openArchive(String archiveFilename) throws SevenZipException, FileNotFoundException {
+        RandomAccessFile randomAccessFile = new RandomAccessFile(archiveFilename, "r");
+        ISevenZipInArchive inArchive = SevenZip.openInArchive(null, // Choose format automatically
+                new RandomAccessFileInStream(randomAccessFile));
+        inArchive.getNumberOfItems();
+        //http://sevenzipjbind.sourceforge.net/first_steps.html
+    }
 }
