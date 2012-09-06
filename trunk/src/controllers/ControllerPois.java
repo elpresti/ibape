@@ -35,16 +35,16 @@ public class ControllerPois {
     }
 
     public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud, String pathImgSonda) {
-            modelo.dataManager.POI p = new POI();
-            p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
-            p.setIdCategoriaPOI(idCategoriaPOI);
-            p.setLatitud(latitud);
-            p.setLongitud(longitud);
-            p.setDescripcion(descripcion);
-            p.setMarcas(null);//ver
-            p.setPathImg("editar en controllerPOI -pathImgSonda");//ver
-            p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
-            BrokerPOIs.getInstance().insertPOI(p);
+        modelo.dataManager.POI p = new POI();
+        p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
+        p.setIdCategoriaPOI(idCategoriaPOI);
+        p.setLatitud(latitud);
+        p.setLongitud(longitud);
+        p.setDescripcion(descripcion);
+        p.setMarcas(null);//ver
+        p.setPathImg("editar en controllerPOI -pathImgSonda");//ver
+        p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
+        BrokerPOIs.getInstance().insertPOI(p);
     }
 
     public void agregaCategoriaPOI(String titulo, String path) {
@@ -81,7 +81,8 @@ public class ControllerPois {
     public boolean isCategoriaPOILibre(int idCategoriaPOI) {
         return BrokerPOIs.getInstance().getPOISFromDBSegunCat(idCategoriaPOI).isEmpty();
     }
-        public ArrayList<String> listadoIconosCatPOI() {
+
+    public ArrayList<String> listadoIconosCatPOI() {
         String rutaIconos = modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois();
 
         File dir = new File(rutaIconos);
@@ -112,6 +113,14 @@ public class ControllerPois {
             JOptionPane.showMessageDialog(null, "No se pudo modificar la categoria POI " + unaCatPOI.getId());
         } else {
             System.out.println("CatPoi modificada: " + unaCatPOI.getId());
+        }
+    }
+
+    public void actualizarCategoria(CategoriaPoi categoriaActual, CategoriaPoi categoriaNueva) {
+        //tendria que ser una transaccion
+        for (POI unPOI : BrokerPOIs.getInstance().getPOISFromDBSegunCat(categoriaActual.getId())) {
+            unPOI.setIdCategoriaPOI(categoriaNueva.getId());
+            ControllerPois.getInstance().modificaPOI(unPOI);
         }
     }
 }

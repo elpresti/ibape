@@ -4,19 +4,13 @@
  */
 package persistencia;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
-import com.mysql.jdbc.ResultSetMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Campania;
 import modelo.dataManager.Marca;
-import modelo.dataManager.POI;
 //import sun.text.normalizer.Trie.DataManipulate;
 
 /**

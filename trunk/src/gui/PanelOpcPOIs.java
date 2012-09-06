@@ -18,7 +18,9 @@ import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.lang.Object;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -604,12 +606,12 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                     JOptionPane.WARNING_MESSAGE) == 0) {
                 int i = 0;
                 while (i < listaCatPOIsSeleccionados.length) {
-                    CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(i, 1);
+                    CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(listaCatPOIsSeleccionados[i], 1);
                     if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
                         ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
                     } else {
                         //JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
-                        int seleccion = JOptionPane.showOptionDialog(
+                        int opcion = JOptionPane.showOptionDialog(
                                 null,
                                 "Existen POIs en alguna campaña con la categoria que se quiere eliminar, ¿que desea hacer con la categoria?",
                                 "Seleccione una opcion",
@@ -617,22 +619,44 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                                 JOptionPane.QUESTION_MESSAGE,
                                 null,
                                 new Object[]{"Eliminar los POIs con dicha categoria", "Asignar otra categoria a los POIs dependientes"}, // null para YES, NO y CANCEL
-                                "Eliminar POIs con la categoria");
-                        if (seleccion == 0) {
-                            System.out.println("borro todo");
-                        }
-                        if (seleccion == 1) {
-                            System.out.println("asigno");
+                                null);
+                        switch (opcion) {
+                            case 0: {
+                                System.out.println("borro todo");
+                                for (POI unPOI : BrokerPOIs.getInstance().getPOISFromDBSegunCat(unaCatPOI.getId())) {
+                                    ControllerPois.getInstance().eliminaPOI(unPOI);
+                                }
+                            }
+                            case 1: {
+                                System.out.println("asigno");
+                                ArrayList a = controllers.ControllerPois.getInstance().cargaCategoriasPOI();
+                                a.remove(unaCatPOI); //saco la categoria que se elimina
+                                Object[] o = a.toArray();
+
+                                Object nuevaCat = JOptionPane.showInputDialog(
+                                        null,
+                                        "Seleccione la nueva categoria",
+                                        "Selector de opciones",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        o,
+                                        null);
+                                if (nuevaCat != null) {
+                                    ControllerPois.getInstance().actualizarCategoria(unaCatPOI, (CategoriaPoi) nuevaCat); //cambia todos los pois con la categoria vieja por la nueva
+                                    //tendria q ser una transaccion
+                                    if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
+                                        ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "No se pudieron actualizar todos los POIs");
+                                    }
+
+                                }
+                            }
                         }
                     }
                     i++;
                 }
-                /*      
-                for (int i = 0; i < tablaPois.getRowCount(); i++) {
-                if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
-                controllers.ControllerPois.getInstance().eliminaPOI((POI) tablaPois.getValueAt(i, 0));
-                }
-                }*/
+                cargaGrillaPOIS();
                 cargaGrillaCategoriaPOIS();
                 cargaComboCategorias();
             }
@@ -975,7 +999,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         campoLatitud.setEnabled(estado);
         campoLongitud.setEnabled(estado);
         campoDescripcionNuevoPoi.setEnabled(estado);
-        campoNombreNuevaCat.setEnabled(estado);
         lblLatitud.setEnabled(estado);
         lblLongitud.setEnabled(estado);
         lblCategoria.setEnabled(estado);

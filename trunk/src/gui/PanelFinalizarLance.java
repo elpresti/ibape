@@ -37,11 +37,11 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaCajones = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
-                "idLance", "# Cajones", "Especie", "Acciones"
+                "idLance", "# Cajones", "Especie"//, "Acciones"
             }) {
 
         Class[] types = new Class[]{
-            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };
 
         @Override
@@ -149,14 +149,14 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
             },
             new String [] {
-                "# Cajones", "Especie", "Acciones"
+                "# Cajones", "Especie"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
+                java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -172,8 +172,6 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         tablaCajones.getColumnModel().getColumn(0).setPreferredWidth(40);
         tablaCajones.getColumnModel().getColumn(1).setMinWidth(350);
         tablaCajones.getColumnModel().getColumn(1).setPreferredWidth(350);
-        tablaCajones.getColumnModel().getColumn(2).setMinWidth(30);
-        tablaCajones.getColumnModel().getColumn(2).setPreferredWidth(30);
 
         javax.swing.GroupLayout panelTablaLayout = new javax.swing.GroupLayout(panelTabla);
         panelTabla.setLayout(panelTablaLayout);
@@ -312,7 +310,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(80, 50));
         panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12));
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -542,7 +540,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     private void inicializador() {
         cargaComboEspecies();
         cargaComboSuceso();
-       // habilitaPanelDatosCajones(false);
+        // habilitaPanelDatosCajones(false);
     }
 
     private void cargaComboEspecies() {
@@ -592,16 +590,16 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     }
 
     private void eliminarCajon() {
-       /* if (JOptionPane.showConfirmDialog(null,
-                "Desea eliminar los cajones seleccionados?",
-                "Eliminar cajones",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE) == 0) {
-            for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-                if ((Boolean) tablaCajones.getValueAt(i, tablaCajones.getColumnCount(false) - 1)) {
-                    ControllerLance.getInstance().borrarCajon((Cajon) tablaCajones.getValueAt(i, 0));
-                }
-            }
+        /* if (JOptionPane.showConfirmDialog(null,
+        "Desea eliminar los cajones seleccionados?",
+        "Eliminar cajones",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE) == 0) {
+        for (int i = 0; i < tablaCajones.getRowCount(); i++) {
+        if ((Boolean) tablaCajones.getValueAt(i, tablaCajones.getColumnCount(false) - 1)) {
+        ControllerLance.getInstance().borrarCajon((Cajon) tablaCajones.getValueAt(i, 0));
+        }
+        }
         }
         cargaGrillaCajones();*/
     }
@@ -612,21 +610,30 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
     private void cargaGrillaCajones() {
         int cantCols = 4;
-        Cajon unCajon;
         ArrayList a = new ArrayList();
         modeloTablaCajones.setRowCount(0);//vacia la tabla
         //ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);//da exeption
         ArrayList<Cajon> b = ControllerLance.getInstance().getListadoCajones();
-        for (int i = 0; i < b.size(); i++/*BrokerCajon.getInstance().getCajonesLanceFromDB(ALLBITS)*/) {
+
+        for (Cajon unCajon : ControllerLance.getInstance().getListadoCajones()) {
+            modeloTablaCajones.addRow(new Object[]{
+                        unCajon,//<--Aca esta el objeto -muestra idLance
+                        unCajon.getCantidad(),
+                        BrokerEspecie.getInstance().getEspecieFromDB(unCajon.getIdEspecie()).getNombre()
+                    });
+        }
+
+/*
+        for (int i = 0; i < b.size(); i++) {
             a.add(b.get(i));//<--Aca esta el objeto -muestra idLance
             a.add(b.get(i).getCantidad());
-            a.add(BrokerEspecie.getInstance().getEspecieFromDB(b.get(i).getIdEspecie()).getNombre()/*unCajon.getIdEspecie()*/);
+            a.add(BrokerEspecie.getInstance().getEspecieFromDB(b.get(i).getIdEspecie()).getNombre());//unCajon.getIdEspecie());
             a.add("false");
             //insertar la fila 
             modeloTablaCajones.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
             a.clear();
 
-        }
+        }*/
         tablaCajones.setModel(modeloTablaCajones);
         ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
     }
