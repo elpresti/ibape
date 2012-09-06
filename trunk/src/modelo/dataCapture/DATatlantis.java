@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.PuntoHistorico;
 import modelo.dataManager.SondaSetHistorico;
 import persistencia.Logueador;
 
@@ -34,6 +35,8 @@ import persistencia.Logueador;
 /**
 Esta es una clase que hize, para leer archivos en bloques de bytes, espero te sirva. Saludos!
 */
+
+
 /**
  *
  * @author Sebastian
@@ -45,27 +48,27 @@ public class DATatlantis{
     private String datFileName;
     private String conversorFileName;
     private String sevenZLibFileName;
-    private static final byte NRO_COL_FRECUENCIA=0;
-    private static final byte NRO_COL_GANANCIA=1;
-    private static final byte NRO_COL_STC=2;
-    private static final byte NRO_COL_LW=3;
-    private static final byte NRO_COL_GS=4;
-    private static final byte NRO_COL_ESCALA=5;
-    private static final byte NRO_COL_SHIFT=6;
-    private static final byte NRO_COL_EXPANDER=7;
-    private static final byte NRO_COL_UNIDAD=8;
-    private static final byte NRO_COL_UNIDAD_MEDIDA=9;
-    private static final byte NRO_COL_HORA=10;
-    private static final byte NRO_COL_LATITUD=11;
-    private static final byte NRO_COL_EO=12;
-    private static final byte NRO_COL_LONGITUD=13;
-    private static final byte NRO_COL_NS=14;
-    private static final byte NRO_COL_VELOCIDAD=15;
-    private static final byte NRO_COL_RUMBO=16;
-    private static final byte NRO_COL_FECHA=17;
-    private static final byte NRO_COL_VELOCIDADPROM=18;
-    private static final byte NRO_COL_PROFUNDIDAD=19;
-    private static final byte NRO_COL_TEMPERATURA=20;    
+    private static final byte NRO_COL_FRECUENCIA=2;
+    private static final byte NRO_COL_GANANCIA=3;
+    private static final byte NRO_COL_STC=4;
+    private static final byte NRO_COL_LW=5;
+    private static final byte NRO_COL_GS=6;
+    private static final byte NRO_COL_ESCALA=7;
+    private static final byte NRO_COL_SHIFT=8;
+    private static final byte NRO_COL_EXPANDER=9;
+    private static final byte NRO_COL_UNIDAD=15;
+    private static final byte NRO_COL_UNIDAD_MEDIDA=16;
+    private static final byte NRO_COL_HORA=19;
+    private static final byte NRO_COL_LATITUD=21;
+    private static final byte NRO_COL_EO=22;
+    private static final byte NRO_COL_LONGITUD=23;
+    private static final byte NRO_COL_NS=24;
+    private static final byte NRO_COL_VELOCIDAD=25;
+    private static final byte NRO_COL_RUMBO=26;
+    private static final byte NRO_COL_FECHA=27;
+    private static final byte NRO_COL_VELOCIDADPROM=11;
+    private static final byte NRO_COL_PROFUNDIDAD=14;
+    private static final byte NRO_COL_TEMPERATURA=18;//mentira, no se cual de las variables leidas es la temperatura
     
     private DATatlantis(){
         inicializador();
@@ -81,28 +84,56 @@ public class DATatlantis{
     private void inicializador(){
     }
 
-    private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos(ArrayList valoresByteDeUnSsh) {
+    private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
         SondaSetHistorico ssh = new SondaSetHistorico();
-        
+        ssh.setEscala((int)(2.5*getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_ESCALA))));
+        ssh.setExpander((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_EXPANDER)));
+        ssh.setFrecuencia((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_FRECUENCIA)));
+        ssh.setGanancia((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_GANANCIA)));
+        ssh.setLineaBlanca((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LW)));
+        ssh.setShift((int)(2.5*getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_SHIFT))));
+        ssh.setStc((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_STC)));
+        ssh.setUnidadDeEscala((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_UNIDAD_MEDIDA)));
+        ssh.setVelPantalla((int)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_GS)));
         return ssh;
     }
-    
-    private int getIntFromByteArray(byte[] byteArray){
-        int salida = 0;
+
+    private PuntoHistorico getPuntoHistoricoFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
+        PuntoHistorico ph = new PuntoHistorico();
+        ph.setFechaYhora(armaDate(Integer.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_FECHA))), 
+                Integer.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_HORA)))));
+        ph.setLatitud(getLatEnGradosDecimalesFromString(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LATITUD))));
+        ph.setLongitud(getLonEnGradosDecimalesFromString(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LONGITUD))));
+        ph.setProfundidad((double)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_PROFUNDIDAD)));
+        ph.setRumbo(Double.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_RUMBO))));
+        ph.setVelocidad(Double.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_VELOCIDAD))));
+        return ph;
+    }
+   
+    private long getLongFromByteArray(byte[] byteArray){
+        long salida = 0;
         try{
             byte[] nro = new byte[] {0, 0, 0, 0, 0, 0, 0, 0};
             for (int i=0;i<byteArray.length;i++){
                 nro[nro.length-i-1] = byteArray[i];
             }            
             ByteBuffer bb = ByteBuffer.wrap(nro);
-            long l =bb.getLong();
-            salida = (int)l;
+            salida =bb.getLong();
         }catch(Exception e){
-            Logueador.getInstance().agregaAlLog("getIntFromByteArray(): "+e.toString());
+            Logueador.getInstance().agregaAlLog("getLongFromByteArray(): "+e.toString());
         }
         return salida;
     }
-    
+
+    private String getStringFromByteArray(byte[] byteArray){        
+        String salida = "";
+        try{
+            salida = new String (byteArray);;
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("getStringFromByteArray(): "+e.toString());
+        }
+        return salida;
+    }
     
 //http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
 
@@ -199,29 +230,44 @@ public class DATatlantis{
         return data;
     }
     
+    public Date armaDate(int fecha, int horario) {
+        int hora = Integer.parseInt(String.valueOf(horario).substring(0, 2));
+        int minutos = Integer.parseInt(String.valueOf(horario).substring(2, 4));
+        int segundos = Integer.parseInt(String.valueOf(horario).substring(4, 6));
+        int dia = Integer.parseInt(String.valueOf(fecha).substring(0, 2));
+        int mes = Integer.parseInt(String.valueOf(fecha).substring(2, 4));
+        int anio = Integer.parseInt(String.valueOf(fecha).substring(4, 6));
+        
+        Calendar calendario = Calendar.getInstance();
+        calendario.set(anio, mes-1, dia, hora, minutos, segundos);        
+        return calendario.getTime();
+    }
+    
     public static void main(String args[]){
         try{
             String ruta="D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357";
             // 1001 0010 1110 = 2350 / 3730
             //DATatlantis dat = new DATatlantis();
             //dat.leerDat("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357");
+            double valor = DATatlantis.getInstance().getLatEnGradosDecimalesFromString("2730.7201S");
             ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
+            ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
             File archivo = new File(ruta);
             FileReaderAsBlocks frab = new FileReaderAsBlocks(archivo,1);
-            ArrayList<byte[]> valoresByteDeUnSs = new ArrayList<byte[]>();
+            ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
             int i=0;
             while (!frab.isEOF()){
-                if (valoresByteDeUnSs.size()<29){ //cada sonda set se compone de 28 valores escritos consecutivamente
+                if (parametrosByteDeUnPixel.size()<29){ //cada sonda set se compone de 28 valores escritos consecutivamente
                     byte[] byteLeido = frab.readBytes();
                     byte[] valorEncontrado;
                     if (byteLeido[0] != 0){
                         valorEncontrado = DATatlantis.getInstance().getValorEncontrado(frab,byteLeido[0]);
-                        valoresByteDeUnSs.add(valorEncontrado);
+                        parametrosByteDeUnPixel.add(valorEncontrado);
                     }
                 }else{
-                   int valor = DATatlantis.getInstance().getIntFromByteArray(valoresByteDeUnSs.get(14));
-                   sondaSets.add(DATatlantis.getInstance().getSondaSetHistoricoFromValoresLeidos(valoresByteDeUnSs));
-                   valoresByteDeUnSs = new ArrayList();
+                   sondaSets.add(DATatlantis.getInstance().getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                   puntos.add(DATatlantis.getInstance().getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                   parametrosByteDeUnPixel = new ArrayList();
                 }
                 i++;
             }
@@ -229,11 +275,28 @@ public class DATatlantis{
             System.out.println(e);
         }
     }
+
+    public double getLatEnGradosDecimalesFromString(String stringFromByteArray) {
+       String latitudStr = stringFromByteArray.substring(0,stringFromByteArray.length()-1);
+       String latHemisf = stringFromByteArray.substring(stringFromByteArray.length()-1,stringFromByteArray.length());
+       double latitud = Double.valueOf(latitudStr.substring(0, 2)) + (Double.valueOf(latitudStr.substring(2, latitudStr.length()))/60);
+       if (latHemisf.toLowerCase().contains("s")){
+           latitud=latitud*(-1);
+       }
+       return latitud;
+    }
+
+    public double getLonEnGradosDecimalesFromString(String stringFromByteArray) {
+       String longitudStr = stringFromByteArray.substring(0,stringFromByteArray.length()-1);
+       String lonHemisf = stringFromByteArray.substring(stringFromByteArray.length()-1,stringFromByteArray.length());
+       double longitud = Double.valueOf(longitudStr.substring(0, 3)) + (Double.valueOf(longitudStr.substring(3, longitudStr.length()))/60);
+       if (lonHemisf.toLowerCase().contains("w")){
+           longitud=longitud*(-1);
+       }
+       return longitud;
+    }
+        
 }
-/**
-*
-* @author Disegni
-*/
 class FileReaderAsBlocks {
 
 /**
