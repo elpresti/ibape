@@ -95,7 +95,7 @@ public class Csv {
                             expanderLeido = Integer.parseInt(sondaSets.get(NRO_COL_EXPANDER).trim());
                             shiftLeido = Integer.parseInt(sondaSets.get(NRO_COL_SHIFT).trim());
                             unidadLeida = Integer.parseInt(sondaSets.get(NRO_COL_UNIDAD).trim());
-                            fechaYhoraLeida = armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),
+                            fechaYhoraLeida = DATatlantis.getInstance().armaDate(Integer.parseInt(sondaSets.get(NRO_COL_FECHA).trim()),
                                         Integer.parseInt(sondaSets.get(NRO_COL_HORA).trim()));
                             if (frecuenciaLeida != ssAnterior.getFrecuencia() || 
                                 gananciaLeida != ssAnterior.getGanancia() || 
@@ -161,19 +161,6 @@ public class Csv {
      */
     public void setUltimoCsvLeido(String ultimoCsvLeido) {
         this.ultimoCsvLeido = ultimoCsvLeido;
-    }
-
-    private Date armaDate(int fecha, int horario) {
-        int hora = Integer.parseInt(String.valueOf(horario).substring(0, 2));
-        int minutos = Integer.parseInt(String.valueOf(horario).substring(2, 4));
-        int segundos = Integer.parseInt(String.valueOf(horario).substring(4, 6));
-        int dia = Integer.parseInt(String.valueOf(fecha).substring(0, 2));
-        int mes = Integer.parseInt(String.valueOf(fecha).substring(2, 4));
-        int anio = Integer.parseInt(String.valueOf(fecha).substring(4, 6));
-        
-        Calendar calendario = Calendar.getInstance();
-        calendario.set(anio, mes-1, dia, hora, minutos, segundos);        
-        return calendario.getTime();
     }
 
     
@@ -253,7 +240,7 @@ public class Csv {
                     datosPixelX.setVelocidad(Double.parseDouble(docCsv.get(NRO_COL_VELOCIDAD).trim()));
                     datosPixelX.setVelocidadProm(Double.parseDouble(docCsv.get(NRO_COL_VELOCIDADPROM).trim()));
                     datosPixelX.setFechaYhora(                    
-                                    armaDate(Integer.parseInt(docCsv.get(NRO_COL_FECHA).trim()),
+                                    DATatlantis.getInstance().armaDate(Integer.parseInt(docCsv.get(NRO_COL_FECHA).trim()),
                                     Integer.parseInt(docCsv.get(NRO_COL_HORA).trim()))
                             );
                     String latitud = docCsv.get(NRO_COL_LATITUD).trim();
