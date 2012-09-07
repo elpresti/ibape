@@ -17,6 +17,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -25,11 +26,15 @@ import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.PuntoHistorico;
 import modelo.dataManager.SondaSetHistorico;
+import net.sf.sevenzipjbinding.ExtractOperationResult;
+import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.ISevenZipInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
 import net.sf.sevenzipjbinding.SevenZipNativeInitializationException;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
+import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
+import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import persistencia.Logueador;
 
 
@@ -43,15 +48,18 @@ Esta es una clase que hize, para leer archivos en bloques de bytes, espero te si
 */
 
 
+
+
 /**
  *
  * @author Sebastian
  */
 public class DATatlantis{
     private static DATatlantis unicaInstancia;
-
+    private byte[] datosDescomprimidos;
     private String ultimoDatLeido;
     private String datFileName;
+    private int indiceDat;
     private String conversorFileName;
     private String sevenZLibFileName;
     private static final byte NRO_COL_FRECUENCIA=2;
@@ -88,6 +96,7 @@ public class DATatlantis{
     }
 
     private void inicializador(){
+        setDatosDescomprimidos(null);
     }
 
     private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
@@ -146,47 +155,63 @@ public class DATatlantis{
     public ArrayList leerDat(String rutaFileDat){
         ArrayList valoresPorPixel = new ArrayList();
         try{
-            File fileDat = new File(rutaFileDat);
-            ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
-            ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
-            FileReaderAsBlocks frab = new FileReaderAsBlocks(fileDat,1);
-            ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
-            int i=0;
-            while (!frab.isEOF()){
-                if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
-                    byte[] byteLeido = frab.readBytes();
-                    byte[] valorEncontrado;
-                    if (byteLeido[0] != 0){
-                        valorEncontrado = DATatlantis.getInstance().getValorEncontrado(frab,byteLeido[0]);
-                        parametrosByteDeUnPixel.add(valorEncontrado);
+            if (decompressData(rutaFileDat)){ 
+                ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
+                ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();           
+                ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
+                setIndiceDat(0);
+                while (getIndiceDat()<getDatosDescomprimidos().length){
+                    if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
+                        byte byteLeido = getDatosDescomprimidos()[getIndiceDat()];
+                        byte[] valorEncontrado;
+                        if (byteLeido != 0){
+                            valorEncontrado = getValorEncontrado(byteLeido);
+                            parametrosByteDeUnPixel.add(valorEncontrado);
+                        }
+                    }else{
+                        setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
+                        try{ 
+                            if (sondaSets.size()==131){
+                                sondaSets.size();
+                             }
+                            sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                            puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                        }catch(Exception e){
+                            Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros byte leidos del pixel "+(sondaSets.size()-1));
+                        }
+                        parametrosByteDeUnPixel = new ArrayList();
                     }
-                }else{
-                   sondaSets.add(DATatlantis.getInstance().getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                   puntos.add(DATatlantis.getInstance().getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                   parametrosByteDeUnPixel = new ArrayList();
+                    setIndiceDat(getIndiceDat()+1);
                 }
-                i++;
+                valoresPorPixel.add(sondaSets);
+                valoresPorPixel.add(puntos);                
+            }else{
+                Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
             }
-            valoresPorPixel.add(sondaSets);
-            valoresPorPixel.add(puntos);
         }catch(Exception e){
             System.out.println(e);
         }
         return valoresPorPixel;
     }
-    
-    public int avanzaNulos(FileInputStream inDat){
+ 
+/*
+    public int avanzaNulos(){
       int ultimoNoNulo=-1;
-      byte[] buffer = new byte[1];
       try{ 
-        int byteLeido=inDat.read(buffer);
-        int i = 0;
-        while(byteLeido!=-1 && byteLeido==0){//tiene q avanzar siempre q no sea EOF y haya nulos
-          byteLeido=inDat.read(buffer);
-          i++;
-        }
-        if (byteLeido != -1){
-            ultimoNoNulo= (byte) byteLeido;
+           byte byteLeido;
+           boolean salir = false;
+           setIndiceDat(getIndiceDat()+1);
+           while (getIndiceDat()<getDatosDescomprimidos().length && 
+                   !salir){
+               byteLeido = getDatosDescomprimidos()[getIndiceDat()];
+               if (byteLeido !=0){
+                   salir=true;
+               }else{
+                   setIndiceDat(getIndiceDat()+1);
+               }
+           }
+           if (salir){
+              ultimoNoNulo= (byte) byteLeido;
         }
       }
       catch(Exception e){
@@ -194,15 +219,23 @@ public class DATatlantis{
       }
       return ultimoNoNulo;
     }
-
-    private byte[] getValorEncontrado(FileReaderAsBlocks frab, byte valorLeido) {
+*/
+    private byte[] getValorEncontrado(byte valorLeido) {
         ArrayList<Byte> valorEncontrado = new ArrayList<Byte>();
         try{
             valorEncontrado.add(valorLeido);
-            byte[] nuevoValorLeido = frab.readBytes();
-            while (!frab.isEOF() && nuevoValorLeido[0] != 0){
-                valorEncontrado.add(nuevoValorLeido[0]);
-                nuevoValorLeido = frab.readBytes();
+            setIndiceDat(getIndiceDat()+1);
+            byte nuevoValorLeido;
+            boolean salir = false;
+            while (getIndiceDat()<getDatosDescomprimidos().length && 
+                    !salir){
+                nuevoValorLeido = getDatosDescomprimidos()[getIndiceDat()];
+                if (nuevoValorLeido !=0){
+                    valorEncontrado.add(nuevoValorLeido);
+                    setIndiceDat(getIndiceDat()+1);
+                }else{
+                    salir=true;
+                }
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("getValorEncontrado(): "+e.toString());
@@ -246,8 +279,106 @@ public class DATatlantis{
        }
        return longitud;
     }
-        
+
+    public byte[] byteArrayConcat(byte[] array1, byte[] array2){
+        if (array1==null){
+            array1= new byte[0];
+        }
+        if (array2==null){
+            array2=new byte[0];
+        }
+        byte[] salida = new byte[array1.length + array2.length]; 
+        System.arraycopy(array1, 0, salida, 0, array1.length);
+        System.arraycopy(array2, 0, salida, array1.length, array2.length);        
+        return salida;
+    }
+    
+    public boolean decompressData(String rutaDat) {
+        boolean sePudo=false;
+        ISevenZipInArchive inArchive = null;
+        RandomAccessFile randomAccessFile = null;
+        try {
+            randomAccessFile = new RandomAccessFile(rutaDat, "r");
+            inArchive = SevenZip.openInArchive(null, // autodetect archive type
+                    new RandomAccessFileInStream(randomAccessFile));
+            // Getting simple interface of the archive inArchive
+            ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
+            ISimpleInArchiveItem item = simpleInArchive.getArchiveItem(0);
+            final int[] hash = new int[] { 0 };
+            final long[] sizeArray = new long[1];
+            ExtractOperationResult result = item.extractSlow(new ISequentialOutStream() {
+                public int write(byte[] data) throws SevenZipException {
+                    hash[0] ^= Arrays.hashCode(data); // Consume data
+                    sizeArray[0] += data.length; 
+                    if (data != null && data.length>0){
+                       setDatosDescomprimidos(byteArrayConcat(getDatosDescomprimidos(), data));
+                    }
+                    return data.length; // Return amount of consumed data
+                }
+            });
+            if (result == ExtractOperationResult.OK) {
+                sePudo=true;
+            } else {
+                setDatosDescomprimidos(null);
+                Logueador.getInstance().agregaAlLog("Error extracting item: " + result.toString());
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("Error occurs: " + e);
+        } finally {
+            if (inArchive != null) {
+                try {
+                    inArchive.close();
+                } catch (SevenZipException e) {
+                    Logueador.getInstance().agregaAlLog("Error closing archive: " + e);
+                }
+            }
+            if (randomAccessFile != null) {
+                try {
+                    randomAccessFile.close();
+                } catch (IOException e) {
+                    Logueador.getInstance().agregaAlLog("Error closing file: " + e);
+                }
+            }
+        }
+        return sePudo;
+    }
+
+    /**
+     * @return the datosDescomprimidos
+     */
+    public byte[] getDatosDescomprimidos() {
+        return datosDescomprimidos;
+    }
+
+    /**
+     * @param datosDescomprimidos the datosDescomprimidos to set
+     */
+    public void setDatosDescomprimidos(byte[] datosDescomprimidos) {
+        this.datosDescomprimidos = datosDescomprimidos;
+    }
+
+    /**
+     * @return the indiceDat
+     */
+    public int getIndiceDat() {
+        return indiceDat;
+    }
+
+    /**
+     * @param indiceDat the indiceDat to set
+     */
+    public void setIndiceDat(int indiceDat) {
+        this.indiceDat = indiceDat;
+    }
+
+    public static void main(String args[]){
+        //ExtractItemsSimple eis = new ExtractItemsSimple();
+        //eis.disparar();
+        DATatlantis dat = new DATatlantis();
+        dat.leerDat("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357.dat");
+    }
 }
+
 class FileReaderAsBlocks {
     FileInputStream _fileInput;
     BufferedInputStream _stream;
@@ -291,12 +422,14 @@ class FileReaderAsBlocks {
         _stream.close();
     }
 }
-
+/*
 class SevenZipJBindingInitCheck {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SevenZipException, FileNotFoundException {
         try {
             SevenZip.initSevenZipFromPlatformJAR();
             System.out.println("7-Zip-JBinding library was initialized");
+            SevenZipJBindingInitCheck sevenZbinding = new SevenZipJBindingInitCheck();
+            sevenZbinding.openArchive("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357.dat");
         } catch (SevenZipNativeInitializationException e) {
             e.printStackTrace();
         }
@@ -310,3 +443,70 @@ class SevenZipJBindingInitCheck {
         //http://sevenzipjbind.sourceforge.net/first_steps.html
     }
 }
+
+*/
+class ExtractItemsSimple {
+    //public static void main(String[] args) {
+    public void disparar(){
+        String rutaDat = "D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357.dat";
+//        if (jajajaja.length == 0) {
+//            System.out.println("Usage: java ExtractItemsSimple <archive-name>");
+//            return;
+//        }
+        RandomAccessFile randomAccessFile = null;
+        ISevenZipInArchive inArchive = null;
+        try {
+            randomAccessFile = new RandomAccessFile(rutaDat, "r");
+            inArchive = SevenZip.openInArchive(null, // autodetect archive type
+                    new RandomAccessFileInStream(randomAccessFile));
+
+            // Getting simple interface of the archive inArchive
+            ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
+
+            System.out.println("   Hash   |    Size    | Filename");
+            System.out.println("----------+------------+---------");
+
+            for (ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
+                final int[] hash = new int[] { 0 };
+                if (!item.isFolder()) {
+                    ExtractOperationResult result;
+
+                    final long[] sizeArray = new long[1];
+                    result = item.extractSlow(new ISequentialOutStream() {
+                        public int write(byte[] data) throws SevenZipException {
+                            hash[0] ^= Arrays.hashCode(data); // Consume data
+                            sizeArray[0] += data.length;
+                            return data.length; // Return amount of consumed data
+                        }
+                    });
+                    if (result == ExtractOperationResult.OK) {
+                        System.out.println(String.format("%9X | %10s | %s", // 
+                                hash[0], sizeArray[0], item.getPath()));
+                    } else {
+                        System.err.println("Error extracting item: " + result);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error occurs: " + e);
+            System.exit(1);
+        } finally {
+            if (inArchive != null) {
+                try {
+                    inArchive.close();
+                } catch (SevenZipException e) {
+                    System.err.println("Error closing archive: " + e);
+                }
+            }
+            if (randomAccessFile != null) {
+                try {
+                    randomAccessFile.close();
+                } catch (IOException e) {
+                    System.err.println("Error closing file: " + e);
+                }
+            }
+        }
+    }
+}
+/*
+*/
