@@ -58,10 +58,13 @@ public class DATatlantis{
     private static DATatlantis unicaInstancia;
     private byte[] datosDescomprimidos;
     private String ultimoDatLeido;
+    private Date fechaYhoraUltimoDatLeido;
+    private ArrayList datosFromDat;
     private String datFileName;
     private int indiceDat;
     private String conversorFileName;
-    private String sevenZLibFileName;
+    private static final byte NRO_COL_DESC6=0;
+    private static final byte NRO_COL_DESC7=1;
     private static final byte NRO_COL_FRECUENCIA=2;
     private static final byte NRO_COL_GANANCIA=3;
     private static final byte NRO_COL_STC=4;
@@ -70,9 +73,17 @@ public class DATatlantis{
     private static final byte NRO_COL_ESCALA=7;
     private static final byte NRO_COL_SHIFT=8;
     private static final byte NRO_COL_EXPANDER=9;
+    private static final byte NRO_COL_DESC2=10;
+    private static final byte NRO_COL_VELOCIDADPROM=11;
+    private static final byte NRO_COL_DESC5=12;
+    private static final byte NRO_COL_PROFUNDIDAD=14;
     private static final byte NRO_COL_UNIDAD=15;
     private static final byte NRO_COL_UNIDAD_MEDIDA=16;
+    private static final byte NRO_COL_DESC1=17;
+    private static final byte NRO_COL_DESC3=18;
+    private static final byte NRO_COL_TEMPERATURA=18;//mentira, no se cual de las variables leidas es la temperatura
     private static final byte NRO_COL_HORA=19;
+    private static final byte NRO_COL_DESC4=20;
     private static final byte NRO_COL_LATITUD=21;
     private static final byte NRO_COL_EO=22;
     private static final byte NRO_COL_LONGITUD=23;
@@ -80,9 +91,8 @@ public class DATatlantis{
     private static final byte NRO_COL_VELOCIDAD=25;
     private static final byte NRO_COL_RUMBO=26;
     private static final byte NRO_COL_FECHA=27;
-    private static final byte NRO_COL_VELOCIDADPROM=11;
-    private static final byte NRO_COL_PROFUNDIDAD=14;
-    private static final byte NRO_COL_TEMPERATURA=18;//mentira, no se cual de las variables leidas es la temperatura
+    private static final byte NRO_COL_DESC8=28;
+    
     
     private DATatlantis(){
         inicializador();
@@ -152,8 +162,10 @@ public class DATatlantis{
     
 //http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
 
-    public ArrayList leerDat(String rutaFileDat){
+    public boolean leerDat(String rutaFileDat){
+        boolean sePudo=false;
         ArrayList valoresPorPixel = new ArrayList();
+        ArrayList pixelesConErrorAlGuardarValores = new ArrayList();
         try{
             if (decompressData(rutaFileDat)){ 
                 ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
@@ -171,55 +183,33 @@ public class DATatlantis{
                     }else{
                         setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
                         try{ 
-                            if (sondaSets.size()==131){
-                                sondaSets.size();
-                             }
                             sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
                             puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
                         }catch(Exception e){
-                            Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros byte leidos del pixel "+(sondaSets.size()-1));
+                            pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
                         }
                         parametrosByteDeUnPixel = new ArrayList();
                     }
                     setIndiceDat(getIndiceDat()+1);
                 }
                 valoresPorPixel.add(sondaSets);
-                valoresPorPixel.add(puntos);                
+                valoresPorPixel.add(puntos);
+                sePudo=true;
             }else{
                 Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
             }
         }catch(Exception e){
             System.out.println(e);
         }
-        return valoresPorPixel;
-    }
- 
-/*
-    public int avanzaNulos(){
-      int ultimoNoNulo=-1;
-      try{ 
-           byte byteLeido;
-           boolean salir = false;
-           setIndiceDat(getIndiceDat()+1);
-           while (getIndiceDat()<getDatosDescomprimidos().length && 
-                   !salir){
-               byteLeido = getDatosDescomprimidos()[getIndiceDat()];
-               if (byteLeido !=0){
-                   salir=true;
-               }else{
-                   setIndiceDat(getIndiceDat()+1);
-               }
-           }
-           if (salir){
-              ultimoNoNulo= (byte) byteLeido;
+        if (pixelesConErrorAlGuardarValores.size()>0){
+            Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
         }
-      }
-      catch(Exception e){
-        Logueador.getInstance().agregaAlLog("Error avanzaNulos(): "+e.toString());
-      }
-      return ultimoNoNulo;
+        setUltimoDatLeido(rutaFileDat);
+        setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
+        setDatosFromDat(valoresPorPixel);
+        return sePudo;
     }
-*/
+
     private byte[] getValorEncontrado(byte valorLeido) {
         ArrayList<Byte> valorEncontrado = new ArrayList<Byte>();
         try{
@@ -374,139 +364,192 @@ public class DATatlantis{
     public static void main(String args[]){
         //ExtractItemsSimple eis = new ExtractItemsSimple();
         //eis.disparar();
+        String rutaDat = "C:\\Practicas\\Ibape\\HISTORY\\-0169-100511-185838.dat";
         DATatlantis dat = new DATatlantis();
-        dat.leerDat("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357.dat");
+        if (dat.leerDat(rutaDat)){
+            dat.getDatosFromDat();
+        }
+    }
+
+    /**
+     * @return the datosFromDat
+     */
+    public ArrayList getDatosFromDat() {
+        return datosFromDat;
+    }
+
+    /**
+     * @param datosFromDat the datosFromDat to set
+     */
+    public void setDatosFromDat(ArrayList datosFromDat) {
+        this.datosFromDat = datosFromDat;
+    }
+
+    /**
+     * @return the fechaYhoraUltimoDatLeido
+     */
+    public Date getFechaYhoraUltimoDatLeido() {
+        return fechaYhoraUltimoDatLeido;
+    }
+
+    /**
+     * @param fechaYhoraUltimoDatLeido the fechaYhoraUltimoDatLeido to set
+     */
+    public void setFechaYhoraUltimoDatLeido(Date fechaYhoraUltimoDatLeido) {
+        this.fechaYhoraUltimoDatLeido = fechaYhoraUltimoDatLeido;
+    }
+
+    /**
+     * @return the ultimoDatLeido
+     */
+    public String getUltimoDatLeido() {
+        return ultimoDatLeido;
+    }
+
+    /**
+     * @param ultimoDatLeido the ultimoDatLeido to set
+     */
+    public void setUltimoDatLeido(String ultimoDatLeido) {
+        this.ultimoDatLeido = ultimoDatLeido;
     }
 }
 
-class FileReaderAsBlocks {
-    FileInputStream _fileInput;
-    BufferedInputStream _stream;
-    int _longReaded; // ultima longitud de bytes leída
-    File _file;
-    int _blockLength; // tamaño del espacio de bytes
-    byte [] _block; // espacio de bytes de lectura
+class DatosDesconocidosFromDat{
+    private int id;
+    private int varDesconocida1;
+    private int varDesconocida2;
+    private int varDesconocida3;
+    private int varDesconocida4;
+    private int varDesconocida5;
+    private int varDesconocida6;
+    private int varDesconocida7;
+    private int varDesconocida8;
 
-    public FileReaderAsBlocks( File file , int blocksLength ) throws FileNotFoundException{
-        _file = file; //file, hace referencia al archivo que se leerá
-        _blockLength = blocksLength; //blocksLength, tamaño del bloque de lectura
-        _block = new byte[blocksLength];// se crea el espacio de bytes, en el que almacenarán las lecturas
-        _longReaded = 1;
-        open();
+    public DatosDesconocidosFromDat (){}
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
-    private void open() throws FileNotFoundException{
-        _fileInput = new FileInputStream(_file);//Se prepara el archivo para lectura
-        _stream = new BufferedInputStream(_fileInput);
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
-    public byte [] readBytes() throws IOException{
-        if(_longReaded > 0){
-            _longReaded = _stream.read(_block);
-            if(!(_longReaded > 0)){
-                close();
-                return new byte [0];
-            }
-        }
-        byte [] aux = new byte[_longReaded];
-        for (int i = 0; i < aux.length; i++) {
-            aux[i] = _block[i];
-        }
-        return aux;
+
+    /**
+     * @return the varDesconocida1
+     */
+    public int getVarDesconocida1() {
+        return varDesconocida1;
     }
-    public String readString() throws IOException{
-        return new String(readBytes(),"UTF8");
+
+    /**
+     * @param varDesconocida1 the varDesconocida1 to set
+     */
+    public void setVarDesconocida1(int varDesconocida1) {
+        this.varDesconocida1 = varDesconocida1;
     }
-    public boolean isEOF(){
-        return (_longReaded > 0)?false:true;
+
+    /**
+     * @return the varDesconocida2
+     */
+    public int getVarDesconocida2() {
+        return varDesconocida2;
     }
-    private void close() throws IOException{
-        _stream.close();
+
+    /**
+     * @param varDesconocida2 the varDesconocida2 to set
+     */
+    public void setVarDesconocida2(int varDesconocida2) {
+        this.varDesconocida2 = varDesconocida2;
+    }
+
+    /**
+     * @return the varDesconocida3
+     */
+    public int getVarDesconocida3() {
+        return varDesconocida3;
+    }
+
+    /**
+     * @param varDesconocida3 the varDesconocida3 to set
+     */
+    public void setVarDesconocida3(int varDesconocida3) {
+        this.varDesconocida3 = varDesconocida3;
+    }
+
+    /**
+     * @return the varDesconocida4
+     */
+    public int getVarDesconocida4() {
+        return varDesconocida4;
+    }
+
+    /**
+     * @param varDesconocida4 the varDesconocida4 to set
+     */
+    public void setVarDesconocida4(int varDesconocida4) {
+        this.varDesconocida4 = varDesconocida4;
+    }
+
+    /**
+     * @return the varDesconocida5
+     */
+    public int getVarDesconocida5() {
+        return varDesconocida5;
+    }
+
+    /**
+     * @param varDesconocida5 the varDesconocida5 to set
+     */
+    public void setVarDesconocida5(int varDesconocida5) {
+        this.varDesconocida5 = varDesconocida5;
+    }
+
+    /**
+     * @return the varDesconocida6
+     */
+    public int getVarDesconocida6() {
+        return varDesconocida6;
+    }
+
+    /**
+     * @param varDesconocida6 the varDesconocida6 to set
+     */
+    public void setVarDesconocida6(int varDesconocida6) {
+        this.varDesconocida6 = varDesconocida6;
+    }
+
+    /**
+     * @return the varDesconocida7
+     */
+    public int getVarDesconocida7() {
+        return varDesconocida7;
+    }
+
+    /**
+     * @param varDesconocida7 the varDesconocida7 to set
+     */
+    public void setVarDesconocida7(int varDesconocida7) {
+        this.varDesconocida7 = varDesconocida7;
+    }
+
+    /**
+     * @return the varDesconocida8
+     */
+    public int getVarDesconocida8() {
+        return varDesconocida8;
+    }
+
+    /**
+     * @param varDesconocida8 the varDesconocida8 to set
+     */
+    public void setVarDesconocida8(int varDesconocida8) {
+        this.varDesconocida8 = varDesconocida8;
     }
 }
-/*
-class SevenZipJBindingInitCheck {
-    public static void main(String[] args) throws SevenZipException, FileNotFoundException {
-        try {
-            SevenZip.initSevenZipFromPlatformJAR();
-            System.out.println("7-Zip-JBinding library was initialized");
-            SevenZipJBindingInitCheck sevenZbinding = new SevenZipJBindingInitCheck();
-            sevenZbinding.openArchive("D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357.dat");
-        } catch (SevenZipNativeInitializationException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void openArchive(String archiveFilename) throws SevenZipException, FileNotFoundException {
-        RandomAccessFile randomAccessFile = new RandomAccessFile(archiveFilename, "r");
-        ISevenZipInArchive inArchive = SevenZip.openInArchive(null, // Choose format automatically
-                new RandomAccessFileInStream(randomAccessFile));
-        inArchive.getNumberOfItems();
-        //http://sevenzipjbind.sourceforge.net/first_steps.html
-    }
-}
-
-*/
-class ExtractItemsSimple {
-    //public static void main(String[] args) {
-    public void disparar(){
-        String rutaDat = "D:\\Dropbox\\NetBeansProjects\\IBAPE\\Historico\\camp12\\-0001-260411-142357.dat";
-//        if (jajajaja.length == 0) {
-//            System.out.println("Usage: java ExtractItemsSimple <archive-name>");
-//            return;
-//        }
-        RandomAccessFile randomAccessFile = null;
-        ISevenZipInArchive inArchive = null;
-        try {
-            randomAccessFile = new RandomAccessFile(rutaDat, "r");
-            inArchive = SevenZip.openInArchive(null, // autodetect archive type
-                    new RandomAccessFileInStream(randomAccessFile));
-
-            // Getting simple interface of the archive inArchive
-            ISimpleInArchive simpleInArchive = inArchive.getSimpleInterface();
-
-            System.out.println("   Hash   |    Size    | Filename");
-            System.out.println("----------+------------+---------");
-
-            for (ISimpleInArchiveItem item : simpleInArchive.getArchiveItems()) {
-                final int[] hash = new int[] { 0 };
-                if (!item.isFolder()) {
-                    ExtractOperationResult result;
-
-                    final long[] sizeArray = new long[1];
-                    result = item.extractSlow(new ISequentialOutStream() {
-                        public int write(byte[] data) throws SevenZipException {
-                            hash[0] ^= Arrays.hashCode(data); // Consume data
-                            sizeArray[0] += data.length;
-                            return data.length; // Return amount of consumed data
-                        }
-                    });
-                    if (result == ExtractOperationResult.OK) {
-                        System.out.println(String.format("%9X | %10s | %s", // 
-                                hash[0], sizeArray[0], item.getPath()));
-                    } else {
-                        System.err.println("Error extracting item: " + result);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Error occurs: " + e);
-            System.exit(1);
-        } finally {
-            if (inArchive != null) {
-                try {
-                    inArchive.close();
-                } catch (SevenZipException e) {
-                    System.err.println("Error closing archive: " + e);
-                }
-            }
-            if (randomAccessFile != null) {
-                try {
-                    randomAccessFile.close();
-                } catch (IOException e) {
-                    System.err.println("Error closing file: " + e);
-                }
-            }
-        }
-    }
-}
-/*
-*/
