@@ -109,6 +109,19 @@ public class DATatlantis{
         setDatosDescomprimidos(null);
     }
 
+    private modelo.dataManager.DatosDesconocidosFromDat getDatosDesconocidosFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
+        modelo.dataManager.DatosDesconocidosFromDat ddfd = new modelo.dataManager.DatosDesconocidosFromDat();
+        ddfd.setVarDesconocida1((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC1))));
+        ddfd.setVarDesconocida2((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC2))));
+        ddfd.setVarDesconocida3((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC3))));
+        ddfd.setVarDesconocida4((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC4))));
+        ddfd.setVarDesconocida5((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC5))));
+        ddfd.setVarDesconocida6((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC6))));
+        ddfd.setVarDesconocida7((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC7))));
+        ddfd.setVarDesconocida8((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC8))));
+        return ddfd;
+    }
+    
     private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
         SondaSetHistorico ssh = new SondaSetHistorico();
         ssh.setEscala((int)(2.5*getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_ESCALA))));
@@ -169,7 +182,8 @@ public class DATatlantis{
         try{
             if (decompressData(rutaFileDat)){ 
                 ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
-                ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();           
+                ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
+                ArrayList<modelo.dataManager.DatosDesconocidosFromDat> datosDesconocidos = new ArrayList();
                 ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
                 setIndiceDat(0);
                 while (getIndiceDat()<getDatosDescomprimidos().length){
@@ -185,6 +199,7 @@ public class DATatlantis{
                         try{ 
                             sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
                             puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                            datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
                         }catch(Exception e){
                             pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
                         }
@@ -194,6 +209,7 @@ public class DATatlantis{
                 }
                 valoresPorPixel.add(sondaSets);
                 valoresPorPixel.add(puntos);
+                valoresPorPixel.add(datosDesconocidos);
                 sePudo=true;
             }else{
                 Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
@@ -203,10 +219,11 @@ public class DATatlantis{
         }
         if (pixelesConErrorAlGuardarValores.size()>0){
             Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
+        }else{
+            setUltimoDatLeido(rutaFileDat.substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length()));
+            setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
+            setDatosFromDat(valoresPorPixel);
         }
-        setUltimoDatLeido(rutaFileDat);
-        setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
-        setDatosFromDat(valoresPorPixel);
         return sePudo;
     }
 
@@ -361,14 +378,24 @@ public class DATatlantis{
         this.indiceDat = indiceDat;
     }
 
-    public static void main(String args[]){
-        //ExtractItemsSimple eis = new ExtractItemsSimple();
-        //eis.disparar();
-        String rutaDat = "C:\\Practicas\\Ibape\\HISTORY\\-0169-100511-185838.dat";
-        DATatlantis dat = new DATatlantis();
-        if (dat.leerDat(rutaDat)){
-            dat.getDatosFromDat();
+    public ArrayList getDatosFromPixel(String jpgFileName, int nroPixelX){
+        ArrayList datosPixelX=new ArrayList();
+        String fileNameDelDat = jpgFileName.toLowerCase().replace(".jpg", ".dat");
+        //System.getProperty("user.dir")+"\\"+LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName();
+        String rutaDat = LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+fileNameDelDat;
+        //"D:\\Facultad\\Proyecto Final\\E-Naval\\Historicos\\SOUNDER1\\History\\-0001-260411-142357.dat";        
+        if (!DATatlantis.getInstance().getUltimoDatLeido().toLowerCase().equals(fileNameDelDat)){
+            if (DATatlantis.getInstance().leerDat(rutaDat)){
+                datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(indiceDat));
+                datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(indiceDat));
+                datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(indiceDat));
+            }
+        }else{
+            datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(indiceDat));
+            datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(indiceDat));
+            datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(indiceDat));
         }
+        return datosPixelX;
     }
 
     /**
@@ -411,145 +438,5 @@ public class DATatlantis{
      */
     public void setUltimoDatLeido(String ultimoDatLeido) {
         this.ultimoDatLeido = ultimoDatLeido;
-    }
-}
-
-class DatosDesconocidosFromDat{
-    private int id;
-    private int varDesconocida1;
-    private int varDesconocida2;
-    private int varDesconocida3;
-    private int varDesconocida4;
-    private int varDesconocida5;
-    private int varDesconocida6;
-    private int varDesconocida7;
-    private int varDesconocida8;
-
-    public DatosDesconocidosFromDat (){}
-
-    /**
-     * @return the id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the varDesconocida1
-     */
-    public int getVarDesconocida1() {
-        return varDesconocida1;
-    }
-
-    /**
-     * @param varDesconocida1 the varDesconocida1 to set
-     */
-    public void setVarDesconocida1(int varDesconocida1) {
-        this.varDesconocida1 = varDesconocida1;
-    }
-
-    /**
-     * @return the varDesconocida2
-     */
-    public int getVarDesconocida2() {
-        return varDesconocida2;
-    }
-
-    /**
-     * @param varDesconocida2 the varDesconocida2 to set
-     */
-    public void setVarDesconocida2(int varDesconocida2) {
-        this.varDesconocida2 = varDesconocida2;
-    }
-
-    /**
-     * @return the varDesconocida3
-     */
-    public int getVarDesconocida3() {
-        return varDesconocida3;
-    }
-
-    /**
-     * @param varDesconocida3 the varDesconocida3 to set
-     */
-    public void setVarDesconocida3(int varDesconocida3) {
-        this.varDesconocida3 = varDesconocida3;
-    }
-
-    /**
-     * @return the varDesconocida4
-     */
-    public int getVarDesconocida4() {
-        return varDesconocida4;
-    }
-
-    /**
-     * @param varDesconocida4 the varDesconocida4 to set
-     */
-    public void setVarDesconocida4(int varDesconocida4) {
-        this.varDesconocida4 = varDesconocida4;
-    }
-
-    /**
-     * @return the varDesconocida5
-     */
-    public int getVarDesconocida5() {
-        return varDesconocida5;
-    }
-
-    /**
-     * @param varDesconocida5 the varDesconocida5 to set
-     */
-    public void setVarDesconocida5(int varDesconocida5) {
-        this.varDesconocida5 = varDesconocida5;
-    }
-
-    /**
-     * @return the varDesconocida6
-     */
-    public int getVarDesconocida6() {
-        return varDesconocida6;
-    }
-
-    /**
-     * @param varDesconocida6 the varDesconocida6 to set
-     */
-    public void setVarDesconocida6(int varDesconocida6) {
-        this.varDesconocida6 = varDesconocida6;
-    }
-
-    /**
-     * @return the varDesconocida7
-     */
-    public int getVarDesconocida7() {
-        return varDesconocida7;
-    }
-
-    /**
-     * @param varDesconocida7 the varDesconocida7 to set
-     */
-    public void setVarDesconocida7(int varDesconocida7) {
-        this.varDesconocida7 = varDesconocida7;
-    }
-
-    /**
-     * @return the varDesconocida8
-     */
-    public int getVarDesconocida8() {
-        return varDesconocida8;
-    }
-
-    /**
-     * @param varDesconocida8 the varDesconocida8 to set
-     */
-    public void setVarDesconocida8(int varDesconocida8) {
-        this.varDesconocida8 = varDesconocida8;
     }
 }

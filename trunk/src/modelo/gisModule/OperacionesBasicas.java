@@ -25,6 +25,7 @@ import javax.media.jai.Histogram;
 import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
 import modelo.dataManager.Marca;
+import persistencia.Logueador;
 
 
 /**
@@ -785,6 +786,27 @@ public class OperacionesBasicas {
      */
     public void setProgresoProcesamiento(int progresoProcesamiento) {
         this.progresoProcesamiento = progresoProcesamiento;
+    }
+    
+    public boolean procesarImagen(String imgFileName){
+        boolean sePudo=false;
+        try{
+            OperacionesBasicas.getInstance().obtenerImagen(imgFileName);
+            if (imagenApta(imagenOriginal)){
+                int cantPeces = cuantosPecesHay(imagenOriginal);
+                ArrayList<Marca> marcas= buscaMarcas();
+                BufferedImage imgConMarcas = dibujaMarcasDetectadas(imgProcesada,marcas);
+                grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
+                BufferedImage imgConMarcasRellena = rellenaMarcasDetectadas(imgConMarcas, marcas);
+                grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
+                BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
+                grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
+                sePudo=true;
+            }
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("procesarImagen(): "+e.toString());
+        }
+        return sePudo;
     }
 
 }

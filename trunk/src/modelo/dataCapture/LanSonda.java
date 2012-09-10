@@ -304,7 +304,10 @@ public class LanSonda extends java.util.Observable implements Runnable {
                                     String rutaAcsv =null;
                                     while (i<archivosNuevos.size()){
                                         if (archivosNuevos.get(i).getName().toLowerCase().contains(".jpg")){//si el archivo nuevo es un JPG
-                                            rutaAcsv = Csv.getInstance().getCsvFromJpg(archivosNuevos.get(i).getName().toLowerCase()); //busco su DAT y genero el CSV
+                                            //rutaAcsv = Csv.getInstance().getCsvFromJpg(archivosNuevos.get(i).getName().toLowerCase()); //busco su DAT y genero el CSV
+                                            LeeDatYprocesaImg ldypi = new LeeDatYprocesaImg();
+                                            ldypi.setImgFileName(archivosNuevos.get(i).getName().toLowerCase());
+                                            ldypi.start();
                                             /*
                                             if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
                                                 persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
@@ -453,7 +456,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
                     AdministraCampanias.getInstance().getCampaniaEnCurso().getFolderHistorico()+"\\"+
                     persistencia.BrokerHistoricoPunto.getInstance().getDbFileName();
             lista.remove(new File(rutaDBhistorico)); //sacamos la DB
-            lista.remove(new File(LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName()));
+            //lista.remove(new File(LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName()));
             if (lista.size()>0){
                 listadoSinArchivosDeSistema = lista.toArray(new File[lista.size()]);                        
             }
@@ -486,4 +489,37 @@ public class LanSonda extends java.util.Observable implements Runnable {
         return esArchivoDeHistorico;
     }
     
+}
+
+class LeeDatYprocesaImg implements Runnable{
+    Thread thLdypi;
+    private String imgFileName;
+    public void run() { 
+        try{String datFileName = imgFileName.toLowerCase().replace(".jpg",".dat");
+            File imgFile = new File(imgFileName);
+            File datFile = new File(datFileName);
+            if (imgFile.exists() && datFile.exists()){
+                if (DATatlantis.getInstance().leerDat(datFileName)){
+                   
+                }
+            }
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("LeeDatYprocesaImg: "+e.toString());
+        }
+        controllers.ControllerNavegacion.getInstance().actualizaGuiProcesamientoImgs();
+        thLdypi = null;
+    }
+    public void start() {
+        if (thLdypi == null) {
+            thLdypi = new Thread(this);
+            thLdypi.setPriority(Thread.MIN_PRIORITY);
+            thLdypi.start();
+        }
+    }
+    public void setImgFileName(String imgFileName) {
+        this.imgFileName = imgFileName;
+    }
+    public String getImgFileName() {
+        return imgFileName;
+    }
 }
