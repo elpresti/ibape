@@ -14,6 +14,7 @@ import modelo.dataManager.Punto;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
 
+
 /**
  *
  * @author Sebastian
@@ -126,8 +127,11 @@ public class ControllerNavegacion {
         modelo.gisModule.Browser.getInstance().start();
     }
 
-}
+    public void actualizaGuiProcesamientoImgs() {
+        throw new UnsupportedOperationException("actualizaGuiProcesamientoImgs(): Not yet implemented");
+    }
 
+}
 class GraficaDatosNavegacion implements Runnable {
     Thread thGraficar;
     public int retardo;
