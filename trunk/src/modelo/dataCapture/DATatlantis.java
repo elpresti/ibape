@@ -239,6 +239,9 @@ public class DATatlantis{
                actualizaSondaSet(ultimoSsh);
             }
         }
+        if (!sePudo){
+           controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
+        }
         return sePudo;
     }
 
