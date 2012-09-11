@@ -17,6 +17,7 @@ import java.awt.Point;
 import java.awt.image.Raster;
 import java.awt.image.renderable.ParameterBlock;
 import java.lang.reflect.Array;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Vector;
 import javax.imageio.ImageReader;
@@ -25,6 +26,7 @@ import javax.media.jai.Histogram;
 import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
 import modelo.dataManager.Marca;
+import modelo.dataManager.UltimaImgProcesada;
 import persistencia.Logueador;
 
 
@@ -102,14 +104,13 @@ public class OperacionesBasicas {
 		setAlto(getImagenOriginal().getHeight(null));
 	}
 
-   
+/*   
     public static void main(String[] args) throws IOException{
-
         //Leemos la imagen con obtenerImagen()
         OperacionesBasicas.getInstance().obtenerImagen("imgs\\img1.jpg");
         if (getInstance().imagenApta(getInstance().imagenOriginal)){
              int cantPeces = OperacionesBasicas.getInstance().cuantosPecesHay(getInstance().imagenOriginal);
-             ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas();
+             ArrayList<Marca> marcas=OperacionesBasicas.getInstance().buscaMarcas(getInstance().getImgProcesada());
              BufferedImage imgConMarcas = getInstance().dibujaMarcasDetectadas(getInstance().imgProcesada,marcas);
              getInstance().grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
              BufferedImage imgConMarcasRellena = getInstance().rellenaMarcasDetectadas(imgConMarcas, marcas);
@@ -119,6 +120,7 @@ public class OperacionesBasicas {
              //OperacionesBasicas.getInstance().getMarcas(imgSoloMarcas);
             }
     }
+*/    
     public int cuantosPecesHay(BufferedImage imgOriginal){
         int cantPeces = 0;
         setProgresoProcesamiento(0); 
@@ -135,7 +137,7 @@ public class OperacionesBasicas {
 //        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
 //        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
-        getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+        //getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
         //Obtenemos bordes de la imagen binarizada segmentacion.Bordes(imgProcesada)
 //        imgProcesada = segmentacion.Bordes(imgProcesada);
 //        getInstance().grabarImagen(imgProcesada);
@@ -469,19 +471,32 @@ public class OperacionesBasicas {
         this.alto = alto;
     }
 
-    public ArrayList<Marca> buscaMarcas(){
+    public ArrayList<Marca> buscaMarcas(BufferedImage imgOriginal){
         ArrayList<Marca> marcas = new ArrayList();
-        BufferedImage img = getImgProcesada();
-
+//-----------
+        setProgresoProcesamiento(0); 
+        Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());//Creamos los filtros para la imagen con la clase Filtros
+        BufferedImage imgProcesada = filtros.erode(imgOriginal);//La erosionamos con Filtros.erode()
+        imgProcesada = filtros.Binarizacion(imgProcesada, 20);//Al resultado lo binarizamos con el umbral que corresponda
+        setProgresoProcesamiento(1);
+        imgProcesada = filtros.dilate(imgProcesada);
+        //imgProcesada = filtros.erode(imgProcesada);
+        setProgresoProcesamiento(2);
+        getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+        int fondo[] = buscaFondo(imgProcesada);//obtengo las coordenadas Y del fondo y lo guardo en el arreglo
+        setProgresoProcesamiento(3);
+        BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
+        setImgConFondo(imgConFondo);
+        BufferedImage imagensinhoras = eliminaHoras(imgConFondo);
+        getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondoNiHoras.tmp");
+        setProgresoProcesamiento(4);
+        imgProcesada = imgConFondo;
+//-----------
         Point point = new Point();
-
-
-
-        for (int contAncho = 1; contAncho < img.getWidth(); contAncho++) {
-
-            for (int contAlto= img.getHeight()-1; contAlto >350; contAlto--){
+        for (int contAncho = 1; contAncho < imgProcesada.getWidth(); contAncho++) {
+            for (int contAlto= imgProcesada.getHeight()-1; contAlto >350; contAlto--){
                 point.setLocation(contAncho, contAlto);             
-                    if ((hayBlancoDondeEstoy(img, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
+                    if ((hayBlancoDondeEstoy(imgProcesada, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
                     ArrayList<Point> coordMarca = new ArrayList<Point>();
                     int i=0;
                     coordMarca.add(new Point(contAncho,contAlto));
@@ -498,11 +513,9 @@ public class OperacionesBasicas {
                          marca.setAreaImagen(String.valueOf(coordMarca.size()));
                          marcas.add(marca);
                         }
-                    }                
+                    }
            }
-         
         }
-
         return marcas;
     }
 
@@ -792,15 +805,20 @@ public class OperacionesBasicas {
         boolean sePudo=false;
         try{
             OperacionesBasicas.getInstance().obtenerImagen(imgFileName);
-            if (imagenApta(imagenOriginal)){
-                int cantPeces = cuantosPecesHay(imagenOriginal);
-                ArrayList<Marca> marcas= buscaMarcas();
-                BufferedImage imgConMarcas = dibujaMarcasDetectadas(imgProcesada,marcas);
-                grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
-                BufferedImage imgConMarcasRellena = rellenaMarcasDetectadas(imgConMarcas, marcas);
-                grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
+            BufferedImage imgOriginal = getImagenOriginal();
+            if (imgOriginal != null && imagenApta(imgOriginal)){
+                //int cantPeces = cuantosPecesHay(imagenOriginal);
+                ArrayList<Marca> marcas= buscaMarcas(imgOriginal);
+                //BufferedImage imgConMarcas = dibujaMarcasDetectadas(imgProcesada,marcas);
+                //grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
+                //BufferedImage imgConMarcasRellena = rellenaMarcasDetectadas(imgConMarcas, marcas);
+                //grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
                 BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
                 grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
+                setProgresoProcesamiento(5);
+                UltimaImgProcesada.getInstance().setFechaYhora(Calendar.getInstance().getTime());
+                UltimaImgProcesada.getInstance().setFileName(imgFileName);
+                UltimaImgProcesada.getInstance().setMarcas(marcas);
                 sePudo=true;
             }
         }catch(Exception e){

@@ -152,11 +152,15 @@ public class DATatlantis{
         long salida = 0;
         try{
             byte[] nro = new byte[] {0, 0, 0, 0, 0, 0, 0, 0};
-            for (int i=0;i<byteArray.length;i++){
-                nro[nro.length-i-1] = byteArray[i];
-            }            
-            ByteBuffer bb = ByteBuffer.wrap(nro);
-            salida =bb.getLong();
+            if (byteArray.length<= nro.length){
+                for (int i=0;i<byteArray.length;i++){
+                    nro[nro.length-i-1] = byteArray[i];
+                }
+                ByteBuffer bb = ByteBuffer.wrap(nro);
+                salida =bb.getLong();
+           }else{
+                //int i = 0;//el valor leido es demaciado grande y no puede ser convertido
+           }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("getLongFromByteArray(): "+e.toString());
         }
@@ -177,42 +181,47 @@ public class DATatlantis{
 
     public boolean leerDat(String rutaFileDat){
         boolean sePudo=false;
+        String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
         ArrayList valoresPorPixel = new ArrayList();
         ArrayList pixelesConErrorAlGuardarValores = new ArrayList();
+        ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
+        ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
+        ArrayList<modelo.dataManager.DatosDesconocidosFromDat> datosDesconocidos = new ArrayList();
         try{
-            if (decompressData(rutaFileDat)){ 
-                ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
-                ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
-                ArrayList<modelo.dataManager.DatosDesconocidosFromDat> datosDesconocidos = new ArrayList();
-                ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
-                setIndiceDat(0);
-                while (getIndiceDat()<getDatosDescomprimidos().length){
-                    if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
-                        byte byteLeido = getDatosDescomprimidos()[getIndiceDat()];
-                        byte[] valorEncontrado;
-                        if (byteLeido != 0){
-                            valorEncontrado = getValorEncontrado(byteLeido);
-                            parametrosByteDeUnPixel.add(valorEncontrado);
+            if (getUltimoDatLeido()== null || (!getUltimoDatLeido().toLowerCase().equals(datFileNamee))){
+                if (decompressData(rutaFileDat)){
+                    ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
+                    setIndiceDat(0);
+                    while (getIndiceDat()<getDatosDescomprimidos().length){
+                        if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
+                            byte byteLeido = getDatosDescomprimidos()[getIndiceDat()];
+                            byte[] valorEncontrado;
+                            if (byteLeido != 0){
+                                valorEncontrado = getValorEncontrado(byteLeido);
+                                parametrosByteDeUnPixel.add(valorEncontrado);
+                            }
+                        }else{
+                            setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
+                            try{ 
+                                sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                                puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                                datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
+                            }catch(Exception e){
+                                pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
+                            }
+                            parametrosByteDeUnPixel = new ArrayList();
                         }
-                    }else{
-                        setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
-                        try{ 
-                            sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                            puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                            datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
-                        }catch(Exception e){
-                            pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
-                        }
-                        parametrosByteDeUnPixel = new ArrayList();
+                        setIndiceDat(getIndiceDat()+1);
                     }
-                    setIndiceDat(getIndiceDat()+1);
+                    valoresPorPixel.add(sondaSets);
+                    valoresPorPixel.add(puntos);
+                    valoresPorPixel.add(datosDesconocidos);
+                    sePudo=true;
+                }else{
+                    Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
                 }
-                valoresPorPixel.add(sondaSets);
-                valoresPorPixel.add(puntos);
-                valoresPorPixel.add(datosDesconocidos);
-                sePudo=true;
             }else{
-                Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
+                sePudo=true;
             }
         }catch(Exception e){
             System.out.println(e);
@@ -223,6 +232,12 @@ public class DATatlantis{
             setUltimoDatLeido(rutaFileDat.substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length()));
             setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
             setDatosFromDat(valoresPorPixel);
+            if (sondaSets.size()>0){
+               SondaSetHistorico ultimoSsh = sondaSets.get(sondaSets.size()-1);
+               ultimoSsh.setUsadoDesde(puntos.get(0).getFechaYhora());//mentira
+               ultimoSsh.setUsadoHasta(puntos.get(sondaSets.size()-1).getFechaYhora());
+               actualizaSondaSet(ultimoSsh);
+            }
         }
         return sePudo;
     }
@@ -382,7 +397,7 @@ public class DATatlantis{
         ArrayList datosPixelX=new ArrayList();
         String fileNameDelDat = jpgFileName.toLowerCase().replace(".jpg", ".dat");
         //System.getProperty("user.dir")+"\\"+LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName();
-        String rutaDat = LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+fileNameDelDat;
+        String rutaDat = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+fileNameDelDat;
         //"D:\\Facultad\\Proyecto Final\\E-Naval\\Historicos\\SOUNDER1\\History\\-0001-260411-142357.dat";        
         if (!DATatlantis.getInstance().getUltimoDatLeido().toLowerCase().equals(fileNameDelDat)){
             if (DATatlantis.getInstance().leerDat(rutaDat)){
@@ -438,5 +453,42 @@ public class DATatlantis{
      */
     public void setUltimoDatLeido(String ultimoDatLeido) {
         this.ultimoDatLeido = ultimoDatLeido;
+    }
+
+    private boolean actualizaSondaSet(SondaSetHistorico ultimoSsh) {
+        boolean sePudo = false;
+        try{
+            if (ultimoSsh != null){
+                modelo.dataManager.SondaSet.getInstance().setEscala(ultimoSsh.getEscala());
+                modelo.dataManager.SondaSet.getInstance().setExpander(ultimoSsh.getExpander());
+                modelo.dataManager.SondaSet.getInstance().setFrecuencia(ultimoSsh.getFrecuencia());
+                modelo.dataManager.SondaSet.getInstance().setGanancia(ultimoSsh.getGanancia());
+                modelo.dataManager.SondaSet.getInstance().setLineaBlanca(ultimoSsh.getLineaBlanca());
+                modelo.dataManager.SondaSet.getInstance().setShift(ultimoSsh.getShift());
+                modelo.dataManager.SondaSet.getInstance().setStc(ultimoSsh.getStc());
+                modelo.dataManager.SondaSet.getInstance().setUnidadDeEscala(ultimoSsh.getUnidadDeEscala());
+                modelo.dataManager.SondaSet.getInstance().setUsadoDesde(ultimoSsh.getUsadoDesde());
+                modelo.dataManager.SondaSet.getInstance().setUsadoHasta(ultimoSsh.getUsadoHasta());
+                modelo.dataManager.SondaSet.getInstance().setPixelXdesde(ultimoSsh.getPixelXdesde());
+                modelo.dataManager.SondaSet.getInstance().setPixelXhasta(ultimoSsh.getPixelXhasta());
+                modelo.dataManager.SondaSet.getInstance().setVelPantalla(ultimoSsh.getVelPantalla());
+                sePudo=true;
+/*
+                if (persistencia.BrokerHistoricoSondaSet.getInstance().isGuardaDatosSondaSets()){
+                   if (!(LanSonda.getInstance().guardaSondaSets(ssh))){ //si está habilitado el logueo de SondaSets, guardo los cambios en la dbHistorico de esta campania
+                      Logueador.getInstance().agregaAlLog("No se pudieron guardar los últimos Presets leidos de la Sonda");                      
+                   }else{
+                       sePudo=true;
+                   }
+                }else{
+                    sePudo=true;
+                }
+*/
+            }
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
     }
 }

@@ -230,4 +230,8 @@ public class AdministraCampanias {
         return encontro;
     }
     
+    public String getFullFolderHistoricoDeCampActual(){
+        String salida=persistencia.BrokerHistoricoPunto.getInstance().getFolderNameHistorico()+"\\"+getCampaniaEnCurso().getFolderHistorico();
+        return salida;
+    }
 }
