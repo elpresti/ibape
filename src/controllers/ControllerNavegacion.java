@@ -131,6 +131,10 @@ public class ControllerNavegacion {
         throw new UnsupportedOperationException("actualizaGuiProcesamientoImgs(): Not yet implemented");
     }
 
+    public void errorGuiProcesamientoImgs() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 }
 class GraficaDatosNavegacion implements Runnable {
     Thread thGraficar;

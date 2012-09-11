@@ -47,6 +47,7 @@ public class BrokerMarca extends BrokerPpal {
         }
         return Marcas;
     }
+    
     public ArrayList<modelo.dataManager.Marca> getMarcasPOIFromDB(int idPOI) {
         ArrayList<modelo.dataManager.Marca> Marcas = new ArrayList();
         try {

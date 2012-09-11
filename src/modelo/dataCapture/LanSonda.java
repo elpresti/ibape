@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.Date;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.SondaSetHistorico;
+import modelo.gisModule.OperacionesBasicas;
 import persistencia.BrokerHistoricoSondaSet;
 import persistencia.Logueador;
 
@@ -306,7 +307,8 @@ public class LanSonda extends java.util.Observable implements Runnable {
                                         if (archivosNuevos.get(i).getName().toLowerCase().contains(".jpg")){//si el archivo nuevo es un JPG
                                             //rutaAcsv = Csv.getInstance().getCsvFromJpg(archivosNuevos.get(i).getName().toLowerCase()); //busco su DAT y genero el CSV
                                             LeeDatYprocesaImg ldypi = new LeeDatYprocesaImg();
-                                            ldypi.setImgFileName(archivosNuevos.get(i).getName().toLowerCase());
+                                            ldypi.setImgFileName(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+
+                                                    archivosNuevos.get(i).getName().toLowerCase());
                                             ldypi.start();
                                             /*
                                             if (seModifico && persistencia.BrokerHistoricoPunto.getInstance().isGuardaDatosGps()){
@@ -495,18 +497,26 @@ class LeeDatYprocesaImg implements Runnable{
     Thread thLdypi;
     private String imgFileName;
     public void run() { 
+        boolean sePudo = false;
         try{String datFileName = imgFileName.toLowerCase().replace(".jpg",".dat");
             File imgFile = new File(imgFileName);
             File datFile = new File(datFileName);
             if (imgFile.exists() && datFile.exists()){
                 if (DATatlantis.getInstance().leerDat(datFileName)){
-                   
+                   if (OperacionesBasicas.getInstance().procesarImagen(imgFileName)){
+                       sePudo=true;
+                   }
                 }
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("LeeDatYprocesaImg: "+e.toString());
         }
-        controllers.ControllerNavegacion.getInstance().actualizaGuiProcesamientoImgs();
+        if (sePudo){
+            controllers.ControllerNavegacion.getInstance().actualizaGuiProcesamientoImgs();
+        }else{
+            controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
+        }
+        
         thLdypi = null;
     }
     public void start() {
