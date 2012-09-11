@@ -824,6 +824,11 @@ public class OperacionesBasicas {
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("procesarImagen(): "+e.toString());
         }
+        if (sePudo){
+            controllers.ControllerNavegacion.getInstance().actualizaGuiProcesamientoImgs();
+        }else{
+            controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
+        }        
         return sePudo;
     }
 

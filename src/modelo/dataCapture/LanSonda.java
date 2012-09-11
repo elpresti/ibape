@@ -510,13 +510,7 @@ class LeeDatYprocesaImg implements Runnable{
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("LeeDatYprocesaImg: "+e.toString());
-        }
-        if (sePudo){
-            controllers.ControllerNavegacion.getInstance().actualizaGuiProcesamientoImgs();
-        }else{
-            controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
-        }
-        
+        }        
         thLdypi = null;
     }
     public void start() {
