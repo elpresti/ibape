@@ -37,19 +37,6 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import persistencia.Logueador;
 
-
-
-
-
-
-
-/**
-Esta es una clase que hize, para leer archivos en bloques de bytes, espero te sirva. Saludos!
-*/
-
-
-
-
 /**
  *
  * @author Sebastian
@@ -180,10 +167,6 @@ public class DATatlantis{
     }
     
 //http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
-//leer cada pixel por bloques de (confirmadisimo!!! --->((((bloques de 184bytes!)))))/187 bytes---> 1px = 184b de DAT | 
-//    antes de empezar hay 177nulos
-//177920    / 456px ancho= 84088b 
-//          / 967px ancho = 178112b
     public boolean leerDat(String rutaFileDat){
         boolean sePudo=false;
         String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
@@ -249,6 +232,82 @@ public class DATatlantis{
         }
         return sePudo;
     }
+
+//leer cada pixel por bloques de (confirmadisimo!!! --->((((bloques de 184bytes!)))))/187 bytes---> 1px = 184b de DAT | 
+//    antes de empezar hay 177nulos    //177920    / 456px ancho= 84088b    //          / 967px ancho = 178112b
+    public boolean leerDat(String rutaFileDat){
+        boolean sePudo=false;
+        String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
+		int tamanioBloque=184;
+        ArrayList valoresPorPixel = new ArrayList();
+        ArrayList pixelesConErrorAlGuardarValores = new ArrayList();
+        ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
+        ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
+        ArrayList<modelo.dataManager.DatosDesconocidosFromDat> datosDesconocidos = new ArrayList();
+        try{
+            if (getUltimoDatLeido()== null || (!getUltimoDatLeido().toLowerCase().equals(datFileNamee))){
+                if (decompressData(rutaFileDat)){
+                    ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
+                    setIndiceDat(178);
+                    while ((getIndiceDat()+tamanioBloque)<getDatosDescomprimidos().length){
+						byte [] unBloque = Arrays.copyOfRange(getDatosDescomprimidos(), getIndiceDat(), (getIndiceDat()+tamanioBloque));
+						
+                        if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
+                            byte byteLeido = getDatosDescomprimidos()[getIndiceDat()];
+                            byte[] valorEncontrado;
+                            if (byteLeido != 0){
+                                valorEncontrado = getValorEncontrado(byteLeido);
+                                parametrosByteDeUnPixel.add(valorEncontrado);
+                            }
+                        }else{
+                            setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
+                            try{
+                                sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                                puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
+                                datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
+                            }catch(Exception e){
+                                pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
+                            }
+                            parametrosByteDeUnPixel = new ArrayList();
+                        }
+                        setIndiceDat(getIndiceDat()+tamanioBloque);
+                    }
+                    valoresPorPixel.add(sondaSets);
+                    valoresPorPixel.add(puntos);
+                    valoresPorPixel.add(datosDesconocidos);
+                    sePudo=true;
+                }else{
+                    Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
+                }
+            }else{
+                sePudo=true;
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
+        if (pixelesConErrorAlGuardarValores.size()>0){
+            Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
+        }else{
+            setUltimoDatLeido(rutaFileDat.substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length()));
+            setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
+            setDatosFromDat(valoresPorPixel);
+            if (sondaSets.size()>0){
+               SondaSetHistorico ultimoSsh = sondaSets.get(sondaSets.size()-1);
+               ultimoSsh.setUsadoDesde(puntos.get(0).getFechaYhora());//mentira
+               ultimoSsh.setUsadoHasta(puntos.get(sondaSets.size()-1).getFechaYhora());
+               actualizaSondaSet(ultimoSsh);
+            }
+        }
+        if (!sePudo){
+           controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
+        }
+        return sePudo;
+    }
+
+
+
+
+
 
     private byte[] getValorEncontrado(byte valorLeido) {
         ArrayList<Byte> valorEncontrado = new ArrayList<Byte>();
