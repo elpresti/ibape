@@ -18,6 +18,7 @@ public class DatosDesconocidosFromDat{
     private int varDesconocida6;
     private int varDesconocida7;
     private int varDesconocida8;
+    private int varDesconocida9;
 
     public DatosDesconocidosFromDat (){}
 
@@ -145,6 +146,20 @@ public class DatosDesconocidosFromDat{
      */
     public void setVarDesconocida8(int varDesconocida8) {
         this.varDesconocida8 = varDesconocida8;
+    }
+
+    /**
+     * @return the varDesconocida9
+     */
+    public int getVarDesconocida9() {
+        return varDesconocida9;
+    }
+
+    /**
+     * @param varDesconocida9 the varDesconocida9 to set
+     */
+    public void setVarDesconocida9(int varDesconocida9) {
+        this.varDesconocida9 = varDesconocida9;
     }
 }
 

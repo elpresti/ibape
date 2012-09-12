@@ -92,6 +92,7 @@ public class DATatlantis{
     private static final byte NRO_COL_RUMBO=26;
     private static final byte NRO_COL_FECHA=27;
     private static final byte NRO_COL_DESC8=28;
+    private static final byte NRO_COL_DESC9=29;
     
     
     private DATatlantis(){
@@ -119,6 +120,7 @@ public class DATatlantis{
         ddfd.setVarDesconocida6((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC6))));
         ddfd.setVarDesconocida7((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC7))));
         ddfd.setVarDesconocida8((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC8))));
+        //ddfd.setVarDesconocida9((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC9))));
         return ddfd;
     }
     
@@ -178,7 +180,10 @@ public class DATatlantis{
     }
     
 //http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
-
+//leer cada pixel por bloques de (confirmadisimo!!! --->((((bloques de 184bytes!)))))/187 bytes---> 1px = 184b de DAT | 
+//    antes de empezar hay 177nulos
+//177920    / 456px ancho= 84088b 
+//          / 967px ancho = 178112b
     public boolean leerDat(String rutaFileDat){
         boolean sePudo=false;
         String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
@@ -202,7 +207,7 @@ public class DATatlantis{
                             }
                         }else{
                             setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
-                            try{ 
+                            try{
                                 sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
                                 puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
                                 datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
@@ -320,6 +325,7 @@ public class DATatlantis{
     
     public boolean decompressData(String rutaDat) {
         boolean sePudo=false;
+        setDatosDescomprimidos(null);
         ISevenZipInArchive inArchive = null;
         RandomAccessFile randomAccessFile = null;
         try {
