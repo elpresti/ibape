@@ -172,68 +172,73 @@ public class OperacionesBasicas {
 
 
     public int[] buscaFondo(BufferedImage img) {
+        int[] salida = null;
+        try{
+            ancho = img.getWidth();
+            alto = img.getHeight();
+            int fondo[] = new int[ancho];
+            boolean noencontrofondo = true;
+            int contAncho = 1;      //maximo 966
+            int contAlto = alto - 2;    //maximo 635
 
-        ancho = img.getWidth();
-        alto = img.getHeight();
-        int fondo[] = new int[ancho];
-        boolean noencontrofondo = true;
-        int contAncho = 1;      //maximo 966
-        int contAlto = alto - 2;    //maximo 635
+                while ((contAlto > 0) && (noencontrofondo == true)) {
 
-            while ((contAlto > 0) && (noencontrofondo == true)) {
-
-                int e = getColor().obtieneColor(img.getRGB(contAncho, contAlto));
-                if ((getColor().getColoresMap().get(e).equals("Negro"))) {
-//                    e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-1));
-//                    if ((getColor().getColoresMap().get(e).equals("Negro"))) {
-//                        e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-2));
-//                        if ((getColor().getColoresMap().get(e).equals("Negro"))) {
-//                           e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-3));
-//                           if ((getColor().getColoresMap().get(e).equals("Negro"))) {
-//                               e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-4));
-//                               if ((getColor().getColoresMap().get(e).equals("Negro"))) {
-                                    noencontrofondo = false;//verificar si es 0 el fondo y si lo es darle un rango mayor a
-                                                            //primer busqueda denuevo
-//                               }
-//                           }
-//                        }
-//                    }
+                    int e = getColor().obtieneColor(img.getRGB(contAncho, contAlto));
+                    if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+    //                    e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-1));
+    //                    if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+    //                        e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-2));
+    //                        if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+    //                           e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-3));
+    //                           if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+    //                               e =getColor().obtieneColor(img.getRGB(contAncho, contAlto-4));
+    //                               if ((getColor().getColoresMap().get(e).equals("Negro"))) {
+                                        noencontrofondo = false;//verificar si es 0 el fondo y si lo es darle un rango mayor a
+                                                                //primer busqueda denuevo
+    //                               }
+    //                           }
+    //                        }
+    //                    }
+                    }
+                    contAlto--;
                 }
-                contAlto--;
-            }
-        fondo[contAncho] = contAlto + 2;
-        contAncho++;        
-        int limSup=0;
-        int limInf=0;
+            fondo[contAncho] = contAlto + 2;
+            contAncho++;        
+            int limSup=0;
+            int limInf=0;
 
-        while (contAncho < ancho) {
-            limSup=fondo[contAncho-1]-5;
-            limInf=fondo[contAncho-1]+5;
-            if (todoFondo(img, contAncho, fondo[contAncho-1],limSup, limInf)){
-                fondo[contAncho] = buscaNegroArriba(img,contAncho, fondo[contAncho-1],limSup, limInf);
-            } else {
-                if (hayHueco(img, contAncho, fondo[contAncho-1], limSup, limInf)) {
-                    
-                    fondo[contAncho] = buscaBlancoAbajo(img,contAncho, fondo[contAncho-1],limSup, limInf);
+            while (contAncho < ancho) {
+                limSup=fondo[contAncho-1]-5;
+                limInf=fondo[contAncho-1]+5;
+                if (todoFondo(img, contAncho, fondo[contAncho-1],limSup, limInf)){
+                    fondo[contAncho] = buscaNegroArriba(img,contAncho, fondo[contAncho-1],limSup, limInf);
                 } else {
-                    if (hayBlancoDondeEstoy(img, contAncho, fondo[contAncho-1])) {
-                        if (hayNegroArriba(img, contAncho, fondo[contAncho-1], limSup, limInf) != -1) {
-                            fondo[contAncho] = hayNegroArriba(img, contAncho, fondo[contAncho-1], limSup, limInf);
-                        } else {
-                            fondo[contAncho] = fondo[contAncho - 1];
-                        }
+                    if (hayHueco(img, contAncho, fondo[contAncho-1], limSup, limInf)) {
+
+                        fondo[contAncho] = buscaBlancoAbajo(img,contAncho, fondo[contAncho-1],limSup, limInf);
                     } else {
-                        if (hayBlancoAbajo(img, contAncho, fondo[contAncho-1], limSup, limInf) != -1) {
-                            fondo[contAncho] = hayBlancoAbajo(img, contAncho, fondo[contAncho-1], limSup, limInf);
+                        if (hayBlancoDondeEstoy(img, contAncho, fondo[contAncho-1])) {
+                            if (hayNegroArriba(img, contAncho, fondo[contAncho-1], limSup, limInf) != -1) {
+                                fondo[contAncho] = hayNegroArriba(img, contAncho, fondo[contAncho-1], limSup, limInf);
+                            } else {
+                                fondo[contAncho] = fondo[contAncho - 1];
+                            }
                         } else {
-                            fondo[contAncho] = fondo[contAncho - 1];
+                            if (hayBlancoAbajo(img, contAncho, fondo[contAncho-1], limSup, limInf) != -1) {
+                                fondo[contAncho] = hayBlancoAbajo(img, contAncho, fondo[contAncho-1], limSup, limInf);
+                            } else {
+                                fondo[contAncho] = fondo[contAncho - 1];
+                            }
                         }
                     }
                 }
+                contAncho++;
             }
-            contAncho++;
+            salida=fondo;
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("buscaFondo(): "+e.toString());
         }
-        return fondo;
+        return salida;
     }
 
     public int hayNegroArriba(BufferedImage img, int ancho, int alto, int limSup, int limInf){
@@ -484,37 +489,42 @@ public class OperacionesBasicas {
         setProgresoProcesamiento(2);
         getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
         int fondo[] = buscaFondo(imgProcesada);//obtengo las coordenadas Y del fondo y lo guardo en el arreglo
-        setProgresoProcesamiento(3);
-        BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
-        setImgConFondo(imgConFondo);
-        BufferedImage imagensinhoras = eliminaHoras(imgConFondo);
-        getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondoNiHoras.tmp");
-        setProgresoProcesamiento(4);
-        imgProcesada = imgConFondo;
-//-----------
-        Point point = new Point();
-        for (int contAncho = 1; contAncho < imgProcesada.getWidth(); contAncho++) {
-            for (int contAlto= imgProcesada.getHeight()-1; contAlto >350; contAlto--){
-                point.setLocation(contAncho, contAlto);             
-                    if ((hayBlancoDondeEstoy(imgProcesada, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
-                    ArrayList<Point> coordMarca = new ArrayList<Point>();
-                    int i=0;
-                    coordMarca.add(new Point(contAncho,contAlto));
-                    while (i<coordMarca.size()){
-                        escaneoADerecha(coordMarca.get(i),coordMarca);
-                        escaneoAIzquierda(coordMarca.get(i),coordMarca);
-                        escaneoAAbajo(coordMarca.get(i),coordMarca);
-                        escaneoAArriba(coordMarca.get(i),coordMarca);
-                        i++;
-                    }
-                    if (coordMarca.size()>30){
-                         Marca marca= new Marca();
-                         marca.setCoordMarca(coordMarca);
-                         marca.setAreaImagen(String.valueOf(coordMarca.size()));
-                         marcas.add(marca);
+        if (fondo != null && fondo.length>0){
+            setProgresoProcesamiento(3);
+            BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
+            setImgConFondo(imgConFondo);
+            BufferedImage imagensinhoras = eliminaHoras(imgConFondo);
+            getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondoNiHoras.tmp");
+            setProgresoProcesamiento(4);
+            imgProcesada = imgConFondo;
+            //-----------
+            Point point = new Point();
+            for (int contAncho = 1; contAncho < imgProcesada.getWidth(); contAncho++) {
+                for (int contAlto= imgProcesada.getHeight()-1; contAlto >350; contAlto--){
+                    point.setLocation(contAncho, contAlto);             
+                        if ((hayBlancoDondeEstoy(imgProcesada, contAncho, contAlto)) && (!perteneceAMarcaExistente(point,marcas))){
+                        ArrayList<Point> coordMarca = new ArrayList<Point>();
+                        int i=0;
+                        coordMarca.add(new Point(contAncho,contAlto));
+                        while (i<coordMarca.size()){
+                            escaneoADerecha(coordMarca.get(i),coordMarca);
+                            escaneoAIzquierda(coordMarca.get(i),coordMarca);
+                            escaneoAAbajo(coordMarca.get(i),coordMarca);
+                            escaneoAArriba(coordMarca.get(i),coordMarca);
+                            i++;
                         }
-                    }
-           }
+                        if (coordMarca.size()>30){
+                            Marca marca= new Marca();
+                            marca.setCoordMarca(coordMarca);
+                            marca.setAreaImagen(String.valueOf(coordMarca.size()));
+                            marcas.add(marca);
+                            }
+                        }
+                }
+            }
+            
+        }else{
+            setProgresoProcesamiento(-1);//no se pudo procesar la imagen
         }
         return marcas;
     }
@@ -813,13 +823,22 @@ public class OperacionesBasicas {
                 //grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
                 //BufferedImage imgConMarcasRellena = rellenaMarcasDetectadas(imgConMarcas, marcas);
                 //grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
-                BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
-                grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
-                setProgresoProcesamiento(5);
                 UltimaImgProcesada.getInstance().setFechaYhora(Calendar.getInstance().getTime());
                 UltimaImgProcesada.getInstance().setFileName(imgFileName);
                 UltimaImgProcesada.getInstance().setMarcas(marcas);
-                sePudo=true;
+                if (marcas.size()>0){
+                    BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
+                    grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
+                    setProgresoProcesamiento(5);//5=se encontraron marcas y se graficaran
+                    sePudo=true;
+                }else{
+                    if (getProgresoProcesamiento() != -1){ //-1=no se pudo procesar la imagen
+                        setProgresoProcesamiento(6);//6=no se encontraron marcas
+                        sePudo=true;
+                    }else{
+                        sePudo=false;
+                    }
+                }
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("procesarImagen(): "+e.toString());

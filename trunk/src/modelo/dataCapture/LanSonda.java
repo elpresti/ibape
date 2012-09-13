@@ -502,7 +502,7 @@ class LeeDatYprocesaImg implements Runnable{
             File imgFile = new File(imgFileName);
             File datFile = new File(datFileName);
             if (imgFile.exists() && datFile.exists()){
-                if (DATatlantis.getInstance().leerDat(datFileName)){
+                if (DATatlantis.getInstance().leerDatPorBloques(datFileName)){
                    if (OperacionesBasicas.getInstance().procesarImagen(imgFileName)){
                        sePudo=true;
                    }

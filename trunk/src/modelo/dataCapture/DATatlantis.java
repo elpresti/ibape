@@ -50,36 +50,72 @@ public class DATatlantis{
     private String datFileName;
     private int indiceDat;
     private String conversorFileName;
-    private static final byte NRO_COL_DESC6=0;
-    private static final byte NRO_COL_DESC7=1;
-    private static final byte NRO_COL_FRECUENCIA=2;
-    private static final byte NRO_COL_GANANCIA=3;
-    private static final byte NRO_COL_STC=4;
-    private static final byte NRO_COL_LW=5;
-    private static final byte NRO_COL_GS=6;
-    private static final byte NRO_COL_ESCALA=7;
-    private static final byte NRO_COL_SHIFT=8;
-    private static final byte NRO_COL_EXPANDER=9;
-    private static final byte NRO_COL_DESC2=10;
-    private static final byte NRO_COL_VELOCIDADPROM=11;
-    private static final byte NRO_COL_DESC5=12;
-    private static final byte NRO_COL_PROFUNDIDAD=14;
-    private static final byte NRO_COL_UNIDAD=15;
-    private static final byte NRO_COL_UNIDAD_MEDIDA=16;
-    private static final byte NRO_COL_DESC1=17;
-    private static final byte NRO_COL_DESC3=18;
-    private static final byte NRO_COL_TEMPERATURA=18;//mentira, no se cual de las variables leidas es la temperatura
-    private static final byte NRO_COL_HORA=19;
-    private static final byte NRO_COL_DESC4=20;
-    private static final byte NRO_COL_LATITUD=21;
-    private static final byte NRO_COL_EO=22;
-    private static final byte NRO_COL_LONGITUD=23;
-    private static final byte NRO_COL_NS=24;
-    private static final byte NRO_COL_VELOCIDAD=25;
-    private static final byte NRO_COL_RUMBO=26;
-    private static final byte NRO_COL_FECHA=27;
-    private static final byte NRO_COL_DESC8=28;
-    private static final byte NRO_COL_DESC9=29;
+    private byte NRO_COL_DESC1=0;
+    private int[] BYTES_DESC1={0,3};
+    private byte NRO_COL_DESC2=1;
+    private int[] BYTES_DESC2={4,7};
+    private byte NRO_COL_FRECUENCIA=2;
+    private int[] BYTES_FRECUENCIA={8,11};
+    private byte NRO_COL_GANANCIA=3;
+    private int[] BYTES_GANANCIA={12,15};
+    private byte NRO_COL_STC=4;
+    private int[] BYTES_STC={16,19};
+    private byte NRO_COL_LW=5;
+    private int[] BYTES_LW={20,23};
+    private byte NRO_COL_GS=6;
+    private int[] BYTES_GS={24,27};
+    private byte NRO_COL_DESC3=7;
+    private int[] BYTES_DESC3={28,31};
+    private byte NRO_COL_DESC4;
+    private int[] BYTES_DESC4={32,35};
+    private byte NRO_COL_ESCALA=7;
+    private int[] BYTES_ESCALA={36,39};
+    private byte NRO_COL_SHIFT=8;
+    private int[] BYTES_SHIFT={40,43};
+    private byte NRO_COL_EXPANDER=9;
+    private int[] BYTES_EXPANDER={44,47};
+    private byte NRO_COL_DESC5=10;
+    private int[] BYTES_DESC5={48,51};
+    private byte NRO_COL_VELOCIDADPROM=11;
+    private int[] BYTES_VELOCIDADPROM={52,55};
+    private byte NRO_COL_DESC6=12;
+    private int[] BYTES_DESC6={56,59};
+    private byte NRO_COL_FRECLTR=12;
+    private int[] BYTES_FRECLTR={60,63};
+    private byte NRO_COL_PROFUNDIDAD=14;
+    private int[] BYTES_PROFUNDIDAD={78,81};
+    private byte NRO_COL_UNIDAD=15;
+    private int[] BYTES_UNIDAD={88,91};
+    private byte NRO_COL_UNIDAD_MEDIDA=16;
+    private int[] BYTES_UNIDAD_MEDIDA={92,95};
+    private byte NRO_COL_DESC7=17;
+    private int[] BYTES_DESC7={96,99};
+    private byte NRO_COL_DESC8=18;
+    private int[] BYTES_DESC8={100,103};
+    private byte NRO_COL_TEMPERATURA=18;//mentira, no se cual de las variables leidas es la temperatura
+    private int[] BYTES_TEMPERATURA={,};
+    private byte NRO_COL_HORA=19;
+    private int[] BYTES_HORA={112,117};
+    private byte NRO_COL_DESC9=20;
+    private int[] BYTES_DESC9={119,119};
+    private byte NRO_COL_LATITUD=21;
+    private int[] BYTES_LATITUD={121,130};
+    private byte NRO_COL_EO=22;
+    private int[] BYTES_EO={132,132};
+    private byte NRO_COL_LONGITUD=23;
+    private int[] BYTES_LONGITUD={134,144};
+    private byte NRO_COL_NS=24;
+    private int[] BYTES_NS={146,146};
+    private byte NRO_COL_VELOCIDAD=25;
+    private int[] BYTES_VELOCIDAD={148,153};
+    private byte NRO_COL_RUMBO=26;
+    private int[] BYTES_RUMBO={154,159};
+    private byte NRO_COL_FECHA=27;
+    private int[] BYTES_FECHA={160,165};
+    private byte NRO_COL_DESC10=28;
+    private int[] BYTES_DESC10={68,75};
+    private byte NRO_COL_DESC11=29;
+    private int[] BYTES_DESC11={77,82};
     
     
     private DATatlantis(){
@@ -110,6 +146,22 @@ public class DATatlantis{
         //ddfd.setVarDesconocida9((int)(getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_DESC9))));
         return ddfd;
     }
+
+    private modelo.dataManager.DatosDesconocidosFromDat getDatosDesconocidosFromValoresLeidos2(byte[] valoresByteDeUnPixel) {
+        modelo.dataManager.DatosDesconocidosFromDat ddfd = new modelo.dataManager.DatosDesconocidosFromDat();
+        ddfd.setVarDesconocida1((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC1[0],BYTES_DESC1[1]+1))));
+        ddfd.setVarDesconocida2((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC2[0],BYTES_DESC2[1]+1))));
+        ddfd.setVarDesconocida3((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC3[0],BYTES_DESC3[1]+1))));
+        ddfd.setVarDesconocida4((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC4[0],BYTES_DESC4[1]+1))));
+        ddfd.setVarDesconocida5((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC5[0],BYTES_DESC5[1]+1))));
+        ddfd.setVarDesconocida6((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC6[0],BYTES_DESC6[1]+1))));
+        ddfd.setVarDesconocida7((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC7[0],BYTES_DESC7[1]+1))));
+        ddfd.setVarDesconocida8((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC8[0],BYTES_DESC8[1]+1))));
+        ddfd.setVarDesconocida9((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC9[0],BYTES_DESC9[1]+1))));
+        ddfd.setVarDesconocida10((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC10[0],BYTES_DESC10[1]+1))));
+        ddfd.setVarDesconocida11((int)(getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_DESC11[0],BYTES_DESC11[1]+1))));
+        return ddfd;
+    }
     
     private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
         SondaSetHistorico ssh = new SondaSetHistorico();
@@ -125,6 +177,20 @@ public class DATatlantis{
         return ssh;
     }
 
+    private SondaSetHistorico getSondaSetHistoricoFromValoresLeidos2(byte[] valoresByteDeUnPixel) {
+        SondaSetHistorico ssh = new SondaSetHistorico();
+        ssh.setEscala((int)(2.5*getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_ESCALA[0],BYTES_ESCALA[1]+1))));
+        ssh.setExpander((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_EXPANDER[0],BYTES_EXPANDER[1]+1)));
+        ssh.setFrecuencia((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_FRECUENCIA[0],BYTES_FRECUENCIA[1]+1)));
+        ssh.setGanancia((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_GANANCIA[0],BYTES_GANANCIA[1]+1)));
+        ssh.setLineaBlanca((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LW[0],BYTES_LW[1]+1)));
+        ssh.setShift((int)(2.5*getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_SHIFT[0],BYTES_SHIFT[1]+1))));
+        ssh.setStc((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_STC[0],BYTES_STC[1]+1)));
+        ssh.setUnidadDeEscala((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_UNIDAD_MEDIDA[0],BYTES_UNIDAD_MEDIDA[1]+1)));
+        ssh.setVelPantalla((int)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_GS[0],BYTES_GS[1]+1)));
+        return ssh;
+    }
+    
     private PuntoHistorico getPuntoHistoricoFromValoresLeidos(ArrayList valoresByteDeUnPixel) {
         PuntoHistorico ph = new PuntoHistorico();
         ph.setFechaYhora(armaDate(Integer.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_FECHA))), 
@@ -136,7 +202,19 @@ public class DATatlantis{
         ph.setVelocidad(Double.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_VELOCIDAD))));
         return ph;
     }
-   
+
+    private PuntoHistorico getPuntoHistoricoFromValoresLeidos2(byte[] valoresByteDeUnPixel) {
+        PuntoHistorico ph = new PuntoHistorico();
+        ph.setFechaYhora(armaDate(Integer.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_FECHA[0],BYTES_FECHA[1]+1))), 
+                Integer.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_HORA[0],BYTES_HORA[1]+1)))));
+        ph.setLatitud(getLatEnGradosDecimalesFromString(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LATITUD[0],BYTES_LATITUD[1]+1))));
+        ph.setLongitud(getLonEnGradosDecimalesFromString(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LONGITUD[0],BYTES_LONGITUD[1]+1))));
+        ph.setProfundidad((double)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_PROFUNDIDAD[0],BYTES_PROFUNDIDAD[1]+1)));
+        ph.setRumbo(Double.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_RUMBO[0],BYTES_RUMBO[1]+1))));
+        ph.setVelocidad(Double.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_VELOCIDAD[0],BYTES_VELOCIDAD[1]+1))));
+        return ph;
+    }
+    
     private long getLongFromByteArray(byte[] byteArray){
         long salida = 0;
         try{
@@ -148,7 +226,7 @@ public class DATatlantis{
                 ByteBuffer bb = ByteBuffer.wrap(nro);
                 salida =bb.getLong();
            }else{
-                //int i = 0;//el valor leido es demaciado grande y no puede ser convertido
+                int i = 0;//el valor leido es demaciado grande y no puede ser convertido
            }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("getLongFromByteArray(): "+e.toString());
@@ -235,10 +313,10 @@ public class DATatlantis{
 
 //leer cada pixel por bloques de (confirmadisimo!!! --->((((bloques de 184bytes!)))))/187 bytes---> 1px = 184b de DAT | 
 //    antes de empezar hay 177nulos    //177920    / 456px ancho= 84088b    //          / 967px ancho = 178112b
-    public boolean leerDat(String rutaFileDat){
+    public boolean leerDatPorBloques(String rutaFileDat){
         boolean sePudo=false;
         String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
-		int tamanioBloque=184;
+	int tamanioBloque=184;
         ArrayList valoresPorPixel = new ArrayList();
         ArrayList pixelesConErrorAlGuardarValores = new ArrayList();
         ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
@@ -248,27 +326,15 @@ public class DATatlantis{
             if (getUltimoDatLeido()== null || (!getUltimoDatLeido().toLowerCase().equals(datFileNamee))){
                 if (decompressData(rutaFileDat)){
                     ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
-                    setIndiceDat(178);
+                    setIndiceDat(184);//antes 178
                     while ((getIndiceDat()+tamanioBloque)<getDatosDescomprimidos().length){
-						byte [] unBloque = Arrays.copyOfRange(getDatosDescomprimidos(), getIndiceDat(), (getIndiceDat()+tamanioBloque));
-						
-                        if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
-                            byte byteLeido = getDatosDescomprimidos()[getIndiceDat()];
-                            byte[] valorEncontrado;
-                            if (byteLeido != 0){
-                                valorEncontrado = getValorEncontrado(byteLeido);
-                                parametrosByteDeUnPixel.add(valorEncontrado);
-                            }
-                        }else{
-                            setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
-                            try{
-                                sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                                puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                                datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
-                            }catch(Exception e){
-                                pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
-                            }
-                            parametrosByteDeUnPixel = new ArrayList();
+			byte [] unBloque = Arrays.copyOfRange(getDatosDescomprimidos(), getIndiceDat(), (getIndiceDat()+tamanioBloque));
+                        try{
+                            sondaSets.add(getSondaSetHistoricoFromValoresLeidos2(unBloque));
+                            puntos.add(getPuntoHistoricoFromValoresLeidos2(unBloque));
+                            datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos2(unBloque));
+                        }catch(Exception e){
+                            pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
                         }
                         setIndiceDat(getIndiceDat()+tamanioBloque);
                     }
@@ -277,7 +343,7 @@ public class DATatlantis{
                     valoresPorPixel.add(datosDesconocidos);
                     sePudo=true;
                 }else{
-                    Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
+                    Logueador.getInstance().agregaAlLog("leerDatPorBloques(): Error al descomprimir DAT");
                 }
             }else{
                 sePudo=true;
@@ -303,10 +369,6 @@ public class DATatlantis{
         }
         return sePudo;
     }
-
-
-
-
 
 
     private byte[] getValorEncontrado(byte valorLeido) {
@@ -468,7 +530,7 @@ public class DATatlantis{
         String rutaDat = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+fileNameDelDat;
         //"D:\\Facultad\\Proyecto Final\\E-Naval\\Historicos\\SOUNDER1\\History\\-0001-260411-142357.dat";        
         if (!DATatlantis.getInstance().getUltimoDatLeido().toLowerCase().equals(fileNameDelDat)){
-            if (DATatlantis.getInstance().leerDat(rutaDat)){
+            if (DATatlantis.getInstance().leerDatPorBloques(rutaDat)){
                 datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(indiceDat));
                 datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(indiceDat));
                 datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(indiceDat));
