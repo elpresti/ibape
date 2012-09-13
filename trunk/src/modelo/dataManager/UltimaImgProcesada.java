@@ -15,6 +15,7 @@ public class UltimaImgProcesada {
     private ArrayList<modelo.dataManager.Marca> marcas;
     private String fileName;
     private static UltimaImgProcesada unicaInstancia;
+    private int progresoProcesamiento; //0=sin procesar, 1=ya binarice, 2=ya erosioné y dilaté, 3=ya quite el fondo, 4=ya busque marcas, 5= ya las pinté, 6= fin de procesamiento...
     
     private UltimaImgProcesada (){}
     
@@ -36,6 +37,7 @@ public class UltimaImgProcesada {
      */
     public void setFechaYhora(java.util.Date fechaYhora) {
         this.fechaYhora = fechaYhora;
+        UltimaImgProcesada.getInstance().setProgresoProcesamiento(0);
     }
 
     /**
@@ -64,5 +66,19 @@ public class UltimaImgProcesada {
      */
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    /**
+     * @return the progresoProcesamiento
+     */
+    public int getProgresoProcesamiento() {
+        return progresoProcesamiento;
+    }
+
+    /**
+     * @param progresoProcesamiento the progresoProcesamiento to set
+     */
+    public void setProgresoProcesamiento(int progresoProcesamiento) {
+        this.progresoProcesamiento = progresoProcesamiento;
     }
 }
