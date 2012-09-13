@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.PuntoHistorico;
 import modelo.dataManager.SondaSetHistorico;
+import modelo.dataManager.UltimaImgProcesada;
 import net.sf.sevenzipjbinding.ExtractOperationResult;
 import net.sf.sevenzipjbinding.ISequentialOutStream;
 import net.sf.sevenzipjbinding.ISevenZipInArchive;
@@ -316,6 +317,9 @@ public class DATatlantis{
     public boolean leerDatPorBloques(String rutaFileDat){
         boolean sePudo=false;
         String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
+        UltimaImgProcesada.getInstance().setFechaYhora(Calendar.getInstance().getTime());
+        UltimaImgProcesada.getInstance().setFileName(datFileNamee.replace(".dat", ".jpg"));
+        UltimaImgProcesada.getInstance().setProgresoProcesamiento(1);//inicio el analisis del DAT y empiezo a descomprimir
 	int tamanioBloque=184;
         ArrayList valoresPorPixel = new ArrayList();
         ArrayList pixelesConErrorAlGuardarValores = new ArrayList();
@@ -325,6 +329,7 @@ public class DATatlantis{
         try{
             if (getUltimoDatLeido()== null || (!getUltimoDatLeido().toLowerCase().equals(datFileNamee))){
                 if (decompressData(rutaFileDat)){
+                    UltimaImgProcesada.getInstance().setProgresoProcesamiento(2);//ya descomprimí, ahora leo el archivo por bloques
                     ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
                     setIndiceDat(184);//antes 178
                     while ((getIndiceDat()+tamanioBloque)<getDatosDescomprimidos().length){
@@ -349,10 +354,11 @@ public class DATatlantis{
                 sePudo=true;
             }
         }catch(Exception e){
-            System.out.println(e);
+            Logueador.getInstance().agregaAlLog("leerDatPorBloques(): "+e.toString());
         }
         if (pixelesConErrorAlGuardarValores.size()>0){
             Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
+            sePudo=false;//error al leer el DAT
         }else{
             setUltimoDatLeido(rutaFileDat.substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length()));
             setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
@@ -365,7 +371,10 @@ public class DATatlantis{
             }
         }
         if (!sePudo){
+           UltimaImgProcesada.getInstance().setProgresoProcesamiento(-2);//error al leer el DAT
            controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
+        }else{
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(3);//fin: lectura DAT exitosa, comienza procesamiento de img
         }
         return sePudo;
     }

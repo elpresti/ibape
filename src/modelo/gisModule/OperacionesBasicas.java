@@ -43,8 +43,6 @@ public class OperacionesBasicas {
     private int ancho;
     private int alto;
     private Colores color = new Colores();
-    private int progresoProcesamiento; //0=sin procesar, 1=ya binarice, 2=ya erosioné y dilaté, 3=ya quite el fondo, 4=ya busque marcas, 5= ya las pinté, 6= fin de procesamiento...
-
 
     private OperacionesBasicas(){
         inicializar();
@@ -123,7 +121,7 @@ public class OperacionesBasicas {
 */    
     public int cuantosPecesHay(BufferedImage imgOriginal){
         int cantPeces = 0;
-        setProgresoProcesamiento(0); 
+        //setProgresoProcesamiento(0); 
         //Creamos los filtros para la imagen con la clase Filtros
         Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());
         //La erosionamos con Filtros.erode()
@@ -131,9 +129,9 @@ public class OperacionesBasicas {
 //        getInstance().grabarImagen(imgProcesada);
         //Al resultado lo binarizamos con el umbral que corresponda filtros.Binarizacion(imgProcesada, 20
         imgProcesada = filtros.Binarizacion(imgProcesada, 20);
-        setProgresoProcesamiento(1);
+        //setProgresoProcesamiento(1);
         imgProcesada = filtros.dilate(imgProcesada);
-        setProgresoProcesamiento(2);
+        //setProgresoProcesamiento(2);
 //        getInstance().grabarImagen(imgProcesada);
         //Creamos la segmentacion para esta imagen con la clase Segmentacion
 //        Segmentacion segmentacion = new Segmentacion(getInstance().getAncho(),getInstance().getAlto());
@@ -479,25 +477,25 @@ public class OperacionesBasicas {
     public ArrayList<Marca> buscaMarcas(BufferedImage imgOriginal){
         ArrayList<Marca> marcas = new ArrayList();
 //-----------
-        setProgresoProcesamiento(0); 
+        UltimaImgProcesada.getInstance().setProgresoProcesamiento(5);//erosionando...
         Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());//Creamos los filtros para la imagen con la clase Filtros
         BufferedImage imgProcesada = filtros.erode(imgOriginal);//La erosionamos con Filtros.erode()
+        UltimaImgProcesada.getInstance().setProgresoProcesamiento(6);//binarizando...
         imgProcesada = filtros.Binarizacion(imgProcesada, 20);//Al resultado lo binarizamos con el umbral que corresponda
-        setProgresoProcesamiento(1);
+        UltimaImgProcesada.getInstance().setProgresoProcesamiento(7);//dilatando...
         imgProcesada = filtros.dilate(imgProcesada);
         //imgProcesada = filtros.erode(imgProcesada);
-        setProgresoProcesamiento(2);
         getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+        UltimaImgProcesada.getInstance().setProgresoProcesamiento(8);//buscando fondo...
         int fondo[] = buscaFondo(imgProcesada);//obtengo las coordenadas Y del fondo y lo guardo en el arreglo
         if (fondo != null && fondo.length>0){
-            setProgresoProcesamiento(3);
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(9);//fondo encontrado, quitandolo y buscando marcas...
             BufferedImage imgConFondo = dibujaFondo(imgProcesada, fondo);
             setImgConFondo(imgConFondo);
             BufferedImage imagensinhoras = eliminaHoras(imgConFondo);
             getInstance().grabarImagen(eliminaFondo(imgConFondo, fondo),"imgs\\imagenSinFondoNiHoras.tmp");
-            setProgresoProcesamiento(4);
             imgProcesada = imgConFondo;
-            //-----------
+            //----------- ahora busco las marcas ----------
             Point point = new Point();
             for (int contAncho = 1; contAncho < imgProcesada.getWidth(); contAncho++) {
                 for (int contAlto= imgProcesada.getHeight()-1; contAlto >350; contAlto--){
@@ -522,9 +520,9 @@ public class OperacionesBasicas {
                         }
                 }
             }
-            
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(10);//fin del correcto procesamiento de img
         }else{
-            setProgresoProcesamiento(-1);//no se pudo procesar la imagen
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(-1);//no se pudo procesar la imagen
         }
         return marcas;
     }
@@ -796,26 +794,13 @@ public class OperacionesBasicas {
     public void setImgConFondo(BufferedImage imgConFondo) {
         this.imgConFondo = imgConFondo;
     }
-
-    /**
-     * @return the progresoProcesamiento
-     */
-    public int getProgresoProcesamiento() {
-        return progresoProcesamiento;
-    }
-
-    /**
-     * @param progresoProcesamiento the progresoProcesamiento to set
-     */
-    public void setProgresoProcesamiento(int progresoProcesamiento) {
-        this.progresoProcesamiento = progresoProcesamiento;
-    }
     
     public boolean procesarImagen(String imgFileName){
         boolean sePudo=false;
         try{
             OperacionesBasicas.getInstance().obtenerImagen(imgFileName);
             BufferedImage imgOriginal = getImagenOriginal();
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(4);//cargue en memoria la img, ahora voy a analizar si es apta
             if (imgOriginal != null && imagenApta(imgOriginal)){
                 //int cantPeces = cuantosPecesHay(imagenOriginal);
                 ArrayList<Marca> marcas= buscaMarcas(imgOriginal);
@@ -823,23 +808,20 @@ public class OperacionesBasicas {
                 //grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
                 //BufferedImage imgConMarcasRellena = rellenaMarcasDetectadas(imgConMarcas, marcas);
                 //grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
-                UltimaImgProcesada.getInstance().setFechaYhora(Calendar.getInstance().getTime());
-                UltimaImgProcesada.getInstance().setFileName(imgFileName);
                 UltimaImgProcesada.getInstance().setMarcas(marcas);
                 if (marcas.size()>0){
                     BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
                     grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
-                    setProgresoProcesamiento(5);//5=se encontraron marcas y se graficaran
                     sePudo=true;
                 }else{
-                    if (getProgresoProcesamiento() != -1){ //-1=no se pudo procesar la imagen
-                        setProgresoProcesamiento(6);//6=no se encontraron marcas
+                    if (UltimaImgProcesada.getInstance().getProgresoProcesamiento() != -1){ //-1=no se pudo procesar la imagen
                         sePudo=true;
                     }else{
                         sePudo=false;
                     }
                 }
             }
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("procesarImagen(): "+e.toString());
         }
