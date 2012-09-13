@@ -19,6 +19,8 @@ public class DatosDesconocidosFromDat{
     private int varDesconocida7;
     private int varDesconocida8;
     private int varDesconocida9;
+    private int varDesconocida10;
+    private int varDesconocida11;
 
     public DatosDesconocidosFromDat (){}
 
@@ -160,6 +162,34 @@ public class DatosDesconocidosFromDat{
      */
     public void setVarDesconocida9(int varDesconocida9) {
         this.varDesconocida9 = varDesconocida9;
+    }
+
+    /**
+     * @return the varDesconocida10
+     */
+    public int getVarDesconocida10() {
+        return varDesconocida10;
+    }
+
+    /**
+     * @param varDesconocida10 the varDesconocida10 to set
+     */
+    public void setVarDesconocida10(int varDesconocida10) {
+        this.varDesconocida10 = varDesconocida10;
+    }
+
+    /**
+     * @return the varDesconocida11
+     */
+    public int getVarDesconocida11() {
+        return varDesconocida11;
+    }
+
+    /**
+     * @param varDesconocida11 the varDesconocida11 to set
+     */
+    public void setVarDesconocida11(int varDesconocida11) {
+        this.varDesconocida11 = varDesconocida11;
     }
 }
 
