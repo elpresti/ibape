@@ -80,5 +80,6 @@ public class UltimaImgProcesada {
      */
     public void setProgresoProcesamiento(int progresoProcesamiento) {
         this.progresoProcesamiento = progresoProcesamiento;
+        controllers.ControllerPpal.getInstance().actualizaBarraProgresoProcesaImg(progresoProcesamiento);
     }
 }

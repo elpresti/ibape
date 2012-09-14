@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Timer;
+import modelo.dataManager.UltimaImgProcesada;
 import persistencia.Logueador;
 
 /**
@@ -30,6 +31,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     private PanelBarraDeEstado() {
         initComponents();
         start();
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -43,6 +45,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
 
         barraEstado = new org.jdesktop.swingx.JXStatusBar();
         panelIzquierdo = new org.jdesktop.swingx.JXPanel();
+        barraProcesaImg = new javax.swing.JProgressBar();
         lblMensaje = new org.jdesktop.swingx.JXLabel();
         panelMedio = new org.jdesktop.swingx.JXPanel();
         panelDerecho = new org.jdesktop.swingx.JXPanel();
@@ -70,10 +73,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         panelIzquierdo.setPreferredSize(new java.awt.Dimension(450, 30));
         panelIzquierdo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
+        barraProcesaImg.setPreferredSize(new java.awt.Dimension(350, 17));
+        panelIzquierdo.add(barraProcesaImg);
+
         lblMensaje.setText("Bienvenido a IBAPE!");
         lblMensaje.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         panelIzquierdo.add(lblMensaje);
-        lblMensaje.getAccessibleContext().setAccessibleName("Bienvenido a IBAPE!");
 
         barraEstado.add(panelIzquierdo, java.awt.BorderLayout.WEST);
 
@@ -229,13 +234,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel GpsEstado;
-    private javax.swing.JPanel GpsEstado1;
     private javax.swing.JPanel HistoricoEstado;
     private javax.swing.JPanel LanEstado;
     private javax.swing.JPanel SondaEstado;
     private org.jdesktop.swingx.JXStatusBar barraEstado;
+    private javax.swing.JProgressBar barraProcesaImg;
     private org.jdesktop.swingx.JXLabel lblGpsEstado;
-    private org.jdesktop.swingx.JXLabel lblGpsEstado1;
     private org.jdesktop.swingx.JXLabel lblHistoricoEstado;
     private org.jdesktop.swingx.JXLabel lblLanEstado;
     private org.jdesktop.swingx.JXLabel lblMensaje;
@@ -409,14 +413,94 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
             else
                 { this.lblMensaje.setForeground(Color.blue); }        
     }
- 
     
     public int getIdMensajeAmostrar(ArrayList<String> colaMensajes){
       int idMensajeAmostrar=0;      
       return idMensajeAmostrar;
     }
 
+    private void inicializador() {
+        getBarraProcesaImg().setVisible(false);
+        getBarraProcesaImg().setStringPainted(true);
+        getBarraProcesaImg().setBorderPainted(true);
 
+    }
 
+    public void setProgresoProcesaImg(int estado){
+      MuestraMsgEnBarraProcesaImg mmebpi;
+      String[] msg = {"",""};
+      String imgFileName=modelo.dataManager.UltimaImgProcesada.getInstance().getFileName().toLowerCase(); 
+      imgFileName=imgFileName.substring(imgFileName.lastIndexOf("\\")+1);
+      switch(estado){
+          case -2:  mmebpi = new MuestraMsgEnBarraProcesaImg();
+                    msg[0] = "-2"; msg[1] = "Error DAT: "+imgFileName.replace(".jpg",".dat");
+                    mmebpi.setMensaje(msg);
+                    mmebpi.start();
+                    getBarraProcesaImg().setValue(100);
+                    break;
+          case -1:  mmebpi = new MuestraMsgEnBarraProcesaImg();
+                    msg[0] = "-1"; msg[1] = "Error IMG: "+imgFileName;
+                    mmebpi.setMensaje(msg);
+                    mmebpi.start();
+                    getBarraProcesaImg().setValue(100);
+                    break;
+           case 0:  Logueador.getInstance().agregaAlLog("Comienza el procesamiento de "+UltimaImgProcesada.getInstance().getFileName());
+                    getBarraProcesaImg().setVisible(true);
+                    lblMensaje.setVisible(false);
+                    getBarraProcesaImg().setValue(estado*10);
+                    break;
+          case 11:  mmebpi = new MuestraMsgEnBarraProcesaImg();
+                    msg[0] = "11"; msg[1]="Fin de procesamiento: "+imgFileName;
+                    mmebpi.setMensaje(msg);
+                    mmebpi.start();
+                    getBarraProcesaImg().setValue(100);
+                    break;
+          default:  getBarraProcesaImg().setValue(estado*10);
+                    break;
+      }
+    }
 
+    /**
+     * @return the barraProcesaImg
+     */
+    public javax.swing.JProgressBar getBarraProcesaImg() {
+        return barraProcesaImg;
+    }
+
+}
+
+class MuestraMsgEnBarraProcesaImg implements Runnable{
+    Thread thMsgBarraProcesaImg;
+    private String[] mensaje;
+    public void run() { 
+        PanelBarraDeEstado.getInstance().getLblMensaje().setVisible(false);
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setVisible(true);
+        Color colorFondoAnterior = PanelBarraDeEstado.getInstance().getBarraProcesaImg().getBackground();
+        Color colorLetrasAnterior = PanelBarraDeEstado.getInstance().getBarraProcesaImg().getForeground();
+        if (mensaje[0].equals("-1") || mensaje[0].equals("-2")){
+            PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.red);
+        }else{
+            PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.green);
+        }
+        //PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.white);
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setString(mensaje[1]);
+        try{  thMsgBarraProcesaImg.sleep(5000);/* 5 segundos de msg */ }
+        catch(Exception e){ Logueador.getInstance().agregaAlLog(e.toString()); }
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setBackground(colorFondoAnterior);
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(colorLetrasAnterior);
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setString(null);
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setVisible(false);
+        PanelBarraDeEstado.getInstance().getLblMensaje().setVisible(true);
+        thMsgBarraProcesaImg = null;
+    }
+    public void start() {
+        if (thMsgBarraProcesaImg == null) {
+            thMsgBarraProcesaImg = new Thread(this);
+            thMsgBarraProcesaImg.setPriority(Thread.MIN_PRIORITY);
+            thMsgBarraProcesaImg.start();
+        }
+    }
+    public void setMensaje(String[] mensaje) {
+        this.mensaje = mensaje;
+    }
 }

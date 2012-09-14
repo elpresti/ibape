@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import gui.PanelBarraDeEstado;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -314,4 +315,10 @@ public class ControllerPpal {
         }
         return listRutaIconos;
     }
+
+    public void actualizaBarraProgresoProcesaImg(int progresoProcesamiento) {
+        PanelBarraDeEstado.getInstance().setProgresoProcesaImg(progresoProcesamiento);
+    }
+    
+    
 }

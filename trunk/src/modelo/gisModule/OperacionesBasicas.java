@@ -801,6 +801,7 @@ public class OperacionesBasicas {
             OperacionesBasicas.getInstance().obtenerImagen(imgFileName);
             BufferedImage imgOriginal = getImagenOriginal();
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(4);//cargue en memoria la img, ahora voy a analizar si es apta
+            //if (false){ 
             if (imgOriginal != null && imagenApta(imgOriginal)){
                 //int cantPeces = cuantosPecesHay(imagenOriginal);
                 ArrayList<Marca> marcas= buscaMarcas(imgOriginal);

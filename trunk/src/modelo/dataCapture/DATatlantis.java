@@ -317,8 +317,8 @@ public class DATatlantis{
     public boolean leerDatPorBloques(String rutaFileDat){
         boolean sePudo=false;
         String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
-        UltimaImgProcesada.getInstance().setFechaYhora(Calendar.getInstance().getTime());
         UltimaImgProcesada.getInstance().setFileName(datFileNamee.replace(".dat", ".jpg"));
+        UltimaImgProcesada.getInstance().setFechaYhora(Calendar.getInstance().getTime());
         UltimaImgProcesada.getInstance().setProgresoProcesamiento(1);//inicio el analisis del DAT y empiezo a descomprimir
 	int tamanioBloque=184;
         ArrayList valoresPorPixel = new ArrayList();
