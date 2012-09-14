@@ -303,7 +303,8 @@ public class LanSonda extends java.util.Observable implements Runnable {
                                 if (copiarArchivosRemotos(archivosNuevos)){
                                     int i = 0;
                                     String rutaAcsv =null;
-                                    while (i<archivosNuevos.size()){
+                                    boolean yaLeyoUno=false;
+                                    while (i<archivosNuevos.size() && !yaLeyoUno){
                                         if (archivosNuevos.get(i).getName().toLowerCase().contains(".jpg")){//si el archivo nuevo es un JPG
                                             //rutaAcsv = Csv.getInstance().getCsvFromJpg(archivosNuevos.get(i).getName().toLowerCase()); //busco su DAT y genero el CSV
                                             LeeDatYprocesaImg ldypi = new LeeDatYprocesaImg();
@@ -315,6 +316,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
                                                 persistencia.BrokerHistoricoPunto.getInstance().insertPunto(punto.getInstance());
                                             }
                                             */
+                                            yaLeyoUno=true;
                                         }
                                         i++;
                                     }
@@ -503,7 +505,9 @@ class LeeDatYprocesaImg implements Runnable{
             File datFile = new File(datFileName);
             if (imgFile.exists() && datFile.exists()){
                 if (DATatlantis.getInstance().leerDatPorBloques(datFileName)){
+                   Logueador.getInstance().agregaAlLog(datFileName+" leido correctamente"); 
                    if (OperacionesBasicas.getInstance().procesarImagen(imgFileName)){
+                       Logueador.getInstance().agregaAlLog(imgFileName+" procesada correctamente"); 
                        sePudo=true;
                    }
                 }

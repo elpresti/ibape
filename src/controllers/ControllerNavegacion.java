@@ -128,11 +128,11 @@ public class ControllerNavegacion {
     }
 
     public void actualizaGuiProcesamientoImgs() {
-        throw new UnsupportedOperationException("actualizaGuiProcesamientoImgs(): Not yet implemented");
+        Logueador.getInstance().agregaAlLog("actualizaGuiProcesamientoImgs(): TODO BIEN");
     }
 
     public void errorGuiProcesamientoImgs() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Logueador.getInstance().agregaAlLog("errorGuiProcesamientoImgs(): TODO MAL"); 
     }
 
 }
