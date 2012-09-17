@@ -408,13 +408,25 @@ public class DATatlantis{
     }
     
     public Date armaDate(int fecha, int horario) {
-        int hora = Integer.parseInt(String.valueOf(horario).substring(0, 2));
-        int minutos = Integer.parseInt(String.valueOf(horario).substring(2, 4));
-        int segundos = Integer.parseInt(String.valueOf(horario).substring(4, 6));
-        int dia = Integer.parseInt(String.valueOf(fecha).substring(0, 2));
-        int mes = Integer.parseInt(String.valueOf(fecha).substring(2, 4));
-        int anio = Integer.parseInt(String.valueOf(fecha).substring(4, 6));
-        
+        int hora,minutos,segundos,dia,mes,anio;
+        if (fecha>99999){
+            hora = Integer.parseInt(String.valueOf(horario).substring(0, 2));
+            minutos = Integer.parseInt(String.valueOf(horario).substring(2, 4));
+            segundos = Integer.parseInt(String.valueOf(horario).substring(4, 6));
+        }else{
+            hora = Integer.parseInt(String.valueOf(horario).substring(0, 1));
+            minutos = Integer.parseInt(String.valueOf(horario).substring(1, 3));
+            segundos = Integer.parseInt(String.valueOf(horario).substring(3, 5));
+        }
+        if (horario>99999){
+            dia = Integer.parseInt(String.valueOf(fecha).substring(0, 2));
+            mes = Integer.parseInt(String.valueOf(fecha).substring(2, 4));
+            anio = Integer.parseInt(String.valueOf(fecha).substring(4, 6));            
+        }else{
+            dia = Integer.parseInt(String.valueOf(fecha).substring(0, 1));
+            mes = Integer.parseInt(String.valueOf(fecha).substring(1, 3));
+            anio = Integer.parseInt(String.valueOf(fecha).substring(3, 5));
+        }
         Calendar calendario = Calendar.getInstance();
         calendario.set(anio, mes-1, dia, hora, minutos, segundos);        
         return calendario.getTime();
