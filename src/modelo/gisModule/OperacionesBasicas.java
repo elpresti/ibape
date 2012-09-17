@@ -646,7 +646,9 @@ public class OperacionesBasicas {
      public boolean imagenApta(BufferedImage imgOriginal) throws IOException{
         boolean esApta= false;
         ArrayList<Float> porcentajesPxs = porcentajePxsRojosAmarillosNegros(imgOriginal);
-        if (porcentajesPxs.get(0)<9  && porcentajesPxs.get(1)<10  && porcentajesPxs.get(2)>60){
+        boolean caso1=porcentajesPxs.get(0)<9  && porcentajesPxs.get(1)<10  && porcentajesPxs.get(2)>60;
+        boolean caso2=porcentajesPxs.get(0)<=13  && porcentajesPxs.get(1)<4  && porcentajesPxs.get(2)>60;
+        if (caso1 || caso2){
             esApta=true;
         }
      return esApta;
