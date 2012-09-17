@@ -350,25 +350,25 @@ public class DATatlantis{
                 }else{
                     Logueador.getInstance().agregaAlLog("leerDatPorBloques(): Error al descomprimir DAT");
                 }
+                if (pixelesConErrorAlGuardarValores.size()>0){
+                    Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
+                    sePudo=false;//error al leer el DAT
+                }else{
+                    setUltimoDatLeido(datFileNamee);
+                    setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
+                    setDatosFromDat(valoresPorPixel);
+                    if (sondaSets.size()>0){
+                        SondaSetHistorico ultimoSsh = sondaSets.get(sondaSets.size()-1);
+                        ultimoSsh.setUsadoDesde(puntos.get(0).getFechaYhora());//mentira
+                        ultimoSsh.setUsadoHasta(puntos.get(sondaSets.size()-1).getFechaYhora());
+                        actualizaSondaSet(ultimoSsh);
+                    }
+                }
             }else{
                 sePudo=true;
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("leerDatPorBloques(): "+e.toString());
-        }
-        if (pixelesConErrorAlGuardarValores.size()>0){
-            Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
-            sePudo=false;//error al leer el DAT
-        }else{
-            setUltimoDatLeido(rutaFileDat.substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length()));
-            setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
-            setDatosFromDat(valoresPorPixel);
-            if (sondaSets.size()>0){
-               SondaSetHistorico ultimoSsh = sondaSets.get(sondaSets.size()-1);
-               ultimoSsh.setUsadoDesde(puntos.get(0).getFechaYhora());//mentira
-               ultimoSsh.setUsadoHasta(puntos.get(sondaSets.size()-1).getFechaYhora());
-               actualizaSondaSet(ultimoSsh);
-            }
         }
         if (!sePudo){
            UltimaImgProcesada.getInstance().setProgresoProcesamiento(-2);//error al leer el DAT
@@ -534,20 +534,22 @@ public class DATatlantis{
 
     public ArrayList getDatosFromPixel(String jpgFileName, int nroPixelX){
         ArrayList datosPixelX=new ArrayList();
-        String fileNameDelDat = jpgFileName.toLowerCase().replace(".jpg", ".dat");
-        //System.getProperty("user.dir")+"\\"+LanSonda.getInstance().getCarpetaHistoricoLocal()+"\\"+Csv.getInstance().getConversorFileName();
-        String rutaDat = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+fileNameDelDat;
-        //"D:\\Facultad\\Proyecto Final\\E-Naval\\Historicos\\SOUNDER1\\History\\-0001-260411-142357.dat";        
-        if (!DATatlantis.getInstance().getUltimoDatLeido().toLowerCase().equals(fileNameDelDat)){
-            if (DATatlantis.getInstance().leerDatPorBloques(rutaDat)){
-                datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(indiceDat));
-                datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(indiceDat));
-                datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(indiceDat));
+        try{ 
+            String fileNameDelDat = jpgFileName.toLowerCase().substring(jpgFileName.lastIndexOf("\\")+1,jpgFileName.length());
+            fileNameDelDat = fileNameDelDat.toLowerCase().replace(".jpg", ".dat");
+            if (!DATatlantis.getInstance().getUltimoDatLeido().toLowerCase().equals(fileNameDelDat)){
+                if (DATatlantis.getInstance().leerDatPorBloques(fileNameDelDat)){
+                    datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(nroPixelX));
+                    datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(nroPixelX));
+                    datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(nroPixelX));
+                }
+            }else{
+                datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(nroPixelX));
+                datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(nroPixelX));
+                datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(nroPixelX));
             }
-        }else{
-            datosPixelX.add(((ArrayList<modelo.dataManager.SondaSetHistorico>)DATatlantis.getInstance().getDatosFromDat().get(0)).get(indiceDat));
-            datosPixelX.add(((ArrayList<modelo.dataManager.PuntoHistorico>)DATatlantis.getInstance().getDatosFromDat().get(1)).get(indiceDat));
-            datosPixelX.add(((ArrayList<modelo.dataManager.DatosDesconocidosFromDat>)DATatlantis.getInstance().getDatosFromDat().get(2)).get(indiceDat));
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("getDatosFromPixel(): "+e.toString());
         }
         return datosPixelX;
     }

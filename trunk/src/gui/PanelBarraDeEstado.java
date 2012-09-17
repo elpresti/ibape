@@ -430,19 +430,16 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
       MuestraMsgEnBarraProcesaImg mmebpi;
       String[] msg = {"",""};
       String imgFileName=modelo.dataManager.UltimaImgProcesada.getInstance().getFileName().toLowerCase(); 
-      imgFileName=imgFileName.substring(imgFileName.lastIndexOf("\\")+1);
       switch(estado){
           case -2:  mmebpi = new MuestraMsgEnBarraProcesaImg();
                     msg[0] = "-2"; msg[1] = "Error DAT: "+imgFileName.replace(".jpg",".dat");
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
-                    getBarraProcesaImg().setValue(100);
                     break;
           case -1:  mmebpi = new MuestraMsgEnBarraProcesaImg();
                     msg[0] = "-1"; msg[1] = "Error IMG: "+imgFileName;
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
-                    getBarraProcesaImg().setValue(100);
                     break;
            case 0:  Logueador.getInstance().agregaAlLog("Comienza el procesamiento de "+UltimaImgProcesada.getInstance().getFileName());
                     getBarraProcesaImg().setVisible(true);
@@ -453,7 +450,6 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     msg[0] = "11"; msg[1]="Fin de procesamiento: "+imgFileName;
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
-                    getBarraProcesaImg().setValue(100);
                     break;
           default:  getBarraProcesaImg().setValue(estado*10);
                     break;
@@ -477,12 +473,12 @@ class MuestraMsgEnBarraProcesaImg implements Runnable{
         PanelBarraDeEstado.getInstance().getBarraProcesaImg().setVisible(true);
         Color colorFondoAnterior = PanelBarraDeEstado.getInstance().getBarraProcesaImg().getBackground();
         Color colorLetrasAnterior = PanelBarraDeEstado.getInstance().getBarraProcesaImg().getForeground();
+        PanelBarraDeEstado.getInstance().getBarraProcesaImg().setValue(100);
         if (mensaje[0].equals("-1") || mensaje[0].equals("-2")){
             PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.red);
         }else{
             PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.green);
         }
-        //PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.white);
         PanelBarraDeEstado.getInstance().getBarraProcesaImg().setString(mensaje[1]);
         try{  thMsgBarraProcesaImg.sleep(5000);/* 5 segundos de msg */ }
         catch(Exception e){ Logueador.getInstance().agregaAlLog(e.toString()); }

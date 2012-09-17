@@ -70,37 +70,19 @@ public class Filtros {
 
 	//Conversion de imagen a escala de grises
 	public  BufferedImage Binarizacion (BufferedImage ImageBfrd , int n ) {
-	       
-	    	long Umbral = 500000;
-	       
-	    
-	       
-	        BufferedImage Nueva_Imagen = new BufferedImage(ancho,alto,BufferedImage.TYPE_INT_RGB) ;
-	 
-	    
-	       
-	        for (int i = 0; i <ancho ; i ++) {
-	        for ( int j = 0; j <alto ; j ++ ) {
-	       
-	            if ( ImageBfrd.getRGB(i,j) <-Umbral * n) {
-	               
-	       
-	                Nueva_Imagen.setRGB(i,j,color[1]);
-	           
-	            } else {
-	           
-	                Nueva_Imagen.setRGB(i,j,color[0]);
-	           
-	            }
-	       
-	            }
-	       
-	        }
-	   
+            long Umbral = 500000;
+            BufferedImage Nueva_Imagen = new BufferedImage(ImageBfrd.getWidth(),ImageBfrd.getHeight(),BufferedImage.TYPE_INT_RGB) ;
+            for (int i = 0; i <ImageBfrd.getWidth() ; i ++) {
+                for ( int j = 0; j <ImageBfrd.getHeight() ; j ++ ) {
+                    if ( ImageBfrd.getRGB(i,j) <-Umbral * n) {
+                        Nueva_Imagen.setRGB(i,j,color[1]);
+                    } else {
+                        Nueva_Imagen.setRGB(i,j,color[0]);
+                    }
+                }
+            }
 	    //ImagenOriginal = Nueva_Imagen;
-	   
-	        return Nueva_Imagen;
-	   
-	    }
-   
+	    return Nueva_Imagen;
+	}
+
 }
