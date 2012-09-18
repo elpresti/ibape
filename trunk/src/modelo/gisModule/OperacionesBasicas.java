@@ -14,7 +14,9 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.image.ColorModel;
 import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.awt.image.renderable.ParameterBlock;
 import java.lang.reflect.Array;
 import java.util.Calendar;
@@ -385,13 +387,13 @@ public class OperacionesBasicas {
 
 
     public BufferedImage dibujaFondo (BufferedImage img, int[] fondo){
-         int cont = 0;      // contador
-         int colorRojo = new Color (255,0,0).getRGB();        
-         while (cont < fondo.length ) {
-            img.setRGB(cont, fondo[cont],colorRojo  );
-            cont++;
-        }
-        return img;
+       int cont = 0;      // contador
+       int colorRojo = new Color (255,0,0).getRGB();        
+       while (cont < fondo.length ) {
+          img.setRGB(cont, fondo[cont],colorRojo  );
+          cont++;
+       }
+       return img;
     }
 
     public BufferedImage eliminaFondo(BufferedImage img, int[] fondo){
@@ -411,18 +413,14 @@ public class OperacionesBasicas {
         return img;
     }
 
-        public BufferedImage eliminaHoras(BufferedImage img){
-        int colorNegro = new Color (0,0,0).getRGB();
-        alto = 1;
-        int contAncho = 1;      
-        int contAlto = alto;
-        while (contAncho<=966){
-             contAlto = alto;
-             while (contAlto <= 20 ) {
-                img.setRGB(contAncho, contAlto, colorNegro);
-                contAlto++;
-            }
-             contAncho++;
+    public BufferedImage eliminaHoras(BufferedImage img){ //no recorta la img, sino q las pisa con color Negro
+        if (img.getHeight()>18){
+            int colorNegro = new Color (0,0,0).getRGB();
+            for (int x=0;x<img.getWidth();x++){
+                for (int y=0;y<18;y++){  //suponemos q la hora ocupa los primeros 17px asique hasta ahi escribiremos con Negro
+                    img.setRGB(x,y,colorNegro);
+                }
+            }            
         }
         return img;
     }
@@ -481,6 +479,13 @@ public class OperacionesBasicas {
         this.alto = alto;
     }
 
+    public BufferedImage bufferedImageClone(BufferedImage bi) {
+        ColorModel cm = bi.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = bi.copyData(null);
+        return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+    }    
+    
     public ArrayList<Marca> buscaMarcas(BufferedImage imgOriginal){
         ArrayList<Marca> marcas = new ArrayList();
         try{
@@ -492,16 +497,17 @@ public class OperacionesBasicas {
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(7);//dilatando...
             imgProcesada = filtros.dilate(imgProcesada);
             //imgProcesada = filtros.erode(imgProcesada);
-            getInstance().grabarImagen(imgProcesada,"imgs\\imagen.tmp");
+            getInstance().grabarImagen(imgProcesada,"imgs\\filteredImg.tmp");
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(8);//buscando fondo...
             int fondo[] = buscaFondo(imgProcesada);//obtengo las coordenadas Y del fondo y lo guardo en el arreglo
             if (fondo != null && fondo.length>0){
                 UltimaImgProcesada.getInstance().setProgresoProcesamiento(9);//fondo encontrado, quitandolo y buscando marcas...
-                BufferedImage imgConFondoo = dibujaFondo(imgProcesada, fondo);
-                setImgConFondo(imgConFondoo); //necesito guardarla para despues poder graficar las marcas sobre la img con fondo
-                imgProcesada = eliminaHoras(imgConFondoo);
+                //BufferedImage imgConFondoo = dibujaFondo(imgProcesada, fondo);
+                setImgConFondo(bufferedImageClone(imgProcesada)); //la guardo para despues graficar las marcas sobre la img con fondo
+                //getInstance().grabarImagen(getImgConFondo(),"imgs\\imagenConFondo.tmp");
                 imgProcesada = eliminaFondo(imgProcesada, fondo);
-                getInstance().grabarImagen(imgProcesada,"imgs\\imagenSinFondoNiHoras.tmp");
+                imgProcesada = eliminaHoras(imgProcesada);
+                //getInstance().grabarImagen(imgProcesada,"imgs\\imagenSinFondoNiHoras.tmp");
                 //----------- ahora busco las marcas ----------
                 Point point = new Point();
                 for (int contAncho = 1; contAncho < imgProcesada.getWidth(); contAncho++) {
@@ -623,30 +629,30 @@ public class OperacionesBasicas {
 
      }
 
-         public BufferedImage rellenaMarcasDetectadas(BufferedImage imgOriginal, ArrayList<Marca> marcas){
-         BufferedImage imgConMarcasRellena = imgOriginal;
+     public BufferedImage rellenaMarcasDetectadas(BufferedImage img, ArrayList<Marca> marcas){
          int colorRojo = new Color (255,0,0).getRGB();
-         marcas.get(1).getCoordMarca().get(1);
          for (Marca m : marcas) {
               int i=0;
               while (i<m.getCoordMarca().size()){
-                   imgConMarcasRellena.setRGB((int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY(),colorRojo);
-                   i++;}
-             }
-         return imgConMarcasRellena;
-
+                   img.setRGB((int) m.getCoordMarca().get(i).getX(), 
+                           (int) m.getCoordMarca().get(i).getY(), colorRojo);
+                   i++;
+              }
+         }
+         return img; 
      }
 
      public BufferedImage recortaExpander(BufferedImage imgConExpander){
          //sacamos el expander de la imagen suponiendo q ocupa el ultimo 22% de la imagen, de abajo hacia arriba (estimación basada en ejemplos vistos)
-         BufferedImage imgSinExpander = imgConExpander.getSubimage(0, 0, imgConExpander.getWidth(),(int)(imgConExpander.getHeight()*0.78) );         
+         BufferedImage imgSinExpander = imgConExpander.getSubimage(0, 0, imgConExpander.getWidth(),(int)(imgConExpander.getHeight()*0.78) );
          return imgSinExpander;
      }    
          
      public boolean imagenApta(BufferedImage imgOriginal) throws IOException{
         boolean esApta= false;
-        ArrayList<Float> porcentajesPxs = porcentajePxsRojosAmarillosNegros(imgOriginal);
-        boolean caso1=porcentajesPxs.get(0)<9  && porcentajesPxs.get(1)<10  && porcentajesPxs.get(2)>60;
+        ArrayList<Float> porcentajesPxs = porcentajePxsRojosAmarillosNegros(imgOriginal); 
+        UltimaImgProcesada.getInstance().setPorcentajesColores(porcentajesPxs);
+        boolean caso1=porcentajesPxs.get(0)<12  && porcentajesPxs.get(1)<10  && porcentajesPxs.get(2)>60;
         boolean caso2=porcentajesPxs.get(0)<=13  && porcentajesPxs.get(1)<4  && porcentajesPxs.get(2)>60;
         if (caso1 || caso2){
             esApta=true;
@@ -781,22 +787,17 @@ public class OperacionesBasicas {
             if (imgOriginal != null){
                 ArrayList datosPrimerPixel = DATatlantis.getInstance().getDatosFromPixel(imgFileName, 0);
                 SondaSetHistorico sshPrimerPx = (SondaSetHistorico)datosPrimerPixel.get(0);
-                ArrayList datosUltimoPixel = DATatlantis.getInstance().getDatosFromPixel(imgFileName, imgOriginal.getHeight()-1);
+                ArrayList datosUltimoPixel = DATatlantis.getInstance().getDatosFromPixel(imgFileName, imgOriginal.getWidth()-2);
                 SondaSetHistorico sshUltimoPx = (SondaSetHistorico)datosUltimoPixel.get(0);
                 if (sshPrimerPx.getExpander()>0  || sshUltimoPx.getExpander()>0){//hay expander
                     imgOriginal = recortaExpander(imgOriginal);
                 }
                 if (imagenApta(imgOriginal)){
-                    //int cantPeces = cuantosPecesHay(imagenOriginal);
                     ArrayList<Marca> marcas= buscaMarcas(imgOriginal);
-                    //BufferedImage imgConMarcas = dibujaMarcasDetectadas(imgProcesada,marcas);
-                    //grabarImagen(imgConMarcas,"imgs\\imagenMarcas.tmp");
-                    //BufferedImage imgConMarcasRellena = rellenaMarcasDetectadas(imgConMarcas, marcas);
-                    //grabarImagen(imgConMarcasRellena,"imgs\\imagenMarcasRellenas.tmp");
                     UltimaImgProcesada.getInstance().setMarcas(marcas);
                     if (marcas.size()>0){
                         BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
-                        grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imagenConFondoYMarcasRellenas.tmp");
+                        grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imgWithDetectedMarks.tmp");
                         sePudo=true;
                     }else{
                         if (UltimaImgProcesada.getInstance().getProgresoProcesamiento() != -1){ //-1=no se pudo procesar la imagen
@@ -805,10 +806,13 @@ public class OperacionesBasicas {
                             sePudo=false;
                         }
                     }
+                    UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);
+                }else{
+                    UltimaImgProcesada.getInstance().setProgresoProcesamiento(12);
                 }
-                UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);
             }
         }catch(Exception e){
+            UltimaImgProcesada.getInstance().setProgresoProcesamiento(-1);
             Logueador.getInstance().agregaAlLog("procesarImagen(): "+e.toString());
         }
         if (sePudo){

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public class UltimaImgProcesada {
     private java.util.Date fechaYhora;
     private ArrayList<modelo.dataManager.Marca> marcas;
+    private ArrayList<Float> porcentajesColores;
     private String fileName;
     private static UltimaImgProcesada unicaInstancia;
     private int progresoProcesamiento; //0=sin procesar, 1=ya binarice, 2=ya erosioné y dilaté, 3=ya quite el fondo, 4=ya busque marcas, 5= ya las pinté, 6= fin de procesamiento...
@@ -81,5 +82,19 @@ public class UltimaImgProcesada {
     public void setProgresoProcesamiento(int progresoProcesamiento) {
         this.progresoProcesamiento = progresoProcesamiento;
         controllers.ControllerPpal.getInstance().actualizaBarraProgresoProcesaImg(progresoProcesamiento);
+    }
+
+    /**
+     * @return the porcentajesColores
+     */
+    public ArrayList<Float> getPorcentajesColores() {
+        return porcentajesColores;
+    }
+
+    /**
+     * @param porcentajesColores the porcentajesColores to set
+     */
+    public void setPorcentajesColores(ArrayList<Float> porcentajesColores) {
+        this.porcentajesColores = porcentajesColores;
     }
 }

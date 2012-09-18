@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerPpal;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -451,6 +452,13 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
                     break;
+          case 12:  mmebpi = new MuestraMsgEnBarraProcesaImg();
+                    ArrayList<Float> porcentajes = ControllerPpal.getInstance().getPorcentajesColorUltimaImg();
+                    msg[0] = "12"; msg[1]="Imagen no apta [R:"+porcentajes.get(0)+" A:"+porcentajes.get(1)+" N:"+porcentajes.get(2)+"]: "+imgFileName;
+                    Logueador.getInstance().agregaAlLog(msg[1]);
+                    mmebpi.setMensaje(msg);
+                    mmebpi.start();
+                    break;              
           default:  getBarraProcesaImg().setValue(estado*10);
                     break;
       }
@@ -477,7 +485,7 @@ class MuestraMsgEnBarraProcesaImg implements Runnable{
         if (mensaje[0].equals("-1") || mensaje[0].equals("-2")){
             PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.red);
         }else{
-            PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(Color.green);
+            PanelBarraDeEstado.getInstance().getBarraProcesaImg().setForeground(new Color(00,204,51));
         }
         PanelBarraDeEstado.getInstance().getBarraProcesaImg().setString(mensaje[1]);
         try{  thMsgBarraProcesaImg.sleep(5000);/* 5 segundos de msg */ }
