@@ -244,73 +244,6 @@ public class DATatlantis{
         }
         return salida;
     }
-    
-//http://stackoverflow.com/questions/1026761/how-to-convert-a-byte-array-to-its-numeric-value-java
-    public boolean leerDat(String rutaFileDat){
-        boolean sePudo=false;
-        String datFileNamee = rutaFileDat.toLowerCase().substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length());
-        ArrayList valoresPorPixel = new ArrayList();
-        ArrayList pixelesConErrorAlGuardarValores = new ArrayList();
-        ArrayList<modelo.dataManager.SondaSetHistorico> sondaSets = new ArrayList();
-        ArrayList<modelo.dataManager.PuntoHistorico> puntos = new ArrayList();
-        ArrayList<modelo.dataManager.DatosDesconocidosFromDat> datosDesconocidos = new ArrayList();
-        try{
-            if (getUltimoDatLeido()== null || (!getUltimoDatLeido().toLowerCase().equals(datFileNamee))){
-                if (decompressData(rutaFileDat)){
-                    ArrayList<byte[]> parametrosByteDeUnPixel = new ArrayList<byte[]>();
-                    setIndiceDat(0);
-                    while (getIndiceDat()<getDatosDescomprimidos().length){
-                        if (parametrosByteDeUnPixel.size()<29){ //para cada pixel hay 28 valores escritos consecutivamente
-                            byte byteLeido = getDatosDescomprimidos()[getIndiceDat()];
-                            byte[] valorEncontrado;
-                            if (byteLeido != 0){
-                                valorEncontrado = getValorEncontrado(byteLeido);
-                                parametrosByteDeUnPixel.add(valorEncontrado);
-                            }
-                        }else{
-                            setIndiceDat(getIndiceDat()+10);//salteo el posible valor erroneo q aveces hay al final
-                            try{
-                                sondaSets.add(getSondaSetHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                                puntos.add(getPuntoHistoricoFromValoresLeidos(parametrosByteDeUnPixel));
-                                datosDesconocidos.add(getDatosDesconocidosFromValoresLeidos(parametrosByteDeUnPixel));
-                            }catch(Exception e){
-                                pixelesConErrorAlGuardarValores.add(sondaSets.size()-1);
-                            }
-                            parametrosByteDeUnPixel = new ArrayList();
-                        }
-                        setIndiceDat(getIndiceDat()+1);
-                    }
-                    valoresPorPixel.add(sondaSets);
-                    valoresPorPixel.add(puntos);
-                    valoresPorPixel.add(datosDesconocidos);
-                    sePudo=true;
-                }else{
-                    Logueador.getInstance().agregaAlLog("leerDat(): Error al descomprimir DAT");
-                }
-            }else{
-                sePudo=true;
-            }
-        }catch(Exception e){
-            System.out.println(e);
-        }
-        if (pixelesConErrorAlGuardarValores.size()>0){
-            Logueador.getInstance().agregaAlLog("Error al intentar guardar datos de parametros leidos de "+(pixelesConErrorAlGuardarValores.size())+" pixeles");
-        }else{
-            setUltimoDatLeido(rutaFileDat.substring(rutaFileDat.lastIndexOf("\\")+1,rutaFileDat.length()));
-            setFechaYhoraUltimoDatLeido(Calendar.getInstance().getTime());
-            setDatosFromDat(valoresPorPixel);
-            if (sondaSets.size()>0){
-               SondaSetHistorico ultimoSsh = sondaSets.get(sondaSets.size()-1);
-               ultimoSsh.setUsadoDesde(puntos.get(0).getFechaYhora());//mentira
-               ultimoSsh.setUsadoHasta(puntos.get(sondaSets.size()-1).getFechaYhora());
-               actualizaSondaSet(ultimoSsh);
-            }
-        }
-        if (!sePudo){
-           controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
-        }
-        return sePudo;
-    }
 
 //leer cada pixel por bloques de (confirmadisimo!!! --->((((bloques de 184bytes!)))))/187 bytes---> 1px = 184b de DAT | 
 //    antes de empezar hay 177nulos    //177920    / 456px ancho= 84088b    //          / 967px ancho = 178112b
@@ -409,24 +342,22 @@ public class DATatlantis{
     
     public Date armaDate(int fecha, int horario) {
         int hora,minutos,segundos,dia,mes,anio;
-        if (fecha>99999){
-            hora = Integer.parseInt(String.valueOf(horario).substring(0, 2));
-            minutos = Integer.parseInt(String.valueOf(horario).substring(2, 4));
-            segundos = Integer.parseInt(String.valueOf(horario).substring(4, 6));
-        }else{
-            hora = Integer.parseInt(String.valueOf(horario).substring(0, 1));
-            minutos = Integer.parseInt(String.valueOf(horario).substring(1, 3));
-            segundos = Integer.parseInt(String.valueOf(horario).substring(3, 5));
-        }
-        if (horario>99999){
-            dia = Integer.parseInt(String.valueOf(fecha).substring(0, 2));
-            mes = Integer.parseInt(String.valueOf(fecha).substring(2, 4));
-            anio = Integer.parseInt(String.valueOf(fecha).substring(4, 6));            
-        }else{
-            dia = Integer.parseInt(String.valueOf(fecha).substring(0, 1));
-            mes = Integer.parseInt(String.valueOf(fecha).substring(1, 3));
-            anio = Integer.parseInt(String.valueOf(fecha).substring(3, 5));
-        }
+        //extraigo el horario
+        float cociente = horario / 10000;
+        int resto =  horario % 10000;
+        hora = (int) cociente;
+        cociente = resto / 100;
+        resto = resto % 100;
+        minutos = (int) cociente;
+        segundos = resto;
+        //extraigo la fecha
+        cociente = fecha / 10000;
+        resto =  fecha % 10000;
+        dia = (int) cociente;
+        cociente = resto / 100;
+        resto = resto % 100;
+        mes = (int) cociente;
+        anio = resto;
         Calendar calendario = Calendar.getInstance();
         calendario.set(anio, mes-1, dia, hora, minutos, segundos);        
         return calendario.getTime();

@@ -319,6 +319,10 @@ public class ControllerPpal {
     public void actualizaBarraProgresoProcesaImg(int progresoProcesamiento) {
         PanelBarraDeEstado.getInstance().setProgresoProcesaImg(progresoProcesamiento);
     }
+
+    public ArrayList<Float> getPorcentajesColorUltimaImg() {
+        return modelo.dataManager.UltimaImgProcesada.getInstance().getPorcentajesColores();
+    }
     
     
 }
