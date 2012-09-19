@@ -40,7 +40,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
                 modelo.dataManager.CategoriaPoi catPoi = new modelo.dataManager.CategoriaPoi();
                 // Get the data from the row using the column name
                 catPoi.setId(0 + rs.getInt("id"));
-                catPoi.setPathIcono("" + rs.getString("pathIcono"));
+                catPoi.setPathIcono("" + rs.getString("fileNameIcono"));
                 catPoi.setTitulo("" + rs.getString("titulo"));
 
                 CatPOIS.add(catPoi);
@@ -72,7 +72,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             if (rs.next()) {
                 // Get the data from the row using the column name
                 CatPOI.setId(0 + rs.getInt("id"));
-                CatPOI.setPathIcono("" + rs.getString("pathIcono"));
+                CatPOI.setPathIcono("" + rs.getString("fileNameIcono"));
                 CatPOI.setTitulo("" + rs.getString("titulo"));
             }
         } catch (SQLException ex) {
@@ -102,15 +102,16 @@ public class BrokerCategoriasPOI extends BrokerPpal {
             if (categoriaPOI.getTitulo() != null) {
                 titulo = "'" + categoriaPOI.getTitulo() + "'";
             }
-            String pathIcono = null;
+            String fileNameIcono = null;
             if (categoriaPOI.getPathIcono() != null) {
-                pathIcono = "'" + categoriaPOI.getPathIcono() + "'";
+                fileNameIcono = categoriaPOI.getPathIcono().substring(categoriaPOI.getPathIcono().lastIndexOf("\\")+1);
+                fileNameIcono = "'" + fileNameIcono + "'";
             }
 
             sqlQuery = "INSERT INTO CategoriasPoi "
-                    + "(titulo,pathIcono) "
+                    + "(titulo,fileNameIcono) "
                     + "VALUES "
-                    + "(" + titulo + "," + pathIcono + ")";
+                    + "(" + titulo + "," + fileNameIcono + ")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
@@ -163,9 +164,10 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         boolean sePudo = false;
         String sqlQuery = "";
         try {
+            String fileNameIcono = categoriaPOI.getPathIcono().substring(categoriaPOI.getPathIcono().lastIndexOf("\\")+1);
             sqlQuery = "Update CategoriasPoi "
                     + "SET titulo='" + categoriaPOI.getTitulo() + "', "
-                    + "pathIcono='" + categoriaPOI.getPathIcono() + "' "
+                    + "fileNameIcono='" + fileNameIcono + "' "
                     + "WHERE "
                     + "id=" + categoriaPOI.getId();
             System.out.println("Update CatPOI: " + sqlQuery);

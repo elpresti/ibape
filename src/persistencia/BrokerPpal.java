@@ -577,7 +577,7 @@ public abstract class BrokerPpal {
             String codigoCreacion = "CREATE TABLE CategoriasPoi ("
                     + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     + "  titulo             nvarchar(100) NOT NULL,"
-                    + "  pathIcono          nvarchar(300) NOT NULL"
+                    + "  fileNameIcono      nvarchar(300) NOT NULL"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo = true;

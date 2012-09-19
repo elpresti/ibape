@@ -29,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
@@ -630,6 +631,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                             case 1: {
                                 System.out.println("asigno");
                                 ArrayList a = controllers.ControllerPois.getInstance().cargaCategoriasPOI();
+                                unaCatPOI.setPathIcono(Sistema.getInstance().getRutaIconosCatPois()+"\\"+unaCatPOI.getPathIcono());
                                 a.remove(unaCatPOI); //saco la categoria que se elimina
                                 Object[] o = a.toArray();
 
@@ -900,6 +902,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //carga combo
         comboCategorias.removeAllItems();
         for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
+            cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois()+"\\"+cP.getPathIcono());
             comboCategorias.addItem(cP);
         }
     }
@@ -918,6 +921,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             ImageIcon unIcono = new ImageIcon(newimg);
              */
+            cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois()+"\\"+cP.getPathIcono());
             Image source = new ImageIcon(cP.getPathIcono()).getImage();
             BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
