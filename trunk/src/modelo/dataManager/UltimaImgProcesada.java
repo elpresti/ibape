@@ -17,7 +17,21 @@ public class UltimaImgProcesada {
     private String fileName;
     private static UltimaImgProcesada unicaInstancia;
     private int progresoProcesamiento; //0=sin procesar, 1=ya binarice, 2=ya erosioné y dilaté, 3=ya quite el fondo, 4=ya busque marcas, 5= ya las pinté, 6= fin de procesamiento...
-    
+    //Progreso= -2: LECTURA DAT: error al leer el DAT
+    //Progreso=-1: PROCESA IMG: error al procesar la imagen
+    //Progreso=1: LECTURA DAT: inicio el analisis del DAT y empiezo a descomprimir
+    //Progreso=2: LECTURA DAT: ya descomprimí, ahora leo el archivo por bloques
+    //Progreso=3: LECTURA DAT: fin! lectura DAT exitosa, comienza procesamiento de img
+    //Progreso=4: PROCESA IMG: cargue en memoria la img, ahora voy a analizar si es apta
+    //Progreso=5: PROCESA IMG: erosionando...
+    //Progreso=6: PROCESA IMG: binarizando...
+    //Progreso=7: PROCESA IMG: dilatando...
+    //Progreso=8: PROCESA IMG: buscando fondo...
+    //Progreso=9: PROCESA IMG: fondo encontrado, quitandolo y buscando marcas...
+    //Progreso=10: PROCESA IMG: fin del correcto procesamiento de img
+    //Progreso=11: PROCESA IMG: se procesó con exito y se encontraron marcas
+    //Progreso=12: PROCESA IMG: imagen no apta para el procesamiento
+    //Progreso=13: PROCESA IMG: se procesó con exito pero no se encontraron marcas
     private UltimaImgProcesada (){}
     
     public static UltimaImgProcesada getInstance(){
@@ -38,7 +52,6 @@ public class UltimaImgProcesada {
      */
     public void setFechaYhora(java.util.Date fechaYhora) {
         this.fechaYhora = fechaYhora;
-        UltimaImgProcesada.getInstance().setProgresoProcesamiento(0);
     }
 
     /**

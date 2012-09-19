@@ -784,6 +784,7 @@ public class OperacionesBasicas {
             OperacionesBasicas.getInstance().obtenerImagen(imgFileName);
             BufferedImage imgOriginal = getImagenOriginal();
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(4);//cargue en memoria la img, ahora voy a analizar si es apta
+            UltimaImgProcesada.getInstance().setMarcas(new ArrayList<Marca>());
             if (imgOriginal != null){
                 ArrayList datosPrimerPixel = DATatlantis.getInstance().getDatosFromPixel(imgFileName, 0);
                 SondaSetHistorico sshPrimerPx = (SondaSetHistorico)datosPrimerPixel.get(0);
@@ -799,16 +800,17 @@ public class OperacionesBasicas {
                         BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
                         grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imgWithDetectedMarks.tmp");
                         sePudo=true;
+                        UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);//se procesó con exito y se encontraron marcas
                     }else{
-                        if (UltimaImgProcesada.getInstance().getProgresoProcesamiento() != -1){ //-1=no se pudo procesar la imagen
+                        if (UltimaImgProcesada.getInstance().getProgresoProcesamiento() != -1){
                             sePudo=true;
+                            UltimaImgProcesada.getInstance().setProgresoProcesamiento(13); //se procesó con exito pero no se encontraron marcas
                         }else{
-                            sePudo=false;
+                            sePudo=false;//-1=no se pudo procesar la imagen
                         }
                     }
-                    UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);
                 }else{
-                    UltimaImgProcesada.getInstance().setProgresoProcesamiento(12);
+                    UltimaImgProcesada.getInstance().setProgresoProcesamiento(12); //imagen no apta para el procesamiento
                 }
             }
         }catch(Exception e){
