@@ -268,7 +268,7 @@ public class Sistema {
         return label;  
     }  
    
-    private BufferedImage scaleImg(BufferedImage src, int w, int h) {  
+    public BufferedImage scaleImg(BufferedImage src, int w, int h) {  
         int type = BufferedImage.TYPE_INT_RGB;  
         BufferedImage dst = new BufferedImage(w, h, type);  
         Graphics2D g2 = dst.createGraphics();  

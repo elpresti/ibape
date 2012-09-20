@@ -7,10 +7,12 @@ package controllers;
 import gui.PanelNavegacion;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.gisModule.Browser;
 import modelo.dataManager.Punto;
+import modelo.dataManager.UltimaImgProcesada;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
 
@@ -128,11 +130,15 @@ public class ControllerNavegacion {
     }
 
     public void actualizaGuiProcesamientoImgs() {
-        Logueador.getInstance().agregaAlLog("actualizaGuiProcesamientoImgs(): TODO BIEN");
+        gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
+                , "\\img\\imgWithDetectedMarks.tmp");
+        //Logueador.getInstance().agregaAlLog("actualizaGuiProcesamientoImgs(): TODO BIEN");
     }
 
     public void errorGuiProcesamientoImgs() {
-        Logueador.getInstance().agregaAlLog("errorGuiProcesamientoImgs(): TODO MAL"); 
+        gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
+                , "\\imgs\\imgProcessingError.tmp");
+        //Logueador.getInstance().agregaAlLog("errorGuiProcesamientoImgs(): TODO MAL"); 
     }
 
 }
