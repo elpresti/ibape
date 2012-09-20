@@ -32,7 +32,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
     Thread lanThread;
     static final int BUFFER_SIZE = 2048;
     static final byte[] buffer = new byte[BUFFER_SIZE];
-    static LanSonda unicaInstancia;
+    private static LanSonda unicaInstancia;
     private int estadoConexion; // 0=desconectado, 1=conectando, 2=conectado
     private String carpetaHistoricoLocal;
     private String carpetaHistoricoRemoto;
