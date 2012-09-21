@@ -36,6 +36,7 @@ public class Sistema {
     private static Sistema unicaInstancia;
     private String currentVarDir;
     private String rutaIconosCatPois;
+    private String imgWithDetectedMarksFileName;
     
     private Sistema(){
         inicializador();
@@ -258,6 +259,7 @@ public class Sistema {
 
     private void inicializador() {
         setRutaIconosCatPois("web\\imgs\\");
+        setImgWithDetectedMarksFileName("imgWithDetectedMarks.jpg");
     }
     
     public JLabel getLabelWithImgResized(int w, int h, BufferedImage image) {  
@@ -294,5 +296,16 @@ public class Sistema {
     
     public boolean pathIconoEsValido(String pathIcono){
         return (pathIcono != null)  &&  pathIcono.toLowerCase().contains("png");
+    }
+
+    public String getImgWithDetectedMarksFileName() {
+        return this.imgWithDetectedMarksFileName;
+    }
+
+    /**
+     * @param imgWithDetectedMarksFileName the imgWithDetectedMarksFileName to set
+     */
+    public void setImgWithDetectedMarksFileName(String imgWithDetectedMarksFileName) {
+        this.imgWithDetectedMarksFileName = imgWithDetectedMarksFileName;
     }
 }

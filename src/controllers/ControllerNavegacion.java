@@ -131,14 +131,19 @@ public class ControllerNavegacion {
 
     public void actualizaGuiProcesamientoImgs() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
-                , "\\img\\imgWithDetectedMarks.tmp");
+                , "\\imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName());
         //Logueador.getInstance().agregaAlLog("actualizaGuiProcesamientoImgs(): TODO BIEN");
     }
 
     public void errorGuiProcesamientoImgs() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
-                , "\\imgs\\imgProcessingError.tmp");
+                , "/imgs/errorProcessing.jpg");
         //Logueador.getInstance().agregaAlLog("errorGuiProcesamientoImgs(): TODO MAL"); 
+    }
+
+    public void errorImgNoApta() {
+        gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
+                , "/imgs/imgNotSuitable.jpg");
     }
 
 }
