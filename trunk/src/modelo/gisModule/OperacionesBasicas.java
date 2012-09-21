@@ -28,6 +28,7 @@ import javax.media.jai.Histogram;
 import javax.media.jai.JAI;
 import javax.media.jai.PlanarImage;
 import modelo.dataCapture.DATatlantis;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.Marca;
 import modelo.dataManager.SondaSetHistorico;
 import modelo.dataManager.UltimaImgProcesada;
@@ -793,12 +794,12 @@ public class OperacionesBasicas {
                 if (sshPrimerPx.getExpander()>0  || sshUltimoPx.getExpander()>0){//hay expander
                     imgOriginal = recortaExpander(imgOriginal);
                 }
-                if (imagenApta(imgOriginal)){
+                if (imagenApta(imgOriginal)){ 
                     ArrayList<Marca> marcas= buscaMarcas(imgOriginal);
                     UltimaImgProcesada.getInstance().setMarcas(marcas);
                     if (marcas.size()>0){
                         BufferedImage imgConFondoYMarcasRellenas = rellenaMarcasDetectadas(getImgConFondo(), marcas);
-                        grabarImagen(imgConFondoYMarcasRellenas,"imgs\\imgWithDetectedMarks.tmp");
+                        grabarImagen(imgConFondoYMarcasRellenas,"imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName());
                         sePudo=true;
                         UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);//se procesó con exito y se encontraron marcas
                     }else{
@@ -819,9 +820,12 @@ public class OperacionesBasicas {
         }
         if (sePudo){
             controllers.ControllerNavegacion.getInstance().actualizaGuiProcesamientoImgs();
-        }else{
+        }
+        /*
+        else{
             controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
-        }        
+        } 
+        */
         return sePudo;
     }
 

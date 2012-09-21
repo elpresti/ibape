@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerNavegacion;
 import controllers.ControllerPpal;
 import java.awt.Color;
 import java.awt.Font;
@@ -456,6 +457,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     ArrayList<Float> porcentajes = ControllerPpal.getInstance().getPorcentajesColorUltimaImg();
                     msg[0] = "12"; msg[1]="Imagen no apta [R:"+porcentajes.get(0)+" A:"+porcentajes.get(1)+" N:"+porcentajes.get(2)+"]: "+imgFileName;
                     Logueador.getInstance().agregaAlLog(msg[1]);
+                    ControllerNavegacion.getInstance().errorImgNoApta();
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
                     break;              

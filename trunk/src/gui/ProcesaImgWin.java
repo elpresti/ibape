@@ -59,7 +59,6 @@ public class ProcesaImgWin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("ProcesaImgWin"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(700, 700));
 
         panelSuperior.setPreferredSize(new java.awt.Dimension(700, 30));
 
@@ -72,15 +71,19 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         panelCentro.setPreferredSize(new java.awt.Dimension(700, 620));
 
         splitPanelPdi.setDividerLocation(200);
+        splitPanelPdi.setDividerSize(8);
         splitPanelPdi.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         splitPanelPdi.setContinuousLayout(true);
         splitPanelPdi.setOneTouchExpandable(true);
-        splitPanelPdi.setPreferredSize(new java.awt.Dimension(296, 395));
+        splitPanelPdi.setPreferredSize(new java.awt.Dimension(520, 600));
 
-        imgSinProcesar.setText("jLabel1");
+        imgSinProcesar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        imgSinProcesar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/imgNotProcessedFill.jpg"))); // NOI18N
+        imgSinProcesar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         splitPanelPdi.setLeftComponent(imgSinProcesar);
 
-        imgProcesada.setText("jLabel2");
+        imgProcesada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        imgProcesada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/imgProcessedFill.jpg"))); // NOI18N
         splitPanelPdi.setRightComponent(imgProcesada);
 
         panelCentro.add(splitPanelPdi);
@@ -108,29 +111,8 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void inicializador() {
-        //imgSinProcesar.setIcon(new ImageIcon("imgs\\img2.jpg"));
-        //splitPanelPdi = new JSplitPane(JSplitPane.VERTICAL_SPLIT,imgSinProcesar,imgProcesada);
-        //splitPanelPdi.setContinuousLayout(true);
-        //splitPanelPdi.setOneTouchExpandable(true);
-        //splitPanelPdi.setDividerLocation(200);
-
-        //imgProcesada = getImgOnAresizedJlabel("imgs\\img1.jpg",600,400);
-        //--- resize Icon
-        Image source = new ImageIcon("imgs\\img1-proc.jpg").getImage();
-        BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = (Graphics2D)image.getGraphics();
-        g2d.drawImage(source, 0, 0, null);
-        g2d.dispose();
-        //-------------
-        int anchoPretendido=400;
-        int altoPretendido=250;
-        BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
-        imgProcesada.setIcon(new ImageIcon(scaled));
-        imgProcesada.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
-        imgProcesada.setMinimumSize(new Dimension(0,0));
-        imgSinProcesar.setMinimumSize(new Dimension(0,0));
-
-        //imgSinProcesar = getImgOnAresizedJlabel("imgs\\img1-proc.jpg",600,400);        
+        setImgOnImgProcesadaLabel("/imgs/imgProcessedFill.jpg", 520, 580);
+        setImgOnImgSinProcesarLabel("/imgs/imgNotProcessedFill.jpg", 520, 580);
     }
     
     public void mostrarVentana(boolean estado){
@@ -140,28 +122,67 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     public void actualizaImgs(String rutaImgSinProcesar,String rutaImgProcesada){
         try{
             if (rutaImgProcesada == null || rutaImgProcesada.length()<2){
-                rutaImgProcesada = "imgs\\imgWithDetectedMarks.tmp";
+                rutaImgProcesada = "imgs\\"+modelo.dataCapture.Sistema.getInstance().getImgWithDetectedMarksFileName();
             }
             if (rutaImgSinProcesar == null || rutaImgSinProcesar.length()<2){
                 rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()
                         +"\\"+UltimaImgProcesada.getInstance().getFileName();
             }
-            imgSinProcesar = new JLabel(new ImageIcon(rutaImgSinProcesar));
-            imgProcesada = new JLabel(new ImageIcon(rutaImgProcesada));
+            setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 520, 580);
+            setImgOnImgProcesadaLabel(rutaImgProcesada, 520, 580);
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("actualizaImgs(): "+e.toString());
-            imgProcesada = new JLabel(new ImageIcon("imgs\\imgNotFound.png"));
+            setImgOnImgProcesadaLabel("/imgs/errorProcessing.jpg", 520, 580);
         }
     }
-    
-    public JLabel getImgOnAresizedJlabel(String rutaImg,int anchoSalida, int altoSalida){
-        //--- resize Icon
-        Image source = new ImageIcon(rutaImg).getImage();
-        BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+    private void setImgOnImgProcesadaLabel(String rutaImg, int anchoPretendido, int altoPretendido) {
+        Image source = null;
+        if (!rutaImg.contains("/")){
+            source = new ImageIcon(rutaImg).getImage();
+        }else{
+            source = new ImageIcon(getClass().getResource(rutaImg)).getImage();
+        }
+        //--- resize imgIcon
+        BufferedImage image = null;
+        if (!(source.getWidth(null) == -1)){
+            image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        }else{
+            image = new BufferedImage(967, 636, BufferedImage.TYPE_INT_ARGB); 
+        }
         Graphics2D g2d = (Graphics2D)image.getGraphics();
         g2d.drawImage(source, 0, 0, null);
         g2d.dispose();
         //-------------
-        return modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(anchoSalida, altoSalida, image);
+        BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
+        imgProcesada.setIcon(new ImageIcon(scaled));
+        imgProcesada.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
+        imgProcesada.setMinimumSize(new Dimension(0,0));
+        imgProcesada.setHorizontalAlignment(JLabel.LEFT);
+    }
+    
+    private void setImgOnImgSinProcesarLabel(String rutaImg, int anchoPretendido, int altoPretendido) {
+        Image source = null;
+        if (!rutaImg.contains("/")){
+            source = new ImageIcon(rutaImg).getImage();
+        }else{
+            source = new ImageIcon(getClass().getResource(rutaImg)).getImage();
+        }
+        //--- resize imgIcon
+        BufferedImage image = null;
+        if (!(source.getWidth(null) == -1)){
+            image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        }else{
+            image = new BufferedImage(967, 636, BufferedImage.TYPE_INT_ARGB); 
+        }
+        Graphics2D g2d = (Graphics2D)image.getGraphics();
+        g2d.drawImage(source, 0, 0, null);
+        g2d.dispose();
+        //-------------
+        BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
+        imgSinProcesar.setIcon(new ImageIcon(scaled));
+        imgSinProcesar.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
+        imgSinProcesar.setMinimumSize(new Dimension(0,0));
+        imgSinProcesar.setHorizontalAlignment(JLabel.LEFT);
     }
 }
