@@ -392,14 +392,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelTablaCategorias.setPreferredSize(new java.awt.Dimension(500, 200));
         panelTablaCategorias.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 200));
+        jScrollPane2.setMaximumSize(new java.awt.Dimension(500, 250));
+        jScrollPane2.setMinimumSize(new java.awt.Dimension(500, 250));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 250));
 
         tablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "Nombre de Categoria", "Icono"
@@ -420,9 +419,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaCategorias.setMaximumSize(new java.awt.Dimension(500, 200));
-        tablaCategorias.setMinimumSize(new java.awt.Dimension(500, 200));
-        tablaCategorias.setPreferredScrollableViewportSize(new java.awt.Dimension(500, 200));
+        tablaCategorias.setMinimumSize(new java.awt.Dimension(500, 100));
+        tablaCategorias.setPreferredScrollableViewportSize(new java.awt.Dimension(295, 360));
         tablaCategorias.setPreferredSize(new java.awt.Dimension(500, 200));
         jScrollPane2.setViewportView(tablaCategorias);
         tablaCategorias.getColumnModel().getColumn(1).setMinWidth(50);
@@ -502,9 +500,9 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelAgregaCategoria.setPreferredSize(new java.awt.Dimension(500, 60));
         panelAgregaCategoria.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        panelNombreNuevaCat.setMaximumSize(new java.awt.Dimension(500, 30));
-        panelNombreNuevaCat.setMinimumSize(new java.awt.Dimension(500, 30));
-        panelNombreNuevaCat.setPreferredSize(new java.awt.Dimension(500, 30));
+        panelNombreNuevaCat.setMaximumSize(new java.awt.Dimension(500, 40));
+        panelNombreNuevaCat.setMinimumSize(new java.awt.Dimension(500, 40));
+        panelNombreNuevaCat.setPreferredSize(new java.awt.Dimension(500, 40));
         panelNombreNuevaCat.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
         lblNombreNuevaCat.setText("Nombre");
@@ -738,7 +736,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }
 
     private void btnGuardarPOIActionPerformed(java.awt.event.ActionEvent evt) {
-        if (campoLatitud.getText().substring(campoLatitud.getText().indexOf(".") + 1).contains(".")) {
+        try {
+                if (campoLatitud.getText().substring(campoLatitud.getText().indexOf(".") + 1).contains(".")) {
             JOptionPane.showMessageDialog(null, "Latitud incorrecta");
             return;
         }
@@ -750,15 +749,23 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "La descripcion no es valida");
             return;
         }
-        if (campoLatitud.getText().isEmpty() || Double.valueOf(campoLatitud.getText()) == 0) {
-            JOptionPane.showMessageDialog(null, "La latitud no puede ser igual a 0");
+        if (campoLatitud.getText().isEmpty() || Double.valueOf(campoLatitud.getText()) == 0 || !(Double.valueOf(campoLatitud.getText()) >= -90 && Double.valueOf(campoLatitud.getText()) <= 90) ) {
+            JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
             return;
         }
-        if (campoLongitud.getText().isEmpty() || Double.valueOf(campoLongitud.getText()) == 0) {
-            JOptionPane.showMessageDialog(null, "La longitud no puede ser igual a 0");
+        if (campoLongitud.getText().isEmpty() || Double.valueOf(campoLongitud.getText()) == 0 || !(Double.valueOf(campoLongitud.getText()) >= -180 && Double.valueOf(campoLongitud.getText()) <= 180)) {
+            JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
+            return;
+        } 
+        if (comboCategorias.getSelectedItem()==null) {
+            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
             return;
         }
-
+        
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Verifique que los datos ingresados sean correctos");
+            return;
+        }
         if (modificandoPOI) {
             //modifica POI
             POI unPOI = getTempPOI();
@@ -921,7 +928,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             ImageIcon unIcono = new ImageIcon(newimg);
              */
-            cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois()+"\\"+cP.getPathIcono());
+            //cP.setPathIcono(/*Sistema.getInstance().getRutaIconosCatPois()+"\\"+*/cP.getPathIcono());
             Image source = new ImageIcon(cP.getPathIcono()).getImage();
             BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
@@ -1106,7 +1113,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             ke.consume();
              */
             if (((loc_caracter < '0') || (loc_caracter > '9')) && (loc_caracter != KeyEvent.VK_BACK_SPACE)
-                    && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.')) {
+                    && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.')&& (loc_caracter != '-')) {
                 ke.consume();
             }
         }
