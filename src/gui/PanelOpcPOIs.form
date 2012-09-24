@@ -567,8 +567,14 @@
                   <SubComponents>
                     <Container class="javax.swing.JScrollPane" name="jScrollPane2">
                       <Properties>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[500, 250]"/>
+                        </Property>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[500, 250]"/>
+                        </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[500, 200]"/>
+                          <Dimension value="[500, 250]"/>
                         </Property>
                       </Properties>
                       <AuxValues>
@@ -580,7 +586,7 @@
                         <Component class="org.jdesktop.swingx.JXTable" name="tablaCategorias">
                           <Properties>
                             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                              <Table columnCount="2" rowCount="4">
+                              <Table columnCount="2" rowCount="0">
                                 <Column editable="false" title="Nombre de Categoria" type="java.lang.String"/>
                                 <Column editable="true" title="Icono" type="java.lang.Object"/>
                               </Table>
@@ -599,14 +605,11 @@
                                 </Column>
                               </TableColumnModel>
                             </Property>
-                            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[500, 200]"/>
-                            </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[500, 200]"/>
+                              <Dimension value="[500, 100]"/>
                             </Property>
                             <Property name="preferredScrollableViewportSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[500, 200]"/>
+                              <Dimension value="[295, 360]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                               <Dimension value="[500, 200]"/>
@@ -750,13 +753,13 @@
                         <Container class="org.jdesktop.swingx.JXPanel" name="panelNombreNuevaCat">
                           <Properties>
                             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[500, 30]"/>
+                              <Dimension value="[500, 40]"/>
                             </Property>
                             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[500, 30]"/>
+                              <Dimension value="[500, 40]"/>
                             </Property>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                              <Dimension value="[500, 30]"/>
+                              <Dimension value="[500, 40]"/>
                             </Property>
                           </Properties>
 
