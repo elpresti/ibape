@@ -607,6 +607,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 while (i < listaCatPOIsSeleccionados.length) {
                     CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(listaCatPOIsSeleccionados[i], 1);
                     if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
+                        //ver que no sea la ultima
                         ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
                     } else {
                         //JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
@@ -621,15 +622,18 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                                 null);
                         switch (opcion) {
                             case 0: {
-                                System.out.println("borro todo");
+                                System.out.println("borro todos los poi");
                                 for (POI unPOI : BrokerPOIs.getInstance().getPOISFromDBSegunCat(unaCatPOI.getId())) {
-                                    ControllerPois.getInstance().eliminaPOI(unPOI);
+                                    ControllerPois.getInstance().eliminaPOI(unPOI);                                    
                                 }
+                                //borro la categoria
+                                ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                                break;
                             }
                             case 1: {
                                 System.out.println("asigno");
                                 ArrayList a = controllers.ControllerPois.getInstance().cargaCategoriasPOI();
-                                unaCatPOI.setPathIcono(Sistema.getInstance().getRutaIconosCatPois()+"\\"+unaCatPOI.getPathIcono());
+                                unaCatPOI.setPathIcono(Sistema.getInstance().getRutaIconosCatPois() + unaCatPOI.getPathIcono());
                                 a.remove(unaCatPOI); //saco la categoria que se elimina
                                 Object[] o = a.toArray();
 
@@ -651,6 +655,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                                     }
 
                                 }
+                                break;
                             }
                         }
                     }
@@ -679,11 +684,15 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private void btnInsertarPOIActionPerformed(java.awt.event.ActionEvent evt) {
         //INSERTA un POI
         if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
-            habilitaPanelDatosPOIs(true);
-            btnModificarPOI.setEnabled(false);
-            btnEliminarPOI.setEnabled(false);
-            btnInsertarPOI.setEnabled(false);
-            btnGuardarPOI.setEnabled(true);
+            if (comboCategorias.getItemCount() == 0) {
+                JOptionPane.showMessageDialog(null, "Cree una categoria de POI primero");
+            } else {
+                habilitaPanelDatosPOIs(true);
+                btnModificarPOI.setEnabled(false);
+                btnEliminarPOI.setEnabled(false);
+                btnInsertarPOI.setEnabled(false);
+                btnGuardarPOI.setEnabled(true);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
         }
@@ -737,31 +746,31 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     private void btnGuardarPOIActionPerformed(java.awt.event.ActionEvent evt) {
         try {
-                if (campoLatitud.getText().substring(campoLatitud.getText().indexOf(".") + 1).contains(".")) {
-            JOptionPane.showMessageDialog(null, "Latitud incorrecta");
-            return;
-        }
-        if (campoLongitud.getText().substring(campoLongitud.getText().indexOf(".") + 1).contains(".")) {
-            JOptionPane.showMessageDialog(null, "Longitud incorrecta");
-            return;
-        }
-        if (campoDescripcionNuevoPoi.getText().length() < 3) {
-            JOptionPane.showMessageDialog(null, "La descripcion no es valida");
-            return;
-        }
-        if (campoLatitud.getText().isEmpty() || Double.valueOf(campoLatitud.getText()) == 0 || !(Double.valueOf(campoLatitud.getText()) >= -90 && Double.valueOf(campoLatitud.getText()) <= 90) ) {
-            JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
-            return;
-        }
-        if (campoLongitud.getText().isEmpty() || Double.valueOf(campoLongitud.getText()) == 0 || !(Double.valueOf(campoLongitud.getText()) >= -180 && Double.valueOf(campoLongitud.getText()) <= 180)) {
-            JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
-            return;
-        } 
-        if (comboCategorias.getSelectedItem()==null) {
-            JOptionPane.showMessageDialog(null, "Seleccione una categoria");
-            return;
-        }
-        
+            if (campoLatitud.getText().substring(campoLatitud.getText().indexOf(".") + 1).contains(".")) {
+                JOptionPane.showMessageDialog(null, "Latitud incorrecta");
+                return;
+            }
+            if (campoLongitud.getText().substring(campoLongitud.getText().indexOf(".") + 1).contains(".")) {
+                JOptionPane.showMessageDialog(null, "Longitud incorrecta");
+                return;
+            }
+            if (campoDescripcionNuevoPoi.getText().length() < 3) {
+                JOptionPane.showMessageDialog(null, "La descripcion no es valida");
+                return;
+            }
+            if (campoLatitud.getText().isEmpty() || Double.valueOf(campoLatitud.getText()) == 0 || !(Double.valueOf(campoLatitud.getText()) >= -90 && Double.valueOf(campoLatitud.getText()) <= 90)) {
+                JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
+                return;
+            }
+            if (campoLongitud.getText().isEmpty() || Double.valueOf(campoLongitud.getText()) == 0 || !(Double.valueOf(campoLongitud.getText()) >= -180 && Double.valueOf(campoLongitud.getText()) <= 180)) {
+                JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
+                return;
+            }
+            if (comboCategorias.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(null, "Seleccione una categoria");
+                return;
+            }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Verifique que los datos ingresados sean correctos");
             return;
@@ -909,7 +918,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         //carga combo
         comboCategorias.removeAllItems();
         for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
-            cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois()+"\\"+cP.getPathIcono());
+            cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois() + "\\" + cP.getPathIcono());
             comboCategorias.addItem(cP);
         }
     }
@@ -928,7 +937,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             ImageIcon unIcono = new ImageIcon(newimg);
              */
-            //cP.setPathIcono(/*Sistema.getInstance().getRutaIconosCatPois()+"\\"+*/cP.getPathIcono());
+            cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois() + cP.getPathIcono());
+            //ver que hacer cuando no se encuentra el icono
             Image source = new ImageIcon(cP.getPathIcono()).getImage();
             BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D) image.getGraphics();
@@ -1113,7 +1123,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             ke.consume();
              */
             if (((loc_caracter < '0') || (loc_caracter > '9')) && (loc_caracter != KeyEvent.VK_BACK_SPACE)
-                    && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.')&& (loc_caracter != '-')) {
+                    && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.') && (loc_caracter != '-')) {
                 ke.consume();
             }
         }
