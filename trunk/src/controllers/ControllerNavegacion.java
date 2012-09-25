@@ -131,7 +131,7 @@ public class ControllerNavegacion {
 
     public void actualizaGuiProcesamientoImgs() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
-                , "\\imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName());
+                , "imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName());
         //Logueador.getInstance().agregaAlLog("actualizaGuiProcesamientoImgs(): TODO BIEN");
     }
 
@@ -141,9 +141,25 @@ public class ControllerNavegacion {
         //Logueador.getInstance().agregaAlLog("errorGuiProcesamientoImgs(): TODO MAL"); 
     }
 
+    public void errorGuiNotFoundImgProcesada() {
+        gui.ProcesaImgWin.getInstance().actualizaImgs(null,"/imgs/imgNotFound.jpg");
+    }
+    
+    public void loadingGuiImgProcesada() {
+        gui.ProcesaImgWin.getInstance().setLoadingOnImgProcesada("/imgs/loading.gif");
+    }
+
+    public void loadingGuiImgSinProcesar() {
+        gui.ProcesaImgWin.getInstance().setLoadingOnImgSinProcesar("/imgs/loading.gif");
+    }
+
     public void errorImgNoApta() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
                 , "/imgs/imgNotSuitable.jpg");
+    }
+
+    public void errorGuiNotFoundImgSinProcesar() {
+        gui.ProcesaImgWin.getInstance().actualizaImgs("/imgs/imgNotFound.jpg",null);
     }
 
 }

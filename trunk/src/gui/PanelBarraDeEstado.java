@@ -443,10 +443,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
                     break;
-           case 0:  Logueador.getInstance().agregaAlLog("Comienza el procesamiento de "+UltimaImgProcesada.getInstance().getFileName());
+           case 1:  Logueador.getInstance().agregaAlLog("Comienza el procesamiento de "+UltimaImgProcesada.getInstance().getFileName());
                     getBarraProcesaImg().setVisible(true);
                     lblMensaje.setVisible(false);
                     getBarraProcesaImg().setValue(estado*10);
+                    ControllerNavegacion.getInstance().loadingGuiImgProcesada();
+                    ControllerNavegacion.getInstance().loadingGuiImgSinProcesar();
                     break;
           case 11:  mmebpi = new MuestraMsgEnBarraProcesaImg();
                     msg[0] = "11"; msg[1]="Fin de procesamiento: "+imgFileName;
