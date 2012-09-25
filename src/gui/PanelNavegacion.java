@@ -91,7 +91,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblProf = new java.awt.Label();
         panelRelleno1 = new javax.swing.JPanel();
         panelRelleno2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnProcesaImg = new javax.swing.JButton();
         panelImgProc = new javax.swing.JPanel();
         panelImgs = new javax.swing.JPanel();
         panelImgSinProcesar = new javax.swing.JPanel();
@@ -276,30 +276,18 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelSonda.add(panelRelleno1);
 
         panelRelleno2.setOpaque(false);
+        panelRelleno2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnProcesaImg.setText("Detección de peces");
+        btnProcesaImg.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnProcesaImg.setMaximumSize(new java.awt.Dimension(115, 23));
+        btnProcesaImg.setPreferredSize(new java.awt.Dimension(115, 23));
+        btnProcesaImg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnProcesaImgActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout panelRelleno2Layout = new javax.swing.GroupLayout(panelRelleno2);
-        panelRelleno2.setLayout(panelRelleno2Layout);
-        panelRelleno2Layout.setHorizontalGroup(
-            panelRelleno2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelRelleno2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        panelRelleno2Layout.setVerticalGroup(
-            panelRelleno2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelRelleno2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        panelRelleno2.add(btnProcesaImg);
 
         panelSonda.add(panelRelleno2);
 
@@ -719,20 +707,20 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
     }//GEN-LAST:event_chkPoisTodosActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnProcesaImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcesaImgActionPerformed
         ProcesaImgWin.getInstance().mostrarVentana(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnProcesaImgActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDetenerMapaNav;
     private javax.swing.JButton btnGraficarDatos;
     private javax.swing.JButton btnIniciarMapaNav;
+    private javax.swing.JButton btnProcesaImg;
     private javax.swing.JCheckBox chkConCamara;
     private javax.swing.JCheckBox chkPoisTodos;
     private javax.swing.JCheckBox chkRecorrido;
     private org.jdesktop.swingx.JXImageView imgProcesada;
     private org.jdesktop.swingx.JXImageView imgSinProcesar;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

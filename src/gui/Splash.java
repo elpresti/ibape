@@ -5,6 +5,7 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,11 @@ public class Splash extends javax.swing.JFrame implements Runnable{
      */
     public Splash() {
         //inicializador();
+        //cargo el icono de la aplicacion
+        java.net.URL imgURL = getClass().getResource("/imgs/iconoIbape32x32.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage(imgURL);
+        setIconImage(icon);
+        setTitle("IBaPE v1.0");
     }
 
     /**

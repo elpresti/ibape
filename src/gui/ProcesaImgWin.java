@@ -5,9 +5,13 @@
 package gui;
 
 import com.sun.script.javascript.JSAdapter;
+import controllers.ControllerNavegacion;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.swing.ImageIcon;
@@ -57,7 +61,6 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         imgProcesada = new javax.swing.JLabel();
         panelInferior = new org.jdesktop.swingx.JXPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("ProcesaImgWin"); // NOI18N
 
         panelSuperior.setPreferredSize(new java.awt.Dimension(700, 30));
@@ -69,8 +72,9 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         getContentPane().add(panelSuperior, java.awt.BorderLayout.NORTH);
 
         panelCentro.setPreferredSize(new java.awt.Dimension(700, 620));
+        panelCentro.setLayout(new java.awt.BorderLayout());
 
-        splitPanelPdi.setDividerLocation(200);
+        splitPanelPdi.setDividerLocation(300);
         splitPanelPdi.setDividerSize(8);
         splitPanelPdi.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         splitPanelPdi.setContinuousLayout(true);
@@ -86,7 +90,7 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         imgProcesada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/imgProcessedFill.jpg"))); // NOI18N
         splitPanelPdi.setRightComponent(imgProcesada);
 
-        panelCentro.add(splitPanelPdi);
+        panelCentro.add(splitPanelPdi, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(panelCentro, java.awt.BorderLayout.CENTER);
 
@@ -113,6 +117,18 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     private void inicializador() {
         setImgOnImgProcesadaLabel("/imgs/imgProcessedFill.jpg", 520, 580);
         setImgOnImgSinProcesarLabel("/imgs/imgNotProcessedFill.jpg", 520, 580);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent evt) {
+                mostrarVentana(false);
+            } 
+        });
+        //cargo el icono de la aplicacion
+        java.net.URL imgURL = getClass().getResource("/imgs/iconoIbape32x32.png");
+        Image icon = Toolkit.getDefaultToolkit().getImage(imgURL);
+        setIconImage(icon);
+        setTitle("IBAPE - Detección de peces");//titulo del frame
     }
     
     public void mostrarVentana(boolean estado){
@@ -122,20 +138,22 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     public void actualizaImgs(String rutaImgSinProcesar,String rutaImgProcesada){
         try{
             if (rutaImgProcesada == null || rutaImgProcesada.length()<2){
-                rutaImgProcesada = "imgs\\"+modelo.dataCapture.Sistema.getInstance().getImgWithDetectedMarksFileName();
+                //rutaImgProcesada = "imgs\\"+modelo.dataCapture.Sistema.getInstance().getImgWithDetectedMarksFileName();
+            }else{
+                setImgOnImgProcesadaLabel(rutaImgProcesada, 520, 580);
             }
             if (rutaImgSinProcesar == null || rutaImgSinProcesar.length()<2){
-                rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()
-                        +"\\"+UltimaImgProcesada.getInstance().getFileName();
+                //rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()
+                //        +"\\"+UltimaImgProcesada.getInstance().getFileName();
+            }else{
+                setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 520, 580);
             }
-            setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 520, 580);
-            setImgOnImgProcesadaLabel(rutaImgProcesada, 520, 580);
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("actualizaImgs(): "+e.toString());
             setImgOnImgProcesadaLabel("/imgs/errorProcessing.jpg", 520, 580);
         }
     }
-
+    
     private void setImgOnImgProcesadaLabel(String rutaImg, int anchoPretendido, int altoPretendido) {
         Image source = null;
         if (!rutaImg.contains("/")){
@@ -147,18 +165,18 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         BufferedImage image = null;
         if (!(source.getWidth(null) == -1)){
             image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = (Graphics2D)image.getGraphics();
+            g2d.drawImage(source, 0, 0, null);
+            g2d.dispose();
+            //-------------
+            BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
+            imgProcesada.setIcon(new ImageIcon(scaled));
+            imgProcesada.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
+            imgProcesada.setMinimumSize(new Dimension(0,0));
+            imgProcesada.setHorizontalAlignment(JLabel.CENTER);
         }else{
-            image = new BufferedImage(967, 636, BufferedImage.TYPE_INT_ARGB); 
+            ControllerNavegacion.getInstance().errorGuiNotFoundImgProcesada();
         }
-        Graphics2D g2d = (Graphics2D)image.getGraphics();
-        g2d.drawImage(source, 0, 0, null);
-        g2d.dispose();
-        //-------------
-        BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
-        imgProcesada.setIcon(new ImageIcon(scaled));
-        imgProcesada.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
-        imgProcesada.setMinimumSize(new Dimension(0,0));
-        imgProcesada.setHorizontalAlignment(JLabel.LEFT);
     }
     
     private void setImgOnImgSinProcesarLabel(String rutaImg, int anchoPretendido, int altoPretendido) {
@@ -172,17 +190,43 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         BufferedImage image = null;
         if (!(source.getWidth(null) == -1)){
             image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2d = (Graphics2D)image.getGraphics();
+            g2d.drawImage(source, 0, 0, null);
+            g2d.dispose();
+            //-------------
+            BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
+            imgSinProcesar.setIcon(new ImageIcon(scaled));
+            imgSinProcesar.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
+            imgSinProcesar.setMinimumSize(new Dimension(0,0));
+            imgSinProcesar.setHorizontalAlignment(JLabel.CENTER);
         }else{
-            image = new BufferedImage(967, 636, BufferedImage.TYPE_INT_ARGB); 
+            ControllerNavegacion.getInstance().errorGuiNotFoundImgSinProcesar();
         }
-        Graphics2D g2d = (Graphics2D)image.getGraphics();
-        g2d.drawImage(source, 0, 0, null);
-        g2d.dispose();
-        //-------------
-        BufferedImage scaled = modelo.dataCapture.Sistema.getInstance().scaleImg(image, anchoPretendido, altoPretendido);
-        imgSinProcesar.setIcon(new ImageIcon(scaled));
-        imgSinProcesar.setPreferredSize(new Dimension(anchoPretendido, altoPretendido));      
-        imgSinProcesar.setMinimumSize(new Dimension(0,0));
-        imgSinProcesar.setHorizontalAlignment(JLabel.LEFT);
     }
+
+    public void setLoadingOnImgSinProcesar(String rutaImg) {
+        ImageIcon source = null;
+        source = new ImageIcon(getClass().getResource(rutaImg));
+        BufferedImage image = null;
+        if (!(source.getIconWidth() == -1)){
+            imgProcesada.setIcon(source);
+            imgProcesada.setMinimumSize(new Dimension(0,0));
+        }else{
+            ControllerNavegacion.getInstance().errorGuiNotFoundImgProcesada();
+        }
+    }
+    
+    public void setLoadingOnImgProcesada(String rutaImg) {
+        ImageIcon source = null;
+        source = new ImageIcon(getClass().getResource(rutaImg));
+        BufferedImage image = null;
+        if (!(source.getIconWidth() == -1)){
+            imgProcesada.setIcon(source);
+            imgProcesada.setMinimumSize(new Dimension(0,0));
+        }else{
+            ControllerNavegacion.getInstance().errorGuiNotFoundImgProcesada();
+        }
+    }
+    
+    
 }
