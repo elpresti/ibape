@@ -208,6 +208,9 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaPoisMouseReleased"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -260,7 +263,7 @@
                             </Property>
                           </Properties>
                         </Component>
-                        <Container class="org.jdesktop.swingx.JXPanel" name="panelAcciones">
+                        <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesMenuPOI">
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                             <Property name="alignment" type="int" value="0"/>
@@ -618,6 +621,9 @@
                               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaCategoriasMouseReleased"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
@@ -670,7 +676,7 @@
                             </Property>
                           </Properties>
                         </Component>
-                        <Container class="org.jdesktop.swingx.JXPanel" name="panelAcciones1">
+                        <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesMenuCatPOI">
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                             <Property name="alignment" type="int" value="0"/>
