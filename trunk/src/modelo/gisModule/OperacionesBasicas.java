@@ -824,7 +824,7 @@ public class OperacionesBasicas {
         /*
         else{
             controllers.ControllerNavegacion.getInstance().errorGuiProcesamientoImgs();
-        } 
+        }
         */
         return sePudo;
     }

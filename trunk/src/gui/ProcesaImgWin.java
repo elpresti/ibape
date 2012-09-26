@@ -13,7 +13,9 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.net.URL;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
@@ -140,13 +142,13 @@ public class ProcesaImgWin extends javax.swing.JFrame {
             if (rutaImgProcesada == null || rutaImgProcesada.length()<2){
                 //rutaImgProcesada = "imgs\\"+modelo.dataCapture.Sistema.getInstance().getImgWithDetectedMarksFileName();
             }else{
-                setImgOnImgProcesadaLabel(rutaImgProcesada, 520, 580);
+                setImgOnImgProcesadaLabel(rutaImgProcesada, 600, 690);
             }
             if (rutaImgSinProcesar == null || rutaImgSinProcesar.length()<2){
                 //rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()
                 //        +"\\"+UltimaImgProcesada.getInstance().getFileName();
             }else{
-                setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 520, 580);
+                setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 600, 690); 
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("actualizaImgs(): "+e.toString());
@@ -157,13 +159,17 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     private void setImgOnImgProcesadaLabel(String rutaImg, int anchoPretendido, int altoPretendido) {
         Image source = null;
         if (!rutaImg.contains("/")){
-            source = new ImageIcon(rutaImg).getImage();
+            try{
+                source = new ImageIcon(ImageIO.read(new File(rutaImg))).getImage();
+            }catch(Exception e){
+                Logueador.getInstance().agregaAlLog(("setImgOnImgProcesadaLabel(): "+e.toString()));
+            }
         }else{
             source = new ImageIcon(getClass().getResource(rutaImg)).getImage();
         }
         //--- resize imgIcon
         BufferedImage image = null;
-        if (!(source.getWidth(null) == -1)){
+        if ((source != null) && (!(source.getWidth(null) == -1))){
             image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2d = (Graphics2D)image.getGraphics();
             g2d.drawImage(source, 0, 0, null);
@@ -182,7 +188,11 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     private void setImgOnImgSinProcesarLabel(String rutaImg, int anchoPretendido, int altoPretendido) {
         Image source = null;
         if (!rutaImg.contains("/")){
-            source = new ImageIcon(rutaImg).getImage();
+            try{
+                source = new ImageIcon(ImageIO.read(new File(rutaImg))).getImage();
+            }catch(Exception e){
+                Logueador.getInstance().agregaAlLog(("setImgOnImgSinProcesarLabel(): "+e.toString()));
+            }
         }else{
             source = new ImageIcon(getClass().getResource(rutaImg)).getImage();
         }
@@ -209,8 +219,8 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         source = new ImageIcon(getClass().getResource(rutaImg));
         BufferedImage image = null;
         if (!(source.getIconWidth() == -1)){
-            imgProcesada.setIcon(source);
-            imgProcesada.setMinimumSize(new Dimension(0,0));
+            imgSinProcesar.setIcon(source);
+            imgSinProcesar.setMinimumSize(new Dimension(0,0));
         }else{
             ControllerNavegacion.getInstance().errorGuiNotFoundImgProcesada();
         }
