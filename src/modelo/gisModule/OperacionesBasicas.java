@@ -527,8 +527,8 @@ public class OperacionesBasicas {
                             }
                             if (coordMarca.size()>30){ //si la marca se compone de mas de 30 pixeles, la considero Marca
                                 Marca marca= new Marca();
-                                marca.setCoordMarca(coordMarca);
-                                marca.setAreaImagen(String.valueOf(coordMarca.size()));
+                                marca.setAreaEnImg(coordMarca);
+                                //marca.setAreaImagen(String.valueOf(coordMarca.size()));
                                 marcas.add(marca);
                             }
                         }
@@ -548,7 +548,7 @@ public class OperacionesBasicas {
         boolean encontro = false;
         int pos = marcas.size()-1;
         while ((pos>=0) &&(! encontro)){
-            ArrayList<Point> coordMarca = marcas.get(pos).getCoordMarca();
+            ArrayList<Point> coordMarca = marcas.get(pos).getAreaEnImg();
             if (coordMarca.contains(point)){
                 encontro=true;
             }
@@ -602,24 +602,24 @@ public class OperacionesBasicas {
      public BufferedImage dibujaMarcasDetectadas(BufferedImage imgOriginal, ArrayList<Marca> marcas){
          BufferedImage imgConMarcas = imgOriginal;
          int colorRojo = new Color (255,0,0).getRGB();
-         marcas.get(1).getCoordMarca().get(1);
+         marcas.get(1).getAreaEnImg().get(1);
          for (Marca m : marcas) {
               int i=0;
-              while (i<m.getCoordMarca().size()){
-                 if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX()+1, (int) m.getCoordMarca().get(i).getY())) {
-                    imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX()+1, (int) m.getCoordMarca().get(i).getY(),colorRojo);
+              while (i<m.getAreaEnImg().size()){
+                 if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getAreaEnImg().get(i).getX()+1, (int) m.getAreaEnImg().get(i).getY())) {
+                    imgConMarcas.setRGB((int) m.getAreaEnImg().get(i).getX()+1, (int) m.getAreaEnImg().get(i).getY(),colorRojo);
                     }
                     else{
-                        if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX()-1, (int) m.getCoordMarca().get(i).getY())) {
-                        imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX()-1, (int) m.getCoordMarca().get(i).getY(),colorRojo);
+                        if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getAreaEnImg().get(i).getX()-1, (int) m.getAreaEnImg().get(i).getY())) {
+                        imgConMarcas.setRGB((int) m.getAreaEnImg().get(i).getX()-1, (int) m.getAreaEnImg().get(i).getY(),colorRojo);
                         }
                         else{
-                            if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()+1)) {
-                                imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()+1,colorRojo);
+                            if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getAreaEnImg().get(i).getX(), (int) m.getAreaEnImg().get(i).getY()+1)) {
+                                imgConMarcas.setRGB((int) m.getAreaEnImg().get(i).getX(), (int) m.getAreaEnImg().get(i).getY()+1,colorRojo);
                             }
                             else{
-                                if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()-1)) {
-                                    imgConMarcas.setRGB((int) m.getCoordMarca().get(i).getX(), (int) m.getCoordMarca().get(i).getY()-1,colorRojo);
+                                if (!hayBlancoDondeEstoy(imgConMarcas, (int) m.getAreaEnImg().get(i).getX(), (int) m.getAreaEnImg().get(i).getY()-1)) {
+                                    imgConMarcas.setRGB((int) m.getAreaEnImg().get(i).getX(), (int) m.getAreaEnImg().get(i).getY()-1,colorRojo);
                                 }
                         }
                     }
@@ -634,9 +634,9 @@ public class OperacionesBasicas {
          int colorRojo = new Color (255,0,0).getRGB();
          for (Marca m : marcas) {
               int i=0;
-              while (i<m.getCoordMarca().size()){
-                   img.setRGB((int) m.getCoordMarca().get(i).getX(), 
-                           (int) m.getCoordMarca().get(i).getY(), colorRojo);
+              while (i<m.getAreaEnImg().size()){
+                   img.setRGB((int) m.getAreaEnImg().get(i).getX(), 
+                           (int) m.getAreaEnImg().get(i).getY(), colorRojo);
                    i++;
               }
          }

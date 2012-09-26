@@ -13,11 +13,15 @@ import java.util.ArrayList;
  */
 public class Marca {
     private double profundidad;
-    private String areaImagen;
+    private java.util.Date fechaYhora;
     private String areaFisica;
     private int id;
-    private int idPois;
-    private ArrayList<Point> coordMarca;
+    private double latitud;
+    private double longitud;
+    private int pxXenImg;
+    private int pxYenImg;
+    private String imgFileName;
+    private ArrayList<Point> areaEnImg;
     
     public Marca(){        
     }
@@ -49,20 +53,6 @@ public class Marca {
     public int getId() {
         return this.id;
     }
-
-    /**
-     * @return the idPois
-     */
-    public int getIdPois() {
-        return idPois;
-    }
-
-    /**
-     * @param idPois the idPois to set
-     */
-    public void setIdPois(int idPois) {
-        this.idPois = idPois;
-    }
     
     public double getLatitudEstimada(){
         double latEstimada = 0;
@@ -77,17 +67,17 @@ public class Marca {
     }
 
     /**
-     * @return the coordMarca
+     * @return the areaEnImg
      */
-    public ArrayList<Point> getCoordMarca() {
-        return coordMarca;
+    public ArrayList<Point> getAreaEnImg() {
+        return areaEnImg;
     }
 
     /**
-     * @param coordMarca the coordMarca to set
+     * @param areaEnImg the areaEnImg to set
      */
-    public void setCoordMarca(ArrayList<Point> coordMarca) {
-        this.coordMarca = coordMarca;
+    public void setAreaEnImg(ArrayList<Point> areaEnImg) {
+        this.setAreaEnImg(areaEnImg);
     }
 
     /**
@@ -105,16 +95,87 @@ public class Marca {
     }
 
     /**
-     * @return the areaImagen
+     * @return the fechaYhora
      */
-    public String getAreaImagen() {
-        return areaImagen;
+    public java.util.Date getFechaYhora() {
+        return fechaYhora;
     }
 
     /**
-     * @param areaImagen the areaImagen to set
+     * @param fechaYhora the fechaYhora to set
      */
-    public void setAreaImagen(String areaImagen) {
-        this.areaImagen = areaImagen;
+    public void setFechaYhora(java.util.Date fechaYhora) {
+        this.fechaYhora = fechaYhora;
     }
+
+    /**
+     * @return the latitud
+     */
+    public double getLatitud() {
+        return latitud;
+    }
+
+    /**
+     * @param latitud the latitud to set
+     */
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    /**
+     * @return the longitud
+     */
+    public double getLongitud() {
+        return longitud;
+    }
+
+    /**
+     * @param longitud the longitud to set
+     */
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
+    /**
+     * @return the pxXenImg
+     */
+    public int getPxXenImg() {
+        return pxXenImg;
+    }
+
+    /**
+     * @param pxXenImg the pxXenImg to set
+     */
+    public void setPxXenImg(int pxXenImg) {
+        this.pxXenImg = pxXenImg;
+    }
+
+    /**
+     * @return the pxYenImg
+     */
+    public int getPxYenImg() {
+        return pxYenImg;
+    }
+
+    /**
+     * @param pxYenImg the pxYenImg to set
+     */
+    public void setPxYenImg(int pxYenImg) {
+        this.pxYenImg = pxYenImg;
+    }
+
+    /**
+     * @return the imgFileName
+     */
+    public String getImgFileName() {
+        return imgFileName;
+    }
+
+    /**
+     * @param imgFileName the imgFileName to set
+     */
+    public void setImgFileName(String imgFileName) {
+        this.imgFileName = imgFileName;
+    }
+
 }

@@ -169,7 +169,7 @@ public abstract class BrokerPpal {
             sePudo = sePudo && crearTriggersIdCampania();
             sePudo = sePudo && crearTriggersIdLance();
             sePudo = sePudo && crearTriggersIdEspecie();
-            sePudo = sePudo && crearTriggersIdPois();
+//            sePudo = sePudo && crearTriggersIdPois();
             sePudo = sePudo && crearTriggersIdAlerta();
 
             //Analizar si es necesario crear triggers para las FK restantes, por ahora, considero que no.
@@ -547,13 +547,18 @@ public abstract class BrokerPpal {
         try {
             String codigoCreacion = "CREATE TABLE Marcas ("
                     + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    + "  idPois             integer NOT NULL,"
-                    + "  prof               float NOT NULL,"
-                    + "  areaFisica         nvarchar(100) NOT NULL,"
-                    + "  areaImagen         nvarchar(100) NOT NULL,"
-                    + "  /* Foreign keys */ "
-                    + "  FOREIGN KEY (idPois)"
-                    + "    REFERENCES Pois(id)"
+//                  + "  idPois             integer NOT NULL,"
+                    + "  latitud            float(30) NOT NULL,"
+                    + "  longitud           float(30) NOT NULL,"
+                    + "  fechaYhora         TIMESTAMP NOT NULL,"
+                    + "  profundidad        float NULL,"
+                    + "  areaFisica         nvarchar(100) NULL,"
+                    + "  pxXenImg           integer NOT NULL,"
+                    + "  pxYenImg           integer NOT NULL,"
+                    + "  imgFileName        nvarchar(100) NOT NULL"
+//                  + "  /* Foreign keys */ "
+//                  + "  FOREIGN KEY (idPois)"
+//                  + "    REFERENCES Pois(id)"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo = true;

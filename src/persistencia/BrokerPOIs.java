@@ -139,6 +139,7 @@ public class BrokerPOIs extends BrokerPpal {
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 //sePudo = true;//sin las marcas
+                /*
                 if (poi.getMarcas() != null) {
                     //recuperar el id para insertar las marcas
                     sqlQuery = "SELECT max(id) from Pois";
@@ -154,6 +155,7 @@ public class BrokerPOIs extends BrokerPpal {
                         }
                     }
                 }
+                */
                 sePudo = true;
             }
         } catch (SQLException ex) {
