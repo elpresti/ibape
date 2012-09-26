@@ -485,8 +485,7 @@ public class LanSonda extends java.util.Observable implements Runnable {
     private boolean esArchivoDeHistorico(File file) {
         boolean esArchivoDeHistorico=false;
         if ( file.getName().toLowerCase().contains(".dat") || 
-             file.getName().toLowerCase().contains(".jpg") ||
-             file.getName().toLowerCase().contains(".txt")
+             file.getName().toLowerCase().contains(".jpg")
            ){
             esArchivoDeHistorico = true;
         }         
