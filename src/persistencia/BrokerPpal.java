@@ -29,7 +29,7 @@ public abstract class BrokerPpal {
     public BrokerPpal() {
         inicializador();
     }
-    
+
     public boolean creaConexionNueva() {
         boolean sePudo = false;
         try {
@@ -67,7 +67,7 @@ public abstract class BrokerPpal {
      */
     public Connection getConexion() {
         try {
-            if ((conexion == null) || (conexion != null && conexion.isClosed())){
+            if ((conexion == null) || (conexion != null && conexion.isClosed())) {
                 creaConexionNueva();
             }
         } catch (SQLException ex) {
@@ -87,7 +87,7 @@ public abstract class BrokerPpal {
      * @return the statement
      */
     public Statement getStatement() {
-        if (statement == null){
+        if (statement == null) {
             try {
                 setStatement(getConexion().createStatement());
             } catch (SQLException ex) {
@@ -175,11 +175,11 @@ public abstract class BrokerPpal {
             //Analizar si es necesario crear triggers para las FK restantes, por ahora, considero que no.
 
             //Inserción de datos estáticos en la BD
-            
+
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelaciones();
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaVariables();
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelacionesxVariables();
-            
+
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
@@ -230,12 +230,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -260,12 +259,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -294,12 +292,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro Statements usados, para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -419,12 +416,11 @@ public abstract class BrokerPpal {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -453,12 +449,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro Statements usados, para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -466,7 +461,7 @@ public abstract class BrokerPpal {
 
     public int getIdUltimoInsert() {
         int salida = 0;
-        ResultSet rs=null;
+        ResultSet rs = null;
         try {
             rs = getStatement().getGeneratedKeys();
             if (rs.next()) {
@@ -475,15 +470,14 @@ public abstract class BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (rs != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null) {
                 rs.close();
             }
-            if (getStatement() != null){
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return salida;
@@ -508,12 +502,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -528,15 +521,49 @@ public abstract class BrokerPpal {
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
             sePudo = true;
+            //codigoCreacion = "insert into Especies (nombre) values ('This is sample data',3)";
+            getStatement().executeUpdate("insert into Especies (nombre) values ('abadejo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('anchoa')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('anchoíta')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('atún')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('besugo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('bacalao')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('brótola')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('caballa')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('cazón')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('cornalito')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('corvinas')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('escualo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('gatuzo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('jurel')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('lisa')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('lenguado')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('mero')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('merluza')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('mojarra')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('palometa')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('pejerrey')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('pescadilla')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('pez palo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('pez gallo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('pez elefante')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('pez limón')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('polaca')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('róbalo')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('sardina')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('tararira')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('tiburón')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('salmon')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('otros')");
+            getStatement().executeUpdate("insert into Especies (nombre) values ('variada')");
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -565,12 +592,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -589,12 +615,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -614,12 +639,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -641,12 +665,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -715,12 +738,11 @@ public abstract class BrokerPpal {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -789,12 +811,11 @@ public abstract class BrokerPpal {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -863,12 +884,11 @@ public abstract class BrokerPpal {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -938,12 +958,11 @@ public abstract class BrokerPpal {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -962,12 +981,11 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
@@ -991,30 +1009,28 @@ public abstract class BrokerPpal {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
+        try {//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null) {
                 getStatement().close();
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
 
-    public void closeDbConnection() {   
+    public void closeDbConnection() {
         try {
-                if (getStatement() != null) {
-                        getStatement().close();
-                }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
 
-                if (getConexion() != null) {
-                        getConexion().close();
-                }
+            if (getConexion() != null) {
+                getConexion().close();
+            }
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             System.out.println(e);
         }
     }
-     
 }
