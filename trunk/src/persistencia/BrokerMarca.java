@@ -7,6 +7,7 @@ package persistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  *
@@ -38,8 +39,12 @@ public class BrokerMarca extends BrokerPpal {
                 // Get the data from the row using the column name
                 marca.setId(rs.getInt("id"));
                 marca.setProfundidad(rs.getDouble("profundidad"));
-                marca.setAreaImagen(rs.getString("areaImagen"));
-
+                marca.setFechaYhora(rs.getDate("fechaYhora"));
+                marca.setImgFileName(rs.getString("imgFileName"));
+                marca.setLatitud(rs.getDouble("latitud"));
+                marca.setLongitud(rs.getDouble("longitud"));
+                marca.setPxXenImg(rs.getInt("pxXenImg"));
+                marca.setPxYenImg(rs.getInt("pxYenImg"));
                 Marcas.add(marca);
             }
         } catch (SQLException ex) {
@@ -57,7 +62,7 @@ public class BrokerMarca extends BrokerPpal {
                 // Get the data from the row using the column name
                 marca.setId(rs.getInt("id"));
                 marca.setProfundidad(rs.getDouble("profundidad"));
-                marca.setAreaImagen(rs.getString("areaImagen"));
+                //marca.setAreaImagen(rs.getString("areaImagen"));
 
                 Marcas.add(marca);
             }
@@ -75,9 +80,15 @@ public class BrokerMarca extends BrokerPpal {
             if (rs != null) {
                 //modelo.dataManager.Marca marca = new modelo.dataManager.Marca();
                 // Get the data from the row using the column name
+                marca = new modelo.dataManager.Marca();
                 marca.setId(rs.getInt("id"));
                 marca.setProfundidad(rs.getDouble("profundidad"));
-                marca.setAreaImagen(rs.getString("areaImagen"));
+                marca.setFechaYhora(rs.getDate("fechaYhora"));
+                marca.setImgFileName(rs.getString("imgFileName"));
+                marca.setLatitud(rs.getDouble("latitud"));
+                marca.setLongitud(rs.getDouble("longitud"));
+                marca.setPxXenImg(rs.getInt("pxXenImg"));
+                marca.setPxYenImg(rs.getInt("pxYenImg"));
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
@@ -90,14 +101,20 @@ public class BrokerMarca extends BrokerPpal {
         String sqlQuery = "";
         ResultSet rs;
         try {
-            String areaImagen = null;
-            if (marca.getAreaImagen()!= null) {
-                areaImagen = "'" + marca.getAreaImagen() + "'";
+            String imgFileName = null;
+            if (marca.getImgFileName() != null) {
+                imgFileName = "'" + marca.getImgFileName() + "'";
+            }
+            String fechaYhora = null;
+            if (marca.getFechaYhora() != null) {
+                fechaYhora = "" + marca.getFechaYhora().getTime() + "";
             }
             sqlQuery = "INSERT INTO Marcas"
-                    + "(areaImagen,profundidad)"
+                    + "(imgFileName,fechaYhora,profundidad,pxXenImg,pxYenImg,latitud,longitud)"
                     + "VALUES"
-                    + "(" + areaImagen + "," + marca.getProfundidad() + ")";
+                    + "(" + imgFileName + "," + fechaYhora+ "," + marca.getProfundidad() 
+                        + "," + marca.getPxXenImg() + "," + marca.getPxYenImg()
+                        + "," + marca.getLatitud()+ "," + marca.getLongitud()+")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
@@ -124,4 +141,25 @@ public class BrokerMarca extends BrokerPpal {
         }
         return sePudo;
     }
+
+
+    public static void main(String args[]){
+        modelo.dataManager.Marca marca = new modelo.dataManager.Marca();
+        marca.setImgFileName("-0118-270411-045001.jpg");
+        marca.setFechaYhora(Calendar.getInstance().getTime());
+        marca.setLatitud(-43.12345);
+        marca.setLongitud(-33.12345);
+        marca.setProfundidad(78.5432);
+        marca.setPxXenImg(134);
+        marca.setPxYenImg(456);
+        marca.setId(2);
+        boolean resultado = BrokerMarca.getInstance().deleteMarca(marca);
+        resultado = BrokerMarca.getInstance().insertMarca(marca);
+        
+        ArrayList<modelo.dataManager.Marca> marcas = BrokerMarca.getInstance().getMarcasFromDB();
+        modelo.dataManager.Marca unaMarca = BrokerMarca.getInstance().getMarcaFromDB(1);
+    }
+
 }
+
+
