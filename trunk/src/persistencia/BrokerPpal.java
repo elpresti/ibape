@@ -45,11 +45,12 @@ public abstract class BrokerPpal {
             setStatement(getConexion().createStatement());
 
             if (!(yaExiste)) {
-                creaTodasLasTablas();
+                if (creaTodasLasTablas()){
+                    sePudo = true;
+                }
             }
             //getStatement().close();
             //getConexion().close();
-            sePudo = true;
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -169,7 +170,7 @@ public abstract class BrokerPpal {
             sePudo = sePudo && crearTriggersIdCampania();
             sePudo = sePudo && crearTriggersIdLance();
             sePudo = sePudo && crearTriggersIdEspecie();
-//            sePudo = sePudo && crearTriggersIdPois();
+//          sePudo = sePudo && crearTriggersIdPois();
             sePudo = sePudo && crearTriggersIdAlerta();
 
             //Analizar si es necesario crear triggers para las FK restantes, por ahora, considero que no.
@@ -317,10 +318,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'insert on table \"lances\" violates foreign key constraint \"fk_idCampania\"')"
                     + "  END; "
                     + "END;";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             codigoCreacion =
                     "CREATE TRIGGER fki_pois_idCampania "
                     + "BEFORE INSERT ON pois "
@@ -330,10 +331,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'insert on table \"pois\" violates foreign key constraint \"fk_idCampania\"')"
                     + "  END; "
                     + "END;";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fku_lance_idCampania "
@@ -344,11 +345,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'update on table \"lances\" violates foreign key constraint \"fk_idCampania\"')"
                     + "  END; "
                     + "END;";
-
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             codigoCreacion =
                     "CREATE TRIGGER fku_pois_idCampania "
                     + "BEFORE UPDATE ON pois "
@@ -358,12 +358,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'update on table \"pois\" violates foreign key constraint \"fk_idCampania\"')"
                     + "  END; "
                     + "END;";
-
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
-
+            
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fkd_lance_idCampania "
@@ -374,10 +372,10 @@ public abstract class BrokerPpal {
                     + "    THEN RAISE(ABORT, 'delete on table \"campanias\" violates foreign key constraint \"fk_idCampania\"') "
                     + "  END; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             codigoCreacion =
                     "CREATE TRIGGER fkd_pois_idCampania "
                     + "BEFORE DELETE ON campanias "
@@ -387,10 +385,10 @@ public abstract class BrokerPpal {
                     + "    THEN RAISE(ABORT, 'delete on table \"campanias\" violates foreign key constraint \"fk_idCampania\"') "
                     + "  END; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*Borrado en cascada */
             codigoCreacion =
                     "CREATE TRIGGER fkd_lances_campanias_id "
@@ -398,20 +396,20 @@ public abstract class BrokerPpal {
                     + "FOR EACH ROW BEGIN "
                     + "   DELETE from lances WHERE idCampania = OLD.id; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             codigoCreacion =
                     "CREATE TRIGGER fkd_pois_campanias_id "
                     + "BEFORE DELETE ON campanias "
                     + "FOR EACH ROW BEGIN "
                     + "   DELETE from pois WHERE idCampania = OLD.id; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
@@ -520,7 +518,6 @@ public abstract class BrokerPpal {
                     + "  nombre             nvarchar(100)"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
-            sePudo = true;
             //codigoCreacion = "insert into Especies (nombre) values ('This is sample data',3)";
             getStatement().executeUpdate("insert into Especies (nombre) values ('abadejo')");
             getStatement().executeUpdate("insert into Especies (nombre) values ('anchoa')");
@@ -556,6 +553,7 @@ public abstract class BrokerPpal {
             getStatement().executeUpdate("insert into Especies (nombre) values ('salmon')");
             getStatement().executeUpdate("insert into Especies (nombre) values ('otros')");
             getStatement().executeUpdate("insert into Especies (nombre) values ('variada')");
+            sePudo = true;
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
@@ -690,10 +688,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'insert on table \"Cajones\" violates foreign key constraint \"fk_idLance\"')"
                     + "  END; "
                     + "END;";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fku_cajones_idLance "
@@ -704,11 +702,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'update on table \"cajones\" violates foreign key constraint \"fk_idLance\"')"
                     + "  END; "
                     + "END;";
-
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fkd_cajones_idLance "
@@ -719,11 +716,10 @@ public abstract class BrokerPpal {
                     + "    THEN RAISE(ABORT, 'delete on table \"lances\" violates foreign key constraint \"fk_idLance\"') "
                     + "  END; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
-
+            
             /*Borrado en cascada */
             codigoCreacion =
                     "CREATE TRIGGER fkd_cajones_lances_id "
@@ -731,7 +727,7 @@ public abstract class BrokerPpal {
                     + "FOR EACH ROW BEGIN "
                     + "   DELETE from cajones WHERE idLance = OLD.id; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
         } catch (Exception e) {
@@ -763,10 +759,9 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'insert on table \"Cajones\" violates foreign key constraint \"fk_idEspecie\"')"
                     + "  END; "
                     + "END;";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fku_cajones_idEspecie "
@@ -777,11 +772,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'update on table \"cajones\" violates foreign key constraint \"fk_idEspecie\"')"
                     + "  END; "
                     + "END;";
-
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fkd_cajones_idEspecie "
@@ -792,11 +786,10 @@ public abstract class BrokerPpal {
                     + "    THEN RAISE(ABORT, 'delete on table \"especies\" violates foreign key constraint \"fk_idEspecie\"') "
                     + "  END; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
-
+            
             /*Borrado en cascada */
             codigoCreacion =
                     "CREATE TRIGGER fkd_cajones_especies_id "
@@ -804,7 +797,7 @@ public abstract class BrokerPpal {
                     + "FOR EACH ROW BEGIN "
                     + "   DELETE from cajones WHERE idEspecie = OLD.id; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
         } catch (Exception e) {
@@ -836,10 +829,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'insert on table \"marcas\" violates foreign key constraint \"fk_idPois\"')"
                     + "  END; "
                     + "END;";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fku_marcas_idPois "
@@ -850,11 +843,10 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'update on table \"marcas\" violates foreign key constraint \"fk_idPois\"')"
                     + "  END; "
                     + "END;";
-
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
+            
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fkd_marcas_idPois "
@@ -865,11 +857,10 @@ public abstract class BrokerPpal {
                     + "    THEN RAISE(ABORT, 'delete on table \"pois\" violates foreign key constraint \"fk_idPois\"') "
                     + "  END; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
-
+            
             /*Borrado en cascada */
             codigoCreacion =
                     "CREATE TRIGGER fkd_marcas_pois_id "
@@ -877,7 +868,7 @@ public abstract class BrokerPpal {
                     + "FOR EACH ROW BEGIN "
                     + "   DELETE from marcas WHERE idPois = OLD.id; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
         } catch (Exception e) {
@@ -910,10 +901,9 @@ public abstract class BrokerPpal {
                     + "     THEN RAISE(ABORT, 'insert on table \"Condiciones\" violates foreign key constraint \"fk_idAlerta\"')"
                     + "  END; "
                     + "END;";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
             /*TRIGGER ON UPDATE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fku_Condiciones_idAlerta "
@@ -925,10 +915,9 @@ public abstract class BrokerPpal {
                     + "  END; "
                     + "END;";
 
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
             /*TRIGGER ON DELETE, si la clave primaria no permite nulos */
             codigoCreacion =
                     "CREATE TRIGGER fkd_Condiciones_idAlerta "
@@ -939,11 +928,9 @@ public abstract class BrokerPpal {
                     + "    THEN RAISE(ABORT, 'delete on table \"Alertas\" violates foreign key constraint \"fk_idAlerta\"') "
                     + "  END; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
-
-
             /*Borrado en cascada */
             codigoCreacion =
                     "CREATE TRIGGER fkd_Condiciones_Alerta_id "
@@ -951,7 +938,7 @@ public abstract class BrokerPpal {
                     + "FOR EACH ROW BEGIN "
                     + "   DELETE from Condiciones WHERE idAlerta = OLD.id; "
                     + "END; ";
-            if (!(getStatement().executeUpdate(codigoCreacion) == 0)) {
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
         } catch (Exception e) {

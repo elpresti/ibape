@@ -77,7 +77,7 @@ public class Marca {
      * @param areaEnImg the areaEnImg to set
      */
     public void setAreaEnImg(ArrayList<Point> areaEnImg) {
-        this.setAreaEnImg(areaEnImg);
+        this.areaEnImg = areaEnImg;
     }
 
     /**
