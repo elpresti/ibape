@@ -142,7 +142,7 @@ public class BrokerMarca extends BrokerPpal {
         return sePudo;
     }
 
-
+/*
     public static void main(String args[]){
         modelo.dataManager.Marca marca = new modelo.dataManager.Marca();
         marca.setImgFileName("-0118-270411-045001.jpg");
@@ -155,10 +155,10 @@ public class BrokerMarca extends BrokerPpal {
         marca.setId(2);
         boolean resultado = BrokerMarca.getInstance().deleteMarca(marca);
         resultado = BrokerMarca.getInstance().insertMarca(marca);
-        
         ArrayList<modelo.dataManager.Marca> marcas = BrokerMarca.getInstance().getMarcasFromDB();
         modelo.dataManager.Marca unaMarca = BrokerMarca.getInstance().getMarcaFromDB(1);
     }
+*/
 
 }
 
