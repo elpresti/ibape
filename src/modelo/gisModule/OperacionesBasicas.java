@@ -493,12 +493,14 @@ public class OperacionesBasicas {
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(5);//erosionando...
             Filtros filtros = new Filtros(getInstance().getAncho(), getInstance().getAlto());//Creamos los filtros para la imagen con la clase Filtros
             BufferedImage imgProcesada = filtros.erode(imgOriginal);//La erosionamos con Filtros.erode()
+            grabarImagen(imgProcesada,"imgs\\"+Sistema.getInstance().getImgErodedFileName());
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(6);//binarizando...
             imgProcesada = filtros.Binarizacion(imgProcesada, 20);//Al resultado lo binarizamos con el umbral que corresponda
+            grabarImagen(imgProcesada,"imgs\\"+Sistema.getInstance().getImgBinarizedFileName());
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(7);//dilatando...
             imgProcesada = filtros.dilate(imgProcesada);
+            grabarImagen(imgProcesada,"imgs\\"+Sistema.getInstance().getImgDilatedFileName());
             //imgProcesada = filtros.erode(imgProcesada);
-            getInstance().grabarImagen(imgProcesada,"imgs\\filteredImg.tmp");
             UltimaImgProcesada.getInstance().setProgresoProcesamiento(8);//buscando fondo...
             int fondo[] = buscaFondo(imgProcesada);//obtengo las coordenadas Y del fondo y lo guardo en el arreglo
             if (fondo != null && fondo.length>0){
@@ -507,7 +509,9 @@ public class OperacionesBasicas {
                 setImgConFondo(bufferedImageClone(imgProcesada)); //la guardo para despues graficar las marcas sobre la img con fondo
                 //getInstance().grabarImagen(getImgConFondo(),"imgs\\imagenConFondo.tmp");
                 imgProcesada = eliminaFondo(imgProcesada, fondo);
+                grabarImagen(imgProcesada,"imgs\\"+Sistema.getInstance().getImgWithOutSeabedFileName());
                 imgProcesada = eliminaHoras(imgProcesada);
+                grabarImagen(imgProcesada,"imgs\\"+Sistema.getInstance().getImgWithOutTimeFileName());
                 //getInstance().grabarImagen(imgProcesada,"imgs\\imagenSinFondoNiHoras.tmp");
                 //----------- ahora busco las marcas ----------
                 Point point = new Point();
@@ -803,6 +807,7 @@ public class OperacionesBasicas {
                         sePudo=true;
                         UltimaImgProcesada.getInstance().setProgresoProcesamiento(11);//se procesó con exito y se encontraron marcas
                     }else{
+                        grabarImagen(getImgConFondo(),"imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName());
                         if (UltimaImgProcesada.getInstance().getProgresoProcesamiento() != -1){
                             sePudo=true;
                             UltimaImgProcesada.getInstance().setProgresoProcesamiento(13); //se procesó con exito pero no se encontraron marcas

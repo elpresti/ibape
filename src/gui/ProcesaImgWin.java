@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.UltimaImgProcesada;
 import persistencia.Logueador;
@@ -29,6 +30,7 @@ import persistencia.Logueador;
  */
 public class ProcesaImgWin extends javax.swing.JFrame {
     private static ProcesaImgWin unicaInstancia;
+    private int indexImgProcesada;
     
     /**
      * Creates new form ProcesaImgWin
@@ -59,8 +61,13 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panelCentro = new org.jdesktop.swingx.JXPanel();
         splitPanelPdi = new javax.swing.JSplitPane();
+        panelImgSinProcesar = new org.jdesktop.swingx.JXPanel();
         imgSinProcesar = new javax.swing.JLabel();
+        panelImgProcesada = new org.jdesktop.swingx.JXPanel();
         imgProcesada = new javax.swing.JLabel();
+        panelNavProcesadas = new org.jdesktop.swingx.JXPanel();
+        btnAtrasProcesada = new javax.swing.JButton();
+        btnAdelanteProcesada = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
 
         setName("ProcesaImgWin"); // NOI18N
@@ -83,14 +90,44 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         splitPanelPdi.setOneTouchExpandable(true);
         splitPanelPdi.setPreferredSize(new java.awt.Dimension(520, 600));
 
+        panelImgSinProcesar.setLayout(new java.awt.BorderLayout());
+
         imgSinProcesar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         imgSinProcesar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/imgNotProcessedFill.jpg"))); // NOI18N
         imgSinProcesar.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        splitPanelPdi.setLeftComponent(imgSinProcesar);
+        panelImgSinProcesar.add(imgSinProcesar, java.awt.BorderLayout.CENTER);
+
+        splitPanelPdi.setLeftComponent(panelImgSinProcesar);
+
+        panelImgProcesada.setLayout(new java.awt.BorderLayout());
 
         imgProcesada.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         imgProcesada.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/imgProcessedFill.jpg"))); // NOI18N
-        splitPanelPdi.setRightComponent(imgProcesada);
+        panelImgProcesada.add(imgProcesada, java.awt.BorderLayout.CENTER);
+
+        panelNavProcesadas.setMinimumSize(new java.awt.Dimension(113, 0));
+
+        btnAtrasProcesada.setText("<<");
+        btnAtrasProcesada.setEnabled(false);
+        btnAtrasProcesada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtrasProcesadaActionPerformed(evt);
+            }
+        });
+        panelNavProcesadas.add(btnAtrasProcesada);
+
+        btnAdelanteProcesada.setText(">>");
+        btnAdelanteProcesada.setEnabled(false);
+        btnAdelanteProcesada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdelanteProcesadaActionPerformed(evt);
+            }
+        });
+        panelNavProcesadas.add(btnAdelanteProcesada);
+
+        panelImgProcesada.add(panelNavProcesadas, java.awt.BorderLayout.SOUTH);
+
+        splitPanelPdi.setRightComponent(panelImgProcesada);
 
         panelCentro.add(splitPanelPdi, java.awt.BorderLayout.CENTER);
 
@@ -102,21 +139,37 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAdelanteProcesadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdelanteProcesadaActionPerformed
+        // TODO add your handling code here:
+        setIndexImgProcesada(getIndexImgProcesada()+1);
+    }//GEN-LAST:event_btnAdelanteProcesadaActionPerformed
+
+    private void btnAtrasProcesadaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasProcesadaActionPerformed
+        // TODO add your handling code here:
+        setIndexImgProcesada(getIndexImgProcesada()-1);
+    }//GEN-LAST:event_btnAtrasProcesadaActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdelanteProcesada;
+    private javax.swing.JButton btnAtrasProcesada;
     private javax.swing.JLabel imgProcesada;
     private javax.swing.JLabel imgSinProcesar;
     private org.jdesktop.swingx.JXLabel lblTitulo;
     private org.jdesktop.swingx.JXPanel panelCentro;
+    private org.jdesktop.swingx.JXPanel panelImgProcesada;
+    private org.jdesktop.swingx.JXPanel panelImgSinProcesar;
     private org.jdesktop.swingx.JXPanel panelInferior;
+    private org.jdesktop.swingx.JXPanel panelNavProcesadas;
     private org.jdesktop.swingx.JXPanel panelSuperior;
     private javax.swing.JSplitPane splitPanelPdi;
     // End of variables declaration//GEN-END:variables
 
     private void inicializador() {
+        setIndexImgProcesada(0);
         setImgOnImgProcesadaLabel("/imgs/imgProcessedFill.jpg", 520, 580);
         setImgOnImgSinProcesarLabel("/imgs/imgNotProcessedFill.jpg", 520, 580);
 
@@ -143,6 +196,7 @@ public class ProcesaImgWin extends javax.swing.JFrame {
                 //rutaImgProcesada = "imgs\\"+modelo.dataCapture.Sistema.getInstance().getImgWithDetectedMarksFileName();
             }else{
                 setImgOnImgProcesadaLabel(rutaImgProcesada, 600, 690);
+                setIndexImgProcesada(6);
             }
             if (rutaImgSinProcesar == null || rutaImgSinProcesar.length()<2){
                 //rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()
@@ -235,6 +289,52 @@ public class ProcesaImgWin extends javax.swing.JFrame {
             imgProcesada.setMinimumSize(new Dimension(0,0));
         }else{
             ControllerNavegacion.getInstance().errorGuiNotFoundImgProcesada();
+        }
+    }
+
+    /**
+     * @return the indexImgProcesada
+     */
+    public int getIndexImgProcesada() {
+        return indexImgProcesada;
+    }
+
+    /**
+     * @param indexImgProcesada the indexImgProcesada to set
+     */
+    public void setIndexImgProcesada(int indexImgProcesada) {
+        this.indexImgProcesada = indexImgProcesada;
+        switch(indexImgProcesada){
+            case 0: btnAdelanteProcesada.setEnabled(false);
+                    btnAtrasProcesada.setEnabled(false);
+                    break;
+            case 1: btnAdelanteProcesada.setEnabled(true);
+                    btnAtrasProcesada.setEnabled(false);
+                    setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgErodedFileName(), 600, 690);
+                    break;
+            case 2: btnAdelanteProcesada.setEnabled(true);
+                    btnAtrasProcesada.setEnabled(true);
+                    setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgBinarizedFileName(), 600, 690);
+                    break;
+            case 3: btnAdelanteProcesada.setEnabled(true);
+                    btnAtrasProcesada.setEnabled(true);
+                    setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgDilatedFileName(), 600, 690);
+                    break;
+            case 4: btnAdelanteProcesada.setEnabled(true);
+                    btnAtrasProcesada.setEnabled(true);
+                    setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgWithOutSeabedFileName(), 600, 690);
+                    break;
+            case 5: btnAdelanteProcesada.setEnabled(true);
+                    btnAtrasProcesada.setEnabled(true);
+                    setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgWithOutTimeFileName(), 600, 690);
+                    break;
+            case 6: btnAdelanteProcesada.setEnabled(false);    
+                    btnAtrasProcesada.setEnabled(true);
+                    setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName(), 600, 690);
+                    break;
+           default: btnAdelanteProcesada.setEnabled(true);    
+                    btnAtrasProcesada.setEnabled(true);
+                    break;
         }
     }
     

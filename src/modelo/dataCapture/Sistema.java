@@ -37,6 +37,12 @@ public class Sistema {
     private String currentVarDir;
     private String rutaIconosCatPois;
     private String imgWithDetectedMarksFileName;
+    private String imgErodedFileName;
+    private String imgBinarizedFileName;
+    private String imgDilatedFileName;
+    private String imgWithOutSeabedFileName;
+    private String imgWithOutTimeFileName;
+    
     
     private Sistema(){
         inicializador();
@@ -259,7 +265,12 @@ public class Sistema {
 
     private void inicializador() {
         setRutaIconosCatPois("web\\imgs\\");
-        setImgWithDetectedMarksFileName("imgWithDetectedMarks.jpg");
+        setImgWithDetectedMarksFileName("imgWithDetectedMarks.tmp");
+        setImgBinarizedFileName("binarized.tmp");
+        setImgDilatedFileName("dilated.tmp");
+        setImgErodedFileName("eroded.tmp");
+        setImgWithOutSeabedFileName("withOutSeabed.tmp");
+        setImgWithOutTimeFileName("withOutTime.tmp");
     }
     
     public JLabel getLabelWithImgResized(int w, int h, BufferedImage image) {  
@@ -307,5 +318,75 @@ public class Sistema {
      */
     public void setImgWithDetectedMarksFileName(String imgWithDetectedMarksFileName) {
         this.imgWithDetectedMarksFileName = imgWithDetectedMarksFileName;
+    }
+
+    /**
+     * @return the imgErodedFileName
+     */
+    public String getImgErodedFileName() {
+        return imgErodedFileName;
+    }
+
+    /**
+     * @param imgErodedFileName the imgErodedFileName to set
+     */
+    public void setImgErodedFileName(String imgErodedFileName) {
+        this.imgErodedFileName = imgErodedFileName;
+    }
+
+    /**
+     * @return the imgBinarizedFileName
+     */
+    public String getImgBinarizedFileName() {
+        return imgBinarizedFileName;
+    }
+
+    /**
+     * @param imgBinarizedFileName the imgBinarizedFileName to set
+     */
+    public void setImgBinarizedFileName(String imgBinarizedFileName) {
+        this.imgBinarizedFileName = imgBinarizedFileName;
+    }
+
+    /**
+     * @return the imgDilatedFileName
+     */
+    public String getImgDilatedFileName() {
+        return imgDilatedFileName;
+    }
+
+    /**
+     * @param imgDilatedFileName the imgDilatedFileName to set
+     */
+    public void setImgDilatedFileName(String imgDilatedFileName) {
+        this.imgDilatedFileName = imgDilatedFileName;
+    }
+
+    /**
+     * @return the imgWithOutSeabedFileName
+     */
+    public String getImgWithOutSeabedFileName() {
+        return imgWithOutSeabedFileName;
+    }
+
+    /**
+     * @param imgWithOutSeabedFileName the imgWithOutSeabedFileName to set
+     */
+    public void setImgWithOutSeabedFileName(String imgWithOutSeabedFileName) {
+        this.imgWithOutSeabedFileName = imgWithOutSeabedFileName;
+    }
+
+    /**
+     * @return the imgWithOutTimeFileName
+     */
+    public String getImgWithOutTimeFileName() {
+        return imgWithOutTimeFileName;
+    }
+
+    /**
+     * @param imgWithOutTimeFileName the imgWithOutTimeFileName to set
+     */
+    public void setImgWithOutTimeFileName(String imgWithOutTimeFileName) {
+        this.imgWithOutTimeFileName = imgWithOutTimeFileName;
     }
 }
