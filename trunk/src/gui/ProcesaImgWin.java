@@ -196,7 +196,6 @@ public class ProcesaImgWin extends javax.swing.JFrame {
                 //rutaImgProcesada = "imgs\\"+modelo.dataCapture.Sistema.getInstance().getImgWithDetectedMarksFileName();
             }else{
                 setImgOnImgProcesadaLabel(rutaImgProcesada, 600, 690);
-                setIndexImgProcesada(6);
             }
             if (rutaImgSinProcesar == null || rutaImgSinProcesar.length()<2){
                 //rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()

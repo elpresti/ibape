@@ -532,6 +532,9 @@ public class OperacionesBasicas {
                             if (coordMarca.size()>30){ //si la marca se compone de mas de 30 pixeles, la considero Marca
                                 Marca marca= new Marca();
                                 marca.setAreaEnImg(coordMarca);
+                                Point pixelCentroDeMarca = getPixelMedioDeMarca(marca);
+                                marca.setPxXenImg(pixelCentroDeMarca.x);
+                                marca.setPxYenImg(pixelCentroDeMarca.y);
                                 //marca.setAreaImagen(String.valueOf(coordMarca.size()));
                                 marcas.add(marca);
                             }
@@ -798,7 +801,7 @@ public class OperacionesBasicas {
                 if (sshPrimerPx.getExpander()>0  || sshUltimoPx.getExpander()>0){//hay expander
                     imgOriginal = recortaExpander(imgOriginal);
                 }
-                if (imagenApta(imgOriginal)){ 
+                if (imagenApta(imgOriginal)){  
                     ArrayList<Marca> marcas= buscaMarcas(imgOriginal);
                     UltimaImgProcesada.getInstance().setMarcas(marcas);
                     if (marcas.size()>0){
@@ -876,6 +879,53 @@ public class OperacionesBasicas {
             salida = coordX;
         }
         return salida;
+    }
+
+    private Point getPixelMedioDeMarca(Marca marca) {
+        Point pixelMedio=marca.getAreaEnImg().get(0 + (int)(Math.random()*(marca.getAreaEnImg().size()-1)));
+        //Objetivo: buscar el pixel X mas al centro de la marca
+        int pixelInferiorX=(int)pixelMedio.getX();
+        int pixelSuperiorX=(int)pixelMedio.getX();
+        for (int i=0; i<marca.getAreaEnImg().size();i++){
+            if (((int)marca.getAreaEnImg().get(i).getX())<pixelInferiorX){
+                pixelInferiorX = (int)marca.getAreaEnImg().get(i).getX();
+            }else{
+                if (((int)marca.getAreaEnImg().get(i).getX())>pixelSuperiorX){
+                    pixelSuperiorX = (int)marca.getAreaEnImg().get(i).getX();
+                }
+            }
+        }
+        //Objetivo: buscar el pixel Y mas al centro de la marca
+        int pixelInferiorY=(int)pixelMedio.getY();
+        int pixelSuperiorY=(int)pixelMedio.getY();        
+        for (int i=0; i<marca.getAreaEnImg().size();i++){
+            if (((int)marca.getAreaEnImg().get(i).getY())<pixelInferiorY){
+                pixelInferiorY = (int)marca.getAreaEnImg().get(i).getY();
+            }else{
+                if (((int)marca.getAreaEnImg().get(i).getY())>pixelSuperiorY){
+                    pixelSuperiorY = (int)marca.getAreaEnImg().get(i).getY();
+                }
+            }
+        }
+        //como voy a buscar el promedio entre superior e inferior de cada eje, voy a chequear que realmente exista este pixel en la marca
+        int pixelPromedioX=(pixelInferiorX+pixelSuperiorX)/2;
+        int pixelPromedioY=(pixelInferiorY+pixelSuperiorY)/2;
+        if (marca.getAreaEnImg().contains(new Point(pixelPromedioX, pixelPromedioY))){
+            pixelMedio = new Point(pixelPromedioX, pixelPromedioY);
+        }else{
+            if (marca.getAreaEnImg().contains(new Point(pixelPromedioX+1, pixelPromedioY))){
+                pixelMedio = new Point(pixelPromedioX+1, pixelPromedioY);
+            }else{
+                if (marca.getAreaEnImg().contains(new Point(pixelPromedioX, pixelPromedioY+1))){
+                    pixelMedio = new Point(pixelPromedioX, pixelPromedioY+1);
+                }else{
+                    if (marca.getAreaEnImg().contains(new Point(pixelPromedioX-1, pixelPromedioY-1))){
+                        pixelMedio = new Point(pixelPromedioX-1, pixelPromedioY-1);
+                    }
+                }
+            }
+        }
+        return pixelMedio;
     }
 
 }
