@@ -535,6 +535,7 @@ public class OperacionesBasicas {
                                 Point pixelCentroDeMarca = getPixelMedioDeMarca(marca);
                                 marca.setPxXenImg(pixelCentroDeMarca.x);
                                 marca.setPxYenImg(pixelCentroDeMarca.y);
+                                //---> seguir DATatlantis.getInstance().getDatosFromPixel(null, i)
                                 //marca.setAreaImagen(String.valueOf(coordMarca.size()));
                                 marcas.add(marca);
                             }
