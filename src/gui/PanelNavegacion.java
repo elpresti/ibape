@@ -22,7 +22,9 @@ import java.awt.image.BufferedImage;
 import modelo.dataManager.Punto;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -47,6 +50,13 @@ import persistencia.BrokerDbMapa;
 public class PanelNavegacion extends javax.swing.JPanel implements java.util.Observer {
     static PanelNavegacion unicaInstancia;
     private Punto punto = Punto.getInstance();
+    private DefaultTableModel modeloTablaDC;    
+    private int NRO_COL_ID_MARCA;
+    private int NRO_COL_FECHAYHORA;
+    private int NRO_COL_LATITUD;
+    private int NRO_COL_LONGITUD;
+    private int NRO_COL_PROFUNDIDAD;
+    private int NRO_COL_IMGFILENAME;
     private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
     private String txtBtnGraficarDatos;
     
@@ -91,25 +101,13 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblProf = new java.awt.Label();
         panelRelleno1 = new javax.swing.JPanel();
         panelRelleno2 = new javax.swing.JPanel();
+        panelDeteccionCardumenes = new javax.swing.JPanel();
+        panelTituloDC = new javax.swing.JPanel();
+        lblTituloDC = new org.jdesktop.swingx.JXLabel();
         btnProcesaImg = new javax.swing.JButton();
-        panelImgProc = new javax.swing.JPanel();
-        panelImgs = new javax.swing.JPanel();
-        panelImgSinProcesar = new javax.swing.JPanel();
-        imgSinProcesar = new org.jdesktop.swingx.JXImageView();
-        panelImgProcesada = new javax.swing.JPanel();
-        imgProcesada = new org.jdesktop.swingx.JXImageView();
-        panelResultadosImgs = new javax.swing.JPanel();
-        panelTituloResul = new javax.swing.JPanel();
-        lblTituloResultados = new javax.swing.JLabel();
-        panelCantMarcas = new javax.swing.JPanel();
-        lblTxtCantMarcas = new java.awt.Label();
-        lblCantMarcas = new java.awt.Label();
-        panelListaMarcas = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listaMarcas = new org.jdesktop.swingx.JXList();
-        panelProfPromMarcas = new javax.swing.JPanel();
-        lblTxtProfPromMarcas = new java.awt.Label();
-        lblProfPromMarcas = new java.awt.Label();
+        panelDatosDC = new org.jdesktop.swingx.JXPanel();
+        scrollTablaMarcas = new javax.swing.JScrollPane();
+        tablaMarcas = new org.jdesktop.swingx.JXTable();
         panelMapa = new org.jdesktop.swingx.JXPanel();
         panelSeparador = new javax.swing.JPanel();
         panelTituloMapa = new javax.swing.JPanel();
@@ -277,18 +275,6 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         panelRelleno2.setOpaque(false);
         panelRelleno2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 5));
-
-        btnProcesaImg.setText("Detección de peces");
-        btnProcesaImg.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnProcesaImg.setMaximumSize(new java.awt.Dimension(115, 23));
-        btnProcesaImg.setPreferredSize(new java.awt.Dimension(115, 23));
-        btnProcesaImg.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnProcesaImgActionPerformed(evt);
-            }
-        });
-        panelRelleno2.add(btnProcesaImg);
-
         panelSonda.add(panelRelleno2);
 
         panelDatos.add(panelSonda);
@@ -297,165 +283,62 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         panelTodo.add(panelDatosNavegacion);
 
-        panelImgProc.setMaximumSize(new java.awt.Dimension(500, 250));
-        panelImgProc.setMinimumSize(new java.awt.Dimension(480, 250));
-        panelImgProc.setOpaque(false);
-        panelImgProc.setPreferredSize(new java.awt.Dimension(480, 250));
-        panelImgProc.setLayout(new javax.swing.BoxLayout(panelImgProc, javax.swing.BoxLayout.LINE_AXIS));
+        panelDeteccionCardumenes.setMaximumSize(new java.awt.Dimension(500, 250));
+        panelDeteccionCardumenes.setMinimumSize(new java.awt.Dimension(480, 250));
+        panelDeteccionCardumenes.setOpaque(false);
+        panelDeteccionCardumenes.setPreferredSize(new java.awt.Dimension(480, 250));
+        panelDeteccionCardumenes.setLayout(new java.awt.BorderLayout());
 
-        panelImgs.setMaximumSize(new java.awt.Dimension(250, 250));
-        panelImgs.setMinimumSize(new java.awt.Dimension(250, 250));
-        panelImgs.setOpaque(false);
-        panelImgs.setPreferredSize(new java.awt.Dimension(250, 250));
-        panelImgs.setLayout(new java.awt.GridLayout(2, 1));
+        panelTituloDC.setMaximumSize(new java.awt.Dimension(250, 250));
+        panelTituloDC.setMinimumSize(new java.awt.Dimension(250, 250));
+        panelTituloDC.setOpaque(false);
+        panelTituloDC.setPreferredSize(new java.awt.Dimension(480, 30));
 
-        panelImgSinProcesar.setMaximumSize(new java.awt.Dimension(250, 120));
-        panelImgSinProcesar.setMinimumSize(new java.awt.Dimension(250, 120));
-        panelImgSinProcesar.setOpaque(false);
-        panelImgSinProcesar.setPreferredSize(new java.awt.Dimension(250, 120));
+        lblTituloDC.setText("Resultados de la detección de cardúmenes:");
+        lblTituloDC.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        panelTituloDC.add(lblTituloDC);
 
-        imgSinProcesar.setMaximumSize(new java.awt.Dimension(250, 120));
-        imgSinProcesar.setMinimumSize(new java.awt.Dimension(250, 120));
-        imgSinProcesar.setPreferredSize(new java.awt.Dimension(250, 120));
-        imgSinProcesar.setScrollableHeightHint(org.jdesktop.swingx.ScrollableSizeHint.NONE);
-        imgSinProcesar.setScrollableWidthHint(org.jdesktop.swingx.ScrollableSizeHint.FIT);
-
-        javax.swing.GroupLayout imgSinProcesarLayout = new javax.swing.GroupLayout(imgSinProcesar);
-        imgSinProcesar.setLayout(imgSinProcesarLayout);
-        imgSinProcesarLayout.setHorizontalGroup(
-            imgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-        );
-        imgSinProcesarLayout.setVerticalGroup(
-            imgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout panelImgSinProcesarLayout = new javax.swing.GroupLayout(panelImgSinProcesar);
-        panelImgSinProcesar.setLayout(panelImgSinProcesarLayout);
-        panelImgSinProcesarLayout.setHorizontalGroup(
-            panelImgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-            .addGroup(panelImgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(imgSinProcesar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelImgSinProcesarLayout.setVerticalGroup(
-            panelImgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 125, Short.MAX_VALUE)
-            .addGroup(panelImgSinProcesarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelImgSinProcesarLayout.createSequentialGroup()
-                    .addComponent(imgSinProcesar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(5, Short.MAX_VALUE)))
-        );
-
-        panelImgs.add(panelImgSinProcesar);
-
-        panelImgProcesada.setMaximumSize(new java.awt.Dimension(250, 120));
-        panelImgProcesada.setMinimumSize(new java.awt.Dimension(250, 120));
-        panelImgProcesada.setOpaque(false);
-        panelImgProcesada.setPreferredSize(new java.awt.Dimension(250, 120));
-
-        javax.swing.GroupLayout imgProcesadaLayout = new javax.swing.GroupLayout(imgProcesada);
-        imgProcesada.setLayout(imgProcesadaLayout);
-        imgProcesadaLayout.setHorizontalGroup(
-            imgProcesadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-        );
-        imgProcesadaLayout.setVerticalGroup(
-            imgProcesadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 125, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout panelImgProcesadaLayout = new javax.swing.GroupLayout(panelImgProcesada);
-        panelImgProcesada.setLayout(panelImgProcesadaLayout);
-        panelImgProcesadaLayout.setHorizontalGroup(
-            panelImgProcesadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
-            .addGroup(panelImgProcesadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(imgProcesada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        panelImgProcesadaLayout.setVerticalGroup(
-            panelImgProcesadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 125, Short.MAX_VALUE)
-            .addGroup(panelImgProcesadaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(imgProcesada, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        panelImgs.add(panelImgProcesada);
-
-        panelImgProc.add(panelImgs);
-
-        panelResultadosImgs.setMaximumSize(new java.awt.Dimension(250, 250));
-        panelResultadosImgs.setMinimumSize(new java.awt.Dimension(230, 250));
-        panelResultadosImgs.setOpaque(false);
-        panelResultadosImgs.setPreferredSize(new java.awt.Dimension(230, 250));
-        panelResultadosImgs.setLayout(new javax.swing.BoxLayout(panelResultadosImgs, javax.swing.BoxLayout.PAGE_AXIS));
-
-        panelTituloResul.setMaximumSize(new java.awt.Dimension(250, 30));
-        panelTituloResul.setMinimumSize(new java.awt.Dimension(230, 30));
-        panelTituloResul.setOpaque(false);
-        panelTituloResul.setPreferredSize(new java.awt.Dimension(230, 30));
-
-        lblTituloResultados.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblTituloResultados.setText("Resultados del procesamiento:");
-        panelTituloResul.add(lblTituloResultados);
-
-        panelResultadosImgs.add(panelTituloResul);
-
-        panelCantMarcas.setMaximumSize(new java.awt.Dimension(250, 50));
-        panelCantMarcas.setMinimumSize(new java.awt.Dimension(230, 50));
-        panelCantMarcas.setOpaque(false);
-        panelCantMarcas.setPreferredSize(new java.awt.Dimension(230, 50));
-        panelCantMarcas.setLayout(new javax.swing.BoxLayout(panelCantMarcas, javax.swing.BoxLayout.LINE_AXIS));
-
-        lblTxtCantMarcas.setAlignment(java.awt.Label.RIGHT);
-        lblTxtCantMarcas.setText("Marcas encontradas: ");
-        panelCantMarcas.add(lblTxtCantMarcas);
-
-        lblCantMarcas.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
-        lblCantMarcas.setText("3");
-        panelCantMarcas.add(lblCantMarcas);
-
-        panelResultadosImgs.add(panelCantMarcas);
-
-        panelListaMarcas.setMaximumSize(new java.awt.Dimension(250, 130));
-        panelListaMarcas.setMinimumSize(new java.awt.Dimension(230, 130));
-        panelListaMarcas.setOpaque(false);
-        panelListaMarcas.setPreferredSize(new java.awt.Dimension(230, 130));
-
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(200, 120));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(200, 120));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(200, 120));
-
-        listaMarcas.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Marca 1: 38 m", "Marca 2: 39 m", "Marca 3: 32 m" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        btnProcesaImg.setText("Detección de cardúmenes");
+        btnProcesaImg.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnProcesaImg.setMaximumSize(new java.awt.Dimension(195, 23));
+        btnProcesaImg.setPreferredSize(new java.awt.Dimension(135, 23));
+        btnProcesaImg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcesaImgActionPerformed(evt);
+            }
         });
-        jScrollPane1.setViewportView(listaMarcas);
+        panelTituloDC.add(btnProcesaImg);
 
-        panelListaMarcas.add(jScrollPane1);
+        panelDeteccionCardumenes.add(panelTituloDC, java.awt.BorderLayout.NORTH);
 
-        panelResultadosImgs.add(panelListaMarcas);
+        panelDatosDC.setLayout(new java.awt.BorderLayout());
 
-        panelProfPromMarcas.setMaximumSize(new java.awt.Dimension(250, 40));
-        panelProfPromMarcas.setMinimumSize(new java.awt.Dimension(230, 40));
-        panelProfPromMarcas.setOpaque(false);
-        panelProfPromMarcas.setPreferredSize(new java.awt.Dimension(230, 40));
-        panelProfPromMarcas.setLayout(new javax.swing.BoxLayout(panelProfPromMarcas, javax.swing.BoxLayout.LINE_AXIS));
+        tablaMarcas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Fecha y Hora", "Latitud", "Longitud", "Profundidad", "ImgFileName"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
 
-        lblTxtProfPromMarcas.setAlignment(java.awt.Label.RIGHT);
-        lblTxtProfPromMarcas.setText("Profundidad promedio marcas: ");
-        panelProfPromMarcas.add(lblTxtProfPromMarcas);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        scrollTablaMarcas.setViewportView(tablaMarcas);
 
-        lblProfPromMarcas.setText("34 m");
-        panelProfPromMarcas.add(lblProfPromMarcas);
+        panelDatosDC.add(scrollTablaMarcas, java.awt.BorderLayout.CENTER);
 
-        panelResultadosImgs.add(panelProfPromMarcas);
+        panelDeteccionCardumenes.add(panelDatosDC, java.awt.BorderLayout.CENTER);
 
-        panelImgProc.add(panelResultadosImgs);
-
-        panelTodo.add(panelImgProc);
+        panelTodo.add(panelDeteccionCardumenes);
 
         panelMapa.setMinimumSize(new java.awt.Dimension(480, 400));
         panelMapa.setOpaque(false);
@@ -719,64 +602,52 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JCheckBox chkConCamara;
     private javax.swing.JCheckBox chkPoisTodos;
     private javax.swing.JCheckBox chkRecorrido;
-    private org.jdesktop.swingx.JXImageView imgProcesada;
-    private org.jdesktop.swingx.JXImageView imgSinProcesar;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private java.awt.Label lblCantMarcas;
     private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido;
     private java.awt.Label lblDatosNavegacion;
     private java.awt.Label lblFechaHora;
     private java.awt.Label lblLatitud;
     private java.awt.Label lblLongitud;
     private java.awt.Label lblProf;
-    private java.awt.Label lblProfPromMarcas;
     private java.awt.Label lblRumbo;
     private java.awt.Label lblTemp;
     private java.awt.Label lblTitulo;
+    private org.jdesktop.swingx.JXLabel lblTituloDC;
     private org.jdesktop.swingx.JXLabel lblTituloNavegacion;
-    private javax.swing.JLabel lblTituloResultados;
-    private java.awt.Label lblTxtCantMarcas;
     private java.awt.Label lblTxtDatosMapa;
     private java.awt.Label lblTxtFechaHora;
     private java.awt.Label lblTxtLatitud;
     private java.awt.Label lblTxtLongitud;
     private java.awt.Label lblTxtProf;
-    private java.awt.Label lblTxtProfPromMarcas;
     private java.awt.Label lblTxtRumbo;
     private java.awt.Label lblTxtTablaCatPois;
     private java.awt.Label lblTxtTemp;
     private java.awt.Label lblTxtVelocidad;
     private java.awt.Label lblVelocidad;
-    private org.jdesktop.swingx.JXList listaMarcas;
     private org.jdesktop.swingx.JXPanel panelBtnActualizaMapa;
     private javax.swing.JPanel panelBtnActualizar;
-    private javax.swing.JPanel panelCantMarcas;
     private javax.swing.JPanel panelDatos;
+    private org.jdesktop.swingx.JXPanel panelDatosDC;
     private javax.swing.JPanel panelDatosMapa;
     private javax.swing.JPanel panelDatosNavegacion;
+    private javax.swing.JPanel panelDeteccionCardumenes;
     private javax.swing.JPanel panelGps;
-    private javax.swing.JPanel panelImgProc;
-    private javax.swing.JPanel panelImgProcesada;
-    private javax.swing.JPanel panelImgSinProcesar;
-    private javax.swing.JPanel panelImgs;
-    private javax.swing.JPanel panelListaMarcas;
     private org.jdesktop.swingx.JXPanel panelMapa;
-    private javax.swing.JPanel panelProfPromMarcas;
     private org.jdesktop.swingx.JXPanel panelRecorrido;
     private javax.swing.JPanel panelRelleno1;
     private javax.swing.JPanel panelRelleno2;
-    private javax.swing.JPanel panelResultadosImgs;
     private javax.swing.JPanel panelSeparador;
     private javax.swing.JPanel panelSonda;
     private javax.swing.JPanel panelTablaPOIs;
     private org.jdesktop.swingx.JXPanel panelTitulo;
+    private javax.swing.JPanel panelTituloDC;
     private javax.swing.JPanel panelTituloDatos;
     private javax.swing.JPanel panelTituloMapa;
-    private javax.swing.JPanel panelTituloResul;
     private org.jdesktop.swingx.JXPanel panelTodo;
+    private javax.swing.JScrollPane scrollTablaMarcas;
     private org.jdesktop.swingx.JXTable tablaCatPois;
+    private org.jdesktop.swingx.JXTable tablaMarcas;
     // End of variables declaration//GEN-END:variables
  
     public static PanelNavegacion getInstance() {
@@ -1026,18 +897,79 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         tablaCatPois.setRowHeight(30);
         chkConCamaraActionPerformed(null);
         punto.addObserver(this);
-        inicializaProcDeImgs();
+        NRO_COL_ID_MARCA = 0;
+        NRO_COL_FECHAYHORA = 1;
+        NRO_COL_LATITUD = 2;
+        NRO_COL_LONGITUD = 3;
+        NRO_COL_PROFUNDIDAD = 4;
+        NRO_COL_IMGFILENAME = 5;
+        tablaMarcas.setRowHeight(20);
+        inicializaTablaDC();
     }
 
-    private void inicializaProcDeImgs() {
-        try {
-            imgSinProcesar.setImage(new File("imgs/img1.jpg"));
-            imgProcesada.setImage(new File("imgs/img1-proc.jpg"));
-        } catch (IOException ex) {
-            Logger.getLogger(PanelNavegacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void agregaUnaMarca(int id, Date fechaYhora, double latitud, 
+            double longitud, double profundidad, String imgFileName) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Object[] fila = new Object[6]; //creamos la fila cantColumnas=6
+        fila[NRO_COL_ID_MARCA]=id;
+        if (fechaYhora != null) { fila[NRO_COL_FECHAYHORA]=sdf.format(fechaYhora); }
+        fila[NRO_COL_LATITUD]=latitud;
+        fila[NRO_COL_LONGITUD]=longitud;
+        fila[NRO_COL_PROFUNDIDAD]=profundidad;
+        fila[NRO_COL_IMGFILENAME]=imgFileName;
+        modeloTablaDC.addRow(fila);
     }
 
+    public void vaciaTabla() {                
+        modeloTablaDC.setRowCount(0);
+    }    
+    
+  public void inicializaTablaDC() {
+        modeloTablaDC = new TableModelMarcasNavegacion();
+        tablaMarcas.setModel(modeloTablaDC);
+        tablaMarcas.setEnabled(true);
+        //escondo la columna ID 
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setMinWidth(0);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setMaxWidth(0);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setPreferredWidth(0);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setResizable(false);
+        //resize de las demas columnas
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMinWidth(10);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMaxWidth(100);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setPreferredWidth(50);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setResizable(true);
+
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setMinWidth(10);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setMaxWidth(100);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setResizable(true);
+
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setMinWidth(10);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setMaxWidth(100);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setResizable(true);
+
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMinWidth(10);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMaxWidth(100);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setResizable(true);
+
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMinWidth(10);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMaxWidth(100);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setResizable(true);
+  }
+
+    public void cargaMsgEnTablaMarcas(String msg){
+        tablaMarcas.setEnabled(false);
+        String[] colNames = new String[1];
+        colNames[0]="Mensaje";
+        DefaultTableModel modeloTmp = new DefaultTableModel(colNames, 1);
+        tablaMarcas.setModel(modeloTmp);
+        String[] data = new String[1];
+        data[0] = msg;
+        modeloTmp.addRow(data);
+    }
     /**
      * @return the chkPoisTodos
      */
@@ -1090,4 +1022,35 @@ class CheckBoxEditorNavegacion extends DefaultCellEditor implements ItemListener
   public void itemStateChanged(ItemEvent e) {    
     super.fireEditingStopped();
   }
+}
+
+/* - - -   clases y métodos q configuran las COLUMNAS del TABLEMODEL de la tabla CATEGORIA DE POIS   - - -  */
+class TableModelMarcasNavegacion extends DefaultTableModel {        
+    public TableModelMarcasNavegacion(){
+        String[] encabezado = new String[6];//Defino la Cabecera (columnas)
+        encabezado[0] = "Id";
+        encabezado[1] = "Fecha y hora";        
+        encabezado[2] = "Latitud";
+        encabezado[3] = "Longitud";
+        encabezado[4] = "Profundidad";
+        encabezado[5] = "ImgFileName";
+        this.setColumnIdentifiers(encabezado);
+    }
+    @Override  
+      public Class getColumnClass(int col) {  
+        switch (col){
+            case 0: return Integer.class;//esta column accepts only Integer values
+            case 2: return Double.class;
+            case 3: return Double.class;
+            case 4: return Double.class;
+            case 5: return String.class;
+            default: return Object.class;//other columns accept Object
+        }
+    }  
+    @Override  
+      public boolean isCellEditable(int row, int col) {
+        return false; //ninguna es editable
+  /*    if (col == 1) return true;//la columna de los checkbox will be editable
+        else return false; */
+      }
 }

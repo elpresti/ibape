@@ -165,6 +165,26 @@ public class ControllerNavegacion {
         gui.ProcesaImgWin.getInstance().actualizaImgs("/imgs/imgNotFound.jpg",null);
     }
 
+    public void cargaResultadosEnTablaMarcas() {
+        if (modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas().size()>0){
+            PanelNavegacion.getInstance().inicializaTablaDC();
+            for (modelo.dataManager.Marca marca : modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas()){
+                PanelNavegacion.getInstance().agregaUnaMarca(marca.getId(), marca.getFechaYhora(), 
+                        marca.getLatitud(),marca.getLongitud(), marca.getProfundidad(),marca.getImgFileName());
+            }
+        }else{
+            PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("No se encontraron marcas para la imagen procesada...");
+        }
+    }
+
+    public void loadingGuiTablaMarcas() {
+        PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("Procesando imagen recibida...");
+    }
+
+    public void errorGuiTablaMarcas() {
+        PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("Hubo un error al procesar la ultima imagen y no se pudieron obtener las marcas...");
+    }
+
 }
 class GraficaDatosNavegacion implements Runnable {
     Thread thGraficar;

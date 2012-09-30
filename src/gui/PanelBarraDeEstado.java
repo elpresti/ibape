@@ -437,11 +437,13 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     msg[0] = "-2"; msg[1] = "Error al leer DAT: "+imgFileName.replace(".jpg",".dat");
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
+                    ControllerNavegacion.getInstance().errorGuiTablaMarcas();                    
                     break;
           case -1:  mmebpi = new MuestraMsgEnBarraProcesaImg();
                     msg[0] = "-1"; msg[1] = "Error al procesar IMG: "+imgFileName;
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
+                    ControllerNavegacion.getInstance().errorGuiTablaMarcas();
                     break;
            case 1:  Logueador.getInstance().agregaAlLog("Comienza el procesamiento de "+UltimaImgProcesada.getInstance().getFileName());
                     getBarraProcesaImg().setVisible(true);
@@ -449,6 +451,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     getBarraProcesaImg().setValue(estado*10);
                     ControllerNavegacion.getInstance().loadingGuiImgProcesada();
                     ControllerNavegacion.getInstance().loadingGuiImgSinProcesar();
+                    ControllerNavegacion.getInstance().loadingGuiTablaMarcas();
                     break;
            case 2:  getBarraProcesaImg().setValue(estado*10);
                     getBarraProcesaImg().setString("Leyendo DAT...");
@@ -481,6 +484,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     msg[0] = "11"; msg[1]="Fin de procesamiento: "+imgFileName;
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
+                    ControllerNavegacion.getInstance().cargaResultadosEnTablaMarcas();
                     break;
           case 12:  mmebpi = new MuestraMsgEnBarraProcesaImg();
                     ArrayList<Float> porcentajes = ControllerPpal.getInstance().getPorcentajesColorUltimaImg();
@@ -489,6 +493,7 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     ControllerNavegacion.getInstance().errorImgNoApta();
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
+                    ControllerNavegacion.getInstance().cargaResultadosEnTablaMarcas();
                     break;
           case 13:  mmebpi = new MuestraMsgEnBarraProcesaImg();
                     msg[0] = "13"; msg[1]="Imagen procesada. No hay marcas...";
@@ -496,7 +501,8 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
                     ControllerNavegacion.getInstance().errorImgNoApta();
                     mmebpi.setMensaje(msg);
                     mmebpi.start();
-                    break;              
+                    ControllerNavegacion.getInstance().cargaResultadosEnTablaMarcas();
+                    break;
           default:  getBarraProcesaImg().setValue(estado*10);
                     break;
       }
