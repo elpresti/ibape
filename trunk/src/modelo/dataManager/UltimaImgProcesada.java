@@ -67,6 +67,7 @@ public class UltimaImgProcesada {
      */
     public void setMarcas(ArrayList<modelo.dataManager.Marca> marcas) {
         this.marcas = marcas;
+        
     }
 
     /**

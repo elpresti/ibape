@@ -36,6 +36,7 @@ public class ControllerPois {
 
     public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud, String pathImgSonda) {
         modelo.dataManager.POI p = new POI();
+        p.addObserver(controllers.ControllerAlertas.getInstance()); //Modulo Alertas
         p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
         p.setIdCategoriaPOI(idCategoriaPOI);
         p.setLatitud(latitud);
