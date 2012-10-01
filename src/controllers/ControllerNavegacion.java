@@ -166,18 +166,21 @@ public class ControllerNavegacion {
     }
 
     public void cargaResultadosEnTablaMarcas() {
-        if (modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas().size()>0){
+        if (modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas() != null && 
+                modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas().size()>0){
             PanelNavegacion.getInstance().inicializaTablaDC();
             for (modelo.dataManager.Marca marca : modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas()){
                 PanelNavegacion.getInstance().agregaUnaMarca(marca.getId(), marca.getFechaYhora(), 
                         marca.getLatitud(),marca.getLongitud(), marca.getProfundidad(),marca.getImgFileName());
             }
+            PanelNavegacion.getInstance().setCantMarcasEncontradas(modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas().size());
         }else{
             PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("No se encontraron marcas para la imagen procesada...");
         }
     }
 
     public void loadingGuiTablaMarcas() {
+        PanelNavegacion.getInstance().habilitaPanelCantMarcas(false); 
         PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("Procesando imagen recibida...");
     }
 

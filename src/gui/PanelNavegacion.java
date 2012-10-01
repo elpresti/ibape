@@ -22,6 +22,7 @@ import java.awt.image.BufferedImage;
 import modelo.dataManager.Punto;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,10 +36,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import modelo.dataManager.CategoriaPoi;
+import org.jdesktop.swingx.JXTable;
 import persistencia.BrokerDbMapa;
 
 
@@ -59,6 +62,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
     private int NRO_COL_IMGFILENAME;
     private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
     private String txtBtnGraficarDatos;
+    private int cantMarcasEncontradas;
     
     /** Creates new form PanelNavegacion */
     private PanelNavegacion() {
@@ -108,6 +112,9 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelDatosDC = new org.jdesktop.swingx.JXPanel();
         scrollTablaMarcas = new javax.swing.JScrollPane();
         tablaMarcas = new org.jdesktop.swingx.JXTable();
+        panelCantMarcas = new org.jdesktop.swingx.JXPanel();
+        lblTxtCantMarcas = new org.jdesktop.swingx.JXLabel();
+        lblCantMarcas = new org.jdesktop.swingx.JXLabel();
         panelMapa = new org.jdesktop.swingx.JXPanel();
         panelSeparador = new javax.swing.JPanel();
         panelTituloMapa = new javax.swing.JPanel();
@@ -315,28 +322,26 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         tablaMarcas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
-                "ID", "Fecha y Hora", "Latitud", "Longitud", "Profundidad", "ImgFileName"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
             }
-        });
+        ));
         scrollTablaMarcas.setViewportView(tablaMarcas);
 
         panelDatosDC.add(scrollTablaMarcas, java.awt.BorderLayout.CENTER);
 
         panelDeteccionCardumenes.add(panelDatosDC, java.awt.BorderLayout.CENTER);
+
+        lblTxtCantMarcas.setText("Cantidad de marcas encontradas: ");
+        lblTxtCantMarcas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelCantMarcas.add(lblTxtCantMarcas);
+
+        lblCantMarcas.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        panelCantMarcas.add(lblCantMarcas);
+
+        panelDeteccionCardumenes.add(panelCantMarcas, java.awt.BorderLayout.PAGE_END);
 
         panelTodo.add(panelDeteccionCardumenes);
 
@@ -604,6 +609,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private javax.swing.JCheckBox chkRecorrido;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private org.jdesktop.swingx.JXLabel lblCantMarcas;
     private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido;
     private java.awt.Label lblDatosNavegacion;
     private java.awt.Label lblFechaHora;
@@ -615,6 +621,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private java.awt.Label lblTitulo;
     private org.jdesktop.swingx.JXLabel lblTituloDC;
     private org.jdesktop.swingx.JXLabel lblTituloNavegacion;
+    private org.jdesktop.swingx.JXLabel lblTxtCantMarcas;
     private java.awt.Label lblTxtDatosMapa;
     private java.awt.Label lblTxtFechaHora;
     private java.awt.Label lblTxtLatitud;
@@ -627,6 +634,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private java.awt.Label lblVelocidad;
     private org.jdesktop.swingx.JXPanel panelBtnActualizaMapa;
     private javax.swing.JPanel panelBtnActualizar;
+    private org.jdesktop.swingx.JXPanel panelCantMarcas;
     private javax.swing.JPanel panelDatos;
     private org.jdesktop.swingx.JXPanel panelDatosDC;
     private javax.swing.JPanel panelDatosMapa;
@@ -893,6 +901,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     private void inicializador() {
         habilitaPanelTablaCatPois(false);
+        habilitaPanelCantMarcas(false);
         seteaBotonesMapa();
         tablaCatPois.setRowHeight(30);
         chkConCamaraActionPerformed(null);
@@ -910,22 +919,24 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     public void agregaUnaMarca(int id, Date fechaYhora, double latitud, 
             double longitud, double profundidad, String imgFileName) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        DecimalFormat formatter = new DecimalFormat( "#.00000000" );
         Object[] fila = new Object[6]; //creamos la fila cantColumnas=6
         fila[NRO_COL_ID_MARCA]=id;
         if (fechaYhora != null) { fila[NRO_COL_FECHAYHORA]=sdf.format(fechaYhora); }
-        fila[NRO_COL_LATITUD]=latitud;
-        fila[NRO_COL_LONGITUD]=longitud;
+        fila[NRO_COL_LATITUD]=formatter.format((Number)latitud);
+        fila[NRO_COL_LONGITUD]=formatter.format((Number)longitud);
         fila[NRO_COL_PROFUNDIDAD]=profundidad;
         fila[NRO_COL_IMGFILENAME]=imgFileName;
         modeloTablaDC.addRow(fila);
     }
 
-    public void vaciaTabla() {                
+    public void vaciaTablaDC() {
         modeloTablaDC.setRowCount(0);
     }    
     
   public void inicializaTablaDC() {
         modeloTablaDC = new TableModelMarcasNavegacion();
+        tablaMarcas.setModel(new DefaultTableModel());
         tablaMarcas.setModel(modeloTablaDC);
         tablaMarcas.setEnabled(true);
         //escondo la columna ID 
@@ -935,40 +946,45 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setResizable(false);
         //resize de las demas columnas
         tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMinWidth(10);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMaxWidth(100);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setPreferredWidth(50);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMaxWidth(200);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setPreferredWidth(70);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setResizable(true);
 
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setMinWidth(10);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setMaxWidth(100);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setMaxWidth(200);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setPreferredWidth(30);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LATITUD).setResizable(true);
 
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setMinWidth(10);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setMaxWidth(100);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setMaxWidth(200);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setPreferredWidth(30);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setResizable(true);
 
         tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMinWidth(10);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMaxWidth(100);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMaxWidth(200);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setPreferredWidth(20);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setResizable(true);
 
         tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMinWidth(10);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMaxWidth(100);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setPreferredWidth(40);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMaxWidth(200);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setPreferredWidth(60);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setResizable(true);
   }
 
     public void cargaMsgEnTablaMarcas(String msg){
-        tablaMarcas.setEnabled(false);
-        String[] colNames = new String[1];
-        colNames[0]="Mensaje";
-        DefaultTableModel modeloTmp = new DefaultTableModel(colNames, 1);
-        tablaMarcas.setModel(modeloTmp);
+        String[] columna = new String[1];
+        columna[0] = "Mensaje";
+        vaciaTablaDC();
+        modeloTablaDC.setColumnCount(1);
+        modeloTablaDC.setColumnIdentifiers(columna);
         String[] data = new String[1];
         data[0] = msg;
-        modeloTmp.addRow(data);
+        modeloTablaDC.addRow(data);
+        //alineamos el contenido
+        DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+        rightRenderer.setHorizontalAlignment(JLabel.LEFT);
+        tablaMarcas.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+        tablaMarcas.setEnabled(false);
     }
     /**
      * @return the chkPoisTodos
@@ -993,6 +1009,28 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             habilitaChkRecorrido(false);
             setTxtCantidadDePuntos(-1);
         }
+    }
+
+    public void setCantMarcasEncontradas(int cant) {
+        this.cantMarcasEncontradas = cant;
+        if (cant==0){
+            habilitaPanelCantMarcas(false);
+        }else{
+            habilitaPanelCantMarcas(true);
+        }
+        lblCantMarcas.setText(String.valueOf(cant));
+    }
+
+    /**
+     * @return the cantMarcasEncontradas
+     */
+    public int getCantMarcasEncontradas() {
+        return cantMarcasEncontradas;
+    }
+
+    public void habilitaPanelCantMarcas(boolean estado) { 
+        lblCantMarcas.setVisible(estado);
+        lblTxtCantMarcas.setVisible(estado);
     }
 
 

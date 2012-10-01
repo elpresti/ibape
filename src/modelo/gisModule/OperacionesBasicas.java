@@ -514,6 +514,7 @@ public class OperacionesBasicas {
                 grabarImagen(imgProcesada,"imgs\\"+Sistema.getInstance().getImgWithOutTimeFileName());
                 //getInstance().grabarImagen(imgProcesada,"imgs\\imagenSinFondoNiHoras.tmp");
                 //----------- ahora busco las marcas ----------
+                int nroDeMarca = 1;
                 Point point = new Point();
                 for (int contAncho = 1; contAncho < imgProcesada.getWidth(); contAncho++) {
                     for (int contAlto= fondo[contAncho]; contAlto >(imgProcesada.getHeight()*0.50); contAlto--){//escanea hasta la mitad de la imagen
@@ -535,9 +536,22 @@ public class OperacionesBasicas {
                                 Point pixelCentroDeMarca = getPixelMedioDeMarca(marca);
                                 marca.setPxXenImg(pixelCentroDeMarca.x);
                                 marca.setPxYenImg(pixelCentroDeMarca.y);
-                                //---> seguir DATatlantis.getInstance().getDatosFromPixel(null, i)
+                                marca.setId(nroDeMarca);
+                                marca.setImgFileName(modelo.dataManager.UltimaImgProcesada.getInstance().getFileName());
+                                ArrayList datosFromPixel = DATatlantis.getInstance().getDatosFromPixel(
+                                        modelo.dataManager.UltimaImgProcesada.getInstance().getFileName(), marca.getPxXenImg());
+                                if (datosFromPixel.size()>2){
+                                    modelo.dataManager.SondaSetHistorico sshPxX = (modelo.dataManager.SondaSetHistorico)datosFromPixel.get(0);
+                                    modelo.dataManager.PuntoHistorico phPxX = (modelo.dataManager.PuntoHistorico)datosFromPixel.get(1);
+                                    modelo.dataManager.DatosDesconocidosFromDat ddfdPxX = (modelo.dataManager.DatosDesconocidosFromDat)datosFromPixel.get(2);
+                                    marca.setLatitud(phPxX.getLatitud());
+                                    marca.setLongitud(phPxX.getLongitud());
+                                    marca.setFechaYhora(phPxX.getFechaYhora());
+                                    marca.setProfundidad(phPxX.getProfundidad());
+                                }
                                 //marca.setAreaImagen(String.valueOf(coordMarca.size()));
                                 marcas.add(marca);
+                                nroDeMarca++;
                             }
                         }
                     }
