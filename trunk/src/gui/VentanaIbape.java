@@ -103,6 +103,7 @@ public class VentanaIbape extends JXFrame {
         add(statusBar,BorderLayout.SOUTH);
 
         controllers.ControllerPpal.getInstance().accionesAlIniciar();
+        
     }
 
     /**

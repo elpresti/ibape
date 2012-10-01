@@ -6,10 +6,12 @@ package persistencia;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import modelo.alertas.Alerta;
+import modelo.alertas.AlertaListaOn;
 import modelo.alertas.Condicion;
 import modelo.alertas.Relacion;
 import modelo.alertas.Variable;
@@ -927,5 +929,66 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         }
         return relaciones;
     }
-    
+
+public boolean guardaOcurAlerta(AlertaListaOn ocurAlerta){
+        boolean sePudo = false;
+        String sqlQuery="";
+        ResultSet rs=null;
+
+        
+        try {                                
+            Float latitud=null;
+            if (String.valueOf(ocurAlerta.getLatitud())!=null) {
+                latitud = Float.parseFloat(String.valueOf(ocurAlerta.getLatitud()));
+            }
+            Float longitud=null;
+            if (String.valueOf(ocurAlerta.getLongitud())!=null) {
+                longitud = Float.parseFloat(String.valueOf(ocurAlerta.getLongitud()));
+            }
+            Timestamp fechaAct=null;
+            if (String.valueOf(ocurAlerta.getFechaActivacion())!=null) {
+                fechaAct = ocurAlerta.getFechaActivacion();
+            }
+            Timestamp fechaDes=null;
+            if (String.valueOf(ocurAlerta.getFechaDesactivacion())!=null) {
+                fechaDes = ocurAlerta.getFechaDesactivacion();
+            }
+            int idAlerta=ocurAlerta.getAlerta().getId();
+            
+            //ciclo para guardar lista de valores;
+            String valor1="";
+            String valor2="";
+            String valor3="";
+            String valor4="";
+            String valor5="";
+            String valor6="";
+            String valor7="";
+            String valor8="";
+            String valor9="";
+
+                        sqlQuery = "INSERT INTO OcurAlertas"
+                        + "(valor1,valor2,valor3,valor4,valor5,valor6,valor7,valor8,valor9,latitud,longitud,fyhini,fyhfin,idAlerta)"
+                        + "VALUES"
+                        +"('"+valor1+"','"+valor2+"','"+valor3+"','"+valor4+"','"+valor5+"','"+valor6+"','"+valor7+"','"+valor8+"','"+valor9+"',"+latitud+","+longitud+",'"+fechaAct+"','"+fechaDes+"',"+idAlerta+")";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }    
 }

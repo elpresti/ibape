@@ -624,14 +624,15 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
    
         if (comboEstado.getSelectedIndex()==0){
             estado="Desactivada";
-        }
+            }
         else{
         estado="Activada";
         }
         if (!PanelOpcAlertas.getInstance().isModificandoAlerta()){
             if (controllers.ControllerAlertas.getInstance().nuevaAlerta(campoNombre.getText(), controllers.ControllerAlertas.getInstance().creaMensaje() , estado,controllers.ControllerAlertas.getInstance().getCondicionesAct())) {
                 JOptionPane.showMessageDialog(null, "Alerta guardada correctamente");
-                btnVolverActionPerformed(null);
+                controllers.ControllerAlertas.getInstance().alertasOn();
+                btnVolverActionPerformed(null);              
             } else {
                 JOptionPane.showMessageDialog(null, "Hubo un error al intentar guardar Alerta");
             }
@@ -639,6 +640,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             else{
                 if (controllers.ControllerAlertas.getInstance().modificarAlerta(controllers.ControllerAlertas.getInstance().getAlertaAct().getId(),campoNombre.getText(), controllers.ControllerAlertas.getInstance().creaMensaje() , estado,controllers.ControllerAlertas.getInstance().getCondicionesAct())) {
                 JOptionPane.showMessageDialog(null, "Alerta guardada correctamente");
+                controllers.ControllerAlertas.getInstance().alertasOn();                
                 btnVolverActionPerformed(null);
                 } else {
                 JOptionPane.showMessageDialog(null, "Hubo un error al intentar guardar Alerta");
