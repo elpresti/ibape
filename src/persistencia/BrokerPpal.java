@@ -163,6 +163,7 @@ public abstract class BrokerPpal {
             sePudo = sePudo && crearTablaRelaciones();
             sePudo = sePudo && crearTablaCondiciones();
             sePudo = sePudo && crearTablaRelacionesXVariables();
+            sePudo = sePudo && crearTablaOcurAlertas();
 
 
             //Creacion de Triggers
@@ -180,7 +181,8 @@ public abstract class BrokerPpal {
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelaciones();
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaVariables();
             sePudo = sePudo && persistencia.BrokerAlertas.getInstance().insertaRelacionesxVariables();
-
+            
+            //sePudo = sePudo && persistencia.BrokerPOIs.getInstance().insertaCatPoi();
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;
@@ -1020,4 +1022,44 @@ public abstract class BrokerPpal {
             System.out.println(e);
         }
     }
+
+    private boolean crearTablaOcurAlertas() {
+        boolean sePudo = false;
+        try {
+            String codigoCreacion = "CREATE TABLE OcurAlertas ("
+                    + "  id          integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    + "  valor1      nvarchar(50) NULL,"
+                    + "  valor2      nvarchar(50) NULL,"
+                    + "  valor3      nvarchar(50) NULL,"
+                    + "  valor4      nvarchar(50) NULL,"
+                    + "  valor5      nvarchar(50) NULL,"
+                    + "  valor6      nvarchar(50) NULL,"
+                    + "  valor7      nvarchar(50) NULL,"
+                    + "  valor8      nvarchar(50) NULL,"
+                    + "  valor9      nvarchar(50) NULL,"
+                    + "  latitud     float(30) NOT NULL,"
+                    + "  longitud    float(30) NOT NULL,"                    
+                    + "  fyhini      TIMESTAMP NOT NULL,"
+                    + "  fyhfin      TIMESTAMP NOT NULL,"
+                    + "  idAlerta    integer NOT NULL,"
+                    + "  /* Foreign keys */ "
+                    + "  FOREIGN KEY (idAlerta)"
+                    + "    REFERENCES Alertas(id)"
+                    + ");";
+            getStatement().executeUpdate(codigoCreacion);
+            sePudo = true;
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+     
 }

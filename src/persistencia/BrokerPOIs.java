@@ -446,4 +446,35 @@ public class BrokerPOIs extends BrokerPpal {
         }
         return POIs;
     }
+/* No se usa por ahora.
+    boolean insertaCatPoi() {
+        boolean sePudo = false;
+        String sqlQuery="";
+        try {                                
+            sqlQuery = "INSERT INTO CategoriasPoi"
+            + "(id,titulo,fileNameIcono)"
+            + "VALUES"
+            +"(99,'Alerta','icono-alertas.png')";
+                System.out.println("Insert: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                
+
+                
+            }catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+    */
+    
 }
