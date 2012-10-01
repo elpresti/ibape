@@ -4,6 +4,7 @@
  */
 package modelo.dataManager;
 
+import controllers.ControllerAlertas;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Observable;
@@ -96,6 +97,8 @@ public class POI extends Observable{
      */
     public void setMarcas(ArrayList<Marca> marcas) {
         this.marcas = marcas;
+        setChanged();
+        notifyObservers(controllers.ControllerAlertas.getIndexCantDeMarcas());
     }
 
     public double calculaProfPromMarcas() {

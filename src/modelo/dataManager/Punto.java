@@ -79,7 +79,7 @@ public class Punto extends Observable{
               { latString=latString+"-"; }
           setLatConNegativo(Double.valueOf(latString+String.valueOf(latitud)));
           setChanged();
-          notifyObservers();
+          notifyObservers(controllers.ControllerAlertas.getIndexLatitud());
           seModifico=true;
        }
        return seModifico;
@@ -105,7 +105,7 @@ public class Punto extends Observable{
               { lonString=lonString+"-"; }
           setLonConNegativo(Double.valueOf(lonString+String.valueOf(longitud)));                   
           setChanged();
-          notifyObservers();
+          notifyObservers(controllers.ControllerAlertas.getIndexLongitud());
           seModifico=true;
        }
        return seModifico;
@@ -196,7 +196,7 @@ public class Punto extends Observable{
         if (this.velocidadAgua != velocidadAgua) {
             this.velocidadAgua = velocidadAgua;
             setChanged();
-            notifyObservers();
+            notifyObservers(controllers.ControllerAlertas.getIndexVelocidadAgua());
             seModifico=true;
         }
         return seModifico;        

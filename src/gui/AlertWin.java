@@ -244,16 +244,17 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
 
     
     public void hacePreLoad(){
-        int i=1;
+        int i=0;
         setShow(true);
-        while((i<=50)&&(isShow())){
-            barraTimeout.setString("Alerta se cerrara en: "+Integer.toString(50-i)+" segs.");
-            barraTimeout.setValue(i*2);
+        while((i<=10)&&(isShow())){
+            barraTimeout.setString("Alerta se cerrara en: "+Integer.toString(10-i)+" segs.");
+            barraTimeout.setValue(i*10);
             try {
                if (!isAccionMouse()) {
                    threadAlertWin.sleep(1000);
                }else{
                    i=0;
+                   threadAlertWin.sleep(3000);
                    setAccionMouse(false);
                }
              
@@ -326,9 +327,9 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
                     descripcion=descripcion+c.getAlertasActivadas().get(c.getAlertasActivadas().size()-1).getAlerta().getCondiciones().get(i).getDescripcion();
             }*/
             jTextAreaDescripcion.setText(descripcion);
-            String fechaAct = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss").format(a.getFechaActivacion());
+            String fechaAct = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(a.getFechaActivacion());
             if (!a.isEstadoActivacion()){
-                String fechaDes = new SimpleDateFormat("MM:dd:yyyy HH:mm:ss").format(a.getFechaDesactivacion());
+                String fechaDes = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(a.getFechaDesactivacion());
                 labelFechaDesactivacionDatos.setText(fechaDes);
             }else{
                 labelFechaDesactivacionDatos.setText("");

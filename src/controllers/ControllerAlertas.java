@@ -23,6 +23,7 @@ import modelo.alertas.AlertaListaOn;
 import modelo.alertas.Condicion;
 import modelo.alertas.Relacion;
 import modelo.alertas.Variable;
+import modelo.dataManager.POI;
 import modelo.dataManager.Punto;
 import modelo.dataManager.SondaSet;
 import org.jdom.Element;
@@ -48,6 +49,7 @@ public class ControllerAlertas extends Observable implements Observer{
     private int idUltAlertaInsertada;
     private Punto punto=modelo.dataManager.Punto.getInstance();
     private SondaSet sonda=modelo.dataManager.SondaSet.getInstance();
+    private POI poi=new modelo.dataManager.POI();
     private AdministraAlertas administraAlertas=modelo.alertas.AdministraAlertas.getInstance();
     private ArrayList<Alerta> alertasEnFuncionamiento= new ArrayList<Alerta>();
     private ArrayList<AlertaListaOn> alertasActivadas= new ArrayList<AlertaListaOn>();
@@ -450,8 +452,6 @@ public class ControllerAlertas extends Observable implements Observer{
       if (o == punto){
           if (index==indexProfundidad){
               analizaActivacionesProfundidad(); 
-          }else if (index==indexCantDeMarcas){
-              analizaActivacionesCantDeMarcas();
           }else if (index==indexLatitud){
               analizaActivacionesLatitud();
           }else if (index==indexLongitud){
@@ -476,8 +476,12 @@ public class ControllerAlertas extends Observable implements Observer{
           else 
               if (o == administraAlertas){
                
-              }
+              }else if (o==poi){
+                if (index==indexCantDeMarcas){
+                    analizaActivacionesCantDeMarcas();
+                }
     
+                }
     }
     }
     public void alertasOn() {
@@ -649,33 +653,79 @@ public class ControllerAlertas extends Observable implements Observer{
         }
 
     private boolean cumpleCondicionCantDeMarcas(Condicion c) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private boolean cumpleCondicionLatitud(Condicion c) {
-    boolean cumpleTodo=true;
+        boolean cumpleTodo=true;
         if (c.getIdRelacion()==1){
-                        if ((Double.parseDouble(c.getValorMinimo())==punto.getLatitud())){
+                        if ((Float.parseFloat(c.getValorMinimo())==poi.getMarcas().size())){
                             cumpleTodo=cumpleTodo && true;
                         }else{
                             cumpleTodo=cumpleTodo && false;
                         }
                     }else{
                         if (c.getIdRelacion()==2){
-                            if (Double.parseDouble(c.getValorMinimo())<=punto.getLatitud()){
+                            if (Float.parseFloat(c.getValorMinimo())<=poi.getMarcas().size()){
                                 cumpleTodo=cumpleTodo && true;
                             }else{
                                 cumpleTodo=cumpleTodo && false;
                             }
                         }else{
                             if (c.getIdRelacion()==3){
-                                if (Double.parseDouble(c.getValorMinimo())>=punto.getLatitud()){
+                                if (Float.parseFloat(c.getValorMinimo())>=poi.getMarcas().size()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
                                 }
                             }else{
-                                if (Double.parseDouble(c.getValorMinimo())<=punto.getLatitud() && Double.parseDouble(c.getValorMaximo())>=punto.getLatitud()){
+                                if (Float.parseFloat(c.getValorMinimo())<=poi.getMarcas().size() && Float.parseFloat(c.getValorMaximo())>=poi.getMarcas().size()){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }   
+                        }
+        }
+        return cumpleTodo;
+    }
+
+    private boolean cumpleCondicionLatitud(Condicion c) {
+    boolean cumpleTodo=true;
+    String strMin=c.getValorMinimo();
+    String strMax=c.getValorMaximo();
+    if ((strMin.substring(0,1)).equals("S")){
+         strMin=strMin.replace("S ","-");
+    }else{
+         strMin=strMin.replace("N ","");
+    }
+    
+    if ((strMax.substring(0,1)).equals("S")){
+         strMax=strMax.replace("S ","-");
+    }else{
+         strMax=strMax.replace("N ","");
+    }
+    
+        if (c.getIdRelacion()==1){
+                        if ((Double.parseDouble(strMin)==punto.getLatitud())){
+                            cumpleTodo=cumpleTodo && true;
+                        }else{
+                            cumpleTodo=cumpleTodo && false;
+                        }
+                    }else{
+                        if (c.getIdRelacion()==2){
+                            if (Double.parseDouble(strMin)<=punto.getLatitud()){
+                                cumpleTodo=cumpleTodo && true;
+                            }else{
+                                cumpleTodo=cumpleTodo && false;
+                            }
+                        }else{
+                            if (c.getIdRelacion()==3){
+                                if (Double.parseDouble(strMin)>=punto.getLatitud()){
+                                    cumpleTodo=cumpleTodo && true;
+                                }else{
+                                    cumpleTodo=cumpleTodo && false;
+                                }
+                            }else{
+
+
+                                if (Double.parseDouble(strMin)<=punto.getLatitud() && Double.parseDouble(strMax)>=punto.getLatitud()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
@@ -758,19 +808,31 @@ public class ControllerAlertas extends Observable implements Observer{
                 f++;
             }
             Alerta al=alertasEnFuncionamiento.get(i);
+            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
             double latitud=modelo.dataManager.Punto.getInstance().getLatitud();
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
                 }else{                   
-                    //alertasActivadas.add(al);                   
-                    PanelAlertaActiva panelAlertaActiva=new PanelAlertaActiva(al.getTitulo(),al.getMensaje(),Double.toString(latitud)); 
-                    VentanaIbape.getInstance().ponerEnPanelDerecho(panelAlertaActiva);
-                    
+                    AlertaListaOn alertaListaOn=new AlertaListaOn();
+                    alertaListaOn.setAlerta(al);
+                    alertaListaOn.setEstadoActivacion(true);
+                    alertaListaOn.setFechaActivacion(fecha);
+                    alertaListaOn.setIdOcur(idOcurProv);
+                    alertaListaOn.setLatitud(modelo.dataManager.Punto.getInstance().getLatitud());
+                    alertaListaOn.setLongitud(modelo.dataManager.Punto.getInstance().getLongitud());
+                    getAlertasActivadas().add(alertaListaOn);
+                    AlertWin.getInstance().setIdShowing(idOcurProv);                    
+                    setChanged();
+                    notifyObservers();
+                    AlertWin.getInstance().muestraAlerta();
+                    idOcurProv=idOcurProv+1;
                 }
             }else{
                 if (activacionAnt){
-                    getAlertasActivadas().remove(al);
+                    desactivaAlerta(al,fecha);
+                    setChanged();
+                    notifyObservers();
                 }else{
                     //Alerta continua desactivada
                 }
@@ -840,7 +902,56 @@ public class ControllerAlertas extends Observable implements Observer{
     }
 
     private void analizaActivacionesCantDeMarcas() {
-        throw new UnsupportedOperationException("Not yet implemented");
+    
+        ArrayList<Condicion> condiciones;
+        boolean activacion;
+        boolean activacionAnt;
+        int i = 0;
+        while ((i<alertasEnFuncionamiento.size())){
+            condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
+            int f=0;
+            activacion=false;
+            while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var cant. de marcas
+                if ((condiciones.get(f).getIdVariable()==indexCantDeMarcas)){
+                    activacion=analizaCondiciones(condiciones);
+                }
+                f++;
+            }
+            Alerta al=alertasEnFuncionamiento.get(i);
+            activacionAnt=existeAlertaActiva(al);            
+            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            
+            if (activacion){
+                if (activacionAnt){
+                    //Alerta continua activada
+                }else{
+                    AlertaListaOn alertaListaOn=new AlertaListaOn();
+                    alertaListaOn.setAlerta(al);
+                    alertaListaOn.setEstadoActivacion(true);
+                    alertaListaOn.setFechaActivacion(fecha);
+                    alertaListaOn.setIdOcur(idOcurProv);
+                    alertaListaOn.setLatitud(modelo.dataManager.Punto.getInstance().getLatitud());
+                    alertaListaOn.setLongitud(modelo.dataManager.Punto.getInstance().getLongitud());
+                    getAlertasActivadas().add(alertaListaOn);
+                    AlertWin.getInstance().setIdShowing(idOcurProv);                    
+                    setChanged();
+                    notifyObservers();
+                    AlertWin.getInstance().muestraAlerta();
+                    idOcurProv=idOcurProv+1;
+    
+                }
+            }else{
+                if (activacionAnt){
+                    desactivaAlerta(al,fecha);
+                    setChanged();
+                    notifyObservers();
+                }else{
+                    //Alerta continua desactivada
+                }
+            }
+            i++;
+        }
+
     }
 
     public void actualizaHoraSistema() throws InterruptedException{
@@ -937,7 +1048,7 @@ public class ControllerAlertas extends Observable implements Observer{
         while ((i<getAlertasActivadas().size()-1) && (sePudo)){
             if (getAlertasActivadas().get(i).getIdOcur()>=10000){
                 result=persistencia.BrokerAlertas.getInstance().guardaOcurAlerta(getAlertasActivadas().get(i));
-                sePudo=sePudo&&result;
+                sePudo=sePudo && result;
             }
             i++;
         }
