@@ -359,7 +359,7 @@ public class DATatlantis{
         mes = (int) cociente;
         anio = resto;
         Calendar calendario = Calendar.getInstance();
-        calendario.set(anio, mes-1, dia, hora, minutos, segundos);        
+        calendario.set(2000+anio, mes-1, dia, hora, minutos, segundos);        
         return calendario.getTime();
     }
     

@@ -69,6 +69,12 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         btnAtrasProcesada = new javax.swing.JButton();
         btnAdelanteProcesada = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
+        panelTxtImgSinProcesar = new org.jdesktop.swingx.JXPanel();
+        lblTxtImgSinProcesar = new org.jdesktop.swingx.JXLabel();
+        lblImgSinProcesar = new org.jdesktop.swingx.JXLabel();
+        panelTxtImgProcesada = new org.jdesktop.swingx.JXPanel();
+        lblTxtImgProcesada = new org.jdesktop.swingx.JXLabel();
+        lblImgProcesada = new org.jdesktop.swingx.JXLabel();
 
         setName("ProcesaImgWin"); // NOI18N
 
@@ -134,6 +140,32 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         getContentPane().add(panelCentro, java.awt.BorderLayout.CENTER);
 
         panelInferior.setPreferredSize(new java.awt.Dimension(700, 50));
+        panelInferior.setLayout(new java.awt.BorderLayout());
+
+        panelTxtImgSinProcesar.setPreferredSize(new java.awt.Dimension(700, 25));
+        panelTxtImgSinProcesar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        lblTxtImgSinProcesar.setText("Imagen mostrada en el panel superior:");
+        lblTxtImgSinProcesar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelTxtImgSinProcesar.add(lblTxtImgSinProcesar);
+
+        lblImgSinProcesar.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelTxtImgSinProcesar.add(lblImgSinProcesar);
+
+        panelInferior.add(panelTxtImgSinProcesar, java.awt.BorderLayout.NORTH);
+
+        panelTxtImgProcesada.setPreferredSize(new java.awt.Dimension(700, 25));
+        panelTxtImgProcesada.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+
+        lblTxtImgProcesada.setText("Imagen mostrada en el panel inferior: ");
+        lblTxtImgProcesada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelTxtImgProcesada.add(lblTxtImgProcesada);
+
+        lblImgProcesada.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelTxtImgProcesada.add(lblImgProcesada);
+
+        panelInferior.add(panelTxtImgProcesada, java.awt.BorderLayout.CENTER);
+
         getContentPane().add(panelInferior, java.awt.BorderLayout.SOUTH);
 
         pack();
@@ -158,13 +190,19 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     private javax.swing.JButton btnAtrasProcesada;
     private javax.swing.JLabel imgProcesada;
     private javax.swing.JLabel imgSinProcesar;
+    private org.jdesktop.swingx.JXLabel lblImgProcesada;
+    private org.jdesktop.swingx.JXLabel lblImgSinProcesar;
     private org.jdesktop.swingx.JXLabel lblTitulo;
+    private org.jdesktop.swingx.JXLabel lblTxtImgProcesada;
+    private org.jdesktop.swingx.JXLabel lblTxtImgSinProcesar;
     private org.jdesktop.swingx.JXPanel panelCentro;
     private org.jdesktop.swingx.JXPanel panelImgProcesada;
     private org.jdesktop.swingx.JXPanel panelImgSinProcesar;
     private org.jdesktop.swingx.JXPanel panelInferior;
     private org.jdesktop.swingx.JXPanel panelNavProcesadas;
     private org.jdesktop.swingx.JXPanel panelSuperior;
+    private org.jdesktop.swingx.JXPanel panelTxtImgProcesada;
+    private org.jdesktop.swingx.JXPanel panelTxtImgSinProcesar;
     private javax.swing.JSplitPane splitPanelPdi;
     // End of variables declaration//GEN-END:variables
 
@@ -184,6 +222,8 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(imgURL);
         setIconImage(icon);
         setTitle("IBAPE - Detección de peces");//titulo del frame
+        habilitaPanelTxtImgSinProcesar(false);
+        habilitaPanelTxtImgProcesada(false);
     }
     
     public void mostrarVentana(boolean estado){
@@ -201,7 +241,7 @@ public class ProcesaImgWin extends javax.swing.JFrame {
                 //rutaImgSinProcesar = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()
                 //        +"\\"+UltimaImgProcesada.getInstance().getFileName();
             }else{
-                setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 600, 690); 
+                setImgOnImgSinProcesarLabel(rutaImgSinProcesar, 600, 690);
             }
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("actualizaImgs(): "+e.toString());
@@ -214,11 +254,13 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         if (!rutaImg.contains("/")){
             try{
                 source = new ImageIcon(ImageIO.read(new File(rutaImg))).getImage();
+                habilitaPanelTxtImgProcesada(true);
             }catch(Exception e){
                 Logueador.getInstance().agregaAlLog(("setImgOnImgProcesadaLabel(): "+e.toString()));
             }
         }else{
             source = new ImageIcon(getClass().getResource(rutaImg)).getImage();
+            habilitaPanelTxtImgProcesada(false);
         }
         //--- resize imgIcon
         BufferedImage image = null;
@@ -243,11 +285,13 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         if (!rutaImg.contains("/")){
             try{
                 source = new ImageIcon(ImageIO.read(new File(rutaImg))).getImage();
+                habilitaPanelTxtImgSinProcesar(true);
             }catch(Exception e){
                 Logueador.getInstance().agregaAlLog(("setImgOnImgSinProcesarLabel(): "+e.toString()));
             }
         }else{
             source = new ImageIcon(getClass().getResource(rutaImg)).getImage();
+            habilitaPanelTxtImgSinProcesar(false);
         }
         //--- resize imgIcon
         BufferedImage image = null;
@@ -268,6 +312,7 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     }
 
     public void setLoadingOnImgSinProcesar(String rutaImg) {
+        habilitaPanelTxtImgSinProcesar(false);
         ImageIcon source = null;
         source = new ImageIcon(getClass().getResource(rutaImg));
         BufferedImage image = null;
@@ -280,6 +325,7 @@ public class ProcesaImgWin extends javax.swing.JFrame {
     }
     
     public void setLoadingOnImgProcesada(String rutaImg) {
+        habilitaPanelTxtImgProcesada(false);
         ImageIcon source = null;
         source = new ImageIcon(getClass().getResource(rutaImg));
         BufferedImage image = null;
@@ -337,5 +383,20 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         }
     }
     
+    public void habilitaPanelTxtImgProcesada(boolean estado){
+        if (estado){
+            lblImgProcesada.setText("Imagen procesada!");
+        }
+        lblImgProcesada.setVisible(estado);
+        lblTxtImgProcesada.setVisible(estado);
+    }
+
+    public void habilitaPanelTxtImgSinProcesar(boolean estado){
+        if (estado){
+            lblImgSinProcesar.setText(modelo.dataManager.UltimaImgProcesada.getInstance().getFileName());
+        }
+        lblImgSinProcesar.setVisible(estado);
+        lblTxtImgSinProcesar.setVisible(estado);
+    }
     
 }
