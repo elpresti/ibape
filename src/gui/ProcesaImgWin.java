@@ -31,6 +31,12 @@ import persistencia.Logueador;
 public class ProcesaImgWin extends javax.swing.JFrame {
     private static ProcesaImgWin unicaInstancia;
     private int indexImgProcesada;
+    private String TXT1_IMG_PROCESADA;
+    private String TXT2_IMG_PROCESADA;
+    private String TXT3_IMG_PROCESADA;
+    private String TXT4_IMG_PROCESADA;
+    private String TXT5_IMG_PROCESADA;
+    private String TXT6_IMG_PROCESADA;
     
     /**
      * Creates new form ProcesaImgWin
@@ -224,6 +230,12 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         setTitle("IBAPE - Detección de peces");//titulo del frame
         habilitaPanelTxtImgSinProcesar(false);
         habilitaPanelTxtImgProcesada(false);
+        setTXT1_IMG_PROCESADA("Imagen erosionada");
+        setTXT2_IMG_PROCESADA("Imagen binarizada");
+        setTXT3_IMG_PROCESADA("Imagen dilatada");
+        setTXT4_IMG_PROCESADA("Imagen sin fondo");
+        setTXT5_IMG_PROCESADA("Imagen sin horarios");
+        setTXT6_IMG_PROCESADA("Imagen con las marcas encontradas");
     }
     
     public void mostrarVentana(boolean estado){
@@ -356,26 +368,34 @@ public class ProcesaImgWin extends javax.swing.JFrame {
             case 1: btnAdelanteProcesada.setEnabled(true);
                     btnAtrasProcesada.setEnabled(false);
                     setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgErodedFileName(), 600, 690);
+                    habilitaPanelTxtImgProcesada(true);
+                    lblImgProcesada.setText(getTXT1_IMG_PROCESADA());
                     break;
             case 2: btnAdelanteProcesada.setEnabled(true);
                     btnAtrasProcesada.setEnabled(true);
                     setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgBinarizedFileName(), 600, 690);
+                    lblImgProcesada.setText(getTXT2_IMG_PROCESADA());
                     break;
             case 3: btnAdelanteProcesada.setEnabled(true);
                     btnAtrasProcesada.setEnabled(true);
                     setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgDilatedFileName(), 600, 690);
+                    lblImgProcesada.setText(getTXT3_IMG_PROCESADA());
                     break;
             case 4: btnAdelanteProcesada.setEnabled(true);
                     btnAtrasProcesada.setEnabled(true);
                     setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgWithOutSeabedFileName(), 600, 690);
+                    lblImgProcesada.setText(getTXT4_IMG_PROCESADA());
                     break;
             case 5: btnAdelanteProcesada.setEnabled(true);
                     btnAtrasProcesada.setEnabled(true);
                     setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgWithOutTimeFileName(), 600, 690);
+                    lblImgProcesada.setText(getTXT5_IMG_PROCESADA());
                     break;
             case 6: btnAdelanteProcesada.setEnabled(false);    
                     btnAtrasProcesada.setEnabled(true);
                     setImgOnImgProcesadaLabel("imgs\\"+Sistema.getInstance().getImgWithDetectedMarksFileName(), 600, 690);
+                    habilitaPanelTxtImgProcesada(true);
+                    lblImgProcesada.setText(getTXT6_IMG_PROCESADA());
                     break;
            default: btnAdelanteProcesada.setEnabled(true);    
                     btnAtrasProcesada.setEnabled(true);
@@ -397,6 +417,90 @@ public class ProcesaImgWin extends javax.swing.JFrame {
         }
         lblImgSinProcesar.setVisible(estado);
         lblTxtImgSinProcesar.setVisible(estado);
+    }
+
+    /**
+     * @return the TXT1_IMG_PROCESADA
+     */
+    public String getTXT1_IMG_PROCESADA() {
+        return TXT1_IMG_PROCESADA;
+    }
+
+    /**
+     * @param TXT1_IMG_PROCESADA the TXT1_IMG_PROCESADA to set
+     */
+    public void setTXT1_IMG_PROCESADA(String TXT1_IMG_PROCESADA) {
+        this.TXT1_IMG_PROCESADA = TXT1_IMG_PROCESADA;
+    }
+
+    /**
+     * @return the TXT2_IMG_PROCESADA
+     */
+    public String getTXT2_IMG_PROCESADA() {
+        return TXT2_IMG_PROCESADA;
+    }
+
+    /**
+     * @param TXT2_IMG_PROCESADA the TXT2_IMG_PROCESADA to set
+     */
+    public void setTXT2_IMG_PROCESADA(String TXT2_IMG_PROCESADA) {
+        this.TXT2_IMG_PROCESADA = TXT2_IMG_PROCESADA;
+    }
+
+    /**
+     * @return the TXT3_IMG_PROCESADA
+     */
+    public String getTXT3_IMG_PROCESADA() {
+        return TXT3_IMG_PROCESADA;
+    }
+
+    /**
+     * @param TXT3_IMG_PROCESADA the TXT3_IMG_PROCESADA to set
+     */
+    public void setTXT3_IMG_PROCESADA(String TXT3_IMG_PROCESADA) {
+        this.TXT3_IMG_PROCESADA = TXT3_IMG_PROCESADA;
+    }
+
+    /**
+     * @return the TXT4_IMG_PROCESADA
+     */
+    public String getTXT4_IMG_PROCESADA() {
+        return TXT4_IMG_PROCESADA;
+    }
+
+    /**
+     * @param TXT4_IMG_PROCESADA the TXT4_IMG_PROCESADA to set
+     */
+    public void setTXT4_IMG_PROCESADA(String TXT4_IMG_PROCESADA) {
+        this.TXT4_IMG_PROCESADA = TXT4_IMG_PROCESADA;
+    }
+
+    /**
+     * @return the TXT5_IMG_PROCESADA
+     */
+    public String getTXT5_IMG_PROCESADA() {
+        return TXT5_IMG_PROCESADA;
+    }
+
+    /**
+     * @param TXT5_IMG_PROCESADA the TXT5_IMG_PROCESADA to set
+     */
+    public void setTXT5_IMG_PROCESADA(String TXT5_IMG_PROCESADA) {
+        this.TXT5_IMG_PROCESADA = TXT5_IMG_PROCESADA;
+    }
+
+    /**
+     * @return the TXT6_IMG_PROCESADA
+     */
+    public String getTXT6_IMG_PROCESADA() {
+        return TXT6_IMG_PROCESADA;
+    }
+
+    /**
+     * @param TXT6_IMG_PROCESADA the TXT6_IMG_PROCESADA to set
+     */
+    public void setTXT6_IMG_PROCESADA(String TXT6_IMG_PROCESADA) {
+        this.TXT6_IMG_PROCESADA = TXT6_IMG_PROCESADA;
     }
     
 }
