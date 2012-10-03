@@ -806,6 +806,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         cargaGrillaCampanias();
         setGuiCampaniaFinalizada();
         controlaPanelAccionesCampania();
+        jXTaskPaneContainer1.setVisible(false);
     }
 
     public int getIdDeCampaniaSeleccionada() {

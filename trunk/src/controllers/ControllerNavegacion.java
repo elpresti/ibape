@@ -6,9 +6,11 @@ package controllers;
 
 import gui.PanelNavegacion;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.AdministraCatPoi;
 import modelo.dataManager.CategoriaPoi;
 import modelo.gisModule.Browser;
 import modelo.dataManager.Punto;
@@ -186,6 +188,36 @@ public class ControllerNavegacion {
 
     public void errorGuiTablaMarcas() {
         PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("Hubo un error al procesar la ultima imagen y no se pudieron obtener las marcas...");
+    }
+
+    public boolean guardaPoiDeImgConMarcas() {//intentará guardar un POI de img con marcas
+        boolean sePudo=false;
+        try{
+            //verifica si ya existe la categoria de imgsConMarcas
+            if (!ControllerPois.getInstance().existeCategoria(
+                    modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas())){
+                //si no existe la crea
+                ControllerPois.getInstance().agregaCategoriaPOI(
+                    modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), 
+                    modelo.dataManager.AdministraCatPoi.getInstance().getNombreCatImgsConMarcas(), 
+                    modelo.dataManager.AdministraCatPoi.getInstance().getIconoFileNameCatImgsConMarcas());
+            }
+            //obtiene y formatea los datos que compondran el POI
+            modelo.dataManager.Marca ultimaMarca = UltimaImgProcesada.getInstance().getMarcas().get(
+                    UltimaImgProcesada.getInstance().getMarcas().size()-1);
+            String descripcionPoi = "<cantMarcas>"+UltimaImgProcesada.getInstance().getMarcas().size()+"</cantMarcas>";
+            descripcionPoi += "<imgFileName>"+UltimaImgProcesada.getInstance().getFileName()+"</imgFileName>";
+            ControllerPois.getInstance().agregaPOI(
+                    modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), 
+                    descripcionPoi, 
+                    ultimaMarca.getLatitud(),
+                    ultimaMarca.getLongitud(), 
+                    null);
+            sePudo=true;
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("guardaPoiDeImgConMarcas(): "+e.toString());
+        }
+        return sePudo;
     }
 
 }

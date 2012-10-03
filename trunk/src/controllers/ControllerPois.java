@@ -55,6 +55,14 @@ public class ControllerPois {
         BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
     }
 
+    public void agregaCategoriaPOI(int id, String titulo, String path) {
+        modelo.dataManager.CategoriaPoi cP = new CategoriaPoi();
+        cP.setId(id);
+        cP.setTitulo(titulo);
+        cP.setPathIcono(path);
+        BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
+    }    
+    
     public void eliminaPOI(POI unPoi) {
         if (!BrokerPOIs.getInstance().deletePOI(unPoi)) {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar el POI " + unPoi.getId());
@@ -123,5 +131,19 @@ public class ControllerPois {
             unPOI.setIdCategoriaPOI(categoriaNueva.getId());
             ControllerPois.getInstance().modificaPOI(unPOI);
         }
+    }
+    
+    public boolean existeCategoria(int id){
+        boolean encontro = false;
+        ArrayList<modelo.dataManager.CategoriaPoi> categorias = cargaCategoriasPOI();
+        int i = 0;
+        while (i<categorias.size()  && !encontro){
+            if (categorias.get(i).getId() == id){
+                encontro=true;
+            }else{
+                i++;
+            }
+        }
+        return encontro;
     }
 }
