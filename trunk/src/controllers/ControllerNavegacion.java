@@ -205,8 +205,12 @@ public class ControllerNavegacion {
             //obtiene y formatea los datos que compondran el POI
             modelo.dataManager.Marca ultimaMarca = UltimaImgProcesada.getInstance().getMarcas().get(
                     UltimaImgProcesada.getInstance().getMarcas().size()-1);
-            String descripcionPoi = "<cantMarcas>"+UltimaImgProcesada.getInstance().getMarcas().size()+"</cantMarcas>";
-            descripcionPoi += "<imgFileName>"+UltimaImgProcesada.getInstance().getFileName()+"</imgFileName>";
+            String descripcionPoi = "<datosImgProcesada>";
+            descripcionPoi += "<cantMarcas nombre=\"Marcas encontradas: \" valor=\""+UltimaImgProcesada.getInstance().getMarcas().size()+"\" />";
+            String rutaImg = System.getProperty("user.dir")+AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\";
+            rutaImg += UltimaImgProcesada.getInstance().getFileName();
+            descripcionPoi += "<imgFileName nombre=\"Imagen sin procesar: \" valor=\""+rutaImg+"\" />";
+            descripcionPoi += "</datosImgProcesada>";
             ControllerPois.getInstance().agregaPOI(
                     modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), 
                     descripcionPoi, 

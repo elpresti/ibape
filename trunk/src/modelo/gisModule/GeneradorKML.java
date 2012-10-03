@@ -4,14 +4,21 @@
  */
 package modelo.gisModule;
 
+import java.io.StringReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.AdministraCatPoi;
 import modelo.dataManager.POI;
 import modelo.dataManager.PuntoHistorico;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+import persistencia.Logueador;
 
 /**
  *
@@ -314,9 +321,35 @@ public class GeneradorKML {
                             + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
                             + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
                             + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
-                            + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo()
-                            + "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion()
-                    +    "</td>"
+                            + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
+        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatImgsConMarcas()){
+                    salida += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
+        }else{
+            //SAXBuilder se encarga de cargar el archivo XML del disco o de un String
+            // Creamos el builder basado en SAX      
+            SAXBuilder builder = new SAXBuilder();  
+            try {
+                // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
+                Document contenidoXML = builder.build(new StringReader(poi.getDescripcion()));
+                // Obtenemos la etiqueta raíz  
+                Element raiz = contenidoXML.getRootElement();  
+                // Recorremos los hijos de la etiqueta raíz  
+                List<Element> hijosRaiz = raiz.getChildren();  
+                for(Element parametro: hijosRaiz){
+                    // Obtenemos el nombre y su contenido de tipo texto  
+                    String nombre = parametro.getAttribute("nombre").getValue();
+                    String valor = parametro.getAttribute("valor").getValue();
+                    if (parametro.getName() == "imgFileName"){
+                        salida += "<br> <strong>- "+nombre+" :</strong> <a href=\""+valor+"\" target=\"_blank\">Imagen!</a>";
+                    }else{
+                        salida += "<br> <strong>- "+nombre+" :</strong> "+valor;
+                    }
+                }
+            }catch(Exception e){
+                Logueador.getInstance().agregaAlLog("conviertePOIaKml(): "+e.toString());
+            }
+        }
+        salida +=        "</td>"
                     +    "<td valign=\"top\" align=\"right\">";
                     if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
                             salida+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
