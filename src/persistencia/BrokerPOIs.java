@@ -305,7 +305,7 @@ public class BrokerPOIs extends BrokerPpal {
     public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
         ResultSet rs = null;
-        if ((idDeCampania >= 0) && (idDeCatPois >= 0)) {
+        if (idDeCampania >= 0){
             try {
                 Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
                 if (laCampania != null) {
@@ -364,7 +364,7 @@ public class BrokerPOIs extends BrokerPpal {
     public int getCantPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         int cantPoisDeEstaCampania = 0;
         ResultSet rs = null;
-        if ((idDeCampania >= 0) && (idDeCatPois >= 0)) {
+        if (idDeCampania >= 0){
             try {
                 Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
                 if (laCampania != null) {
