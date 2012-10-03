@@ -304,6 +304,7 @@ private void lnkPoisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
 private void lnkInformesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkInformesActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcInformes.getInstance());
+    controllers.ControllerInforme.getInstance().actualizaDatosEnGui();
 }//GEN-LAST:event_lnkInformesActionPerformed
 
 private void lnkAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkAyudaActionPerformed
