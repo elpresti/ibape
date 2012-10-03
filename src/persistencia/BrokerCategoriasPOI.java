@@ -98,6 +98,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         String sqlQuery = "";
         ResultSet rs = null;
         try {
+            
             String titulo = null;
             if (categoriaPOI.getTitulo() != null) {
                 titulo = "'" + categoriaPOI.getTitulo() + "'";
@@ -107,11 +108,17 @@ public class BrokerCategoriasPOI extends BrokerPpal {
                 fileNameIcono = categoriaPOI.getPathIcono().substring(categoriaPOI.getPathIcono().lastIndexOf("\\")+1);
                 fileNameIcono = "'" + fileNameIcono + "'";
             }
-
-            sqlQuery = "INSERT INTO CategoriasPoi "
-                    + "(titulo,fileNameIcono) "
-                    + "VALUES "
-                    + "(" + titulo + "," + fileNameIcono + ")";
+            if (categoriaPOI.getId()<0){
+                sqlQuery = "INSERT INTO CategoriasPoi "
+                        + "(id,titulo,fileNameIcono) "
+                        + "VALUES "
+                        + "(" + categoriaPOI.getId() + "," + titulo + "," + fileNameIcono + ")";
+            }else{
+                sqlQuery = "INSERT INTO CategoriasPoi "
+                        + "(titulo,fileNameIcono) "
+                        + "VALUES "
+                        + "(" + titulo + "," + fileNameIcono + ")";
+            }
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
@@ -132,7 +139,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
         }
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
-        }        
+        }
         return sePudo;
     }
 
