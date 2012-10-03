@@ -4,7 +4,7 @@
  */
 package modelo.dataManager;
 
-import gui.PanelFinalizarLance;
+import gui.PanelOpcLances;
 import persistencia.BrokerCampania;
 
 /**
@@ -162,5 +162,10 @@ public class Lance {
      */
     public void setEstadoLance(int estadoLance) {
         this.estadoLance = estadoLance;
+    }
+
+    @Override
+    public String toString() {
+        return "" + getId();
     }
 }

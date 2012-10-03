@@ -11,6 +11,7 @@
 package gui;
 
 import controllers.ControllerAlertas;
+import controllers.ControllerLance;
 import java.awt.Dimension;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -310,11 +311,13 @@ private void lnkAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 }//GEN-LAST:event_lnkAyudaActionPerformed
 
 private void btnLanzaRecogeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzaRecogeActionPerformed
-    VentanaIbape.getInstance().ponerEnPanelDerecho(PanelFinalizarLance.getInstance());
+    VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
+    ControllerLance.getInstance().iniciaLance();
 }//GEN-LAST:event_btnLanzaRecogeActionPerformed
 
 private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistraPOIActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcPOIs.getInstance());
+    PanelOpcPOIs.getInstance().botonRegPOI();
 }//GEN-LAST:event_btnRegistraPOIActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

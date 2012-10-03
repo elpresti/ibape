@@ -277,16 +277,16 @@ public abstract class BrokerPpal {
         try {
             String codigoCreacion = "CREATE TABLE Lances ("
                     + "  id             integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    + "  fyhini         TIMESTAMP NOT NULL,"
-                    + "  posinilat      float(30) NOT NULL,"
-                    + "  posinilon      float(30) NOT NULL,"
-                    + "  fyhfin         TIMESTAMP NOT NULL,"
-                    + "  posfinlat      float(30) NOT NULL,"
-                    + "  posfinlon      float(30) NOT NULL,"
+                    + "  fyHIni         TIMESTAMP NOT NULL,"
+                    + "  posIniLat      float(30) NOT NULL,"
+                    + "  posIniLon      float(30) NOT NULL,"
+                    + "  fyHFin         TIMESTAMP,"
+                    + "  posFinLat      float(30),"
+                    + "  posFinLon      float(30),"
                     + "  comentarios    nvarchar(500),"
-                    + "  idcampania     integer NOT NULL,"
+                    + "  idCampania     integer NOT NULL,"
                     + "  /* Foreign keys */ "
-                    + "  FOREIGN KEY (idcampania)"
+                    + "  FOREIGN KEY (idCampania)"
                     + "    REFERENCES Campanias(id)"
                     + ");";
             getStatement().executeUpdate(codigoCreacion);
@@ -487,10 +487,11 @@ public abstract class BrokerPpal {
         boolean sePudo = false;
         try {
             String codigoCreacion = "CREATE TABLE Cajones ("
+                    + "  id                 integer PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     + "  idLance            integer NOT NULL,"
                     + "  idEspecie          integer NOT NULL,"
                     + "  cantidad           integer NOT NULL,"
-                    + "  PRIMARY KEY        (idLance,idEspecie),"
+                    //+ "  PRIMARY KEY        (idLance,idEspecie),"
                     + "  /* Foreign keys */ "
                     + "  FOREIGN KEY (idLance)"
                     + "    REFERENCES Lances(id)"

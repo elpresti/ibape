@@ -12,6 +12,8 @@ package gui;
 
 import controllers.ControllerLance;
 import controllers.ControllerPpal;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
@@ -19,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.Cajon;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.Especie;
+import modelo.dataManager.Lance;
 import persistencia.BrokerCajon;
 import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerEspecie;
@@ -29,11 +32,12 @@ import persistencia.Logueador;
  *
  * @author Sebastian
  */
-public class PanelFinalizarLance extends javax.swing.JPanel {
+public class PanelOpcCajones extends javax.swing.JPanel {
 
-    static PanelFinalizarLance unicaInstancia;
+    static PanelOpcCajones unicaInstancia;
     private boolean modificandoCajon;
     private Cajon tempCajon;
+    private Lance tempLanceSeleccionado;
     private DefaultTableModel modeloTablaCajones = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
@@ -51,7 +55,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     };
 
     /** Creates new form PanelFinalizarLance */
-    private PanelFinalizarLance() {
+    private PanelOpcCajones() {
         initComponents();
         inicializador();
     }
@@ -74,6 +78,8 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelTabla = new org.jdesktop.swingx.JXPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCajones = new org.jdesktop.swingx.JXTable();
+        panelTotalCajones = new org.jdesktop.swingx.JXPanel();
+        lblTotalCajones = new org.jdesktop.swingx.JXLabel();
         panelAccionesCajones = new org.jdesktop.swingx.JXPanel();
         lblAccionesCajones = new org.jdesktop.swingx.JXLabel();
         panelAcciones = new org.jdesktop.swingx.JXPanel();
@@ -88,18 +94,8 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelComboEspecie = new org.jdesktop.swingx.JXPanel();
         lblEspecie = new org.jdesktop.swingx.JXLabel();
         comboEspecies = new javax.swing.JComboBox();
-        panelBtnAgregar = new org.jdesktop.swingx.JXPanel();
-        jButton1 = new javax.swing.JButton();
-        panelSuceso = new org.jdesktop.swingx.JXPanel();
-        lblSuceso = new org.jdesktop.swingx.JXLabel();
-        comboSuceso = new javax.swing.JComboBox();
-        jButton2 = new javax.swing.JButton();
-        panelComentarios = new org.jdesktop.swingx.JXPanel();
-        lblComentarios = new org.jdesktop.swingx.JXLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        txtComentarios = new javax.swing.JTextArea();
         panelInferior = new org.jdesktop.swingx.JXPanel();
-        btnGuardarLance = new javax.swing.JButton();
+        btnGuardarCajonesLance = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -110,7 +106,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelSuperior.setMinimumSize(new java.awt.Dimension(500, 30));
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 30));
 
-        lblTitulo.setText("Finalizar lance");
+        lblTitulo.setText("Administración de la pesca");
         lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
         panelSuperior.add(lblTitulo);
 
@@ -121,9 +117,9 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelMedio.setPreferredSize(new java.awt.Dimension(500, 420));
         panelMedio.setLayout(new java.awt.BorderLayout());
 
-        panelCajones.setMaximumSize(new java.awt.Dimension(500, 320));
+        panelCajones.setMaximumSize(new java.awt.Dimension(500, 400));
         panelCajones.setMinimumSize(new java.awt.Dimension(500, 320));
-        panelCajones.setPreferredSize(new java.awt.Dimension(500, 320));
+        panelCajones.setPreferredSize(new java.awt.Dimension(500, 400));
 
         panelTituloTabla.setMaximumSize(new java.awt.Dimension(500, 30));
         panelTituloTabla.setMinimumSize(new java.awt.Dimension(500, 30));
@@ -177,18 +173,24 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelTabla.setLayout(panelTablaLayout);
         panelTablaLayout.setHorizontalGroup(
             panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelTablaLayout.createSequentialGroup()
+            .addGroup(panelTablaLayout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelTablaLayout.setVerticalGroup(
             panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTablaLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
 
         panelCajones.add(panelTabla);
+
+        panelTotalCajones.setPreferredSize(new java.awt.Dimension(500, 56));
+        panelTotalCajones.setLayout(new java.awt.BorderLayout());
+
+        lblTotalCajones.setText("Cantidad de cajones: ");
+        panelTotalCajones.add(lblTotalCajones, java.awt.BorderLayout.CENTER);
+
+        panelCajones.add(panelTotalCajones);
 
         panelAccionesCajones.setMaximumSize(new java.awt.Dimension(500, 30));
         panelAccionesCajones.setMinimumSize(new java.awt.Dimension(500, 30));
@@ -264,7 +266,6 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelEspecie.setMaximumSize(new java.awt.Dimension(500, 50));
         panelEspecie.setMinimumSize(new java.awt.Dimension(500, 50));
         panelEspecie.setPreferredSize(new java.awt.Dimension(500, 50));
-        panelEspecie.setLayout(new javax.swing.BoxLayout(panelEspecie, javax.swing.BoxLayout.LINE_AXIS));
 
         panelCantCajones.setMaximumSize(new java.awt.Dimension(150, 50));
         panelCantCajones.setMinimumSize(new java.awt.Dimension(150, 50));
@@ -291,8 +292,7 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         lblEspecie.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComboEspecie.add(lblEspecie);
 
-        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12));
-        comboEspecies.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Abadejo", "Anchoita", "Merluza", "Calamar" }));
+        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         comboEspecies.setMaximumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setMinimumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -305,71 +305,9 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
         panelEspecie.add(panelComboEspecie);
 
-        panelBtnAgregar.setMaximumSize(new java.awt.Dimension(80, 50));
-        panelBtnAgregar.setMinimumSize(new java.awt.Dimension(80, 50));
-        panelBtnAgregar.setPreferredSize(new java.awt.Dimension(80, 50));
-        panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jButton1.setText("Agregar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        panelBtnAgregar.add(jButton1);
-
-        panelEspecie.add(panelBtnAgregar);
-
         panelCajones.add(panelEspecie);
 
         panelMedio.add(panelCajones, java.awt.BorderLayout.NORTH);
-
-        panelSuceso.setMaximumSize(new java.awt.Dimension(500, 50));
-        panelSuceso.setMinimumSize(new java.awt.Dimension(500, 50));
-        panelSuceso.setPreferredSize(new java.awt.Dimension(500, 50));
-
-        lblSuceso.setText("Suceso ocurrido");
-        lblSuceso.setFont(new java.awt.Font("Tahoma", 0, 12));
-        panelSuceso.add(lblSuceso);
-
-        comboSuceso.setFont(new java.awt.Font("Tahoma", 0, 12));
-        comboSuceso.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Lista categorias POI" }));
-        comboSuceso.setMaximumSize(new java.awt.Dimension(200, 20));
-        comboSuceso.setMinimumSize(new java.awt.Dimension(200, 20));
-        comboSuceso.setPreferredSize(new java.awt.Dimension(200, 20));
-        panelSuceso.add(comboSuceso);
-
-        jButton2.setText("accion");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        panelSuceso.add(jButton2);
-
-        panelMedio.add(panelSuceso, java.awt.BorderLayout.CENTER);
-
-        panelComentarios.setMaximumSize(new java.awt.Dimension(500, 120));
-        panelComentarios.setMinimumSize(new java.awt.Dimension(500, 120));
-        panelComentarios.setPreferredSize(new java.awt.Dimension(500, 120));
-        panelComentarios.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
-
-        lblComentarios.setText("Comentarios del lance:");
-        lblComentarios.setFont(new java.awt.Font("Tahoma", 0, 12));
-        panelComentarios.add(lblComentarios);
-
-        jScrollPane2.setFont(new java.awt.Font("Tahoma", 0, 12));
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 70));
-
-        txtComentarios.setColumns(20);
-        txtComentarios.setFont(new java.awt.Font("Arial", 0, 13));
-        txtComentarios.setRows(5);
-        jScrollPane2.setViewportView(txtComentarios);
-
-        panelComentarios.add(jScrollPane2);
-
-        panelMedio.add(panelComentarios, java.awt.BorderLayout.SOUTH);
 
         add(panelMedio, java.awt.BorderLayout.CENTER);
 
@@ -378,14 +316,14 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
         panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGuardarLance.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnGuardarLance.setText("Guardar lance");
-        btnGuardarLance.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarCajonesLance.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnGuardarCajonesLance.setText("Cerrar");
+        btnGuardarCajonesLance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarLanceActionPerformed(evt);
+                btnGuardarCajonesLanceActionPerformed(evt);
             }
         });
-        panelInferior.add(btnGuardarLance);
+        panelInferior.add(btnGuardarCajonesLance);
 
         add(panelInferior, java.awt.BorderLayout.SOUTH);
     }// </editor-fold>//GEN-END:initComponents
@@ -394,45 +332,12 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboEspeciesActionPerformed
 
-    private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
-        // TODO add your handling code here:
-        controllers.ControllerLance.getInstance().guardaLance();
+    private void btnGuardarCajonesLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCajonesLanceActionPerformed
 
-    }//GEN-LAST:event_btnGuardarLanceActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        if (!campoCajones.getText().isEmpty() && Integer.valueOf(campoCajones.getText()) > 0 && comboEspecies.getSelectedIndex() > -1) {
-            Cajon unCajon = new Cajon();
-            unCajon.setIdLance(/*BrokerLance.getInstance().getIdLanceActual()*/1);
-            Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
-            unCajon.setIdEspecie(unaEsp.getId());
-            unCajon.setCantidad(Integer.valueOf(campoCajones.getText()));
-            ControllerLance.getInstance().addCajon(unCajon); //quedan en una lista
-
-            cargaGrillaCajones();
-            //    int cantCols = 4;
-            //    ArrayList a = new ArrayList();
-            //    a.add(unCajon.getIdLance());
-            //    a.add(unCajon.getCantidad());
-            //    a.add(unaEsp.getNombre()/*unCajon.getIdEspecie()*/);
-            //    a.add("false");
-            //    //insertar la fila 
-            //    modeloTablaCajones.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
-            //    a.clear();
-            //    tablaCajones.setModel(modeloTablaCajones);
-            //    ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
-        } else {
-            JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
-        }
-
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        eliminarCajon();
-        //modificarCajon();
-    }//GEN-LAST:event_jButton2ActionPerformed
+        //saco el lance seleccionado y vuelvo a la ventana lances
+        setTempLanceSeleccionado(null);
+        VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
+    }//GEN-LAST:event_btnGuardarCajonesLanceActionPerformed
 
     private void btnModificarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCajonActionPerformed
         habilitaPanelDatosCajones(true);
@@ -456,6 +361,46 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
 
     private void btnGuardarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCajonActionPerformed
         // TODO add your handling code here:
+        /*        if (!campoCajones.getText().isEmpty() && Integer.valueOf(campoCajones.getText()) > 0 && comboEspecies.getSelectedIndex() > -1) {
+        Cajon unCajon = new Cajon();
+        unCajon.setIdLance(tempLanceSeleccionado.getId());
+        Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
+        unCajon.setIdEspecie(unaEsp.getId());
+        unCajon.setCantidad(Integer.valueOf(campoCajones.getText()));
+        controllers.ControllerLance.getInstance().addCajon(unCajon)
+        
+        
+        cargaGrillaCajones();
+        } else {
+        JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
+        }*/
+        if (campoCajones.getText().equals("") || Integer.valueOf(campoCajones.getText())==0) {
+            JOptionPane.showMessageDialog(null, "Ingrese una cantidad");
+            return;
+        }
+        if (comboEspecies.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione una especie");
+            return;
+        }
+        Cajon unCajon = new Cajon();
+        unCajon.setIdLance(tempLanceSeleccionado.getId());
+        Especie unaEsp = (Especie) comboEspecies.getSelectedItem();
+        unCajon.setIdEspecie(unaEsp.getId());
+        unCajon.setCantidad(Integer.valueOf(campoCajones.getText()));
+        if (modificandoCajon) {
+            //modifica Cajon
+            controllers.ControllerLance.getInstance().modificaCajon(unCajon);
+            setModificandoCajon(false);
+        } else {
+            // Agrega/inserta Cajon:
+            if (!campoCajones.getText().isEmpty() && Integer.valueOf(campoCajones.getText()) > 0 && comboEspecies.getSelectedIndex() > -1) {
+                controllers.ControllerLance.getInstance().agregaCajon(unCajon);
+            } else {
+                JOptionPane.showMessageDialog(null, "No se selecciono una especie o cantidad");
+            }
+        }
+        habilitaPanelDatosCajones(false);
+        cargaGrillaCajones();
     }//GEN-LAST:event_btnGuardarCajonActionPerformed
 
     private void btnEliminarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCajonActionPerformed
@@ -468,61 +413,57 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
                     JOptionPane.WARNING_MESSAGE) == 0) {
                 int i = 0;
                 while (i < listaCajonesSeleccionados.length) {
-                    Cajon unCajon = (Cajon) tablaCajones.getValueAt(i, 0);
-                    ControllerLance.getInstance().borrarCajon(unCajon); //lo saca de la lista en memoria
-                    System.out.println("Se saco de la lista el cajon " + unCajon);
-                    //ControllerLance.getInstance().eliminaCajon(unCajon);
+                    controllers.ControllerLance.getInstance().eliminaCajon((Cajon) tablaCajones.getValueAt(listaCajonesSeleccionados[i], 0));
                     i++;
                 }
                 cargaGrillaCajones();
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "No se seleccionaron cajones");
         }
     }//GEN-LAST:event_btnEliminarCajonActionPerformed
 
     private void btnInsertarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarCajonActionPerformed
         // TODO add your handling code here:
+        habilitaPanelDatosCajones(true);
+        btnModificarCajon.setEnabled(false);
+        btnEliminarCajon.setEnabled(false);
+        btnInsertarCajon.setEnabled(false);
+        btnGuardarCajon.setEnabled(true);
     }//GEN-LAST:event_btnInsertarCajonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink btnEliminarCajon;
     private org.jdesktop.swingx.JXHyperlink btnGuardarCajon;
-    private javax.swing.JButton btnGuardarLance;
+    private javax.swing.JButton btnGuardarCajonesLance;
     private org.jdesktop.swingx.JXHyperlink btnInsertarCajon;
     private org.jdesktop.swingx.JXHyperlink btnModificarCajon;
     private javax.swing.JTextField campoCajones;
     private javax.swing.JComboBox comboEspecies;
-    private javax.swing.JComboBox comboSuceso;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXLabel lblAccionesCajones;
     private org.jdesktop.swingx.JXLabel lblCantCajones;
-    private org.jdesktop.swingx.JXLabel lblComentarios;
     private org.jdesktop.swingx.JXLabel lblEspecie;
-    private org.jdesktop.swingx.JXLabel lblSuceso;
     private org.jdesktop.swingx.JXLabel lblTitulo;
     private org.jdesktop.swingx.JXLabel lblTituloTabla;
+    private org.jdesktop.swingx.JXLabel lblTotalCajones;
     private org.jdesktop.swingx.JXPanel panelAcciones;
     private org.jdesktop.swingx.JXPanel panelAccionesCajones;
-    private org.jdesktop.swingx.JXPanel panelBtnAgregar;
     private org.jdesktop.swingx.JXPanel panelCajones;
     private org.jdesktop.swingx.JXPanel panelCantCajones;
     private org.jdesktop.swingx.JXPanel panelComboEspecie;
-    private org.jdesktop.swingx.JXPanel panelComentarios;
     private org.jdesktop.swingx.JXPanel panelEspecie;
     private org.jdesktop.swingx.JXPanel panelInferior;
     private org.jdesktop.swingx.JXPanel panelMedio;
-    private org.jdesktop.swingx.JXPanel panelSuceso;
     private org.jdesktop.swingx.JXPanel panelSuperior;
     private org.jdesktop.swingx.JXPanel panelTabla;
     private org.jdesktop.swingx.JXPanel panelTituloTabla;
+    private org.jdesktop.swingx.JXPanel panelTotalCajones;
     private org.jdesktop.swingx.JXTable tablaCajones;
-    private javax.swing.JTextArea txtComentarios;
     // End of variables declaration//GEN-END:variables
 
-    public static PanelFinalizarLance getInstance() {
+    public static PanelOpcCajones getInstance() {
         if (unicaInstancia == null) {
-            unicaInstancia = new PanelFinalizarLance();
+            unicaInstancia = new PanelOpcCajones();
         }
         return unicaInstancia;
     }
@@ -531,16 +472,36 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
     public static void main(String[] args) {
         javax.swing.JFrame elFrame = new javax.swing.JFrame();
         elFrame.setSize(500, 500);
-        PanelFinalizarLance a = new PanelFinalizarLance();
-        //cargaEspecies();
+        PanelOpcCajones a = new PanelOpcCajones();
         elFrame.add(a);
         elFrame.setVisible(true);
     }
 
     private void inicializador() {
+        habilitaPanelDatosCajones(false);
         cargaComboEspecies();
-        cargaComboSuceso();
-        // habilitaPanelDatosCajones(false);
+        btnModificarCajon.setVisible(false); // no se usa, se borra y s evuelve a agregar
+        //validadores de los campos
+        Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
+        campoCajones.addKeyListener(obj_teclas);
+    }
+
+    private void modificarCajon() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void cargaGrillaCajones() {
+        modeloTablaCajones.setRowCount(0);//vacia la tabla
+        for (Cajon unCajon : BrokerCajon.getInstance().getCajonesLanceFromDB(tempLanceSeleccionado.getId())) {
+            modeloTablaCajones.addRow(new Object[]{
+                        unCajon,//<--Aca esta el objeto -muestra idLance
+                        unCajon.getCantidad(),
+                        BrokerEspecie.getInstance().getEspecieFromDB(unCajon.getIdEspecie()).getNombre()
+                    });
+        }
+        tablaCajones.setModel(modeloTablaCajones);
+        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
+        lblTotalCajones.setText("Total de cajones del lance: "+BrokerCajon.getInstance().getCajonesFromLance(tempLanceSeleccionado.getId()));
     }
 
     private void cargaComboEspecies() {
@@ -552,90 +513,6 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-    }
-
-    /*public ArrayList<Cajon> getCajones() {
-    //------------
-    for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-    }
-    
-    //------------
-    ArrayList<Cajon> listaCajones = null;
-    Cajon unCajon = new Cajon();
-    for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-    unCajon.setIdLance(0); //que lance?
-    //  unCajon.setIdEspecie(tablaCajones.getModel().getValueAt(i, 0));
-    //  unCajon.setCantidad(tablaCajones.getModel().getValueAt(i, 1));
-    listaCajones.add(unCajon);
-    }
-    return listaCajones;
-    }*/
-    public String getComentarios() {
-        if (!txtComentarios.getText().isEmpty()) {
-            return txtComentarios.getText();
-        } else {
-            return "";
-        }
-    }
-
-    private void cargaComboSuceso() {
-        try {
-            comboSuceso.removeAllItems();
-            for (CategoriaPoi i : BrokerCategoriasPOI.getInstance().getCatPOISFromDB()) {
-                comboSuceso.addItem(i);
-            }
-        } catch (Exception e) {
-            Logueador.getInstance().agregaAlLog(e.toString());
-        }
-    }
-
-    private void eliminarCajon() {
-        /* if (JOptionPane.showConfirmDialog(null,
-        "Desea eliminar los cajones seleccionados?",
-        "Eliminar cajones",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.WARNING_MESSAGE) == 0) {
-        for (int i = 0; i < tablaCajones.getRowCount(); i++) {
-        if ((Boolean) tablaCajones.getValueAt(i, tablaCajones.getColumnCount(false) - 1)) {
-        ControllerLance.getInstance().borrarCajon((Cajon) tablaCajones.getValueAt(i, 0));
-        }
-        }
-        }
-        cargaGrillaCajones();*/
-    }
-
-    private void modificarCajon() {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private void cargaGrillaCajones() {
-        int cantCols = 4;
-        ArrayList a = new ArrayList();
-        modeloTablaCajones.setRowCount(0);//vacia la tabla
-        //ControllerPpal.getInstance().vaciarJTable(modeloTablaCajones);//da exeption
-        ArrayList<Cajon> b = ControllerLance.getInstance().getListadoCajones();
-
-        for (Cajon unCajon : ControllerLance.getInstance().getListadoCajones()) {
-            modeloTablaCajones.addRow(new Object[]{
-                        unCajon,//<--Aca esta el objeto -muestra idLance
-                        unCajon.getCantidad(),
-                        BrokerEspecie.getInstance().getEspecieFromDB(unCajon.getIdEspecie()).getNombre()
-                    });
-        }
-
-/*
-        for (int i = 0; i < b.size(); i++) {
-            a.add(b.get(i));//<--Aca esta el objeto -muestra idLance
-            a.add(b.get(i).getCantidad());
-            a.add(BrokerEspecie.getInstance().getEspecieFromDB(b.get(i).getIdEspecie()).getNombre());//unCajon.getIdEspecie());
-            a.add("false");
-            //insertar la fila 
-            modeloTablaCajones.addRow(ControllerPpal.getInstance().creaUnaFilaGenerica(cantCols, a));
-            a.clear();
-
-        }*/
-        tablaCajones.setModel(modeloTablaCajones);
-        ControllerPpal.getInstance().ocultarColJTable(tablaCajones, 0);
     }
 
     private void habilitaPanelDatosCajones(boolean estado) {
@@ -676,5 +553,29 @@ public class PanelFinalizarLance extends javax.swing.JPanel {
      */
     public void setTempCajon(Cajon tempCajon) {
         this.tempCajon = tempCajon;
+    }
+
+    /**
+     * @return the tempLanceSeleccionado
+     */
+    public Lance getTempLanceSeleccionado() {
+        return tempLanceSeleccionado;
+    }
+
+    /**
+     * @param tempLanceSeleccionado the tempLanceSeleccionado to set
+     */
+    public void setTempLanceSeleccionado(Lance tempLanceSeleccionado) {
+        this.tempLanceSeleccionado = tempLanceSeleccionado;
+    }
+
+    class Cls_ManejoTeclas extends KeyAdapter {
+
+        public void keyTyped(KeyEvent ke) {
+            char loc_caracter = ke.getKeyChar();
+            if (((loc_caracter < '0') || (loc_caracter > '9')) && (loc_caracter != KeyEvent.VK_BACK_SPACE)) {
+                ke.consume();
+            }
+        }
     }
 }
