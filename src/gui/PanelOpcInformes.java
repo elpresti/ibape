@@ -4,7 +4,7 @@
  */
 
 /*
- * PanelHistorico.java
+ * PanelOpcInformes.java
  *
  * Created on 11/04/2012, 14:48:19
  */
@@ -13,35 +13,23 @@ package gui;
 import controllers.ControllerCampania;
 import controllers.ControllerHistorico;
 import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.table.TableModel;
-import modelo.dataCapture.Sistema;
-import modelo.dataManager.CategoriaPoi;
-import org.jdesktop.swingx.JXLabel;
 
 /**
  *
- * @author Sebastian
+ * @author emmmau
  */
 public class PanelOpcInformes extends javax.swing.JPanel {
 
@@ -78,25 +66,25 @@ public class PanelOpcInformes extends javax.swing.JPanel {
     private void initComponents() {
 
         panelTitulo = new javax.swing.JPanel();
-        lblTituloHistorico = new java.awt.Label();
+        lblTituloInformes = new java.awt.Label();
         panelCampanias = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCampanias = new org.jdesktop.swingx.JXTable();
-        panelInfoMapa = new javax.swing.JPanel();
-        panelSuperior = new javax.swing.JPanel();
-        lblTxtDatosMapa = new java.awt.Label();
-        panelRecorrido = new org.jdesktop.swingx.JXPanel();
-        chkRecorrido = new javax.swing.JCheckBox();
-        lblCantPuntosRecorrido = new org.jdesktop.swingx.JXLabel();
-        chkPoisTodos = new javax.swing.JCheckBox();
-        lblTxtTablaCatPois = new java.awt.Label();
-        panelInferior = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablaCatPois = new org.jdesktop.swingx.JXTable();
-        panelBtnGraficar = new javax.swing.JPanel();
-        btnGraficarDatos = new javax.swing.JButton();
-        btnIniciarMapaHistorico = new javax.swing.JButton();
-        btnDetenerMapaHistorico = new javax.swing.JButton();
+        panelDatosInforme = new javax.swing.JPanel();
+        panelRecorrido1 = new org.jdesktop.swingx.JXPanel();
+        lblCantPuntosRecorrido1 = new org.jdesktop.swingx.JXLabel();
+        lblTxtDatosInforme1 = new java.awt.Label();
+        chkRecorrido1 = new javax.swing.JCheckBox();
+        chkPoisTodos1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        jCheckBox4 = new javax.swing.JCheckBox();
+        jCheckBox5 = new javax.swing.JCheckBox();
+        jCheckBox6 = new javax.swing.JCheckBox();
+        jCheckBox7 = new javax.swing.JCheckBox();
+        javax.swing.JPanel panelBtnGenerarInforme = new javax.swing.JPanel();
+        btnGenerarInforme = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -107,9 +95,10 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelTitulo.setMinimumSize(new java.awt.Dimension(500, 40));
         panelTitulo.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        lblTituloHistorico.setFont(new java.awt.Font("Arial", 0, 18));
-        lblTituloHistorico.setText("Datos Historicos");
-        panelTitulo.add(lblTituloHistorico);
+        lblTituloInformes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTituloInformes.setText("Informes");
+        panelTitulo.add(lblTituloInformes);
+        lblTituloInformes.getAccessibleContext().setAccessibleName("Informes");
 
         add(panelTitulo);
 
@@ -164,238 +153,121 @@ public class PanelOpcInformes extends javax.swing.JPanel {
 
         add(panelCampanias);
 
-        panelInfoMapa.setMaximumSize(new java.awt.Dimension(500, 220));
-        panelInfoMapa.setMinimumSize(new java.awt.Dimension(500, 220));
-        panelInfoMapa.setPreferredSize(new java.awt.Dimension(500, 220));
-        panelInfoMapa.setLayout(new javax.swing.BoxLayout(panelInfoMapa, javax.swing.BoxLayout.PAGE_AXIS));
+        panelDatosInforme.setMaximumSize(new java.awt.Dimension(500, 1000));
+        panelDatosInforme.setMinimumSize(new java.awt.Dimension(500, 1000));
+        panelDatosInforme.setPreferredSize(new java.awt.Dimension(1000, 100));
+        panelDatosInforme.setLayout(new java.awt.GridLayout(10, 1));
 
-        panelSuperior.setMaximumSize(new java.awt.Dimension(500, 100));
-        panelSuperior.setMinimumSize(new java.awt.Dimension(500, 100));
-        panelSuperior.setPreferredSize(new java.awt.Dimension(500, 100));
-        panelSuperior.setLayout(new java.awt.GridLayout(4, 1));
+        panelRecorrido1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
-        lblTxtDatosMapa.setFont(new java.awt.Font("Tahoma", 0, 12));
-        lblTxtDatosMapa.setText("Datos mostrados en el mapa:");
-        panelSuperior.add(lblTxtDatosMapa);
+        lblCantPuntosRecorrido1.setForeground(new java.awt.Color(0, 204, 51));
+        lblCantPuntosRecorrido1.setFont(new java.awt.Font("Tahoma", 2, 12));
+        panelRecorrido1.add(lblCantPuntosRecorrido1);
 
-        panelRecorrido.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTxtDatosInforme1.setText("Datos a incluir en el Informe:");
+        panelRecorrido1.add(lblTxtDatosInforme1);
 
-        chkRecorrido.setFont(new java.awt.Font("Tahoma", 0, 12));
-        chkRecorrido.setText("Recorrido");
-        chkRecorrido.addActionListener(new java.awt.event.ActionListener() {
+        panelDatosInforme.add(panelRecorrido1);
+
+        chkRecorrido1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkRecorrido1.setText("yy");
+        chkRecorrido1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkRecorridoActionPerformed(evt);
+                chkRecorrido1ActionPerformed(evt);
             }
         });
-        panelRecorrido.add(chkRecorrido);
+        panelDatosInforme.add(chkRecorrido1);
 
-        lblCantPuntosRecorrido.setForeground(new java.awt.Color(0, 204, 51));
-        lblCantPuntosRecorrido.setFont(new java.awt.Font("Tahoma", 2, 12));
-        panelRecorrido.add(lblCantPuntosRecorrido);
-
-        panelSuperior.add(panelRecorrido);
-
-        chkPoisTodos.setFont(new java.awt.Font("Tahoma", 0, 12));
-        chkPoisTodos.setText("Puntos de Interes (POI) de todas las campañas");
-        chkPoisTodos.addActionListener(new java.awt.event.ActionListener() {
+        chkPoisTodos1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkPoisTodos1.setText("xx");
+        chkPoisTodos1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkPoisTodosActionPerformed(evt);
+                chkPoisTodos1ActionPerformed(evt);
             }
         });
-        panelSuperior.add(chkPoisTodos);
+        panelDatosInforme.add(chkPoisTodos1);
 
-        lblTxtTablaCatPois.setAlignment(java.awt.Label.CENTER);
-        lblTxtTablaCatPois.setFont(new java.awt.Font("Tahoma", 2, 11));
-        lblTxtTablaCatPois.setText("Seleccione las categorias de POIs que desea ver en el mapa");
-        panelSuperior.add(lblTxtTablaCatPois);
+        jCheckBox2.setText("jCheckBox1");
+        panelDatosInforme.add(jCheckBox2);
 
-        panelInfoMapa.add(panelSuperior);
+        jCheckBox1.setText("jCheckBox1");
+        panelDatosInforme.add(jCheckBox1);
 
-        panelInferior.setMaximumSize(new java.awt.Dimension(500, 120));
-        panelInferior.setMinimumSize(new java.awt.Dimension(500, 120));
-        panelInferior.setPreferredSize(new java.awt.Dimension(500, 120));
-        panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
+        jCheckBox3.setText("jCheckBox3");
+        panelDatosInforme.add(jCheckBox3);
 
-        jScrollPane2.setMaximumSize(new java.awt.Dimension(450, 120));
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(450, 120));
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(450, 120));
+        jCheckBox4.setText("jCheckBox4");
+        panelDatosInforme.add(jCheckBox4);
 
-        tablaCatPois.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+        jCheckBox5.setText("jCheckBox5");
+        panelDatosInforme.add(jCheckBox5);
 
-            },
-            new String [] {
-                "id", "Elegir", "Icono", "Categorias de POI"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, false, false
-            };
+        jCheckBox6.setText("jCheckBox6");
+        panelDatosInforme.add(jCheckBox6);
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
+        jCheckBox7.setText("jCheckBox7");
+        panelDatosInforme.add(jCheckBox7);
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(tablaCatPois);
-        tablaCatPois.getColumnModel().getColumn(0).setResizable(false);
-        tablaCatPois.getColumnModel().getColumn(0).setPreferredWidth(0);
-        tablaCatPois.getColumnModel().getColumn(1).setMinWidth(40);
-        tablaCatPois.getColumnModel().getColumn(1).setPreferredWidth(40);
-        tablaCatPois.getColumnModel().getColumn(1).setMaxWidth(40);
-        tablaCatPois.getColumnModel().getColumn(2).setMinWidth(50);
-        tablaCatPois.getColumnModel().getColumn(2).setPreferredWidth(50);
-        tablaCatPois.getColumnModel().getColumn(2).setMaxWidth(50);
-        tablaCatPois.getColumnModel().getColumn(3).setPreferredWidth(200);
+        add(panelDatosInforme);
 
-        panelInferior.add(jScrollPane2);
+        panelBtnGenerarInforme.setMaximumSize(new java.awt.Dimension(500, 40));
+        panelBtnGenerarInforme.setMinimumSize(new java.awt.Dimension(500, 40));
+        panelBtnGenerarInforme.setPreferredSize(new java.awt.Dimension(500, 40));
+        panelBtnGenerarInforme.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        panelInfoMapa.add(panelInferior);
-
-        add(panelInfoMapa);
-
-        panelBtnGraficar.setMaximumSize(new java.awt.Dimension(500, 40));
-        panelBtnGraficar.setMinimumSize(new java.awt.Dimension(500, 40));
-        panelBtnGraficar.setPreferredSize(new java.awt.Dimension(500, 40));
-        panelBtnGraficar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
-
-        btnGraficarDatos.setText("Graficar datos");
-        btnGraficarDatos.setMaximumSize(new java.awt.Dimension(130, 23));
-        btnGraficarDatos.setMinimumSize(new java.awt.Dimension(130, 23));
-        btnGraficarDatos.setPreferredSize(new java.awt.Dimension(130, 23));
-        btnGraficarDatos.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerarInforme.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnGenerarInforme.setText("Generar Informe");
+        btnGenerarInforme.setAutoscrolls(true);
+        btnGenerarInforme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGraficarDatosActionPerformed(evt);
+                btnGenerarInformeActionPerformed(evt);
             }
         });
-        panelBtnGraficar.add(btnGraficarDatos);
+        panelBtnGenerarInforme.add(btnGenerarInforme);
 
-        btnIniciarMapaHistorico.setFont(new java.awt.Font("Tahoma", 1, 12));
-        btnIniciarMapaHistorico.setLabel("Iniciar Mapa Historico");
-        btnIniciarMapaHistorico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnIniciarMapaHistoricoActionPerformed(evt);
-            }
-        });
-        panelBtnGraficar.add(btnIniciarMapaHistorico);
-
-        btnDetenerMapaHistorico.setFont(new java.awt.Font("Tahoma", 1, 12));
-        btnDetenerMapaHistorico.setLabel("Detener Mapa Historico");
-        btnDetenerMapaHistorico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDetenerMapaHistoricoActionPerformed(evt);
-            }
-        });
-        panelBtnGraficar.add(btnDetenerMapaHistorico);
-
-        add(panelBtnGraficar);
+        add(panelBtnGenerarInforme);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void chkPoisTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodosActionPerformed
-        if ((chkPoisTodos.isSelected()) || (getChkRecorrido().isSelected())) {
-            habilitaBtnGraficarDatos(true);
-        } else {
-            habilitaBtnGraficarDatos(false);
-        }
-        if (chkPoisTodos.isSelected()) {
-            habilitaPanelTablaCatPois(true);
-        } else {
-            habilitaPanelTablaCatPois(false);
-        }
-    }//GEN-LAST:event_chkPoisTodosActionPerformed
 
-    private void chkRecorridoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRecorridoActionPerformed
-        if (getChkRecorrido().isSelected()) {
-            habilitaBtnGraficarDatos(true);
-        } else {
-            if (!chkPoisTodos.isSelected()) {
-                habilitaBtnGraficarDatos(false);
-            }
-        }
-    }//GEN-LAST:event_chkRecorridoActionPerformed
 
-    private void btnIniciarMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarMapaHistoricoActionPerformed
-        setTxtBtnIniciaMapa(btnIniciarMapaHistorico.getText());
-        btnIniciarMapaHistorico.setText("Abriendo...");
-        btnIniciarMapaHistorico.setEnabled(false);
-        if (!(controllers.ControllerHistorico.getInstance().iniciaServerYabreBrowser())) {
-            JOptionPane.showMessageDialog(this, "Hubo un error al iniciar el Servidor Web ó el Navegador");
-        }
-    }//GEN-LAST:event_btnIniciarMapaHistoricoActionPerformed
+    private void chkRecorrido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRecorrido1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkRecorrido1ActionPerformed
 
-    private void btnGraficarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGraficarDatosActionPerformed
-        if (getIdCampaniaElegida() >= 0) {
-            if (getChkRecorrido().isSelected() || (chkPoisTodos.isSelected() && getCategoriasSeleccionadas().size() > 0)) {
-                setTxtBtnGraficarDatos(btnGraficarDatos.getText());
-                btnGraficarDatos.setText("Transfiriendo datos...");
-                habilitaBtnGraficarDatos(false);
-                int retardo = 0; //sin retardo
-                if (btnIniciarMapaHistorico.isEnabled() && btnIniciarMapaHistorico.isVisible()) {
-                    btnIniciarMapaHistoricoActionPerformed(null);//si no se ha hecho click en iniciar Mapa historico previamente, lo hago
-                    retardo = 5000;//5 segundos de retardo para graficar xq estba el webserver cerrado
-                } else {
-                    retardo = 4000;//4 segundos de retardo para que lea la DB el browser
-                }
-                ControllerHistorico.getInstance().graficarDatos(retardo);
-            } else {
-                JOptionPane.showMessageDialog(null, "No ha elegido que datos de la campaña elegida desea graficar");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "No ha elegido ninguna campaña para graficar");
-        }
-    }//GEN-LAST:event_btnGraficarDatosActionPerformed
+    private void chkPoisTodos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodos1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chkPoisTodos1ActionPerformed
 
-    public void restauraBtnIniciarMapa() {
-        btnIniciarMapaHistorico.setText(getTxtBtnIniciaMapa());
-        btnIniciarMapaHistorico.setEnabled(true);
-        btnIniciarMapaHistorico.setVisible(false);
-        btnDetenerMapaHistorico.setVisible(true);
-    }
+    private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
+//        setTxtBtnIniciaMapa(btnGenerarInforme.getText());
+//        btnGenerarInforme.setText("Abriendo...");
+//        btnGenerarInforme.setEnabled(false);
+//        if (!(controllers.ControllerHistorico.getInstance().iniciaServerYabreBrowser())) {
+//            JOptionPane.showMessageDialog(this,"Hubo un error al iniciar el Servidor Web ó el Navegador");
+//        }
+}//GEN-LAST:event_btnGenerarInformeActionPerformed
 
-    public void restauraBtnGraficarDatos() {
-        btnGraficarDatos.setText(getTxtBtnGraficarDatos());
-        habilitaBtnGraficarDatos(true);
-    }
-
-    private void btnDetenerMapaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetenerMapaHistoricoActionPerformed
-        String txtOriginal = btnDetenerMapaHistorico.getText();
-        btnDetenerMapaHistorico.setText("Cerrando...");
-        btnDetenerMapaHistorico.setEnabled(false);
-        if (!(controllers.ControllerNavegacion.getInstance().detieneServerYcierraBrowser())) {
-            JOptionPane.showMessageDialog(this, "Hubo un error al detener el Servidor Web o el Navegador");
-        }
-        btnDetenerMapaHistorico.setText(txtOriginal);
-        btnDetenerMapaHistorico.setEnabled(true);
-        btnDetenerMapaHistorico.setVisible(false);
-        btnIniciarMapaHistorico.setVisible(true);
-    }//GEN-LAST:event_btnDetenerMapaHistoricoActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDetenerMapaHistorico;
-    private javax.swing.JButton btnGraficarDatos;
-    private javax.swing.JButton btnIniciarMapaHistorico;
-    private javax.swing.JCheckBox chkPoisTodos;
-    private javax.swing.JCheckBox chkRecorrido;
+    private javax.swing.JButton btnGenerarInforme;
+    private javax.swing.JCheckBox chkPoisTodos1;
+    private javax.swing.JCheckBox chkRecorrido1;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JCheckBox jCheckBox6;
+    private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido;
-    private java.awt.Label lblTituloHistorico;
-    private java.awt.Label lblTxtDatosMapa;
-    private java.awt.Label lblTxtTablaCatPois;
-    private javax.swing.JPanel panelBtnGraficar;
+    private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido1;
+    private java.awt.Label lblTituloInformes;
+    private java.awt.Label lblTxtDatosInforme1;
     private javax.swing.JPanel panelCampanias;
-    private javax.swing.JPanel panelInferior;
-    private javax.swing.JPanel panelInfoMapa;
-    private org.jdesktop.swingx.JXPanel panelRecorrido;
-    private javax.swing.JPanel panelSuperior;
+    private javax.swing.JPanel panelDatosInforme;
+    private org.jdesktop.swingx.JXPanel panelRecorrido1;
     private javax.swing.JPanel panelTitulo;
     private org.jdesktop.swingx.JXTable tablaCampanias;
-    private org.jdesktop.swingx.JXTable tablaCatPois;
     // End of variables declaration//GEN-END:variables
 
     public static PanelOpcInformes getInstance() {
@@ -448,9 +320,8 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         grupoElijeCampania = new ButtonGroup();
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer2());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor2(new JCheckBox()));
-        habilitaPanelTablaCatPois(false);
-        seteaBotonesMapa();
-        tablaCatPois.setRowHeight(30);
+
+      
     }
 
     public void marcaCampaniaEnCurso() {
@@ -487,32 +358,13 @@ public class PanelOpcInformes extends javax.swing.JPanel {
     public void setIdCampaniaElegida(int idCampaniaElegida) {
         if (idCampaniaElegida >= 0) {
             this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());
-            habilitaChkRecorrido(true);
-            setTxtCantidadDePuntosDeCampElegida(controllers.ControllerHistorico.getInstance().getCantPuntosHistoricos(this.idCampaniaElegida));
         } else {
             this.idCampaniaElegida = idCampaniaElegida;
-            habilitaChkRecorrido(false);
-            setTxtCantidadDePuntosDeCampElegida(-1);
         }
 
     }
 
-    public void habilitaPanelTablaCatPois(boolean estado) {
-        lblTxtTablaCatPois.setEnabled(estado);
-        tablaCatPois.setEnabled(estado);
-    }
 
-    public void habilitaChkTodosLosPois(boolean estado) {
-        chkPoisTodos.setEnabled(estado);
-    }
-
-    public void habilitaChkRecorrido(boolean estado) {
-        getChkRecorrido().setEnabled(estado);
-    }
-
-    public void habilitaBtnGraficarDatos(boolean estado) {
-        btnGraficarDatos.setEnabled(estado);
-    }
 
     public void habilitaPanelTablaCampanias(boolean estado) {
         tablaCampanias.setEnabled(estado);
@@ -532,31 +384,6 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         this.categoriasSeleccionadas = categoriasSeleccionadas;
     }
 
-    public Integer getIdCatPoiFromRow(int row) {
-        int idSeleccionado = -1;
-        if (row >= 0) {
-            idSeleccionado = Integer.parseInt(tablaCatPois.getModel().getValueAt(row, 0).toString());
-        }
-        return idSeleccionado;
-    }
-
-    private void setTxtCantidadDePuntosDeCampElegida(int cantPuntosHistoricos) {
-        if (cantPuntosHistoricos >= 0) {
-            lblCantPuntosRecorrido.setText("Recorrido compuesto por " + cantPuntosHistoricos + " puntos");
-        } else {
-            lblCantPuntosRecorrido.setText("");
-        }
-    }
-
-    public void seteaBotonesMapa() {
-        if (modelo.gisModule.WebServer.getInstance().isWebServerEncendido()) {
-            btnDetenerMapaHistorico.setVisible(true);
-            btnIniciarMapaHistorico.setVisible(false);
-        } else {
-            btnDetenerMapaHistorico.setVisible(false);
-            btnIniciarMapaHistorico.setVisible(true);
-        }
-    }
 
     /**
      * @return the txtBtnIniciaMapa
@@ -570,13 +397,6 @@ public class PanelOpcInformes extends javax.swing.JPanel {
      */
     public void setTxtBtnIniciaMapa(String txtBtnIniciaMapa) {
         this.txtBtnIniciaMapa = txtBtnIniciaMapa;
-    }
-
-    /**
-     * @return the chkRecorrido
-     */
-    public javax.swing.JCheckBox getChkRecorrido() {
-        return chkRecorrido;
     }
 
     /**
