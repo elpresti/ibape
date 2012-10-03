@@ -33,6 +33,7 @@ import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
+import modelo.dataManager.Punto;
 import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerPOIs;
 
@@ -147,18 +148,20 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblIconoCatPoi = new org.jdesktop.swingx.JXLabel();
         comboIconoCatPoi = new javax.swing.JComboBox();
 
-        setMaximumSize(new java.awt.Dimension(500, 500));
-        setMinimumSize(new java.awt.Dimension(500, 500));
+        setMaximumSize(new java.awt.Dimension(520, 500));
+        setMinimumSize(new java.awt.Dimension(520, 500));
         setPreferredSize(new java.awt.Dimension(520, 500));
         setLayout(new java.awt.BorderLayout());
 
         jScrollPane3.setAutoscrolls(true);
-        jScrollPane3.setPreferredSize(new java.awt.Dimension(520, 500));
+        jScrollPane3.setPreferredSize(new java.awt.Dimension(525, 500));
 
-        panelTodo.setMinimumSize(new java.awt.Dimension(400, 360));
-        panelTodo.setPreferredSize(new java.awt.Dimension(500, 670));
+        panelTodo.setMaximumSize(new java.awt.Dimension(500, 840));
+        panelTodo.setMinimumSize(new java.awt.Dimension(500, 840));
+        panelTodo.setPreferredSize(new java.awt.Dimension(500, 840));
         panelTodo.setScrollableTracksViewportHeight(false);
         panelTodo.setScrollableTracksViewportWidth(false);
+        panelTodo.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelTitulo.setMaximumSize(new java.awt.Dimension(500, 40));
         panelTitulo.setMinimumSize(new java.awt.Dimension(500, 40));
@@ -191,8 +194,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelTablaPois.setPreferredSize(new java.awt.Dimension(500, 200));
         panelTablaPois.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 250));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 250));
+        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 200));
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 50));
         jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 200));
 
         tablaPois.setModel(new javax.swing.table.DefaultTableModel(
@@ -374,10 +377,9 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
         panelTodo.add(panelPois);
 
-        panelCategoriaPois.setMaximumSize(new java.awt.Dimension(500, 300));
-        panelCategoriaPois.setMinimumSize(new java.awt.Dimension(500, 300));
-        panelCategoriaPois.setPreferredSize(new java.awt.Dimension(500, 300));
-        panelCategoriaPois.setScrollableTracksViewportHeight(false);
+        panelCategoriaPois.setMaximumSize(new java.awt.Dimension(500, 400));
+        panelCategoriaPois.setMinimumSize(new java.awt.Dimension(500, 400));
+        panelCategoriaPois.setPreferredSize(new java.awt.Dimension(500, 400));
         panelCategoriaPois.setScrollableTracksViewportWidth(false);
         panelCategoriaPois.setLayout(new java.awt.BorderLayout());
 
@@ -392,14 +394,12 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
         panelCategoriaPois.add(panelCatTitulo, java.awt.BorderLayout.NORTH);
 
-        panelTablaCategorias.setMaximumSize(new java.awt.Dimension(500, 200));
-        panelTablaCategorias.setMinimumSize(new java.awt.Dimension(500, 200));
-        panelTablaCategorias.setPreferredSize(new java.awt.Dimension(500, 200));
+        panelTablaCategorias.setMaximumSize(new java.awt.Dimension(500, 250));
+        panelTablaCategorias.setMinimumSize(new java.awt.Dimension(500, 250));
+        panelTablaCategorias.setPreferredSize(new java.awt.Dimension(500, 250));
         panelTablaCategorias.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        jScrollPane2.setMaximumSize(new java.awt.Dimension(500, 250));
-        jScrollPane2.setMinimumSize(new java.awt.Dimension(500, 250));
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 250));
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 200));
 
         tablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -424,9 +424,10 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaCategorias.setMinimumSize(new java.awt.Dimension(500, 100));
+        tablaCategorias.setMaximumSize(new java.awt.Dimension(2147483647, 72));
+        tablaCategorias.setMinimumSize(new java.awt.Dimension(115, 72));
         tablaCategorias.setPreferredScrollableViewportSize(new java.awt.Dimension(295, 360));
-        tablaCategorias.setPreferredSize(new java.awt.Dimension(500, 200));
+        tablaCategorias.setPreferredSize(new java.awt.Dimension(295, 72));
         tablaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tablaCategoriasMouseReleased(evt);
@@ -1052,7 +1053,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblLongitud.setEnabled(estado);
         lblCategoria.setEnabled(estado);
         lblDescripciónNuevoPoi.setEnabled(estado);
-        comboCategorias.setEditable(estado);
+        comboCategorias.setEnabled(estado);
         //btnAgregaPoi.setEnabled(estado);
         //Limpio
         campoLatitud.setText("");
@@ -1060,7 +1061,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         campoDescripcionNuevoPoi.setText("");
 
         btnEliminarPOI.setEnabled(estado);
-        btnInsertarPOI.setEnabled(!estado);
+        btnInsertarPOI.setEnabled(true);//!estado);
         btnModificarPOI.setEnabled(estado);
         btnGuardarPOI.setEnabled(false);
         /*
@@ -1112,7 +1113,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         campoNombreNuevaCat.setText("");
 
         btnGuardarCatPOI.setEnabled(false);
-        btnInsertarCatPOI.setEnabled(!estado);
+        btnInsertarCatPOI.setEnabled(true);//!estado);
         btnModificarCatPOI.setEnabled(estado);
         btnEliminaCatPOI.setEnabled(estado);
         //si lo deshabilito habilito la barra
@@ -1151,6 +1152,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
      */
     public void setModificandoCatPOI(boolean modificandoCatPOI) {
         this.modificandoCatPOI = modificandoCatPOI;
+    }
+
+    void botonRegPOI() {
+        btnInsertarPOIActionPerformed(null);
+        campoLatitud.setText(String.valueOf(Punto.getInstance().getLatitud()));
+        campoLongitud.setText(String.valueOf(Punto.getInstance().getLatitud()));
+        
     }
 
     class Cls_ManejoTeclas extends KeyAdapter {

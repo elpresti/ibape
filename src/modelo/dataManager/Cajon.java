@@ -10,6 +10,7 @@ package modelo.dataManager;
  */
 public class Cajon {
     
+    private int id;
     private int idLance;
     private int idEspecie;
     private int cantidad;
@@ -59,5 +60,19 @@ public class Cajon {
     @Override
     public String toString() {
         return ""+getIdLance();//String.valueOf(this.idLance);//VER esta para probar
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 }

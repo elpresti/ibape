@@ -31,11 +31,13 @@ public class BrokerCajon extends BrokerPpal {
 
     public ArrayList<modelo.dataManager.Cajon> getCajonesFromDB() {
         ArrayList<modelo.dataManager.Cajon> cajones = new ArrayList();
+        ResultSet rs = null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Cajones");
+            rs = getStatement().executeQuery("SELECT * FROM Cajones");
             while (rs.next()) {
                 modelo.dataManager.Cajon cajon = new modelo.dataManager.Cajon();
                 // Get the data from the row using the column name
+                cajon.setId(rs.getInt("id"));
                 cajon.setIdLance(rs.getInt("idLance"));
                 cajon.setIdEspecie(rs.getInt("idEspecie"));
                 cajon.setCantidad(rs.getInt("cantidad"));
@@ -43,43 +45,105 @@ public class BrokerCajon extends BrokerPpal {
                 cajones.add(cajon);
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
+            Logueador.getInstance().agregaAlLog("getCajonesFromDB"+ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("getCajonesFromDB"+e.toString());
         }
         return cajones;
     }
 
     public ArrayList<modelo.dataManager.Cajon> getCajonesLanceFromDB(int idLance) {
         ArrayList<modelo.dataManager.Cajon> cajones = new ArrayList();
+        ResultSet rs = null;
         try {
-            ResultSet rs = getStatement().executeQuery("SELECT * FROM Cajones WHERE idLance = " + idLance);
+            rs = getStatement().executeQuery("SELECT * FROM Cajones WHERE idLance = " + idLance);
             while (rs.next()) {
                 modelo.dataManager.Cajon cajon = new modelo.dataManager.Cajon();
                 // Get the data from the row using the column name
+                cajon.setId(rs.getInt("id"));
                 cajon.setIdLance(rs.getInt("idLance"));
                 cajon.setIdEspecie(rs.getInt("idEspecie"));
                 cajon.setCantidad(rs.getInt("cantidad"));
                 cajones.add(cajon);
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
+            Logueador.getInstance().agregaAlLog("getCajonesLanceFromDB(): "+ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("getCajonesLanceFromDB(): "+e.toString());
         }
         return cajones;
     }
 
+     public int getCajonesFromLance(int idLance) {
+        int total=0;
+        ResultSet rs = null;
+        try {
+            rs = getStatement().executeQuery("SELECT SUM(cantidad) as cantidad FROM Cajones WHERE idLance = " + idLance);
+            while (rs.next()) {
+                total= total+rs.getInt("cantidad");
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog("getCajonesFromLance(): "+ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("getCajonesFromLance(): "+e.toString());
+        }
+        return total;
+    }
+
+    
     public modelo.dataManager.Cajon getCajonFromDB(int id) {
         modelo.dataManager.Cajon cajon = null;
         //buscar en la base la campania.id que coincida con el id pasado por parametro        
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             rs = getStatement().executeQuery("SELECT * FROM Cajones WHERE id = " + id);
             if (rs.next()) {
                 // Get the data from the row using the column name
+                cajon.setId(rs.getInt("id"));
                 cajon.setIdLance(rs.getInt("idLance"));
                 cajon.setIdEspecie(rs.getInt("idEspecie"));
                 cajon.setCantidad(rs.getInt("cantidad"));
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
+            Logueador.getInstance().agregaAlLog("getCajonFromDB:"+ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("getCajonFromDB:"+e.toString());
         }
         return cajon;
     }
@@ -87,7 +151,7 @@ public class BrokerCajon extends BrokerPpal {
     public boolean insertCajon(modelo.dataManager.Cajon cajon) {
         boolean sePudo = false;
         String sqlQuery = "";
-        ResultSet rs;
+        ResultSet rs = null;
         try {
             sqlQuery = "INSERT INTO Cajones "
                     + "(idLance, idEspecie, cantidad) "
@@ -96,11 +160,20 @@ public class BrokerCajon extends BrokerPpal {
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
-            } else {
-                sePudo = false;
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
+            Logueador.getInstance().agregaAlLog("insertCajon:"+ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("insertCajon:"+e.toString());
         }
         return sePudo;
     }
@@ -108,16 +181,22 @@ public class BrokerCajon extends BrokerPpal {
     public boolean deleteCajon(modelo.dataManager.Cajon cajon) {
         boolean sePudo = false;
         try {
-            String sqlQuery = "DELETE FROM CategoriasPoi "
-                    + "WHERE idLance= " + cajon.getIdLance() + "AND idEspecie= " + cajon.getIdEspecie();
+            String sqlQuery = "DELETE FROM Cajones WHERE id= " + cajon.getId();
             System.out.println("DELETE: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {
                 sePudo = true;
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
+            Logueador.getInstance().agregaAlLog("deleteCajon:"+ex.toString());
         }
-
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("deleteCajon:"+e.toString());
+        }
         return sePudo;
     }
 //Sin update, borrar y agregar solamente
