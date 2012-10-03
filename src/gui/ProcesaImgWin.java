@@ -4,7 +4,7 @@
  */
 package gui;
 
-import com.sun.script.javascript.JSAdapter;
+
 import controllers.ControllerNavegacion;
 import java.awt.Dimension;
 import java.awt.Graphics2D;

@@ -87,7 +87,7 @@ public class PanelSelector extends javax.swing.JPanel {
         panelLogo.setPreferredSize(new java.awt.Dimension(150, 150));
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"))); // NOI18N
-        lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18));
         panelLogo.add(lblLogo);
 
         jXTaskPaneContainer1.add(panelLogo);
@@ -100,7 +100,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkNavegacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-navegacion.png"))); // NOI18N
         lnkNavegacion.setText("Navegación");
-        lnkNavegacion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkNavegacion.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkNavegacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkNavegacionActionPerformed(evt);
@@ -120,7 +120,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkHistorico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-historial.png"))); // NOI18N
         lnkHistorico.setText("Historico");
-        lnkHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkHistorico.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkHistorico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkHistoricoActionPerformed(evt);
@@ -143,7 +143,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-configuracion.png"))); // NOI18N
         lnkConfiguracion.setText("Configuración");
-        lnkConfiguracion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkConfiguracion.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkConfiguracion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkConfiguracionActionPerformed(evt);
@@ -157,7 +157,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkAlertas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-alertas.png"))); // NOI18N
         lnkAlertas.setText("Alertas");
-        lnkAlertas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkAlertas.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkAlertasActionPerformed(evt);
@@ -171,7 +171,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkCampanias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-campanias.png"))); // NOI18N
         lnkCampanias.setText("Campañas");
-        lnkCampanias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkCampanias.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkCampanias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkCampaniasActionPerformed(evt);
@@ -185,7 +185,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkPois.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-pois.png"))); // NOI18N
         lnkPois.setText("Puntos de Interes");
-        lnkPois.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkPois.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkPois.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkPoisActionPerformed(evt);
@@ -199,7 +199,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkInformes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-Informes.png"))); // NOI18N
         lnkInformes.setText("Informes");
-        lnkInformes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkInformes.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkInformes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkInformesActionPerformed(evt);
@@ -221,7 +221,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-ayuda.png"))); // NOI18N
         lnkAyuda.setText("Ayuda");
-        lnkAyuda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lnkAyuda.setFont(new java.awt.Font("Tahoma", 0, 12));
         lnkAyuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkAyudaActionPerformed(evt);
@@ -239,7 +239,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelBtnRegistraPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
 
-        btnRegistraPOI.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnRegistraPOI.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnRegistraPOI.setText("Registra POI");
         btnRegistraPOI.setMaximumSize(new java.awt.Dimension(110, 23));
         btnRegistraPOI.setPreferredSize(new java.awt.Dimension(110, 23));
@@ -254,7 +254,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelBtnLanzaRecoge.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        btnLanzaRecoge.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLanzaRecoge.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnLanzaRecoge.setText("Lanza / Recoge");
         btnLanzaRecoge.setMaximumSize(new java.awt.Dimension(110, 23));
         btnLanzaRecoge.setPreferredSize(new java.awt.Dimension(110, 23));

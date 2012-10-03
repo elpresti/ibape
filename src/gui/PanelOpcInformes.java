@@ -6,20 +6,47 @@
 /*
  * PanelOpcInformes.java
  *
- * Created on 23/04/2012, 18:43:18
+ * Created on 25/09/2012, 22:23:18
  */
 package gui;
 
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+
 /**
  *
- * @author Sebastian
+ * @author emmmau
  */
 public class PanelOpcInformes extends javax.swing.JPanel {
-    static PanelOpcInformes unicaInstancia;
+   static PanelOpcInformes unicaInstancia;
+    private DefaultTableModel modeloTabla;
+    private ButtonGroup grupoElijeCampania;
+    private int idCampaniaElegida;
+    private int NRO_COL_ID_CAMP;
+    private int NRO_COL_ELEGIR;
+    private int NRO_COL_FECHA_INI;
+    private int NRO_COL_FECHA_FIN;
+    private int NRO_COL_BARCO;
+    private int NRO_COL_CAJONES;
+    private int NRO_COL_CAPITAN;
+    private int NRO_COL_NOMBRE_CAMP;
+    private int cantColumnas;
 
     /** Creates new form PanelOpcInformes */
     public PanelOpcInformes() {
         initComponents();
+        inicializador();
     }
 
     /** This method is called from within the constructor to
@@ -105,6 +132,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        tablaCampanias.setShowGrid(true);
         jScrollPane1.setViewportView(tablaCampanias);
         tablaCampanias.getColumnModel().getColumn(0).setMinWidth(30);
         tablaCampanias.getColumnModel().getColumn(0).setPreferredWidth(30);
@@ -208,5 +236,87 @@ private void btnGeneraInformeActionPerformed(java.awt.event.ActionEvent evt) {//
        }
        return unicaInstancia;
     }
+
+     private void inicializador() {
+        NRO_COL_ID_CAMP=0;
+        NRO_COL_ELEGIR=1;
+        NRO_COL_FECHA_INI=2;
+        NRO_COL_FECHA_FIN=3;
+        NRO_COL_CAJONES=4;
+        NRO_COL_BARCO=5;
+        NRO_COL_CAPITAN=6;
+        NRO_COL_NOMBRE_CAMP=7;
+        cantColumnas=8;
+        modeloTabla = (DefaultTableModel) tablaCampanias.getModel();
+        tablaCampanias.setModel(modeloTabla);
+        //seteo los radiobotones de la tabla
+        grupoElijeCampania = new ButtonGroup();
+        tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer());
+        tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
+    }
+
+     public void agregaUnaFilaCampania(int id, String nombre, String barco, String capitan,
+        int estado, Date fechaInicio, Date fechaFin, int cantCajones) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Object[] fila = new Object[cantColumnas]; //creamos la fila
+        if (fechaInicio != null) { fila[NRO_COL_FECHA_INI]=sdf.format(fechaInicio); }
+        if (fechaFin != null){ fila[NRO_COL_FECHA_FIN]=sdf.format(fechaFin); }
+        fila[NRO_COL_CAPITAN]=capitan;
+        fila[NRO_COL_NOMBRE_CAMP]=nombre;
+        fila[NRO_COL_BARCO]=barco;
+        fila[NRO_COL_ID_CAMP]=id;
+        fila[NRO_COL_CAJONES]=cantCajones;
+        JRadioButton radioBtnCampania = new JRadioButton();
+        grupoElijeCampania.add(radioBtnCampania);//lo agrego al grupo, lo cual me garantiza la selección simple
+        fila[NRO_COL_ELEGIR]= radioBtnCampania;
+
+        modeloTabla.addRow(fila);
+    }
+
+      public void vaciaTabla() {
+        modeloTabla.setRowCount(0);
+        setIdCampaniaElegida(-1);
+    }
+
+      public void setIdCampaniaElegida(int idCampaniaElegida) {
+        if (idCampaniaElegida>=0){
+            this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());
+        }
+        else
+          { this.idCampaniaElegida = idCampaniaElegida;
+          }
+   }
+
+      public void habilitaPanelTablaCampanias(boolean estado){
+        tablaCampanias.setEnabled(estado);
+  }
+
+      class RadioButtonRenderer implements TableCellRenderer {
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                       boolean isSelected, boolean hasFocus, int row, int column) {
+        if (value==null) return null;
+        return (Component)value;
+  }
+}
+      class RadioButtonEditor extends DefaultCellEditor implements ItemListener {
+        private JRadioButton button;
+        public RadioButtonEditor(JCheckBox checkBox) {
+        super(checkBox);
+  }
+      public Component getTableCellEditorComponent(JTable table,Object value,boolean isSelected,int row,int column) {
+        if (value==null) return null;
+        button = (JRadioButton)value;
+        button.addItemListener(this);
+        PanelOpcInformes.getInstance().setIdCampaniaElegida(row);
+        return (Component)value;
+  }
+      public Object getCellEditorValue() {
+        button.removeItemListener(this);
+        return button;
+  }
+      public void itemStateChanged(ItemEvent e) {
+        super.fireEditingStopped();
+  }
+}
 
 }
