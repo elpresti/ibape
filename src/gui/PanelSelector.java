@@ -374,14 +374,27 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
 */
 
     private void inicializador() {
-        mostrarBtnPanelNavegacion(false);
+        setGuiEnNavegacion(false);
         cargaIconosAbotones();
     }
 
+    public void setGuiEnNavegacion(boolean b) {
+        mostrarBtnPanelNavegacion(b);
+        mostrarBtnRegistraPOI(b);
+    }
+    
     public void mostrarBtnPanelNavegacion(boolean b) {
         taskPaneNavegacion.setVisible(b);
     }
+    
+    public void mostrarBtnRegistraPOI(boolean estado){
+        btnRegistraPOI.setVisible(estado);
+    }
 
+    public void mostrarBtnLanzaRecoge(boolean estado){
+        btnLanzaRecoge.setVisible(estado);
+    }    
+    
     private void cargaIconosAbotones() {
         //lnkNavegacion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-navegacion.png"));
         //lnkAlertas.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-alertas.png"));

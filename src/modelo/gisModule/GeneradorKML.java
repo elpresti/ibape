@@ -283,7 +283,6 @@ public class GeneradorKML {
             // - Miniatura imagen de la sonda
             // - Cantidad de marcas encontradas
             // - Alertas (todas)
-        
         //Preset de camara 1 = vista aerea trasera:
         //Longitud:getLonConNegativo()*1.00003  Latitud:getLatConNegativo()*1.00006  altitude:50  heading:35  tilt:75
         //Preset de camara 2 = vista aerea lateral derecha:
@@ -314,60 +313,10 @@ public class GeneradorKML {
             salida+="<styleUrl>#"+poi.getCategoria().getPathIcono()+"</styleUrl>";
         }
         salida+="<description>"
-               + "<![CDATA[<div>"
-                  + "<table border=0>"
-                    + "<tr>"
-                    +    "<td valign=\"top\">"
-                            + "Datos de este punto "
-                            + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
-                            + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
-                            + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
-                            + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
-        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatImgsConMarcas()){
-                    salida += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
-        }else{
-            //SAXBuilder se encarga de cargar el archivo XML del disco o de un String
-            // Creamos el builder basado en SAX      
-            SAXBuilder builder = new SAXBuilder();  
-            try {
-                // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
-                Document contenidoXML = builder.build(new StringReader(poi.getDescripcion()));
-                // Obtenemos la etiqueta raíz  
-                Element raiz = contenidoXML.getRootElement();  
-                // Recorremos los hijos de la etiqueta raíz  
-                List<Element> hijosRaiz = raiz.getChildren();  
-                for(Element parametro: hijosRaiz){
-                    // Obtenemos el nombre y su contenido de tipo texto  
-                    String nombre = parametro.getAttribute("nombre").getValue();
-                    String valor = parametro.getAttribute("valor").getValue();
-                    if (parametro.getName() == "imgFileName"){
-                        htmlImgSonda += "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">";
-                        htmlImgSonda += "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>";
-                        htmlImgSonda += "</a>";
-                    }else{
-                        salida += "<br> <strong>- "+nombre+" :</strong> "+valor;
-                    }
-                }
-            }catch(Exception e){
-                Logueador.getInstance().agregaAlLog("conviertePOIaKml(): "+e.toString());
-            }
-        }
-        salida +=        "</td>"
-                    +    "<td valign=\"top\" align=\"right\">";
-                    if (htmlImgSonda.length()==0){
-                        if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
-                                salida+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
-                                        +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
-                                        +poi.getCategoria().getPathIcono()+"\">";                        
-                        }
-                    }else{
-                        salida+=htmlImgSonda;
-                    }
-                    salida+=
-                         "</td>"                
-                    + "</tr>"
-                  + "</table>" 
-               + "</div>]]>"
+               + "<![CDATA[";
+        salida+= getContenidoHtmlDelGlobo(poi);
+        salida +=
+               "]]>"
             + "</description>"
             +"<Point>"
                 //+"<gx:altitudeMode>absolute</gx:altitudeMode>" //clampToGround, relativeToGround, absolute
@@ -420,7 +369,7 @@ public class GeneradorKML {
                   + "<br>  <strong>- Rumbo:</strong> "+punto.getRumbo()+"° "
                   + "<br>  <strong>- Velocidad:</strong> "+punto.getVelocidad()+" kmph"
                   + "<br>  <strong>- Profundidad:</strong> "+punto.getProfundidad()+" m"                
-                  + "<br><br>Esto es una url: <a href=\"http://www.google.com\" target=\"_blank\">Google!</a>"
+                  //+ "<br><br>Esto es una url: <a href=\"http://www.google.com\" target=\"_blank\">Google!</a>"
                + "</div>]]>"
             + "</description>"
             +"<Point>"
@@ -434,5 +383,65 @@ public class GeneradorKML {
         return salida;
     }
 
-    
+    public String getContenidoHtmlDelGlobo(modelo.dataManager.POI poi){
+        String htmlImgSonda="";
+        java.sql.Timestamp fechaYhora=new java.sql.Timestamp(poi.getFechaHora().getTime());
+        String horaStr=fechaYhora.getHours()+":"+fechaYhora.getMinutes()+":"+fechaYhora.getSeconds();
+        String contenidoHtml=
+                "<div>"
+                  + "<table border=0>"
+                    + "<tr>"
+                    +    "<td valign=\"top\">"
+                            + "Datos de este punto "
+                            + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
+                            + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
+                            + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
+                            + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
+        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatImgsConMarcas()){
+                    contenidoHtml += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
+        }else{
+            //SAXBuilder se encarga de cargar el archivo XML del disco o de un String
+            // Creamos el builder basado en SAX      
+            SAXBuilder builder = new SAXBuilder();  
+            try {
+                // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
+                Document contenidoXML = builder.build(new StringReader(poi.getDescripcion()));
+                // Obtenemos la etiqueta raíz  
+                Element raiz = contenidoXML.getRootElement();  
+                // Recorremos los hijos de la etiqueta raíz  
+                List<Element> hijosRaiz = raiz.getChildren();  
+                for(Element parametro: hijosRaiz){
+                    // Obtenemos el nombre y su contenido de tipo texto  
+                    String nombre = parametro.getAttribute("nombre").getValue();
+                    String valor = parametro.getAttribute("valor").getValue();
+                    if (parametro.getName() == "imgFileName"){
+                        htmlImgSonda += "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">";
+                        htmlImgSonda += "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>";
+                        htmlImgSonda += "</a>";
+                    }else{
+                        contenidoHtml += "<br> <strong>- "+nombre+" :</strong> "+valor;
+                    }
+                }
+            }catch(Exception e){
+                Logueador.getInstance().agregaAlLog("conviertePOIaKml(): "+e.toString());
+            }
+        }
+        contenidoHtml+=  "</td>"
+                    +    "<td valign=\"top\" align=\"right\">";
+                    if (htmlImgSonda.length()==0){
+                        if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
+                        contenidoHtml+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
+                                        +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
+                                        +poi.getCategoria().getPathIcono()+"\">";                        
+                        }
+                    }else{
+                        contenidoHtml+=htmlImgSonda;
+                    }
+                    contenidoHtml+=
+                         "</td>"                
+                    + "</tr>"
+                  + "</table>" 
+               + "</div>";
+        return contenidoHtml;
+    }
 }

@@ -34,10 +34,14 @@ public class ControllerPois {
         return persistencia.BrokerCategoriasPOI.getInstance().getCatPOISFromDB();
     }
 
-    public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud, String pathImgSonda) {
+    public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud, String pathImgSonda, java.util.Date fechaYhora) {
         modelo.dataManager.POI p = new POI();
         p.addObserver(controllers.ControllerAlertas.getInstance()); //Modulo Alertas
-        p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
+        if (fechaYhora == null) {
+            p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
+        }else{
+            p.setFechaHora(fechaYhora);
+        }
         p.setIdCategoriaPOI(idCategoriaPOI);
         p.setLatitud(latitud);
         p.setLongitud(longitud);

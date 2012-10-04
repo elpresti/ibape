@@ -705,7 +705,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 
     public void setGuiCampaniaPausada() {
         btnPausarReanudarCampania.setText("Reanudar campaña");
-        gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(false);
+        gui.PanelSelector.getInstance().setGuiEnNavegacion(false);
         setEstadoCampania(2);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
@@ -713,7 +713,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     public void setGuiCampaniaReanudada() {
         btnPausarReanudarCampania.setText("Pausar campaña");
         setEstadoCampania(1);
-        gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(true);
+        gui.PanelSelector.getInstance().setGuiEnNavegacion(true);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
 
@@ -728,7 +728,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         btnPausarReanudarCampania.setText("Pausar campaña");
         setEstadoCampania(0);
         historicoDeCampania.setVisible(false);
-        gui.PanelSelector.getInstance().mostrarBtnPanelNavegacion(false);
+        gui.PanelSelector.getInstance().setGuiEnNavegacion(false);
         // controllers.ControllerCampania.getInstance().obtenerCampanias();
     }
 

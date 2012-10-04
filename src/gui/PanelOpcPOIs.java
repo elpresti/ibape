@@ -818,7 +818,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             // Agrega/inserta POI:
             if (comboCategorias.getSelectedIndex() != -1 && campoDescripcionNuevoPoi.getText().length() > 2) {
                 CategoriaPoi cP = (CategoriaPoi) comboCategorias.getSelectedItem();
-                controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Double.valueOf(campoLatitud.getText()), Double.valueOf(campoLongitud.getText()), null);
+                controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Double.valueOf(campoLatitud.getText()), Double.valueOf(campoLongitud.getText()), null, null);
                 //cargaGrillaPOIS();
             } else {
                 JOptionPane.showMessageDialog(null, "No se selecciono una categoria o el nombre no es valido");
