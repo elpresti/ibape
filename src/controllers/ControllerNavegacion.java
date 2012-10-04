@@ -207,7 +207,7 @@ public class ControllerNavegacion {
                     UltimaImgProcesada.getInstance().getMarcas().size()-1);
             String descripcionPoi = "<datosImgProcesada>";
             descripcionPoi += "<cantMarcas nombre=\"Marcas encontradas: \" valor=\""+UltimaImgProcesada.getInstance().getMarcas().size()+"\" />";
-            String rutaImg = System.getProperty("user.dir")+AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\";
+            String rutaImg = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\";
             rutaImg += UltimaImgProcesada.getInstance().getFileName();
             descripcionPoi += "<imgFileName nombre=\"Imagen sin procesar: \" valor=\""+rutaImg+"\" />";
             descripcionPoi += "</datosImgProcesada>";
