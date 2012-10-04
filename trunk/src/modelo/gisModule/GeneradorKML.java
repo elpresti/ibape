@@ -289,7 +289,8 @@ public class GeneradorKML {
         //Preset de camara 2 = vista aerea lateral derecha:
         //Longitud:getLonConNegativo()*0.99999  Latitud:getLatConNegativo()*1.00005  altitude:50  heading:0  tilt:70
         // punto de ejemplo para calibrar posicion de camara: setLonConNegativo(-56.85432); setLatConNegativo(-37.11671);
-        String salida = ""; 
+        String htmlImgSonda = "";
+        String salida = "";
         salida=
         "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\">"
         +"<Document>";
@@ -340,7 +341,9 @@ public class GeneradorKML {
                     String nombre = parametro.getAttribute("nombre").getValue();
                     String valor = parametro.getAttribute("valor").getValue();
                     if (parametro.getName() == "imgFileName"){
-                        salida += "<br> <strong>- "+nombre+" :</strong> <a href=\""+valor+"\" target=\"_blank\">Imagen!</a>";
+                        htmlImgSonda += "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">";
+                        htmlImgSonda += "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>";
+                        htmlImgSonda += "</a>";
                     }else{
                         salida += "<br> <strong>- "+nombre+" :</strong> "+valor;
                     }
@@ -351,10 +354,14 @@ public class GeneradorKML {
         }
         salida +=        "</td>"
                     +    "<td valign=\"top\" align=\"right\">";
-                    if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
-                            salida+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
-                                    +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
-                                    +poi.getCategoria().getPathIcono()+"\">";                        
+                    if (htmlImgSonda.length()==0){
+                        if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
+                                salida+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
+                                        +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
+                                        +poi.getCategoria().getPathIcono()+"\">";                        
+                        }
+                    }else{
+                        salida+=htmlImgSonda;
                     }
                     salida+=
                          "</td>"                
