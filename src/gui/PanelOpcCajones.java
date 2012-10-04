@@ -333,7 +333,6 @@ public class PanelOpcCajones extends javax.swing.JPanel {
     }//GEN-LAST:event_comboEspeciesActionPerformed
 
     private void btnGuardarCajonesLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCajonesLanceActionPerformed
-
         //saco el lance seleccionado y vuelvo a la ventana lances
         setTempLanceSeleccionado(null);
         VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
