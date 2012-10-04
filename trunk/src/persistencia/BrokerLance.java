@@ -50,7 +50,7 @@ public class BrokerLance extends BrokerPpal {
                 lances.add(unLance);
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog("getLancesCampaniaActualFromDB"+ex.toString());
+            Logueador.getInstance().agregaAlLog("getLancesCampaniaActualFromDB" + ex.toString());
         }
         //ya la use, asique cierro ResultSets y Statements usados
         try {
@@ -61,7 +61,7 @@ public class BrokerLance extends BrokerPpal {
                 getStatement().close();
             }
         } catch (Exception e) {
-            Logueador.getInstance().agregaAlLog("getLancesCampaniaActualFromDB"+e.toString());
+            Logueador.getInstance().agregaAlLog("getLancesCampaniaActualFromDB" + e.toString());
         }
         return lances;
     }
@@ -84,7 +84,7 @@ public class BrokerLance extends BrokerPpal {
                 unlance.setComentarios(rs.getString("comentarios"));
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog("getLanceFromDB"+ex.toString());
+            Logueador.getInstance().agregaAlLog("getLanceFromDB" + ex.toString());
         }
         //ya la use, asique cierro ResultSets y Statements usados
         try {
@@ -95,11 +95,11 @@ public class BrokerLance extends BrokerPpal {
                 getStatement().close();
             }
         } catch (Exception e) {
-            Logueador.getInstance().agregaAlLog("getLanceFromDB"+e.toString());
+            Logueador.getInstance().agregaAlLog("getLanceFromDB" + e.toString());
         }
         return unlance;
     }
-    
+
     public int getIdLanceEnCurso() {
         int idUltLance = -1;
         String sqlQuery = "SELECT id,fyHFin from Lances order by ROWID DESC limit 1;";
@@ -108,12 +108,12 @@ public class BrokerLance extends BrokerPpal {
         try {
             rs = getStatement().executeQuery(sqlQuery);
             if (rs.next()) {
-                if(rs.getDate("fYHFin") == null ){
-                 idUltLance = rs.getInt("id");//si no esta finalizado devuelvo el id sino qda -1   
-                }                
+                if (rs.getDate("fYHFin") == null) {
+                    idUltLance = rs.getInt("id");//si no esta finalizado devuelvo el id sino qda -1   
+                }
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog("getIdLanceEnCurso"+ex.toString());
+            Logueador.getInstance().agregaAlLog("getIdLanceEnCurso" + ex.toString());
         }
         //ya la use, asique cierro ResultSets y Statements usados
         try {
@@ -124,7 +124,7 @@ public class BrokerLance extends BrokerPpal {
                 getStatement().close();
             }
         } catch (Exception e) {
-            Logueador.getInstance().agregaAlLog("getIdLanceEnCurso"+e.toString());
+            Logueador.getInstance().agregaAlLog("getIdLanceEnCurso" + e.toString());
         }
         return idUltLance;
     }
@@ -151,7 +151,7 @@ public class BrokerLance extends BrokerPpal {
                 sePudo = true;
             }
         } catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog("insertLance"+ex.toString());
+            Logueador.getInstance().agregaAlLog("insertLance" + ex.toString());
         }
         //ya la use, asique cierro ResultSets y Statements usados
         try {
@@ -162,9 +162,70 @@ public class BrokerLance extends BrokerPpal {
                 getStatement().close();
             }
         } catch (Exception e) {
-            Logueador.getInstance().agregaAlLog("insertLance"+e.toString());
+            Logueador.getInstance().agregaAlLog("insertLance" + e.toString());
         }
         return sePudo;
     }
 
+    public boolean updateLance(Lance unLance) {
+        boolean sePudo = false;
+        String sqlQuery = "";
+        try {
+            sqlQuery = "UPDATE Lances SET "
+                    + " comentarios= '" + unLance.getComentarios() + "'"
+                    + " WHERE id=" + unLance.getId();
+            System.out.println("update: " + sqlQuery);
+            if (getStatement().executeUpdate(sqlQuery) > 0) {
+                sePudo = true;
+            } else {
+                sePudo = false;
+            }
+
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
+
+    public boolean deleteLance(Lance unLance) {
+        boolean sePudo = false;
+        try {
+            String sqlQuery = "BEGIN TRANSACTION; "
+                    + "DELETE FROM Cajones WHERE idLance= " + unLance.getId() + "; "
+                    + "DELETE FROM Lances "
+                    + "WHERE id = " + unLance.getId() + "; ";
+            System.out.println("DELETE: " + sqlQuery);
+            if (getStatement().executeUpdate(sqlQuery) > 0) {
+                getStatement().executeUpdate("END TRANSACTION;");
+                sePudo = true;
+            } else {
+                getStatement().executeUpdate("ROLLBACK TRANSACTION;");
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }
 }

@@ -37,8 +37,8 @@ import persistencia.Logueador;
 public class PanelOpcLances extends javax.swing.JPanel {
 
     static PanelOpcLances unicaInstancia;
-    private boolean modificandoCajon;
-    private Cajon tempCajon;
+    private boolean modificandoLance;
+    private Lance tempLance;
     private DefaultTableModel modeloTablaLances = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
@@ -70,6 +70,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jXDatePickerBeanInfo1 = new org.jdesktop.swingx.JXDatePickerBeanInfo();
         panelSuperior = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panelMedio = new org.jdesktop.swingx.JXPanel();
@@ -83,7 +84,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         lblAccionesLances = new org.jdesktop.swingx.JXLabel();
         panelAcciones = new org.jdesktop.swingx.JXPanel();
         btnModificarLance = new org.jdesktop.swingx.JXHyperlink();
-        btnGuardarCajon = new org.jdesktop.swingx.JXHyperlink();
+        btnGuardarLance = new org.jdesktop.swingx.JXHyperlink();
         btnEliminarLance = new org.jdesktop.swingx.JXHyperlink();
         btnInsertarLance = new org.jdesktop.swingx.JXHyperlink();
         panelDatosLance = new org.jdesktop.swingx.JXPanel();
@@ -167,6 +168,11 @@ public class PanelOpcLances extends javax.swing.JPanel {
             }
         });
         tablaLances.setColumnSelectionAllowed(true);
+        tablaLances.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tablaLancesMouseReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaLances);
         tablaLances.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tablaLances.getColumnModel().getColumn(0).setMinWidth(30);
@@ -211,16 +217,16 @@ public class PanelOpcLances extends javax.swing.JPanel {
         });
         panelAcciones.add(btnModificarLance);
 
-        btnGuardarCajon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-guardar.png"))); // NOI18N
-        btnGuardarCajon.setText("");
-        btnGuardarCajon.setToolTipText("Guardar cambios");
-        btnGuardarCajon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btnGuardarCajon.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardarLance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-guardar.png"))); // NOI18N
+        btnGuardarLance.setText("");
+        btnGuardarLance.setToolTipText("Guardar cambios");
+        btnGuardarLance.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btnGuardarLance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarCajonActionPerformed(evt);
+                btnGuardarLanceActionPerformed(evt);
             }
         });
-        panelAcciones.add(btnGuardarCajon);
+        panelAcciones.add(btnGuardarLance);
 
         btnEliminarLance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-eliminar.png"))); // NOI18N
         btnEliminarLance.setText("");
@@ -374,64 +380,77 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAdmCajonesActionPerformed
 
     private void btnModificarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarLanceActionPerformed
-        /*  habilitaPanelDatosCajones(true);
-        setModificandoCajon(true);
+        habilitaPanelDatosLances(true);
+        setModificandoLance(true);
         btnEliminarLance.setEnabled(false);
         btnInsertarLance.setEnabled(false);
         btnModificarLance.setEnabled(false);
-        btnGuardarCajon.setEnabled(true);
-        //cargo la fila seleccionada en el formulario
+        btnGuardarLance.setEnabled(true);
         if (tablaLances.getSelectedRowCount() != 0) {
-        Cajon unCajon = (Cajon) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
-        campoFechaInicio.setText(String.valueOf(unCajon.getCantidad()));
-        //ver el icono
-        setTempCajon(unCajon);
+            Lance unLance = (Lance) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
+            campoComentario.setText(String.valueOf(unLance.getComentarios()));
+            setTempLance(unLance);
         } else {
-        habilitaPanelDatosCajones(false);
-        setModificandoCajon(false);
-        JOptionPane.showMessageDialog(null, "Seleccione un cajon primero");
-        }*/
+            habilitaPanelDatosLances(false);
+            setModificandoLance(false);
+            JOptionPane.showMessageDialog(null, "Seleccione un lance primero");
+        }
     }//GEN-LAST:event_btnModificarLanceActionPerformed
 
-    private void btnGuardarCajonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCajonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGuardarCajonActionPerformed
+    private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
+        if (modificandoLance) {
+            //modifica POI
+            Lance unLance = getTempLance();
+            unLance.setComentarios(""+campoComentario.getText());
+            controllers.ControllerLance.getInstance().modificaLance(unLance);
+            setModificandoLance(false);
+        } else {
+            // Agrega/inserta lance:
+
+        }
+        habilitaPanelDatosLances(false);
+        cargaGrillaLances();
+    }//GEN-LAST:event_btnGuardarLanceActionPerformed
 
     private void btnEliminarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarLanceActionPerformed
-        
-        //tambien ahy que eliminar todos los cajones del lance 
-        
-        /* if (tablaLances.getSelectedRowCount() != 0) {
-        int[] listaCajonesSeleccionados = tablaLances.getSelectedRows();
-        if (JOptionPane.showConfirmDialog(null,
-        "Desea eliminar " + listaCajonesSeleccionados.length + " cajones seleccionados?",
-        "Eliminar cajones",
-        JOptionPane.YES_NO_OPTION,
-        JOptionPane.WARNING_MESSAGE) == 0) {
-        int i = 0;
-        while (i < listaCajonesSeleccionados.length) {
-        Cajon unCajon = (Cajon) tablaLances.getValueAt(i, 0);
-        ControllerLance.getInstance().borrarCajon(unCajon); //lo saca de la lista en memoria
-        System.out.println("Se saco de la lista el cajon " + unCajon);
-        //ControllerLance.getInstance().eliminaCajon(unCajon);
-        i++;
+        if (tablaLances.getSelectedRowCount() != 0) {
+            int[] listaLancesSeleccionados = tablaLances.getSelectedRows();
+            if (JOptionPane.showConfirmDialog(null,
+                    "Desea eliminar " + listaLancesSeleccionados.length + " Lances seleccionados y su pesca?",
+                    "Eliminar Lances",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE) == 0) {
+                int i = 0;
+                while (i < listaLancesSeleccionados.length) {
+                    controllers.ControllerLance.getInstance().eliminaLance((Lance) tablaLances.getValueAt(listaLancesSeleccionados[i], 0));
+                    i++;
+                }
+                cargaGrillaLances();
+            }
         }
-        cargaGrillaCajones();
-        }
-        }*/
     }//GEN-LAST:event_btnEliminarLanceActionPerformed
 
     private void btnInsertarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarLanceActionPerformed
         // TODO add your handling code here:
+        //VER si se pueden agregar lances cuando quieren
     }//GEN-LAST:event_btnInsertarLanceActionPerformed
 
     private void campoComentarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoComentarioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_campoComentarioActionPerformed
+
+    private void tablaLancesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaLancesMouseReleased
+        // TODO add your handling code here:
+        if (tablaLances.getSelectedRowCount() == 0) {
+            habilitaPanelDatosLances(false);
+        } else {
+            habilitaPanelDatosLances(true);
+        }
+    }//GEN-LAST:event_tablaLancesMouseReleased
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmCajones;
     private org.jdesktop.swingx.JXHyperlink btnEliminarLance;
-    private org.jdesktop.swingx.JXHyperlink btnGuardarCajon;
+    private org.jdesktop.swingx.JXHyperlink btnGuardarLance;
     private javax.swing.JButton btnInicFinLance;
     private org.jdesktop.swingx.JXHyperlink btnInsertarLance;
     private org.jdesktop.swingx.JXHyperlink btnModificarLance;
@@ -439,6 +458,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private javax.swing.JTextField campoFechaFin;
     private javax.swing.JTextField campoFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
+    private org.jdesktop.swingx.JXDatePickerBeanInfo jXDatePickerBeanInfo1;
     private org.jdesktop.swingx.JXLabel lblAccionesLances;
     private org.jdesktop.swingx.JXLabel lblComentario;
     private org.jdesktop.swingx.JXLabel lblFechaFin;
@@ -480,7 +500,8 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     private void inicializador() {
         cargaGrillaLances();
-        habilitaPanelDatosCajones(false);
+        habilitaPanelDatosLances(false);
+        btnInsertarLance.setVisible(false);
     }
 
     public void cargaGrillaLances() {
@@ -496,7 +517,8 @@ public class PanelOpcLances extends javax.swing.JPanel {
                         unLance,//<--Aca esta el objeto -muestra idLance
                         horaCompleta.format(unLance.getfYHIni()),
                         fechaFin,
-                        unLance.getComentarios()
+                        unLance.getComentarios(),
+                        BrokerCajon.getInstance().getCajonesFromLance(unLance.getId())
                     });
         }
 
@@ -504,23 +526,20 @@ public class PanelOpcLances extends javax.swing.JPanel {
         ControllerPpal.getInstance().ocultarColJTable(tablaLances, 0);
     }
 
-    private void habilitaPanelDatosCajones(boolean estado) {
-        campoFechaInicio.setEnabled(estado);
-        campoFechaInicio.setText("");
-        //si lo deshabilito habilito la barra
-        if (!estado) {
-            btnEliminarLance.setEnabled(!estado);
-            btnInsertarLance.setEnabled(!estado);
-            btnModificarLance.setEnabled(!estado);
-            btnGuardarCajon.setEnabled(estado);
-        }
-    }
+    private void habilitaPanelDatosLances(boolean estado) {
+        campoFechaInicio.setEnabled(false); //no se si se va a editar
+        campoFechaFin.setEnabled(false);
+        campoComentario.setEnabled(estado);
 
-    /**
-     * @return the tempCajon
-     */
-    public Cajon getTempCajon() {
-        return tempCajon;
+        campoFechaInicio.setText("");
+        campoFechaFin.setText("");
+        campoComentario.setText("");
+
+        btnEliminarLance.setEnabled(estado);
+        btnInsertarLance.setEnabled(true);
+        btnModificarLance.setEnabled(estado);
+        btnGuardarLance.setEnabled(false);
+
     }
 
     public void setTxtBtnIniciaLance() {
@@ -530,4 +549,33 @@ public class PanelOpcLances extends javax.swing.JPanel {
     public void setTxtBtnFinLance() {
         btnInicFinLance.setText("Finalizar lance");
     }
+
+    /**
+     * @return the tempLance
+     */
+    public Lance getTempLance() {
+        return tempLance;
+    }
+
+    /**
+     * @param tempLance the tempLance to set
+     */
+    public void setTempLance(Lance tempLance) {
+        this.tempLance = tempLance;
+    }
+
+    /**
+     * @return the modificandoLance
+     */
+    public boolean isModificandoLance() {
+        return modificandoLance;
+    }
+
+    /**
+     * @param modificandoLance the modificandoLance to set
+     */
+    public void setModificandoLance(boolean modificandoLance) {
+        this.modificandoLance = modificandoLance;
+    }
+
 }

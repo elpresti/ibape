@@ -107,6 +107,17 @@ public class BrokerPOIs extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return poi;
     }
 
@@ -141,21 +152,21 @@ public class BrokerPOIs extends BrokerPpal {
                 //sePudo = true;//sin las marcas
                 /*
                 if (poi.getMarcas() != null) {
-                    //recuperar el id para insertar las marcas
-                    sqlQuery = "SELECT max(id) from Pois";
-                    System.out.println("Select: " + sqlQuery);
-                    rs = getStatement().executeQuery(sqlQuery);
-                    if (rs.next()) {
-                        int idPOI = rs.getInt("id");
-                        for (Marca m : poi.getMarcas()) {
-                            //if (m.getId() == 0) {
-                            m.setIdPois(idPOI);
-                            BrokerMarca.getInstance().insertMarca(m);
-                            //}
-                        }
-                    }
+                //recuperar el id para insertar las marcas
+                sqlQuery = "SELECT max(id) from Pois";
+                System.out.println("Select: " + sqlQuery);
+                rs = getStatement().executeQuery(sqlQuery);
+                if (rs.next()) {
+                int idPOI = rs.getInt("id");
+                for (Marca m : poi.getMarcas()) {
+                //if (m.getId() == 0) {
+                m.setIdPois(idPOI);
+                BrokerMarca.getInstance().insertMarca(m);
+                //}
                 }
-                */
+                }
+                }
+                 */
                 sePudo = true;
             }
         } catch (SQLException ex) {
@@ -205,6 +216,14 @@ public class BrokerPOIs extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return sePudo;
     }
 
@@ -223,6 +242,14 @@ public class BrokerPOIs extends BrokerPpal {
             }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
     }
@@ -291,7 +318,15 @@ public class BrokerPOIs extends BrokerPpal {
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
+        //ya la use, asique cierro ResultSets y Statements usados
+        try {
 
+            if (getStatement() != null) {
+                getStatement().close();
+            }
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
         return poisDeEstaCampania;
     }
 
@@ -305,7 +340,7 @@ public class BrokerPOIs extends BrokerPpal {
     public ArrayList<modelo.dataManager.POI> getPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         ArrayList<modelo.dataManager.POI> poisDeEstaCampania = new ArrayList();
         ResultSet rs = null;
-        if (idDeCampania >= 0){
+        if (idDeCampania >= 0) {
             try {
                 Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
                 if (laCampania != null) {
@@ -364,23 +399,23 @@ public class BrokerPOIs extends BrokerPpal {
     public int getCantPOISDeUnaCampSegunCatPoi(int idDeCampania, int idDeCatPois) {
         int cantPoisDeEstaCampania = 0;
         ResultSet rs = null;
-        if (idDeCampania >= 0){
+        if (idDeCampania >= 0) {
             try {
                 Campania laCampania = BrokerCampania.getInstance().getCampaniaFromDb(idDeCampania);
                 if (laCampania != null) {
                     PreparedStatement psSelect = getConexion().prepareStatement(
                             "SELECT count() FROM Pois "
-                            + "WHERE idCampania= ? AND " 
-                            + "idCategoriaPoi=? ");                            
-/*  si quisieramos determinar los POIs de una campaña segun las fechas, este sería el código:
-                            + "WHERE (idCampania= ? OR fechaHora  BETWEEN ? AND ? ) AND "
+                            + "WHERE idCampania= ? AND "
+                            + "idCategoriaPoi=? ");
+                    /*  si quisieramos determinar los POIs de una campaña segun las fechas, este sería el código:
+                    + "WHERE (idCampania= ? OR fechaHora  BETWEEN ? AND ? ) AND "
                     psSelect.setDate(2, new java.sql.Date(laCampania.getFechaInicio().getTime()));
                     if (laCampania.getEstado() == 1 && laCampania.getFechaFin() != null) {//campania finalizada
-                        psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
+                    psSelect.setDate(3, new java.sql.Date(laCampania.getFechaFin().getTime()));
                     } else {
-                        psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
+                    psSelect.setDate(3, new java.sql.Date(Calendar.getInstance().getTime().getTime()));
                     }
-*/
+                     */
                     psSelect.setInt(1, idDeCampania);
                     psSelect.setInt(2, idDeCatPois);
                     System.out.println("Select : " + psSelect.toString());
@@ -411,7 +446,7 @@ public class BrokerPOIs extends BrokerPpal {
         ArrayList<modelo.dataManager.POI> POIs = new ArrayList();
         ResultSet rs = null;
         try {
-            rs = getStatement().executeQuery("SELECT * FROM Pois WHERE idCategoriaPoi="+idCategoriaPOI);
+            rs = getStatement().executeQuery("SELECT * FROM Pois WHERE idCategoriaPoi=" + idCategoriaPOI);
             while (rs.next()) {
                 modelo.dataManager.POI poi = new modelo.dataManager.POI();
                 // Get the data from the row using the column name
@@ -446,35 +481,34 @@ public class BrokerPOIs extends BrokerPpal {
         }
         return POIs;
     }
-/* No se usa por ahora.
+    /* No se usa por ahora.
     boolean insertaCatPoi() {
-        boolean sePudo = false;
-        String sqlQuery="";
-        try {                                
-            sqlQuery = "INSERT INTO CategoriasPoi"
-            + "(id,titulo,fileNameIcono)"
-            + "VALUES"
-            +"(99,'Alerta','icono-alertas.png')";
-                System.out.println("Insert: "+sqlQuery);
-                if (getStatement().executeUpdate(sqlQuery) > 0) {
-                    sePudo = true;
-                }else{sePudo=false;}
-                
-
-                
-            }catch (SQLException ex) {
-            Logueador.getInstance().agregaAlLog(ex.toString());
-        }
-        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
-            if (getStatement() != null){
-                getStatement().close();
-            }
-        }
-        catch(Exception e){
-            Logueador.getInstance().agregaAlLog(e.toString());
-        }
-        return sePudo;
-    }
-    */
+    boolean sePudo = false;
+    String sqlQuery="";
+    try {                                
+    sqlQuery = "INSERT INTO CategoriasPoi"
+    + "(id,titulo,fileNameIcono)"
+    + "VALUES"
+    +"(99,'Alerta','icono-alertas.png')";
+    System.out.println("Insert: "+sqlQuery);
+    if (getStatement().executeUpdate(sqlQuery) > 0) {
+    sePudo = true;
+    }else{sePudo=false;}
     
+    
+    
+    }catch (SQLException ex) {
+    Logueador.getInstance().agregaAlLog(ex.toString());
+    }
+    try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+    if (getStatement() != null){
+    getStatement().close();
+    }
+    }
+    catch(Exception e){
+    Logueador.getInstance().agregaAlLog(e.toString());
+    }
+    return sePudo;
+    }
+     */
 }
