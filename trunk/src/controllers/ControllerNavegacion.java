@@ -216,7 +216,7 @@ public class ControllerNavegacion {
                     descripcionPoi, 
                     ultimaMarca.getLatitud(),
                     ultimaMarca.getLongitud(), 
-                    null);
+                    null, ultimaMarca.getFechaYhora());
             sePudo=true;
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("guardaPoiDeImgConMarcas(): "+e.toString());
