@@ -742,23 +742,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnInsertarPOI.setEnabled(false);
         btnModificarPOI.setEnabled(false);
         btnGuardarPOI.setEnabled(true);
-        //cargo la fila seleccionada en el formulario
-        /*int i = 0;
-        while (!(Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1) && i < tablaPois.getRowCount() - 1) {
-        i++;
-        }
-        if ((Boolean) tablaPois.getValueAt(i, tablaPois.getColumnCount(false) - 1)) {
-        POI unPOI = (POI) tablaPois.getValueAt(i, 0);
-        campoLatitud.setText(String.valueOf(unPOI.getLatitud()));
-        campoLongitud.setText(String.valueOf(unPOI.getLongitud()));
-        comboCategorias.setSelectedItem(BrokerCategoriasPOI.getInstance().getCatPOIFromDB(unPOI.getIdCategoriaPOI()));
-        campoDescripcionNuevoPoi.setText(unPOI.getDescripcion());
-        setTempPOI(unPOI);
-        } else {
-        habilitaPanelDatosPOIs(false);
-        setModificandoPOI(false);
-        JOptionPane.showMessageDialog(null, "Seleccione un POI primero");
-        }*/
         if (tablaPois.getSelectedRowCount() != 0) {
             POI unPOI = (POI) tablaPois.getValueAt(tablaPois.getSelectedRow(), 0);
             campoLatitud.setText(String.valueOf(unPOI.getLatitud()));
@@ -933,15 +916,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             System.out.println(e);
         }
     }
-    //main de prueba
-
-    public static void main(String[] args) {
-        javax.swing.JFrame elFrame = new javax.swing.JFrame();
-        elFrame.setSize(500, 500);
-        PanelOpcPOIs a = new PanelOpcPOIs();
-        elFrame.add(a);
-        elFrame.setVisible(true);
-    }
+ 
 
     private void cargaComboCategorias() {
         //carga combo

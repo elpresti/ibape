@@ -108,7 +108,7 @@ public class BrokerCategoriasPOI extends BrokerPpal {
                 fileNameIcono = categoriaPOI.getPathIcono().substring(categoriaPOI.getPathIcono().lastIndexOf("\\")+1);
                 fileNameIcono = "'" + fileNameIcono + "'";
             }
-            if (categoriaPOI.getId()<0){
+            if (categoriaPOI.getId()<0){ //VER Que es esta comparacion?
                 sqlQuery = "INSERT INTO CategoriasPoi "
                         + "(id,titulo,fileNameIcono) "
                         + "VALUES "

@@ -289,6 +289,7 @@ public abstract class BrokerPpal {
                     + "  FOREIGN KEY (idCampania)"
                     + "    REFERENCES Campanias(id)"
                     + ");";
+
             getStatement().executeUpdate(codigoCreacion);
 
             sePudo = true;

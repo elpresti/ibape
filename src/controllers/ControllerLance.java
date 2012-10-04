@@ -25,7 +25,7 @@ public class ControllerLance {
 
     static ControllerLance unicaInstancia;
     private int estadoLance; //1=en curso 0=sin lance
-    private ArrayList<Cajon> listadoCajones = new ArrayList(); //los cajones de la campania actual, se podrian asignar a un lance o no
+    
     public ArrayList<Especie> listadoEspecies = BrokerEspecie.getInstance().getEspeciesFromDB(); //listado de las especies guardadas, mas facil para mostrar/guardar
 
     public static ControllerLance getInstance() {
@@ -37,10 +37,6 @@ public class ControllerLance {
 
     public ArrayList<Especie> getListadoEspecies() {
         return listadoEspecies;
-    }
-
-    public void addCajon(Cajon unCajon) {
-        getListadoCajones().add(unCajon);
     }
 
     public void iniciaLance() {
@@ -132,17 +128,6 @@ public class ControllerLance {
         this.estadoLance = estadoLance;
     }
 
-    public void borrarCajon(Cajon unCajon) {
-        getListadoCajones().remove(unCajon);
-    }
-
-    /**
-     * @return the listadoCajones
-     */
-    public ArrayList<Cajon> getListadoCajones() {
-        return listadoCajones;
-    }
-
     private void agregaLance(Lance unLance) {
         BrokerLance.getInstance().insertLance(unLance);
     }
@@ -165,6 +150,22 @@ public class ControllerLance {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar el Cajon " + unCajon.getId());
         } else {
             System.out.println("Cajon eliminado: " + unCajon.getId());
+        }
+    }
+
+    public void modificaLance(Lance unLance) {
+        if (!BrokerLance.getInstance().updateLance(unLance)) {
+            JOptionPane.showMessageDialog(null, "No se pudo modificar el Lance " + unLance.getId());
+        } else {
+            System.out.println("Lance modificado: " + unLance.getId());
+        }
+    }
+
+    public void eliminaLance(Lance unLance) {
+        if (!BrokerLance.getInstance().deleteLance(unLance)) {
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar el Lance " + unLance.getId());
+        } else {
+            System.out.println("Lance eliminado: " + unLance.getId());
         }
     }
 }
