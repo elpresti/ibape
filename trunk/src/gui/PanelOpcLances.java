@@ -102,17 +102,18 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelInferior = new org.jdesktop.swingx.JXPanel();
         btnInicFinLance = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(500, 500));
-        setMinimumSize(new java.awt.Dimension(500, 500));
+        setMaximumSize(new java.awt.Dimension(500, 32767));
+        setMinimumSize(new java.awt.Dimension(500, 300));
         setPreferredSize(new java.awt.Dimension(500, 500));
         setLayout(new java.awt.BorderLayout());
 
-        panelSuperior.setMaximumSize(new java.awt.Dimension(500, 30));
+        panelSuperior.setMaximumSize(new java.awt.Dimension(500, 32767));
         panelSuperior.setMinimumSize(new java.awt.Dimension(500, 30));
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblTitulo.setText("Administración de lances");
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTitulo.setTextAlignment(org.jdesktop.swingx.JXLabel.TextAlignment.CENTER);
         panelSuperior.add(lblTitulo);
 
         add(panelSuperior, java.awt.BorderLayout.NORTH);
@@ -348,9 +349,8 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelInferior.setMaximumSize(new java.awt.Dimension(500, 50));
         panelInferior.setMinimumSize(new java.awt.Dimension(500, 50));
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
-        panelInferior.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnInicFinLance.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnInicFinLance.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnInicFinLance.setText("Finalizar lance");
         btnInicFinLance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -364,7 +364,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     private void btnInicFinLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicFinLanceActionPerformed
         // TODO add your handling code here:
-        //controllers.ControllerLance.getInstance().guardaLance();
+        ControllerLance.getInstance().registrarLance();
     }//GEN-LAST:event_btnInicFinLanceActionPerformed
 
     private void btnAdmCajonesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmCajonesActionPerformed

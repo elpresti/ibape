@@ -313,7 +313,7 @@ private void lnkAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
 private void btnLanzaRecogeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzaRecogeActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
-    ControllerLance.getInstance().iniciaLance();
+    ControllerLance.getInstance().registrarLance();
 }//GEN-LAST:event_btnLanzaRecogeActionPerformed
 
 private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistraPOIActionPerformed

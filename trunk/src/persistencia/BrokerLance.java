@@ -34,7 +34,7 @@ public class BrokerLance extends BrokerPpal {
         ArrayList<modelo.dataManager.Lance> lances = new ArrayList();
         ResultSet rs = null;
         try {
-            rs = getStatement().executeQuery("SELECT * FROM Lances WHERE idCampania= " + idCamp);
+            rs = getStatement().executeQuery("SELECT * FROM Lances WHERE idCampania= " + idCamp+ " ORDER BY fYHIni DESC");
             while (rs.next()) {
                 modelo.dataManager.Lance unLance = new modelo.dataManager.Lance();
                 // Get the data from the row using the column name
@@ -67,10 +67,10 @@ public class BrokerLance extends BrokerPpal {
     }
 
     public modelo.dataManager.Lance getLanceFromDB(int idLance) {
-        modelo.dataManager.Lance unlance = null;
+        modelo.dataManager.Lance unlance = new modelo.dataManager.Lance();
         ResultSet rs = null;
         try {
-            rs = getStatement().executeQuery("SELECT * FROM Lances WHERE idLance= " + idLance);
+            rs = getStatement().executeQuery("SELECT * FROM Lances WHERE id= " + idLance);
             if (rs.next()) {
                 // Get the data from the row using the column name
                 unlance.setId(rs.getInt("id"));
@@ -170,8 +170,16 @@ public class BrokerLance extends BrokerPpal {
     public boolean updateLance(Lance unLance) {
         boolean sePudo = false;
         String sqlQuery = "";
+
+        String fechaHoraFin = null;
+        if (unLance.getfYHFin() != null) {
+            fechaHoraFin = "" + unLance.getfYHFin().getTime() + "";
+        }
         try {
             sqlQuery = "UPDATE Lances SET "
+                    + " fYHFin= " + fechaHoraFin+ ", "
+                    + " posFinLat= " + unLance.getPosFinLat()+ ", "
+                    + " posFinLon= " + unLance.getPosFinLon()+ ", "
                     + " comentarios= '" + unLance.getComentarios() + "'"
                     + " WHERE id=" + unLance.getId();
             System.out.println("update: " + sqlQuery);
