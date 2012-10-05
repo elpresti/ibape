@@ -6,15 +6,9 @@ package controllers;
 
 import gui.PanelHistorico;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
-import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerDbMapa;
 import persistencia.BrokerDbMapaHistorico;
 import persistencia.BrokerHistoricoPunto;
@@ -187,39 +181,4 @@ public class ControllerInforme {
         BrokerDbMapaHistorico.getInstance().vaciaMapaHistorico();
     }
 
-    public void graficarDatos(int retardo) {
-        GraficaDatosHistoricos grafica = new GraficaDatosHistoricos();
-        grafica.retardo=retardo;
-        grafica.start();
-    }
-    
-}
-class GraficaDatosHistoricos implements Runnable{
-    Thread thGraficar;
-    public int retardo;
-    public void run() { 
-        try{
-            thGraficar.sleep(retardo);
-            ControllerInforme.getInstance().vaciaMapaHistorico();
-            if (PanelHistorico.getInstance().getCategoriasSeleccionadas().size()>0){
-                ControllerInforme.getInstance().cargaPoisEnMapa(PanelHistorico.getInstance().getIdCampaniaElegida(),
-                        PanelHistorico.getInstance().getCategoriasSeleccionadas());
-            }
-            if (PanelHistorico.getInstance().getChkRecorrido().isSelected()){
-                ControllerInforme.getInstance().cargaRecorridoEnMapa(PanelHistorico.getInstance().getIdCampaniaElegida());
-            }
-        }
-        catch(Exception e){
-            Logueador.getInstance().agregaAlLog(e.toString());
-        }
-        ControllerInforme.getInstance().restauraBtnGraficarDatos();
-        thGraficar = null;
-    }
-    public void start() {
-        if (thGraficar == null) {
-            thGraficar = new Thread(this);
-            thGraficar.setPriority(Thread.MIN_PRIORITY);
-            thGraficar.start();
-        }
-    }
 }
