@@ -53,6 +53,8 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         panelDerecho = new org.jdesktop.swingx.JXPanel();
         HistoricoEstado = new javax.swing.JPanel();
         lblHistoricoEstado = new org.jdesktop.swingx.JXLabel();
+        AlertasEstado = new javax.swing.JPanel();
+        lblAlertasEstado = new org.jdesktop.swingx.JXLabel();
         GpsEstado = new javax.swing.JPanel();
         lblGpsEstado = new org.jdesktop.swingx.JXLabel();
         SondaEstado = new javax.swing.JPanel();
@@ -91,11 +93,11 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         panelMedio.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
         barraEstado.add(panelMedio, java.awt.BorderLayout.CENTER);
 
-        panelDerecho.setMaximumSize(new java.awt.Dimension(205, 30));
-        panelDerecho.setMinimumSize(new java.awt.Dimension(205, 30));
+        panelDerecho.setMaximumSize(new java.awt.Dimension(3205, 30));
+        panelDerecho.setMinimumSize(new java.awt.Dimension(250, 30));
         panelDerecho.setOpaque(false);
-        panelDerecho.setPreferredSize(new java.awt.Dimension(205, 30));
-        panelDerecho.setLayout(new java.awt.GridLayout(1, 4, 8, 0));
+        panelDerecho.setPreferredSize(new java.awt.Dimension(250, 30));
+        panelDerecho.setLayout(new java.awt.GridLayout(1, 5, 8, 0));
 
         HistoricoEstado.setBackground(new java.awt.Color(204, 0, 0));
         HistoricoEstado.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -111,12 +113,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         HistoricoEstado.setLayout(HistoricoEstadoLayout);
         HistoricoEstadoLayout.setHorizontalGroup(
             HistoricoEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 41, Short.MAX_VALUE)
+            .addGap(0, 54, Short.MAX_VALUE)
             .addGroup(HistoricoEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(HistoricoEstadoLayout.createSequentialGroup()
-                    .addGap(0, 9, Short.MAX_VALUE)
+                    .addGap(0, 15, Short.MAX_VALUE)
                     .addComponent(lblHistoricoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 9, Short.MAX_VALUE)))
+                    .addGap(0, 16, Short.MAX_VALUE)))
         );
         HistoricoEstadoLayout.setVerticalGroup(
             HistoricoEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,6 +131,39 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         );
 
         panelDerecho.add(HistoricoEstado);
+
+        AlertasEstado.setBackground(new java.awt.Color(204, 0, 0));
+        AlertasEstado.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        AlertasEstado.setToolTipText("Estado de la conexión de red a la Sonda");
+        AlertasEstado.setEnabled(false);
+        AlertasEstado.setMaximumSize(new java.awt.Dimension(30, 20));
+        AlertasEstado.setMinimumSize(new java.awt.Dimension(30, 20));
+
+        lblAlertasEstado.setForeground(new java.awt.Color(255, 255, 255));
+        lblAlertasEstado.setText("ALERT");
+
+        javax.swing.GroupLayout AlertasEstadoLayout = new javax.swing.GroupLayout(AlertasEstado);
+        AlertasEstado.setLayout(AlertasEstadoLayout);
+        AlertasEstadoLayout.setHorizontalGroup(
+            AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 54, Short.MAX_VALUE)
+            .addGroup(AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(AlertasEstadoLayout.createSequentialGroup()
+                    .addGap(0, 11, Short.MAX_VALUE)
+                    .addComponent(lblAlertasEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 12, Short.MAX_VALUE)))
+        );
+        AlertasEstadoLayout.setVerticalGroup(
+            AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 29, Short.MAX_VALUE)
+            .addGroup(AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(AlertasEstadoLayout.createSequentialGroup()
+                    .addGap(0, 7, Short.MAX_VALUE)
+                    .addComponent(lblAlertasEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 8, Short.MAX_VALUE)))
+        );
+
+        panelDerecho.add(AlertasEstado);
 
         GpsEstado.setBackground(new java.awt.Color(204, 0, 0));
         GpsEstado.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -145,12 +180,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         GpsEstado.setLayout(GpsEstadoLayout);
         GpsEstadoLayout.setHorizontalGroup(
             GpsEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 41, Short.MAX_VALUE)
+            .addGap(0, 54, Short.MAX_VALUE)
             .addGroup(GpsEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(GpsEstadoLayout.createSequentialGroup()
-                    .addGap(0, 11, Short.MAX_VALUE)
+                    .addGap(0, 17, Short.MAX_VALUE)
                     .addComponent(lblGpsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 11, Short.MAX_VALUE)))
+                    .addGap(0, 18, Short.MAX_VALUE)))
         );
         GpsEstadoLayout.setVerticalGroup(
             GpsEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,12 +213,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         SondaEstado.setLayout(SondaEstadoLayout);
         SondaEstadoLayout.setHorizontalGroup(
             SondaEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 41, Short.MAX_VALUE)
+            .addGap(0, 54, Short.MAX_VALUE)
             .addGroup(SondaEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(SondaEstadoLayout.createSequentialGroup()
-                    .addGap(0, 5, Short.MAX_VALUE)
+                    .addGap(0, 12, Short.MAX_VALUE)
                     .addComponent(lblSondaEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 6, Short.MAX_VALUE)))
+                    .addGap(0, 12, Short.MAX_VALUE)))
         );
         SondaEstadoLayout.setVerticalGroup(
             SondaEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -211,12 +246,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         LanEstado.setLayout(LanEstadoLayout);
         LanEstadoLayout.setHorizontalGroup(
             LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 41, Short.MAX_VALUE)
+            .addGap(0, 54, Short.MAX_VALUE)
             .addGroup(LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(LanEstadoLayout.createSequentialGroup()
-                    .addGap(0, 11, Short.MAX_VALUE)
+                    .addGap(0, 17, Short.MAX_VALUE)
                     .addComponent(lblLanEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 11, Short.MAX_VALUE)))
+                    .addGap(0, 18, Short.MAX_VALUE)))
         );
         LanEstadoLayout.setVerticalGroup(
             LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,12 +270,14 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         add(barraEstado, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel AlertasEstado;
     private javax.swing.JPanel GpsEstado;
     private javax.swing.JPanel HistoricoEstado;
     private javax.swing.JPanel LanEstado;
     private javax.swing.JPanel SondaEstado;
     private org.jdesktop.swingx.JXStatusBar barraEstado;
     private javax.swing.JProgressBar barraProcesaImg;
+    private org.jdesktop.swingx.JXLabel lblAlertasEstado;
     private org.jdesktop.swingx.JXLabel lblGpsEstado;
     private org.jdesktop.swingx.JXLabel lblHistoricoEstado;
     private org.jdesktop.swingx.JXLabel lblLanEstado;
@@ -317,6 +354,24 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         LanEstado.setToolTipText("Leyendo");
         lblLanEstado.setForeground(Color.white);
     }
+
+    public void setAlertasOcurrencia() {
+        AlertasEstado.setBackground(Color.blue);
+        AlertasEstado.setToolTipText("Ocurrencia");
+        lblAlertasEstado.setForeground(Color.white);
+    }
+    
+    public void setAlertasActivadas() {
+        AlertasEstado.setBackground(Color.green);
+        AlertasEstado.setToolTipText("Hay alertas activas");
+        lblAlertasEstado.setForeground(Color.black);
+    }
+
+    public void setAlertasDesactivadas() {
+        AlertasEstado.setBackground(new Color(204,0,0));
+        AlertasEstado.setToolTipText("No hay alertas activas");
+        lblAlertasEstado.setForeground(Color.white);
+    }    
 
     public void setHistoricoDesactivado() {
         HistoricoEstado.setBackground(new Color(204,0,0));
