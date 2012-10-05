@@ -26,6 +26,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import pdf.generadorPDF;
 
 /**
  *
@@ -240,6 +241,12 @@ public class PanelOpcInformes extends javax.swing.JPanel {
     }//GEN-LAST:event_chkPoisTodos1ActionPerformed
 
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
+// TODO add your handling code here:
+      generadorPDF pdf=new generadorPDF();  
+       pdf.crear_PDF("Informe de pesca del capitán :","emmanuel","lorena");
+      //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
+
+
 //        setTxtBtnIniciaMapa(btnGenerarInforme.getText());
 //        btnGenerarInforme.setText("Abriendo...");
 //        btnGenerarInforme.setEnabled(false);
