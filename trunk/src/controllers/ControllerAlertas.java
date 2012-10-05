@@ -254,8 +254,10 @@ public class ControllerAlertas extends Observable implements Observer{
         estadoAlertas=estado;
         if (estado){   
             gui.PanelOpcAlertas.getInstance().habilitaTablaAlertas();
+            gui.PanelBarraDeEstado.getInstance().setAlertasActivadas();
         } else {
             gui.PanelOpcAlertas.getInstance().deshabilitaTablaAlertas();
+            gui.PanelBarraDeEstado.getInstance().setAlertasDesactivadas();
         }
         persistencia.BrokerConfig.getInstance().guardaConfiguracion();
                     
@@ -1054,8 +1056,5 @@ public class ControllerAlertas extends Observable implements Observer{
         }
         return sePudo;
     }
-    
-    }
 
-
-    
+}

@@ -70,7 +70,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jXDatePickerBeanInfo1 = new org.jdesktop.swingx.JXDatePickerBeanInfo();
         panelSuperior = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panelMedio = new org.jdesktop.swingx.JXPanel();
@@ -132,7 +131,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelTituloTabla.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
         lblTituloTabla.setText("Listado de lances durante la campaña:");
-        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         panelTituloTabla.add(lblTituloTabla);
 
         panelLances.add(panelTituloTabla);
@@ -202,7 +201,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         lblAccionesLances.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesLances.setText("Acciones sobre el lance elegido:");
-        lblAccionesLances.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblAccionesLances.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         panelAcciones.setMaximumSize(new java.awt.Dimension(184, 30));
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
@@ -257,6 +256,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
             panelAccionesLancesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelAccionesLancesLayout.createSequentialGroup()
                 .addComponent(lblAccionesLances, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
                 .addComponent(panelAcciones, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         panelAccionesLancesLayout.setVerticalGroup(
@@ -277,10 +277,10 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaInicio.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblFechaInicio.setText("Fecha inicio");
-        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         panelFechaInicio.add(lblFechaInicio);
 
-        campoFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12));
+        campoFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         campoFechaInicio.setMaximumSize(new java.awt.Dimension(40, 20));
         campoFechaInicio.setMinimumSize(new java.awt.Dimension(40, 20));
         campoFechaInicio.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -294,10 +294,10 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaFin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblFechaFin.setText("Fecha fin");
-        lblFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lblFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         panelFechaFin.add(lblFechaFin);
 
-        campoFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12));
+        campoFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         campoFechaFin.setMaximumSize(new java.awt.Dimension(40, 20));
         campoFechaFin.setMinimumSize(new java.awt.Dimension(40, 20));
         campoFechaFin.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -311,7 +311,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelComentario.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblComentario.setText("Comentarios sobre el lance:");
-        lblComentario.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lblComentario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         panelComentario.add(lblComentario);
 
         campoComentario.setPreferredSize(new java.awt.Dimension(300, 20));
@@ -329,7 +329,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(150, 50));
         panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        btnAdmCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnAdmCajones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnAdmCajones.setText("Agregar cajones");
         btnAdmCajones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -458,7 +458,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private javax.swing.JTextField campoFechaFin;
     private javax.swing.JTextField campoFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.swingx.JXDatePickerBeanInfo jXDatePickerBeanInfo1;
     private org.jdesktop.swingx.JXLabel lblAccionesLances;
     private org.jdesktop.swingx.JXLabel lblComentario;
     private org.jdesktop.swingx.JXLabel lblFechaFin;
