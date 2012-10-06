@@ -5,16 +5,20 @@
 
 package pdf;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -81,6 +85,18 @@ public class generadorPDF {
                 // se establece una instancia a un documento pdf
                 PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));
                 mipdf.open();// se abre el documento
+                Image im=null;
+                try {
+                    im = Image.getInstance("src\\imgs\\logoIbapeChico.png");
+                } catch (BadElementException ex) {
+                    Logger.getLogger(generadorPDF.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MalformedURLException ex) {
+                    Logger.getLogger(generadorPDF.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(generadorPDF.class.getName()).log(Level.SEVERE, null, ex);
+                }
+	            im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
+	            mipdf.add(im);
                 mipdf.add(new Paragraph(formato.format(fechaHoy)));
                 mipdf.add(new Paragraph(a, fuenteRojo25));
                 mipdf.add(new Paragraph(c)); // se añade el contendio del PDF
