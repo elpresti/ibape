@@ -172,8 +172,8 @@ public class ControllerNavegacion {
                 modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas().size()>0){
             PanelNavegacion.getInstance().inicializaTablaDC();
             for (modelo.dataManager.Marca marca : modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas()){
-                PanelNavegacion.getInstance().agregaUnaMarca(marca.getId(), marca.getFechaYhora(), 
-                        marca.getLatitud(),marca.getLongitud(), marca.getProfundidad(),marca.getImgFileName());
+                PanelNavegacion.getInstance().agregaUnaMarca(marca.getId(), marca.getFechaYhora(), marca.getLatitud(),
+                        marca.getLongitud(), marca.getProfundidad(),marca.getImgFileName(), marca.getAreaEnImg().size());
             }
             PanelNavegacion.getInstance().setCantMarcasEncontradas(modelo.dataManager.UltimaImgProcesada.getInstance().getMarcas().size());
         }else{

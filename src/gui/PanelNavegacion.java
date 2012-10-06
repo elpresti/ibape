@@ -20,29 +20,22 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import modelo.dataManager.Punto;
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Observable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import modelo.dataManager.CategoriaPoi;
-import org.jdesktop.swingx.JXTable;
-import persistencia.BrokerDbMapa;
 
 
 
@@ -60,6 +53,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
     private int NRO_COL_LONGITUD;
     private int NRO_COL_PROFUNDIDAD;
     private int NRO_COL_IMGFILENAME;
+    private int NRO_COL_TAMANIOPX;
     private ArrayList<Integer> categoriasSeleccionadas=new ArrayList();
     private String txtBtnGraficarDatos;
     private int cantMarcasEncontradas;
@@ -664,27 +658,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
        }
        return unicaInstancia;
     }        
-    
-    
-/*
-    public void paintComponent(Graphics g) {
-    Dimension tamanio = getSize();
-    ImageIcon fondo = new ImageIcon(getClass().getResource("imgs/Bienvenida.png"));
-    g.drawImage(fondo.getImage(), 0, 0, tamanio.width, tamanio.height, null);
-    setOpaque(false);
-    super.paintComponent(g);
-    }            
-  
-*/
-    
-/* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
-    public static void main(String[] args) {
-        javax.swing.JFrame elFrame = new javax.swing.JFrame();
-        elFrame.setSize(500, 500);
-        elFrame.add(new PanelNavegacion()); 
-        elFrame.setVisible(true);
-    }
-*/    
+     
   @Override
   public void update(Observable obs, Object arg){
       modelo.dataManager.Punto p = modelo.dataManager.Punto.getInstance();
@@ -912,21 +886,23 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         NRO_COL_LONGITUD = 3;
         NRO_COL_PROFUNDIDAD = 4;
         NRO_COL_IMGFILENAME = 5;
+        NRO_COL_TAMANIOPX = 6;
         tablaMarcas.setRowHeight(20);
         inicializaTablaDC();
     }
 
     public void agregaUnaMarca(int id, Date fechaYhora, double latitud, 
-            double longitud, double profundidad, String imgFileName) {
+            double longitud, double profundidad, String imgFileName, int cantPx) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         DecimalFormat formatter = new DecimalFormat( "#.00000000" );
-        Object[] fila = new Object[6]; //creamos la fila cantColumnas=6
+        Object[] fila = new Object[7]; //creamos la fila cantColumnas=6
         fila[NRO_COL_ID_MARCA]=id;
         if (fechaYhora != null) { fila[NRO_COL_FECHAYHORA]=sdf.format(fechaYhora); }
         fila[NRO_COL_LATITUD]=formatter.format((Number)latitud);
         fila[NRO_COL_LONGITUD]=formatter.format((Number)longitud);
         fila[NRO_COL_PROFUNDIDAD]=profundidad;
         fila[NRO_COL_IMGFILENAME]=imgFileName;
+        fila[NRO_COL_TAMANIOPX]=cantPx;
         modeloTablaDC.addRow(fila);
     }
 
@@ -944,6 +920,11 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setMaxWidth(0);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setPreferredWidth(0);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_ID_MARCA).setResizable(false);
+        //escondo la columna Profundidad de marca, xq por ahora no es posible determinarla
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMinWidth(0);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMaxWidth(0);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setPreferredWidth(0);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setResizable(false);
         //resize de las demas columnas
         tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMinWidth(10);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_FECHAYHORA).setMaxWidth(200);
@@ -959,11 +940,11 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setMaxWidth(200);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setPreferredWidth(30);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_LONGITUD).setResizable(true);
-
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMinWidth(10);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setMaxWidth(200);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setPreferredWidth(20);
-        tablaMarcas.getColumnModel().getColumn(NRO_COL_PROFUNDIDAD).setResizable(true);
+        
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_TAMANIOPX).setMinWidth(10);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_TAMANIOPX).setMaxWidth(200);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_TAMANIOPX).setPreferredWidth(30);
+        tablaMarcas.getColumnModel().getColumn(NRO_COL_TAMANIOPX).setResizable(true);
 
         tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMinWidth(10);
         tablaMarcas.getColumnModel().getColumn(NRO_COL_IMGFILENAME).setMaxWidth(200);
@@ -1065,13 +1046,14 @@ class CheckBoxEditorNavegacion extends DefaultCellEditor implements ItemListener
 /* - - -   clases y métodos q configuran las COLUMNAS del TABLEMODEL de la tabla CATEGORIA DE POIS   - - -  */
 class TableModelMarcasNavegacion extends DefaultTableModel {        
     public TableModelMarcasNavegacion(){
-        String[] encabezado = new String[6];//Defino la Cabecera (columnas)
+        String[] encabezado = new String[7];//Defino la Cabecera (columnas)
         encabezado[0] = "Id";
         encabezado[1] = "Fecha y hora";        
         encabezado[2] = "Latitud";
         encabezado[3] = "Longitud";
         encabezado[4] = "Profundidad";
         encabezado[5] = "ImgFileName";
+        encabezado[6] = "Tamaño[px]";
         this.setColumnIdentifiers(encabezado);
     }
     @Override  
@@ -1082,6 +1064,7 @@ class TableModelMarcasNavegacion extends DefaultTableModel {
             case 3: return Double.class;
             case 4: return Double.class;
             case 5: return String.class;
+            case 6: return Integer.class;
             default: return Object.class;//other columns accept Object
         }
     }  
