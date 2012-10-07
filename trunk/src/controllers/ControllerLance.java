@@ -43,6 +43,7 @@ public class ControllerLance {
         //if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
         //  if (ControllerCampania.getInstance().getEstadoCampaniaEnCurso() == 1) { //tengo una campaña en curso
         //  if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) { //tengo un lance en curso
+        PanelOpcLances.getInstance().setTxtBtnIniciaLance();
         if (JOptionPane.showConfirmDialog(null,
                 "Desea registrar un nuevo lance?", //<---
                 "Registrar lances",
@@ -60,17 +61,10 @@ public class ControllerLance {
             PanelOpcLances.getInstance().cargaGrillaLances();
             PanelOpcLances.getInstance().setTxtBtnFinLance();
         }
-
-        //} else {
-                /*JOptionPane.showMessageDialog(null, "Primero se debe finalizar el lance en curso");
-        PanelOpcLances.getInstance().setTxtBtnFinLance();*/
-        //}
-        //  } else {
-        //     JOptionPane.showMessageDialog(null, "No se puede registrar un lance sin estar navegando");
-        // }
     }
 
     public void finalizarLance() {
+        PanelOpcLances.getInstance().setTxtBtnFinLance();
         if (JOptionPane.showConfirmDialog(null,
                 "Desea finalizar el lance en curso?", //<---
                 "Finalizar lances",
