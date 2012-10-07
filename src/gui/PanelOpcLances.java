@@ -10,25 +10,15 @@
  */
 package gui;
 
-import controllers.ControllerCampania;
 import controllers.ControllerLance;
 import controllers.ControllerPpal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.AdministraCampanias;
-import modelo.dataManager.Cajon;
-import modelo.dataManager.CategoriaPoi;
-import modelo.dataManager.Especie;
 import modelo.dataManager.Lance;
 import persistencia.BrokerCajon;
-import persistencia.BrokerCampania;
-import persistencia.BrokerCategoriasPOI;
-import persistencia.BrokerEspecie;
 import persistencia.BrokerLance;
-import persistencia.Logueador;
 
 /**
  *
@@ -42,7 +32,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaLances = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
-                "idLance", "Fecha Inicio", "Fecha Fin", "Comentarios", "# Cajones"//, "Acciones"
+                "idLance", "Fecha Inicio", "Fecha Fin", "Comentarios", "Cant. Cajones"//, "Acciones"
             }) {
 
         Class[] types = new Class[]{
@@ -69,7 +59,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
         panelSuperior = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panelMedio = new org.jdesktop.swingx.JXPanel();
@@ -111,7 +100,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelSuperior.setPreferredSize(new java.awt.Dimension(500, 30));
 
         lblTitulo.setText("Administración de lances");
-        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("Arial", 0, 18));
         lblTitulo.setTextAlignment(org.jdesktop.swingx.JXLabel.TextAlignment.CENTER);
         panelSuperior.add(lblTitulo);
 
@@ -281,6 +270,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaInicio.add(lblFechaInicio);
 
         campoFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoFechaInicio.setEnabled(false);
         campoFechaInicio.setMaximumSize(new java.awt.Dimension(40, 20));
         campoFechaInicio.setMinimumSize(new java.awt.Dimension(40, 20));
         campoFechaInicio.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -298,6 +288,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaFin.add(lblFechaFin);
 
         campoFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoFechaFin.setEnabled(false);
         campoFechaFin.setMaximumSize(new java.awt.Dimension(40, 20));
         campoFechaFin.setMinimumSize(new java.awt.Dimension(40, 20));
         campoFechaFin.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -314,6 +305,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         lblComentario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         panelComentario.add(lblComentario);
 
+        campoComentario.setEnabled(false);
         campoComentario.setPreferredSize(new java.awt.Dimension(300, 20));
         campoComentario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,6 +323,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         btnAdmCajones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnAdmCajones.setText("Agregar cajones");
+        btnAdmCajones.setEnabled(false);
         btnAdmCajones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdmCajonesActionPerformed(evt);
@@ -350,7 +343,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelInferior.setMinimumSize(new java.awt.Dimension(500, 50));
         panelInferior.setPreferredSize(new java.awt.Dimension(500, 50));
 
-        btnInicFinLance.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnInicFinLance.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnInicFinLance.setText("Finalizar lance");
         btnInicFinLance.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -380,19 +373,20 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAdmCajonesActionPerformed
 
     private void btnModificarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarLanceActionPerformed
-        habilitaPanelDatosLances(true);
-        setModificandoLance(true);
-        btnEliminarLance.setEnabled(false);
-        btnInsertarLance.setEnabled(false);
-        btnModificarLance.setEnabled(false);
-        btnGuardarLance.setEnabled(true);
         if (tablaLances.getSelectedRowCount() != 0) {
+            habilitaPanelDatosLances(true);
+            habilitaCamposLances(true);
+            setModificandoLance(true);
+            btnEliminarLance.setEnabled(false);
+            btnInsertarLance.setEnabled(false);
+            btnModificarLance.setEnabled(false);
+            btnGuardarLance.setEnabled(true);
             Lance unLance = (Lance) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
             campoComentario.setText(String.valueOf(unLance.getComentarios()));
             setTempLance(unLance);
         } else {
-            habilitaPanelDatosLances(false);
-            setModificandoLance(false);
+            //habilitaPanelDatosLances(false);
+            //setModificandoLance(false);
             JOptionPane.showMessageDialog(null, "Seleccione un lance primero");
         }
     }//GEN-LAST:event_btnModificarLanceActionPerformed
@@ -401,14 +395,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
         if (modificandoLance) {
             //modifica POI
             Lance unLance = getTempLance();
-            unLance.setComentarios(""+campoComentario.getText());
+            unLance.setComentarios("" + campoComentario.getText());
             controllers.ControllerLance.getInstance().modificaLance(unLance);
             setModificandoLance(false);
         } else {
             // Agrega/inserta lance:
-
         }
         habilitaPanelDatosLances(false);
+        habilitaCamposLances(false);
         cargaGrillaLances();
     }//GEN-LAST:event_btnGuardarLanceActionPerformed
 
@@ -427,6 +421,10 @@ public class PanelOpcLances extends javax.swing.JPanel {
                 }
                 cargaGrillaLances();
             }
+        } else {
+            //habilitaPanelDatosLances(false);
+            //setModificandoLance(false);
+            JOptionPane.showMessageDialog(null, "Seleccione un lance primero");
         }
     }//GEN-LAST:event_btnEliminarLanceActionPerformed
 
@@ -500,6 +498,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private void inicializador() {
         cargaGrillaLances();
         habilitaPanelDatosLances(false);
+        habilitaCamposLances(false);
         btnInsertarLance.setVisible(false);
     }
 
@@ -526,6 +525,15 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }
 
     private void habilitaPanelDatosLances(boolean estado) {
+        btnEliminarLance.setEnabled(estado);
+        btnInsertarLance.setEnabled(true);
+        btnModificarLance.setEnabled(estado);
+        btnGuardarLance.setEnabled(false);
+        btnAdmCajones.setEnabled(estado);
+
+    }
+
+    private void habilitaCamposLances(boolean estado) {
         campoFechaInicio.setEnabled(false); //no se si se va a editar
         campoFechaFin.setEnabled(false);
         campoComentario.setEnabled(estado);
@@ -533,12 +541,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
         campoFechaInicio.setText("");
         campoFechaFin.setText("");
         campoComentario.setText("");
-
-        btnEliminarLance.setEnabled(estado);
-        btnInsertarLance.setEnabled(true);
-        btnModificarLance.setEnabled(estado);
-        btnGuardarLance.setEnabled(false);
-
     }
 
     public void setTxtBtnIniciaLance() {
@@ -576,5 +578,4 @@ public class PanelOpcLances extends javax.swing.JPanel {
     public void setModificandoLance(boolean modificandoLance) {
         this.modificandoLance = modificandoLance;
     }
-
 }

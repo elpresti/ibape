@@ -276,7 +276,8 @@ public class PanelOpcCajones extends javax.swing.JPanel {
         lblCantCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelCantCajones.add(lblCantCajones);
 
-        campoCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
+        campoCajones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        campoCajones.setEnabled(false);
         campoCajones.setMaximumSize(new java.awt.Dimension(40, 20));
         campoCajones.setMinimumSize(new java.awt.Dimension(40, 20));
         campoCajones.setPreferredSize(new java.awt.Dimension(40, 20));
@@ -292,7 +293,8 @@ public class PanelOpcCajones extends javax.swing.JPanel {
         lblEspecie.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComboEspecie.add(lblEspecie);
 
-        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        comboEspecies.setFont(new java.awt.Font("Tahoma", 0, 12));
+        comboEspecies.setEnabled(false);
         comboEspecies.setMaximumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setMinimumSize(new java.awt.Dimension(200, 20));
         comboEspecies.setPreferredSize(new java.awt.Dimension(200, 20));
@@ -518,6 +520,7 @@ public class PanelOpcCajones extends javax.swing.JPanel {
     private void habilitaPanelDatosCajones(boolean estado) {
         campoCajones.setEnabled(estado);
         campoCajones.setText("");
+        comboEspecies.setEnabled(estado);
         //si lo deshabilito habilito la barra
         if (!estado) {
             btnEliminarCajon.setEnabled(!estado);

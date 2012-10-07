@@ -364,6 +364,7 @@
                             </Component>
                             <Component class="javax.swing.JTextField" name="campoLatitud">
                               <Properties>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[100, 20]"/>
                                 </Property>
@@ -394,6 +395,7 @@
                             </Component>
                             <Component class="javax.swing.JTextField" name="campoLongitud">
                               <Properties>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[100, 20]"/>
                                 </Property>
@@ -442,6 +444,7 @@
                                     <StringItem index="2" value="Fondo rocoso"/>
                                   </StringArray>
                                 </Property>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[130, 20]"/>
                                 </Property>
@@ -483,6 +486,7 @@
                             </Component>
                             <Component class="javax.swing.JTextField" name="campoDescripcionNuevoPoi">
                               <Properties>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[200, 20]"/>
                                 </Property>
@@ -785,6 +789,7 @@
                             </Component>
                             <Component class="javax.swing.JTextField" name="campoNombreNuevaCat">
                               <Properties>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[170, 20]"/>
                                 </Property>
@@ -806,6 +811,7 @@
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                                   <StringArray count="0"/>
                                 </Property>
+                                <Property name="enabled" type="boolean" value="false"/>
                                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                                   <Dimension value="[50, 25]"/>
                                 </Property>
