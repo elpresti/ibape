@@ -175,9 +175,14 @@ public class BrokerLance extends BrokerPpal {
         if (unLance.getfYHFin() != null) {
             fechaHoraFin = "" + unLance.getfYHFin().getTime() + "";
         }
+        String fechaHoraInicio = null;
+        if (unLance.getfYHFin() != null) {
+            fechaHoraInicio = "" + unLance.getfYHIni().getTime() + "";
+        }
         try {
             sqlQuery = "UPDATE Lances SET "
                     + " fYHFin= " + fechaHoraFin+ ", "
+                    + " fYHIni= " + fechaHoraInicio+ ", "
                     + " posFinLat= " + unLance.getPosFinLat()+ ", "
                     + " posFinLon= " + unLance.getPosFinLon()+ ", "
                     + " comentarios= '" + unLance.getComentarios() + "'"
