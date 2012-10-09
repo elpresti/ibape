@@ -82,8 +82,6 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblDatosNavegacion = new java.awt.Label();
         panelDatos = new javax.swing.JPanel();
         panelGps = new javax.swing.JPanel();
-        lblTxtFechaHora = new java.awt.Label();
-        lblFechaHora = new java.awt.Label();
         lblTxtLatitud = new java.awt.Label();
         lblLatitud = new java.awt.Label();
         lblTxtLongitud = new java.awt.Label();
@@ -129,6 +127,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         btnGraficarDatos = new javax.swing.JButton();
         btnIniciarMapaNav = new javax.swing.JButton();
         btnDetenerMapaNav = new javax.swing.JButton();
+        logoChrome = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setPreferredSize(new java.awt.Dimension(500, 500));
@@ -187,15 +186,6 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         panelGps.setOpaque(false);
         panelGps.setPreferredSize(new java.awt.Dimension(240, 220));
         panelGps.setLayout(new java.awt.GridLayout(4, 2));
-
-        lblTxtFechaHora.setAlignment(java.awt.Label.RIGHT);
-        lblTxtFechaHora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblTxtFechaHora.setText("Fecha y hora: ");
-        panelGps.add(lblTxtFechaHora);
-
-        lblFechaHora.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblFechaHora.setText("---");
-        panelGps.add(lblFechaHora);
 
         lblTxtLatitud.setAlignment(java.awt.Label.RIGHT);
         lblTxtLatitud.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
@@ -501,6 +491,10 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         });
         panelBtnActualizar.add(btnDetenerMapaNav);
 
+        logoChrome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoChome30x30.png"))); // NOI18N
+        logoChrome.setToolTipText("Se recomienda visualizar el mapa con Google Chrome");
+        panelBtnActualizar.add(logoChrome);
+
         add(panelBtnActualizar, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -606,7 +600,6 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private org.jdesktop.swingx.JXLabel lblCantMarcas;
     private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido;
     private java.awt.Label lblDatosNavegacion;
-    private java.awt.Label lblFechaHora;
     private java.awt.Label lblLatitud;
     private java.awt.Label lblLongitud;
     private java.awt.Label lblProf;
@@ -617,7 +610,6 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private org.jdesktop.swingx.JXLabel lblTituloNavegacion;
     private org.jdesktop.swingx.JXLabel lblTxtCantMarcas;
     private java.awt.Label lblTxtDatosMapa;
-    private java.awt.Label lblTxtFechaHora;
     private java.awt.Label lblTxtLatitud;
     private java.awt.Label lblTxtLongitud;
     private java.awt.Label lblTxtProf;
@@ -626,6 +618,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private java.awt.Label lblTxtTemp;
     private java.awt.Label lblTxtVelocidad;
     private java.awt.Label lblVelocidad;
+    private javax.swing.JLabel logoChrome;
     private org.jdesktop.swingx.JXPanel panelBtnActualizaMapa;
     private javax.swing.JPanel panelBtnActualizar;
     private org.jdesktop.swingx.JXPanel panelCantMarcas;
@@ -663,7 +656,7 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
   public void update(Observable obs, Object arg){
       modelo.dataManager.Punto p = modelo.dataManager.Punto.getInstance();
       if (obs == p){
-          lblFechaHora.setText(p.getFechaYhora().toString());
+          //lblFechaHora.setText(p.getFechaYhora().toString());
           lblLatitud.setText(p.getLatitud() + p.getLatHemisf());
           lblLongitud.setText(p.getLongitud() + p.getLonHemisf());
           lblProf.setText(String.valueOf(p.getProfundidad()));

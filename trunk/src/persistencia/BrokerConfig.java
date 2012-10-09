@@ -149,8 +149,8 @@ public class BrokerConfig {
         Element sondaConfig =  new Element("PanelConfiguracion-Sonda");
         sondaConfig.setAttribute("Estado","false");
         sondaConfig.setAttribute("ComboPuerto","COM 3");
-        sondaConfig.setAttribute("ComboVelocidad","9600");
-        sondaConfig.setAttribute("ComboBitsDatos","7");
+        sondaConfig.setAttribute("ComboVelocidad","4800");
+        sondaConfig.setAttribute("ComboBitsDatos","8");
         sondaConfig.setAttribute("ComboParidad","Ninguno");
         sondaConfig.setAttribute("Autoconexion","false");
         elemConfig.addContent(sondaConfig);

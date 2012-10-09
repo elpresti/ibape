@@ -390,6 +390,14 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDetenerMapaHistoricoActionPerformed"/>
           </Events>
         </Component>
+        <Component class="javax.swing.JLabel" name="logoChrome">
+          <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imgs/logoChome30x30.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Se recomienda visualizar el mapa con Google Chrome"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
   </SubComponents>

@@ -42,6 +42,7 @@ public class Sistema {
     private String imgDilatedFileName;
     private String imgWithOutSeabedFileName;
     private String imgWithOutTimeFileName;
+    private String imgsDir;
     
     
     private Sistema(){
@@ -120,6 +121,16 @@ public class Sistema {
         return estanTodos;
     }
 
+    public boolean compruebaDirectoriosNecesarios(){
+        boolean estanTodos=false;
+        if (!compruebaDirectorioImgs()){
+            estanTodos = crearDirectorioImgs();
+        }else{
+            estanTodos = estanTodos && true;
+        }
+        return estanTodos;
+    }
+    
     private boolean copiarArchivosDeRxtxcomm() {
         boolean sePudo = false;
         //    ---> C:\Program Files\Java\jdk1.7.0_05\bin\rxtxSerial.dll
@@ -271,6 +282,7 @@ public class Sistema {
         setImgErodedFileName("eroded.tmp");
         setImgWithOutSeabedFileName("withOutSeabed.tmp");
         setImgWithOutTimeFileName("withOutTime.tmp");
+        setImgsDir("imgs");
     }
     
     public JLabel getLabelWithImgResized(int w, int h, BufferedImage image) {  
@@ -388,5 +400,39 @@ public class Sistema {
      */
     public void setImgWithOutTimeFileName(String imgWithOutTimeFileName) {
         this.imgWithOutTimeFileName = imgWithOutTimeFileName;
+    }
+
+    private boolean compruebaDirectorioImgs() {
+        boolean esta = false;
+        String imgsDirStr = System.getProperty("user.dir")+"\\"+getImgsDir()+"\\";
+        File imgsDir = new File(imgsDirStr);
+        esta = imgsDir.exists();
+        return esta;
+    }
+
+    /**
+     * @return the imgsDir
+     */
+    public String getImgsDir() {
+        return imgsDir;
+    }
+
+    /**
+     * @param imgsDir the imgsDir to set
+     */
+    public void setImgsDir(String imgsDir) {
+        this.imgsDir = imgsDir;
+    }
+
+    private boolean crearDirectorioImgs() {
+        boolean sePudo = false;
+        try{
+            String imgsDirStr = System.getProperty("user.dir")+"\\"+getImgsDir()+"\\";
+            File imgsDir = new File(imgsDirStr);
+            sePudo = imgsDir.mkdir();
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("crearDirectorioImgs(): "+e.toString());
+        }
+        return sePudo;
     }
 }

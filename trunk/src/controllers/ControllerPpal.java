@@ -61,6 +61,7 @@ public class ControllerPpal {
             gui.PanelOpcCampanias.getInstance().cargarDatosDeCampaniaEnCurso();
             gui.PanelOpcCampanias.getInstance().marcaCampaniaEnCurso();
         }
+        modelo.dataCapture.Sistema.getInstance().compruebaDirectoriosNecesarios();
     }
 
     public static ControllerPpal getInstance() {
