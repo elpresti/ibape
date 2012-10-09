@@ -59,6 +59,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+
         panelSuperior = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panelMedio = new org.jdesktop.swingx.JXPanel();
@@ -78,10 +79,10 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelDatosLance = new org.jdesktop.swingx.JXPanel();
         panelFechaInicio = new org.jdesktop.swingx.JXPanel();
         lblFechaInicio = new org.jdesktop.swingx.JXLabel();
-        campoFechaInicio = new javax.swing.JTextField();
+        comboFechaInicio = new org.jdesktop.swingx.JXDatePicker();
         panelFechaFin = new org.jdesktop.swingx.JXPanel();
         lblFechaFin = new org.jdesktop.swingx.JXLabel();
-        campoFechaFin = new javax.swing.JTextField();
+        comboFechaFin = new org.jdesktop.swingx.JXDatePicker();
         panelComentario = new org.jdesktop.swingx.JXPanel();
         lblComentario = new org.jdesktop.swingx.JXLabel();
         campoComentario = new org.jdesktop.swingx.JXTextField();
@@ -120,7 +121,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelTituloTabla.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 10));
 
         lblTituloTabla.setText("Listado de lances durante la campaña:");
-        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTituloTabla.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelTituloTabla.add(lblTituloTabla);
 
         panelLances.add(panelTituloTabla);
@@ -190,7 +191,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         lblAccionesLances.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesLances.setText("Acciones sobre el lance elegido:");
-        lblAccionesLances.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblAccionesLances.setFont(new java.awt.Font("Tahoma", 0, 14));
 
         panelAcciones.setMaximumSize(new java.awt.Dimension(184, 30));
         panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
@@ -266,15 +267,11 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaInicio.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblFechaInicio.setText("Fecha inicio");
-        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelFechaInicio.add(lblFechaInicio);
 
-        campoFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        campoFechaInicio.setEnabled(false);
-        campoFechaInicio.setMaximumSize(new java.awt.Dimension(40, 20));
-        campoFechaInicio.setMinimumSize(new java.awt.Dimension(40, 20));
-        campoFechaInicio.setPreferredSize(new java.awt.Dimension(40, 20));
-        panelFechaInicio.add(campoFechaInicio);
+        comboFechaInicio.setEnabled(false);
+        panelFechaInicio.add(comboFechaInicio);
 
         panelDatosLance.add(panelFechaInicio);
 
@@ -284,15 +281,11 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaFin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblFechaFin.setText("Fecha fin");
-        lblFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelFechaFin.add(lblFechaFin);
 
-        campoFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        campoFechaFin.setEnabled(false);
-        campoFechaFin.setMaximumSize(new java.awt.Dimension(40, 20));
-        campoFechaFin.setMinimumSize(new java.awt.Dimension(40, 20));
-        campoFechaFin.setPreferredSize(new java.awt.Dimension(40, 20));
-        panelFechaFin.add(campoFechaFin);
+        comboFechaFin.setEnabled(false);
+        panelFechaFin.add(comboFechaFin);
 
         panelDatosLance.add(panelFechaFin);
 
@@ -302,7 +295,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelComentario.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblComentario.setText("Comentarios sobre el lance:");
-        lblComentario.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblComentario.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelComentario.add(lblComentario);
 
         campoComentario.setEnabled(false);
@@ -321,7 +314,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelBtnAgregar.setPreferredSize(new java.awt.Dimension(150, 50));
         panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
-        btnAdmCajones.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnAdmCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
         btnAdmCajones.setText("Agregar cajones");
         btnAdmCajones.setEnabled(false);
         btnAdmCajones.addActionListener(new java.awt.event.ActionListener() {
@@ -396,10 +389,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
             //modifica POI
             Lance unLance = getTempLance();
             unLance.setComentarios("" + campoComentario.getText());
+            unLance.setfYHIni(comboFechaInicio.getDate());
+            unLance.setfYHFin(comboFechaFin.getDate());
             controllers.ControllerLance.getInstance().modificaLance(unLance);
             setModificandoLance(false);
         } else {
             // Agrega/inserta lance:
+            //controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Double.valueOf(campoLatitud.getText()), Double.valueOf(campoLongitud.getText()), null, null);
+            //ControllerLance.getInstance().agregaLance();
         }
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
@@ -430,7 +427,18 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     private void btnInsertarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarLanceActionPerformed
         // TODO add your handling code here:
-        //VER si se pueden agregar lances cuando quieren
+                if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+          
+                habilitaPanelDatosLances(true);
+                habilitaCamposLances(true);
+                btnModificarLance.setEnabled(false);
+                btnEliminarLance.setEnabled(false);
+                btnInsertarLance.setEnabled(false);
+                btnGuardarLance.setEnabled(true);
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pueden registrar lances sin estar en una campaña");
+        }
     }//GEN-LAST:event_btnInsertarLanceActionPerformed
 
     private void campoComentarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoComentarioActionPerformed
@@ -453,8 +461,8 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXHyperlink btnInsertarLance;
     private org.jdesktop.swingx.JXHyperlink btnModificarLance;
     private org.jdesktop.swingx.JXTextField campoComentario;
-    private javax.swing.JTextField campoFechaFin;
-    private javax.swing.JTextField campoFechaInicio;
+    private org.jdesktop.swingx.JXDatePicker comboFechaFin;
+    private org.jdesktop.swingx.JXDatePicker comboFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXLabel lblAccionesLances;
     private org.jdesktop.swingx.JXLabel lblComentario;
@@ -499,7 +507,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         cargaGrillaLances();
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
-        btnInsertarLance.setVisible(false);
+        //btnInsertarLance.setVisible(false);
     }
 
     public void cargaGrillaLances() {
@@ -534,12 +542,12 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }
 
     private void habilitaCamposLances(boolean estado) {
-        campoFechaInicio.setEnabled(false); //no se si se va a editar
-        campoFechaFin.setEnabled(false);
+        comboFechaInicio.setEnabled(estado);
+        comboFechaFin.setEnabled(estado);
         campoComentario.setEnabled(estado);
 
-        campoFechaInicio.setText("");
-        campoFechaFin.setText("");
+        //campoFechaInicio.setText("");
+        //campoFechaFin.setText("");
         campoComentario.setText("");
     }
 
