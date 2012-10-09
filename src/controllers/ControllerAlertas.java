@@ -955,7 +955,7 @@ public class ControllerAlertas extends Observable implements Observer{
         }
 
     }
-
+/*
     public void actualizaHoraSistema() throws InterruptedException{
         int segundos=1;
         while(true){
@@ -963,7 +963,7 @@ public class ControllerAlertas extends Observable implements Observer{
             Thread.sleep (segundos*1000);
         } 
     }
-
+*/
     private boolean desactivaAlerta(Alerta al,Timestamp fechaDes) {
         boolean desactivacion=false;
         int i=getAlertasActivadas().size()-1;
