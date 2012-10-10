@@ -30,7 +30,7 @@ public class BrokerLance extends BrokerPpal {
         return sePudo;
     }
 
-    public ArrayList<modelo.dataManager.Lance> getLancesCampaniaActualFromDB(int idCamp) {
+    public ArrayList<modelo.dataManager.Lance> getLancesCampaniaFromDB(int idCamp) {
         ArrayList<modelo.dataManager.Lance> lances = new ArrayList();
         ResultSet rs = null;
         try {

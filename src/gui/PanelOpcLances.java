@@ -385,6 +385,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_btnModificarLanceActionPerformed
 
     private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
+        if (comboFechaInicio.getDate()==null) {
+                JOptionPane.showMessageDialog(null, "Seleccionar fecha de inicio");
+                return;
+            }
+        if (comboFechaFin.getDate() == null) {
+                JOptionPane.showMessageDialog(null, "Seleccionar fecha de fin");
+                return;
+            }
         if (modificandoLance) {
             //modifica POI
             Lance unLance = getTempLance();
@@ -407,7 +415,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         if (tablaLances.getSelectedRowCount() != 0) {
             int[] listaLancesSeleccionados = tablaLances.getSelectedRows();
             if (JOptionPane.showConfirmDialog(null,
-                    "Desea eliminar " + listaLancesSeleccionados.length + " Lances seleccionados y su pesca?",
+                    "Desea eliminar " + listaLancesSeleccionados.length + " lances seleccionados y su pesca?",
                     "Eliminar Lances",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE) == 0) {
@@ -514,7 +522,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         modeloTablaLances.setRowCount(0);//vacia la tabla
         SimpleDateFormat horaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaActualFromDB(AdministraCampanias.getInstance().getCampaniaEnCurso().getId())) {
+        for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaFromDB(AdministraCampanias.getInstance().getCampaniaEnCurso().getId())) {
             String fechaFin = "En curso";
             if (unLance.getfYHFin() != null) {
                 fechaFin = horaCompleta.format(unLance.getfYHFin());
