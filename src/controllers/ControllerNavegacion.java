@@ -143,15 +143,18 @@ public class ControllerNavegacion {
     public void errorGuiProcesamientoImgs() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
                 , "/imgs/errorProcessing.jpg");
+        gui.ProcesaImgWin.getInstance().setIndexImgProcesada(0);
         //Logueador.getInstance().agregaAlLog("errorGuiProcesamientoImgs(): TODO MAL"); 
     }
 
     public void errorGuiNotFoundImgProcesada() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(null,"/imgs/imgNotFound.jpg");
+        gui.ProcesaImgWin.getInstance().setIndexImgProcesada(0);
     }
     
     public void loadingGuiImgProcesada() {
         gui.ProcesaImgWin.getInstance().setLoadingOnImgProcesada("/imgs/loading.gif");
+        gui.ProcesaImgWin.getInstance().setIndexImgProcesada(0);
     }
 
     public void loadingGuiImgSinProcesar() {
@@ -161,6 +164,7 @@ public class ControllerNavegacion {
     public void errorImgNoApta() {
         gui.ProcesaImgWin.getInstance().actualizaImgs(AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\"+UltimaImgProcesada.getInstance().getFileName()
                 , "/imgs/imgNotSuitable.jpg");
+        gui.ProcesaImgWin.getInstance().setIndexImgProcesada(0);
     }
 
     public void errorGuiNotFoundImgSinProcesar() {

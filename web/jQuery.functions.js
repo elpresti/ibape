@@ -28,7 +28,7 @@
                         cache: false,
                         type: "GET",
                         success: function(datos){
-                                $("#tabla").html(datos);								
+                                $("#tabla").html(datos);
                         }
                 });
         }
