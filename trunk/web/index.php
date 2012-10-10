@@ -38,13 +38,22 @@ function consultaYmuestra() {
 	//pasaUltimoPuntoAmapa();
 	var inputLastID = document.getElementById('campoLastID');
 	var inputLastObjeto = document.getElementById('campoLastObjeto');
+	var inputLastFecha = document.getElementById('campoLastFecha');
 	if ((inputLastID != null) && (inputLastID.value >= 0)){
+		if (inputLastFecha != null){
+			cargaUltimaFechaDeLectura();
+		}
 		if ((inputLastObjeto != null) && (inputLastObjeto.value == "vaciarMapa()")){
 			vaciarMapa();
 		}
 		else{ cargaUltimoKml(); }
 		
 	}
+}
+
+function cargaUltimaFechaDeLectura(){
+	var inputLastFecha = document.getElementById('campoLastFecha');
+	document.getElementById('campoUltimaFechaLectura').value = inputLastFecha.value;
 }
 
 function vaciarMapa(){
@@ -231,13 +240,16 @@ addKmlFromString(textoKml);
 
 <div id="map3d" style="height: 100%; width: 100%"></div>  
 <div id="botonardi">
-
+<!--
 <form action="#" method="get" onsubmit="return false;">
     Latitud:<input type="text" id="campoLatitud" size="50" value="latitud"/><br/>
 	Longitud:<input type="text" id="campoLongitud" size="50" value="longitud"/><br/>
     <input type="submit" onclick="levantaInputsYdispara()" value="Carga Punto!"/>
+-->	
 	<!-- <button name="elBoton" onClick="cargaKmlAhora();" text="CargaKML" value="CargaKMLvalue">CargaKmlEntre</button>   -->
+<!--
 </form>
+-->
 
 </div>
 <div id="contenedor">
@@ -248,6 +260,8 @@ addKmlFromString(textoKml);
 	?>
     </div>
 </div>	
-			
+	
+Fecha y hora del &uacute;ltimo punto obtenido: <input type="text" id="campoUltimaFechaLectura" size="50" value="N/A"/ DISABLED><br/>
+	
 </body>
 </html>
