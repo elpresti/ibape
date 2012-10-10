@@ -28,22 +28,38 @@
       function failureCB(errorCode) {
           alert("Error "+errorCode+". No se pudo crear una instancia de GE. Asegurese de que su navegador tiene instalado y activado el Plugin de Google Earth.");		  
       }
-      google.setOnLoadCallback(init);	  
+      google.setOnLoadCallback(init);
+	  
     </script>
 
 <script type="text/javascript">
+function actionsOnLoad(){
+	msgInicial();
+	setInterval('consultaYmuestra()',3000);	
+}
+
+
 function consultaYmuestra() {
 	ConsultaDatosHistoricos();	
 	//pasaUltimoPuntoAmapa();
 	var inputLastID = document.getElementById('campoLastID');
 	var inputLastObjeto = document.getElementById('campoLastObjeto');
+	var inputLastFecha = document.getElementById('campoLastFecha');
 	if ((inputLastID != null) && (inputLastID.value >= 0)){
+		if (inputLastFecha != null  && inputLastFecha.value != null){
+			cargaUltimaFechaDeLectura();
+		}
 		if ((inputLastObjeto != null) && (inputLastObjeto.value == "vaciarMapa()")){
 			vaciarMapa();
 		}
 		else{ cargaUltimoKml(); }
 		
 	}
+}
+
+function cargaUltimaFechaDeLectura(){
+	var inputLastFecha = document.getElementById('campoLastFecha');
+	document.getElementById('campoUltimaFechaLectura').value = inputLastFecha.value;
 }
 
 function pasaUltimoPuntoAmapa() {
@@ -203,17 +219,39 @@ function mueveCamaraApunto(latitud,longitud) {
  
 </head>
 
-<body onLoad="setInterval('consultaYmuestra()',3000);">
+<body onLoad="actionsOnLoad();">
+<div id="titulo">
+	<p align="center" style="color:#000; font-family:Arial, Helvetica, sans-serif; font-size:24px; line-height:24px;">Mapa de Hist&oacute;rico</p>
+</div>
+<div class="msgMultiplesInstancias" style="display:none;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td align="center" valign="middle"><img src="imgs\logoIbapeChico.png" width="140" height="140" border="0"></td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:18px; line-height:18px;">Cargado <span style="color:#06F;">Mapa de Historico</span>...</p></td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:16px;">Recuerde que no deben haber otras instancias corriendo del <span style="color:#06F;">Mapa de Historico</span>, en caso contrario cierre las demas</p></td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:12px;">Sitio optimizado para visualizar con Google Chrome <img src="imgs\logoChome30x30.png" width="30" height="30" border="0"></p></td>
+        </tr>
+    </table>
+</div>
 
 <div id="map3d" style="height: 100%; width: 100%"></div>  
 <div id="botonardi">
-
+<!--
 <form action="#" method="get" onsubmit="return false;">
     Latitud:<input type="text" id="campoLatitud" size="50" value="latitud"/><br/>
 	Longitud:<input type="text" id="campoLongitud" size="50" value="longitud"/><br/>
     <input type="submit" onclick="levantaInputsYdispara()" value="Carga Punto!"/>
+-->
 	<!-- <button name="elBoton" onClick="cargaKmlAhora();" text="CargaKML" value="CargaKMLvalue">CargaKmlEntre</button>   -->
+<!--
 </form>
+-->
 
 </div>
 <div id="contenedor">
@@ -224,6 +262,6 @@ function mueveCamaraApunto(latitud,longitud) {
 	?>
     </div>
 </div>	
-			
+Fecha y hora del &uacute;ltimo punto recibido: <input type="text" id="campoUltimaFechaLectura" size="50" value="N/A"/ disabled><br/>
 </body>
 </html>

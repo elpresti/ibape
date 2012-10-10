@@ -8,8 +8,8 @@
 
 
  
-    <script src="http://www.google.com/jsapi?key=ABQIAAAAOtousWKrL8vd1IswNyu1ehRGEPZC4_vF9r_VtS7sm9R3s5IEWRRGeCJGgyvIj3TyAjFPctCee28OOA"></script>        
-    <script type="text/javascript">
+<script src="http://www.google.com/jsapi?key=ABQIAAAAOtousWKrL8vd1IswNyu1ehRGEPZC4_vF9r_VtS7sm9R3s5IEWRRGeCJGgyvIj3TyAjFPctCee28OOA"></script>        
+<script type="text/javascript">
       var ge;
       google.load("earth", "1");
 
@@ -33,6 +33,12 @@
     </script>
 
 <script type="text/javascript">
+function actionsOnLoad(){
+	msgInicial();
+	setInterval('consultaYmuestra()',3000);	
+}
+
+
 function consultaYmuestra() {
 	ConsultaDatos();	
 	//pasaUltimoPuntoAmapa();
@@ -236,7 +242,26 @@ addKmlFromString(textoKml);
  
 </head>
 
-<body onLoad="setInterval('consultaYmuestra()',3000);">
+<body onLoad="actionsOnLoad();">
+<div id="titulo">
+	<p align="center" style="color:#000; font-family:Arial, Helvetica, sans-serif; font-size:24px; line-height:24px;">Mapa de Navegaci&oacute;n</p>
+</div>
+<div class="msgMultiplesInstancias" style="display:none;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+            <td align="center" valign="middle"><img src="imgs\logoIbapeChico.png" width="140" height="140" border="0"></td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:18px; line-height:18px;">Cargado <span style="color:#0C3;">Mapa de Navegación</span>...</p></td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:16px;">Recuerde que no deben haber otras instancias corriendo del <span style="color:#0C3;">Mapa de Navegación</span>, en caso contrario cierre las demas</p></td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:12px;">Sitio optimizado para visualizar con Google Chrome <img src="imgs\logoChome30x30.png" width="30" height="30" border="0"></p></td>
+        </tr>
+    </table>
+</div>
 
 <div id="map3d" style="height: 100%; width: 100%"></div>  
 <div id="botonardi">
@@ -259,9 +284,7 @@ addKmlFromString(textoKml);
 		require('consulta.php');
 	?>
     </div>
-</div>	
-	
-Fecha y hora del &uacute;ltimo punto obtenido: <input type="text" id="campoUltimaFechaLectura" size="50" value="N/A"/ DISABLED><br/>
-	
+</div>
+Fecha y hora del &uacute;ltimo punto recibido: <input type="text" id="campoUltimaFechaLectura" size="50" value="N/A"/ DISABLED><br/>
 </body>
 </html>

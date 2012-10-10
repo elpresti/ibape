@@ -86,3 +86,7 @@
                 $("#tabla").show();
                 return false;
         }
+		
+function msgInicial(){
+	$('.msgMultiplesInstancias').show().delay(12000).fadeOut("slow");
+}
