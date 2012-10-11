@@ -189,7 +189,7 @@ public class BrokerDbMapaHistorico implements Runnable{
                 +"PROFUNDIDAD VARCHAR(30) NULL, " 
                 +"OBJETO VARCHAR(40) NULL, "   
                 +"TEMPAGUA VARCHAR(40) NULL, "   
-                +"COMENTARIOS VARCHAR(400) NULL, "
+                +"COMENTARIOS TEXT NULL, "
                 +"LEIDO BOOLEAN NOT NULL DEFAULT 0, "
                 +"KML TEXT NULL, "
                 +" PRIMARY KEY (ID)"

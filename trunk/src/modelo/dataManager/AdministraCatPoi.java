@@ -13,9 +13,15 @@ import java.util.ArrayList;
 public class AdministraCatPoi {
     private ArrayList<CategoriaPoi> categorias;
     static AdministraCatPoi unicaInstancia;
-    private String nombreCatImgsConMarcas;
+    //atributos de la categoria reservada "Imgs con marcas"
     private int idCatImgsConMarcas;
+    private String nombreCatImgsConMarcas;
     private String iconoFileNameCatImgsConMarcas;
+    //atributos de la categoria reservada "Lances"
+    private int idCatLances;
+    private String nombreCatLances;
+    private String iconoFileNameCatLances;
+    
     
     private AdministraCatPoi(){
         inicializador();
@@ -79,6 +85,9 @@ public class AdministraCatPoi {
         setIdCatImgsConMarcas(-1);
         setNombreCatImgsConMarcas("Imagenes con Marcas");
         setIconoFileNameCatImgsConMarcas("icono-cat-peces50x50.png");
+        setIdCatLances(-2);
+        setNombreCatLances("Lances finalizados");
+        setIconoFileNameCatLances("icono-cat-red50x50.png");
     }
 
     /**
@@ -93,6 +102,48 @@ public class AdministraCatPoi {
      */
     public void setIconoFileNameCatImgsConMarcas(String iconoFileNameCatImgsConMarcas) {
         this.iconoFileNameCatImgsConMarcas = iconoFileNameCatImgsConMarcas;
+    }
+
+    /**
+     * @return the idCatLances
+     */
+    public int getIdCatLances() {
+        return idCatLances;
+    }
+
+    /**
+     * @param idCatLances the idCatLances to set
+     */
+    public void setIdCatLances(int idCatLances) {
+        this.idCatLances = idCatLances;
+    }
+
+    /**
+     * @return the nombreCatLances
+     */
+    public String getNombreCatLances() {
+        return nombreCatLances;
+    }
+
+    /**
+     * @param nombreCatLances the nombreCatLances to set
+     */
+    public void setNombreCatLances(String nombreCatLances) {
+        this.nombreCatLances = nombreCatLances;
+    }
+
+    /**
+     * @return the iconoFileNameCatLances
+     */
+    public String getIconoFileNameCatLances() {
+        return iconoFileNameCatLances;
+    }
+
+    /**
+     * @param iconoFileNameCatLances the iconoFileNameCatLances to set
+     */
+    public void setIconoFileNameCatLances(String iconoFileNameCatLances) {
+        this.iconoFileNameCatLances = iconoFileNameCatLances;
     }
 
 }

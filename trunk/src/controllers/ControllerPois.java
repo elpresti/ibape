@@ -10,10 +10,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.JOptionPane;
 import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.AdministraCatPoi;
 import modelo.dataManager.CategoriaPoi;
+import modelo.dataManager.Lance;
+import modelo.dataManager.Marca;
 import modelo.dataManager.POI;
+import modelo.dataManager.UltimaImgProcesada;
 import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerPOIs;
+import persistencia.Logueador;
 
 /**
  *
@@ -47,7 +52,7 @@ public class ControllerPois {
         p.setLongitud(longitud);
         p.setDescripcion(descripcion);
         p.setMarcas(null);//ver
-        p.setPathImg("editar en controllerPOI -pathImgSonda");//ver
+        p.setPathImg(null);//editar en controllerPOI -pathImgSonda-->ver
         p.setIdCampania(AdministraCampanias.getInstance().getCampaniaEnCurso().getId());
         BrokerPOIs.getInstance().insertPOI(p);
     }
@@ -149,5 +154,60 @@ public class ControllerPois {
             }
         }
         return encontro;
+    }
+
+    public boolean guardaPoiDeImgConMarcas() {
+        //intentará guardar un POI de img con marcas
+        boolean sePudo = false;
+        try {
+            if (!ControllerPois.getInstance().existeCategoria(AdministraCatPoi.getInstance().getIdCatImgsConMarcas())) {
+                ControllerPois.getInstance().agregaCategoriaPOI(AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), AdministraCatPoi.getInstance().getNombreCatImgsConMarcas(), AdministraCatPoi.getInstance().getIconoFileNameCatImgsConMarcas());
+            }
+            Marca ultimaMarca = UltimaImgProcesada.getInstance().getMarcas().get(UltimaImgProcesada.getInstance().getMarcas().size() - 1);
+            String descripcionPoi = "<datosImgProcesada>";
+            descripcionPoi += "<cantMarcas nombre=\"Marcas encontradas: \" valor=\"" + UltimaImgProcesada.getInstance().getMarcas().size() + "\" />";
+            String rutaImg = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual() + "\\";
+            rutaImg += UltimaImgProcesada.getInstance().getFileName();
+            descripcionPoi += "<imgFileName nombre=\"Imagen sin procesar: \" valor=\"" + rutaImg + "\" />";
+            descripcionPoi += "</datosImgProcesada>";
+            ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), descripcionPoi, ultimaMarca.getLatitud(), ultimaMarca.getLongitud(), null, ultimaMarca.getFechaYhora());
+            sePudo = true;
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("guardaPoiDeImgConMarcas(): " + e.toString());
+        }
+        return sePudo;
+    }
+
+    public boolean guardaPoisDelLance(Lance unLance) {
+        //intentará guardar un POI de un Lance finalizado
+        boolean sePudo = false;
+        try {
+            if (!ControllerPois.getInstance().existeCategoria(AdministraCatPoi.getInstance().getIdCatLances())) {
+                ControllerPois.getInstance().agregaCategoriaPOI(AdministraCatPoi.getInstance().getIdCatLances(), AdministraCatPoi.getInstance().getNombreCatLances(), AdministraCatPoi.getInstance().getIconoFileNameCatLances());
+            }
+            //primero inserto el POI de INICIO del lance, junto con sus datos
+            String descripcionPoi = 
+                             "<datosLance>";
+            descripcionPoi +=   "<idLance nombre=\"Numero de Lance: \" valor=\"" + unLance.getId() + "\" />";
+            //descripcionPoi +=   "<estadoLance nombre=\"Estado del Lance: \" valor=\"" + unLance.getEstadoLance() + "\" />";
+            descripcionPoi +=   "<fYhInicio nombre=\"Fecha y hora de inicio: \" valor=\"" + unLance.getfYHIni() + "\" />";
+            descripcionPoi +=   "<latitudInicio nombre=\"Latitud de inicio: \" valor=\"" + unLance.getPosIniLat() + "\" />";
+            descripcionPoi +=   "<longitudInicio nombre=\"Longitud de inicio: \" valor=\"" + unLance.getPosIniLon() + "\" />";
+            descripcionPoi +="</datosLance>";
+            ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatLances(), descripcionPoi, unLance.getPosIniLat(), unLance.getPosIniLon(), null, unLance.getfYHIni());
+            //luego inserto el POI de FIN del lance, junto con sus datos
+            descripcionPoi +="<datosLance>";
+            descripcionPoi +=   "<idLance nombre=\"Numero de Lance: \" valor=\"" + unLance.getId() + "\" />";
+            descripcionPoi +=   "<estadoLance nombre=\"Estado del Lance: \" valor=\"" + unLance.getEstadoLance() + "\" />";
+            descripcionPoi +=   "<fYhFin nombre=\"Fecha y hora de fin: \" valor=\"" + unLance.getfYHFin() + "\" />";
+            descripcionPoi +=   "<latitudFin nombre=\"Latitud de fin: \" valor=\"" + unLance.getPosFinLat() + "\" />";
+            descripcionPoi +=   "<longitudFin nombre=\"Longitud de fin: \" valor=\"" + unLance.getPosFinLon() + "\" />";
+            descripcionPoi +="</datosLance>";
+            ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatLances(), descripcionPoi, unLance.getPosFinLat(), unLance.getPosFinLon(), null, unLance.getfYHFin());
+            sePudo = true;
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("guardaPoisDelLance(): " + e.toString());
+        }
+        return sePudo;
     }
 }

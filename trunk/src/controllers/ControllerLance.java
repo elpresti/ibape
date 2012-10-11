@@ -79,6 +79,7 @@ public class ControllerLance {
                 return;
             }
             modificaLance(unLance);
+            ControllerPois.getInstance().guardaPoisDelLance(unLance);
             PanelOpcLances.getInstance().cargaGrillaLances();
             PanelOpcLances.getInstance().setTxtBtnIniciaLance();
         }
