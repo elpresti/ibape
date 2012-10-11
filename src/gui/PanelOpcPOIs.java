@@ -18,15 +18,11 @@ import java.awt.Image;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.lang.Object;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import modelo.dataCapture.Sistema;
@@ -104,7 +100,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelPoisTitulo = new org.jdesktop.swingx.JXPanel();
         lblTituloTablaPois = new org.jdesktop.swingx.JXLabel();
         panelTablaPois = new org.jdesktop.swingx.JXPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
         tablaPois = new org.jdesktop.swingx.JXTable();
         panelSurPois = new org.jdesktop.swingx.JXPanel();
         panelAccionesPOIElegido = new org.jdesktop.swingx.JXPanel();
@@ -131,7 +127,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelCatTitulo = new org.jdesktop.swingx.JXPanel();
         lblTituloTablaCategorias = new org.jdesktop.swingx.JXLabel();
         panelTablaCategorias = new org.jdesktop.swingx.JXPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         tablaCategorias = new org.jdesktop.swingx.JXTable();
         panelSurCatPois = new org.jdesktop.swingx.JXPanel();
         panelAccionesCatPOIElegido = new org.jdesktop.swingx.JXPanel();
@@ -192,11 +188,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelTablaPois.setMaximumSize(new java.awt.Dimension(500, 200));
         panelTablaPois.setMinimumSize(new java.awt.Dimension(500, 200));
         panelTablaPois.setPreferredSize(new java.awt.Dimension(500, 200));
-        panelTablaPois.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
-
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 200));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 50));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 200));
 
         tablaPois.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -206,35 +197,26 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tablaPois.setEditable(false);
+        ));
         tablaPois.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tablaPoisMouseReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(tablaPois);
-        tablaPois.getColumnModel().getColumn(0).setMinWidth(70);
-        tablaPois.getColumnModel().getColumn(0).setPreferredWidth(70);
+        jScrollPane4.setViewportView(tablaPois);
 
-        panelTablaPois.add(jScrollPane1);
+        javax.swing.GroupLayout panelTablaPoisLayout = new javax.swing.GroupLayout(panelTablaPois);
+        panelTablaPois.setLayout(panelTablaPoisLayout);
+        panelTablaPoisLayout.setHorizontalGroup(
+            panelTablaPoisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+        );
+        panelTablaPoisLayout.setVerticalGroup(
+            panelTablaPoisLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+        );
 
         panelPois.add(panelTablaPois, java.awt.BorderLayout.CENTER);
 
@@ -401,48 +383,35 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelTablaCategorias.setMaximumSize(new java.awt.Dimension(500, 250));
         panelTablaCategorias.setMinimumSize(new java.awt.Dimension(500, 250));
         panelTablaCategorias.setPreferredSize(new java.awt.Dimension(500, 250));
-        panelTablaCategorias.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
-
-        jScrollPane2.setPreferredSize(new java.awt.Dimension(500, 200));
 
         tablaCategorias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Nombre de Categoria", "Icono"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tablaCategorias.setMaximumSize(new java.awt.Dimension(2147483647, 72));
-        tablaCategorias.setMinimumSize(new java.awt.Dimension(115, 72));
-        tablaCategorias.setPreferredScrollableViewportSize(new java.awt.Dimension(295, 360));
-        tablaCategorias.setPreferredSize(new java.awt.Dimension(295, 72));
+        ));
         tablaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tablaCategoriasMouseReleased(evt);
             }
         });
-        jScrollPane2.setViewportView(tablaCategorias);
-        tablaCategorias.getColumnModel().getColumn(1).setMinWidth(50);
-        tablaCategorias.getColumnModel().getColumn(1).setPreferredWidth(50);
-        tablaCategorias.getColumnModel().getColumn(1).setMaxWidth(50);
+        jScrollPane1.setViewportView(tablaCategorias);
 
-        panelTablaCategorias.add(jScrollPane2);
+        javax.swing.GroupLayout panelTablaCategoriasLayout = new javax.swing.GroupLayout(panelTablaCategorias);
+        panelTablaCategorias.setLayout(panelTablaCategoriasLayout);
+        panelTablaCategoriasLayout.setHorizontalGroup(
+            panelTablaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+        );
+        panelTablaCategoriasLayout.setVerticalGroup(
+            panelTablaCategoriasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+        );
 
         panelCategoriaPois.add(panelTablaCategorias, java.awt.BorderLayout.CENTER);
 
@@ -618,22 +587,28 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private void btnEliminaCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminaCatPOIActionPerformed
         if (tablaCategorias.getSelectedRowCount() != 0) {
             int[] listaCatPOIsSeleccionados = tablaCategorias.getSelectedRows();
-            if (JOptionPane.showConfirmDialog(null,
+            /*if (JOptionPane.showConfirmDialog(null,
                     "Desea eliminar " + listaCatPOIsSeleccionados.length + " Categorias de POIs seleccionados?",
-                    "Eliminar POIs",
+                    "Eliminar categorias",
                     JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE) == 0) {
+                    JOptionPane.WARNING_MESSAGE) == 0) {*/
                 int i = 0;
                 while (i < listaCatPOIsSeleccionados.length) {
                     CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(listaCatPOIsSeleccionados[i], 1);
                     if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
                         //ver que no sea la ultima
-                        ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                        if (JOptionPane.showConfirmDialog(null,
+                                "Eliminar la categoria: " + unaCatPOI.getTitulo() + " ?",
+                                "Eliminar categorias",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE) == 0) {
+                            ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                        }
                     } else {
                         //JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
                         int opcion = JOptionPane.showOptionDialog(
                                 null,
-                                "Existen POIs en alguna campaña con la categoria que se quiere eliminar, ¿que desea hacer con la categoria?",
+                                "Existen POIs en alguna campaña con la categoria:" + unaCatPOI.getTitulo() + ", ¿que desea hacer con la categoria?",
                                 "Seleccione una opcion",
                                 JOptionPane.YES_NO_CANCEL_OPTION,
                                 JOptionPane.QUESTION_MESSAGE,
@@ -680,11 +655,14 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                         }
                     }
                     i++;
+                    /*cargaGrillaPOIS();
+                    cargaGrillaCategoriaPOIS();
+                    cargaComboCategorias();*///pierdo los indices para borrar el siguiente
                 }
                 cargaGrillaPOIS();
                 cargaGrillaCategoriaPOIS();
                 cargaComboCategorias();
-            }
+            //}
         }
     }//GEN-LAST:event_btnEliminaCatPOIActionPerformed
 
@@ -712,7 +690,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     }//GEN-LAST:event_tablaPoisMouseReleased
 
     private void tablaCategoriasMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaCategoriasMouseReleased
-        // TODO add your handling code here:
         if (tablaCategorias.getSelectedRowCount() == 0) {
             habilitaPanelDatosCatPOIs(false);
         } else {
@@ -864,8 +841,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private javax.swing.JComboBox comboCategorias;
     private javax.swing.JComboBox comboIconoCatPoi;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private org.jdesktop.swingx.JXLabel lblAccionesCampania1;
     private org.jdesktop.swingx.JXLabel lblAccionesPOI;
     private org.jdesktop.swingx.JXLabel lblCategoria;
