@@ -130,53 +130,29 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelTabla.setMinimumSize(new java.awt.Dimension(500, 190));
         panelTabla.setPreferredSize(new java.awt.Dimension(500, 190));
 
-        jScrollPane1.setMaximumSize(new java.awt.Dimension(500, 170));
-        jScrollPane1.setMinimumSize(new java.awt.Dimension(500, 170));
-        jScrollPane1.setPreferredSize(new java.awt.Dimension(500, 170));
-
         tablaLances.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Fecha inicio", "Fecha fin", "Comentarios"
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tablaLances.setColumnSelectionAllowed(true);
+        ));
         tablaLances.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tablaLancesMouseReleased(evt);
             }
         });
         jScrollPane1.setViewportView(tablaLances);
-        tablaLances.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tablaLances.getColumnModel().getColumn(0).setMinWidth(30);
-        tablaLances.getColumnModel().getColumn(0).setPreferredWidth(30);
-        tablaLances.getColumnModel().getColumn(1).setMinWidth(30);
-        tablaLances.getColumnModel().getColumn(1).setPreferredWidth(30);
 
         javax.swing.GroupLayout panelTablaLayout = new javax.swing.GroupLayout(panelTabla);
         panelTabla.setLayout(panelTablaLayout);
         panelTablaLayout.setHorizontalGroup(
             panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelTablaLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
         panelTablaLayout.setVerticalGroup(
             panelTablaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -385,14 +361,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_btnModificarLanceActionPerformed
 
     private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
-        if (comboFechaInicio.getDate()==null) {
-                JOptionPane.showMessageDialog(null, "Seleccionar fecha de inicio");
-                return;
-            }
+        if (comboFechaInicio.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Seleccionar fecha de inicio");
+            return;
+        }
         if (comboFechaFin.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Seleccionar fecha de fin");
-                return;
-            }
+            JOptionPane.showMessageDialog(null, "Seleccionar fecha de fin");
+            return;
+        }
         if (modificandoLance) {
             //modifica POI
             Lance unLance = getTempLance();
@@ -435,15 +411,15 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     private void btnInsertarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarLanceActionPerformed
         // TODO add your handling code here:
-                if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
-          
-                habilitaPanelDatosLances(true);
-                habilitaCamposLances(true);
-                btnModificarLance.setEnabled(false);
-                btnEliminarLance.setEnabled(false);
-                btnInsertarLance.setEnabled(false);
-                btnGuardarLance.setEnabled(true);
-            
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+
+            habilitaPanelDatosLances(true);
+            habilitaCamposLances(true);
+            btnModificarLance.setEnabled(false);
+            btnEliminarLance.setEnabled(false);
+            btnInsertarLance.setEnabled(false);
+            btnGuardarLance.setEnabled(true);
+
         } else {
             JOptionPane.showMessageDialog(null, "No se pueden registrar lances sin estar en una campaña");
         }
@@ -454,7 +430,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_campoComentarioActionPerformed
 
     private void tablaLancesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaLancesMouseReleased
-        // TODO add your handling code here:
         if (tablaLances.getSelectedRowCount() == 0) {
             habilitaPanelDatosLances(false);
         } else {

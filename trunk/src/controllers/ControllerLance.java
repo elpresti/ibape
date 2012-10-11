@@ -5,16 +5,14 @@
 package controllers;
 
 import gui.PanelOpcLances;
+import gui.PanelSelector;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.Cajon;
 import modelo.dataManager.Especie;
 import modelo.dataManager.Lance;
 import modelo.dataManager.Punto;
 import persistencia.BrokerCajon;
-import persistencia.BrokerCampania;
 import persistencia.BrokerEspecie;
 import persistencia.BrokerLance;
 
@@ -44,6 +42,7 @@ public class ControllerLance {
         //  if (ControllerCampania.getInstance().getEstadoCampaniaEnCurso() == 1) { //tengo una campaña en curso
         //  if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) { //tengo un lance en curso
         PanelOpcLances.getInstance().setTxtBtnIniciaLance();
+        PanelSelector.getInstance().setTxtBtnIniciaLance();
         if (JOptionPane.showConfirmDialog(null,
                 "Desea registrar un nuevo lance?", //<---
                 "Registrar lances",
@@ -65,6 +64,7 @@ public class ControllerLance {
 
     public void finalizarLance() {
         PanelOpcLances.getInstance().setTxtBtnFinLance();
+        PanelSelector.getInstance().setTxtBtnFinLance();
         if (JOptionPane.showConfirmDialog(null,
                 "Desea finalizar el lance en curso?", //<---
                 "Finalizar lances",

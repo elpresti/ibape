@@ -10,12 +10,7 @@
  */
 package gui;
 
-import controllers.ControllerAlertas;
 import controllers.ControllerLance;
-import java.awt.Dimension;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -94,7 +89,7 @@ public class PanelSelector extends javax.swing.JPanel {
         jXTaskPaneContainer1.add(panelLogo);
 
         taskPaneNavegacion.setTitle("Navegación");
-        taskPaneNavegacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneNavegacion.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelNavegacion.setPreferredSize(new java.awt.Dimension(140, 30));
         panelNavegacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
@@ -109,12 +104,12 @@ public class PanelSelector extends javax.swing.JPanel {
         });
         panelNavegacion.add(lnkNavegacion);
 
-        taskPaneNavegacion.add(panelNavegacion);
+        taskPaneNavegacion.getContentPane().add(panelNavegacion);
 
         jXTaskPaneContainer1.add(taskPaneNavegacion);
 
         taskPaneHistorico.setTitle("Historico");
-        taskPaneHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneHistorico.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelHistorico.setPreferredSize(new java.awt.Dimension(140, 35));
         panelHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
@@ -129,12 +124,12 @@ public class PanelSelector extends javax.swing.JPanel {
         });
         panelHistorico.add(lnkHistorico);
 
-        taskPaneHistorico.add(panelHistorico);
+        taskPaneHistorico.getContentPane().add(panelHistorico);
 
         jXTaskPaneContainer1.add(taskPaneHistorico);
 
         taskPaneOpciones.setTitle("Opciones");
-        taskPaneOpciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneOpciones.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelOpciones.setMinimumSize(new java.awt.Dimension(110, 170));
         panelOpciones.setPreferredSize(new java.awt.Dimension(140, 200));
@@ -210,12 +205,12 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelOpciones.add(panelInformes);
 
-        taskPaneOpciones.add(panelOpciones);
+        taskPaneOpciones.getContentPane().add(panelOpciones);
 
         jXTaskPaneContainer1.add(taskPaneOpciones);
 
         taskPaneAyuda.setTitle("Ayuda");
-        taskPaneAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneAyuda.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelAyuda.setPreferredSize(new java.awt.Dimension(140, 35));
         panelAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
@@ -230,7 +225,7 @@ public class PanelSelector extends javax.swing.JPanel {
         });
         panelAyuda.add(lnkAyuda);
 
-        taskPaneAyuda.add(panelAyuda);
+        taskPaneAyuda.getContentPane().add(panelAyuda);
 
         jXTaskPaneContainer1.add(taskPaneAyuda);
 
@@ -255,8 +250,8 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelBtnLanzaRecoge.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 0));
 
-        btnLanzaRecoge.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnLanzaRecoge.setText("Lanza / Recoge");
+        btnLanzaRecoge.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnLanzaRecoge.setText("Lance");
         btnLanzaRecoge.setMaximumSize(new java.awt.Dimension(110, 23));
         btnLanzaRecoge.setPreferredSize(new java.awt.Dimension(110, 23));
         btnLanzaRecoge.addActionListener(new java.awt.event.ActionListener() {
@@ -405,6 +400,13 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
         //lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
         //lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
         
+    }
+        public void setTxtBtnIniciaLance() {
+        btnLanzaRecoge.setText("Iniciar lance");
+    }
+
+    public void setTxtBtnFinLance() {
+        btnLanzaRecoge.setText("Finalizar lance");
     }
     
     
