@@ -127,7 +127,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         btnGraficarDatos = new javax.swing.JButton();
         btnIniciarMapaNav = new javax.swing.JButton();
         btnDetenerMapaNav = new javax.swing.JButton();
-        logoChrome = new javax.swing.JLabel();
+        btnAbrirBrowser = new org.jdesktop.swingx.JXHyperlink();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setPreferredSize(new java.awt.Dimension(500, 500));
@@ -491,9 +491,15 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         });
         panelBtnActualizar.add(btnDetenerMapaNav);
 
-        logoChrome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoChome30x30.png"))); // NOI18N
-        logoChrome.setToolTipText("Se recomienda visualizar el mapa con Google Chrome");
-        panelBtnActualizar.add(logoChrome);
+        btnAbrirBrowser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoChome30x30.png"))); // NOI18N
+        btnAbrirBrowser.setText("");
+        btnAbrirBrowser.setToolTipText("Se recomienda visualizar el mapa con Google Chrome");
+        btnAbrirBrowser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirBrowserActionPerformed(evt);
+            }
+        });
+        panelBtnActualizar.add(btnAbrirBrowser);
 
         add(panelBtnActualizar, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
@@ -587,7 +593,12 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         ProcesaImgWin.getInstance().mostrarVentana(true);
     }//GEN-LAST:event_btnProcesaImgActionPerformed
 
+    private void btnAbrirBrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirBrowserActionPerformed
+        ControllerNavegacion.getInstance().abreBrowserConMapaNavegacion();
+    }//GEN-LAST:event_btnAbrirBrowserActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXHyperlink btnAbrirBrowser;
     private javax.swing.JButton btnDetenerMapaNav;
     private javax.swing.JButton btnGraficarDatos;
     private javax.swing.JButton btnIniciarMapaNav;
@@ -618,7 +629,6 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private java.awt.Label lblTxtTemp;
     private java.awt.Label lblTxtVelocidad;
     private java.awt.Label lblVelocidad;
-    private javax.swing.JLabel logoChrome;
     private org.jdesktop.swingx.JXPanel panelBtnActualizaMapa;
     private javax.swing.JPanel panelBtnActualizar;
     private org.jdesktop.swingx.JXPanel panelCantMarcas;

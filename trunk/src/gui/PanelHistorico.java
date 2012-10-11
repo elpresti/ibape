@@ -97,7 +97,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         btnGraficarDatos = new javax.swing.JButton();
         btnIniciarMapaHistorico = new javax.swing.JButton();
         btnDetenerMapaHistorico = new javax.swing.JButton();
-        logoChrome = new javax.swing.JLabel();
+        btnAbreBrowser = new org.jdesktop.swingx.JXHyperlink();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -298,9 +298,15 @@ public class PanelHistorico extends javax.swing.JPanel {
         });
         panelBtnGraficar.add(btnDetenerMapaHistorico);
 
-        logoChrome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoChome30x30.png"))); // NOI18N
-        logoChrome.setToolTipText("Se recomienda visualizar el mapa con Google Chrome");
-        panelBtnGraficar.add(logoChrome);
+        btnAbreBrowser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoChome30x30.png"))); // NOI18N
+        btnAbreBrowser.setText("");
+        btnAbreBrowser.setToolTipText("Se recomienda visualizar el mapa con Google Chrome");
+        btnAbreBrowser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbreBrowserActionPerformed(evt);
+            }
+        });
+        panelBtnGraficar.add(btnAbreBrowser);
 
         add(panelBtnGraficar);
     }// </editor-fold>//GEN-END:initComponents
@@ -390,7 +396,12 @@ public class PanelHistorico extends javax.swing.JPanel {
         btnIniciarMapaHistorico.setVisible(true);
     }//GEN-LAST:event_btnDetenerMapaHistoricoActionPerformed
 
+    private void btnAbreBrowserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbreBrowserActionPerformed
+        ControllerHistorico.getInstance().abreBrowserConMapaHistorico();
+    }//GEN-LAST:event_btnAbreBrowserActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.jdesktop.swingx.JXHyperlink btnAbreBrowser;
     private javax.swing.JButton btnDetenerMapaHistorico;
     private javax.swing.JButton btnGraficarDatos;
     private javax.swing.JButton btnIniciarMapaHistorico;
@@ -402,7 +413,6 @@ public class PanelHistorico extends javax.swing.JPanel {
     private java.awt.Label lblTituloHistorico;
     private java.awt.Label lblTxtDatosMapa;
     private java.awt.Label lblTxtTablaCatPois;
-    private javax.swing.JLabel logoChrome;
     private javax.swing.JPanel panelBtnGraficar;
     private javax.swing.JPanel panelCampanias;
     private javax.swing.JPanel panelInferior;
@@ -461,6 +471,7 @@ public class PanelHistorico extends javax.swing.JPanel {
         grupoElijeCampania = new ButtonGroup(); 
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
+        setTxtBtnIniciaMapa(btnIniciarMapaHistorico.getText());
         habilitaPanelTablaCatPois(false);
         seteaBotonesMapa();
         tablaCatPois.setRowHeight(30);
