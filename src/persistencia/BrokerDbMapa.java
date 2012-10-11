@@ -175,18 +175,18 @@ public class BrokerDbMapa implements Runnable{
     }
 
     public boolean existeDb(){
-        boolean b=false;
+        boolean existe=false;
         try{
              getStatement().executeQuery("use "+getDbName()+";");
-             b=true;
-             return b;
-            }
-             catch (Exception e){
-                return b;
-            }
+             existe=true;
+        }
+         catch (Exception e){
+             //no existe
+        }
+        return existe;
     }
 
-    public boolean creaDbyTabla() throws Exception {
+    public boolean creaDbyTabla() {
         boolean db = false;
         boolean tabla = false;
 
@@ -228,7 +228,7 @@ public class BrokerDbMapa implements Runnable{
             else { setTablaExiste(true); }
         }
         catch (Exception e) {
-            throw e;
+            Logueador.getInstance().agregaAlLog("BrokerDbMapa.creaDbyTabla(): "+e.toString());
         } finally {
             //close();
         }                        

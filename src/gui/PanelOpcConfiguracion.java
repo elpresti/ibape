@@ -41,6 +41,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
     /** Creates new form PanelOpcConfiguracion */
     private PanelOpcConfiguracion() {
         initComponents();
+        inicializador();
         btnDesconectaGps.setVisible(false);
         btnDesconectaSonda.setVisible(false);
         btnDesconectaLan.setVisible(false);
@@ -1775,6 +1776,10 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
      */
     public javax.swing.JCheckBox getChkAutoConectaLan() {
         return chkAutoConectaLan;
+    }
+
+    private void inicializador() {
+        panelUnidades.setVisible(false);
     }
 
 }

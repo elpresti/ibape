@@ -21,6 +21,7 @@ import persistencia.BrokerHistoricoPunto;
 import persistencia.BrokerHistoricoSondaSet;
 import persistencia.Logueador;
 
+
 /**
  *
  * @author Sebastian
@@ -98,7 +99,7 @@ public class ControllerHistorico {
 
     public int getCantPuntosHistoricos(int idCamp){
         return BrokerHistoricoPunto.getInstance().cuantosPuntosTiene(idCamp);
-    }        
+    }
 
     public boolean iniciaServerYabreBrowser() {
         boolean sePudo=false;
@@ -107,8 +108,7 @@ public class ControllerHistorico {
                 if (BrokerDbMapa.getInstance().disparaEjecucion()){
                     if (persistencia.BrokerDbMapaHistorico.getInstance().disparaEjecucion()){                        
                         //do what you want to do after sleeptig
-                        modelo.gisModule.Browser.getInstance().setUrlTemp(modelo.gisModule.Browser.getInstance().getUrl()+"/historico.php");
-                        modelo.gisModule.Browser.getInstance().start();
+                        abreBrowserConMapaHistorico();
                         //modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania(modelo.gisModule.Browser.getInstance().getUrlTemp());
                         sePudo=true;
                     
@@ -191,9 +191,13 @@ public class ControllerHistorico {
         grafica.retardo=retardo;
         grafica.start();
     }
+
+    public void abreBrowserConMapaHistorico(){
+        modelo.gisModule.Browser.getInstance().setUrlTemp(modelo.gisModule.Browser.getInstance().getUrl()+"/historico.php");
+        modelo.gisModule.Browser.getInstance().start();
+    }
     
 }
-
 class GraficaDatosHistoricos implements Runnable{
     Thread thGraficar;
     public int retardo;

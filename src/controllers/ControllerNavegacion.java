@@ -86,7 +86,7 @@ public class ControllerNavegacion {
         try{
             if (!(BrokerDbMapa.getInstance().isUsarMapaNavegacion())) {
                 modelo.gisModule.WebServer.getInstance().start();
-                if (BrokerDbMapa.getInstance().disparaEjecucion()) {
+                if (BrokerDbMapa.getInstance().disparaEjecucion()){
                     BrokerDbMapa.getInstance().setUsarMapaNavegacion(true);
                     //do what you want to do before sleeping
                     //Thread.currentThread().sleep(2000);//sleep for 2000 ms --> ya se hace dentro del Broker
@@ -126,7 +126,8 @@ public class ControllerNavegacion {
     public double getLongitudActual() {
         return Punto.getInstance().getLongitud();
     }
-    private void abreBrowserConMapaNavegacion() {
+
+    public void abreBrowserConMapaNavegacion() {
         modelo.gisModule.Browser.getInstance().setUrlTemp(Browser.getInstance().getUrl());
         modelo.gisModule.Browser.getInstance().start();
     }
@@ -186,7 +187,7 @@ public class ControllerNavegacion {
     }
 
     public void loadingGuiTablaMarcas() {
-        PanelNavegacion.getInstance().habilitaPanelCantMarcas(false); 
+        PanelNavegacion.getInstance().habilitaPanelCantMarcas(false);
         PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("Procesando imagen recibida...");
     }
 
