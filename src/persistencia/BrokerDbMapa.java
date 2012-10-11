@@ -217,7 +217,7 @@ public class BrokerDbMapa implements Runnable{
                 +"PROFUNDIDAD VARCHAR(30) NOT NULL, " 
                 +"OBJETO VARCHAR(40), "   
                 +"TEMPAGUA VARCHAR(40), "   
-                +"COMENTARIOS VARCHAR(400), "
+                +"COMENTARIOS TEXT, "
                 +"LEIDO BOOLEAN NOT NULL DEFAULT 0, "
                 +"KML TEXT NOT NULL, "
                 +" PRIMARY KEY (ID)"

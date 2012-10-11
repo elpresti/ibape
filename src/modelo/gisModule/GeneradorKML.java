@@ -397,7 +397,7 @@ public class GeneradorKML {
                             + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
                             + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
                             + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
-        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatImgsConMarcas()){
+        if (noEsCategoriaDePoiReservada(poi.getIdCategoriaPOI())){
                     contenidoHtml += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
         }else{
             //SAXBuilder se encarga de cargar el archivo XML del disco o de un String
@@ -443,5 +443,14 @@ public class GeneradorKML {
                   + "</table>" 
                + "</div>";
         return contenidoHtml;
+    }
+
+    private boolean noEsCategoriaDePoiReservada(int idCategoriaPOI) {
+        boolean esCatReservada=false;
+        if (idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatImgsConMarcas() ||
+                idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatLances()){
+            esCatReservada=true;
+        }
+        return esCatReservada;
     }
 }

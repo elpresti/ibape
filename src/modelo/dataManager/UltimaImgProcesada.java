@@ -5,6 +5,7 @@
 package modelo.dataManager;
 
 import controllers.ControllerNavegacion;
+import controllers.ControllerPois;
 import java.util.ArrayList;
 
 /**
@@ -69,7 +70,7 @@ public class UltimaImgProcesada {
     public void setMarcas(ArrayList<modelo.dataManager.Marca> marcas) {
         this.marcas = marcas;
         if (marcas.size()>0){
-            ControllerNavegacion.getInstance().guardaPoiDeImgConMarcas();
+            ControllerPois.getInstance().guardaPoiDeImgConMarcas();
         }
     }
 

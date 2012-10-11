@@ -195,40 +195,6 @@ public class ControllerNavegacion {
         PanelNavegacion.getInstance().cargaMsgEnTablaMarcas("Hubo un error al procesar la ultima imagen y no se pudieron obtener las marcas...");
     }
 
-    public boolean guardaPoiDeImgConMarcas() {//intentará guardar un POI de img con marcas
-        boolean sePudo=false;
-        try{
-            //verifica si ya existe la categoria de imgsConMarcas
-            if (!ControllerPois.getInstance().existeCategoria(
-                    modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas())){
-                //si no existe la crea
-                ControllerPois.getInstance().agregaCategoriaPOI(
-                    modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), 
-                    modelo.dataManager.AdministraCatPoi.getInstance().getNombreCatImgsConMarcas(), 
-                    modelo.dataManager.AdministraCatPoi.getInstance().getIconoFileNameCatImgsConMarcas());
-            }
-            //obtiene y formatea los datos que compondran el POI
-            modelo.dataManager.Marca ultimaMarca = UltimaImgProcesada.getInstance().getMarcas().get(
-                    UltimaImgProcesada.getInstance().getMarcas().size()-1);
-            String descripcionPoi = "<datosImgProcesada>";
-            descripcionPoi += "<cantMarcas nombre=\"Marcas encontradas: \" valor=\""+UltimaImgProcesada.getInstance().getMarcas().size()+"\" />";
-            String rutaImg = AdministraCampanias.getInstance().getFullFolderHistoricoDeCampActual()+"\\";
-            rutaImg += UltimaImgProcesada.getInstance().getFileName();
-            descripcionPoi += "<imgFileName nombre=\"Imagen sin procesar: \" valor=\""+rutaImg+"\" />";
-            descripcionPoi += "</datosImgProcesada>";
-            ControllerPois.getInstance().agregaPOI(
-                    modelo.dataManager.AdministraCatPoi.getInstance().getIdCatImgsConMarcas(), 
-                    descripcionPoi, 
-                    ultimaMarca.getLatitud(),
-                    ultimaMarca.getLongitud(), 
-                    null, ultimaMarca.getFechaYhora());
-            sePudo=true;
-        }catch(Exception e){
-            Logueador.getInstance().agregaAlLog("guardaPoiDeImgConMarcas(): "+e.toString());
-        }
-        return sePudo;
-    }
-
 }
 class GraficaDatosNavegacion implements Runnable {
     Thread thGraficar;
