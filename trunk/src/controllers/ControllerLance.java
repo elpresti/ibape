@@ -51,8 +51,8 @@ public class ControllerLance {
 
             Lance unLance = new Lance();
             unLance.setIdCampania(ControllerCampania.getInstance().getIdCampaniaEnCurso());
-            unLance.setPosIniLat(Punto.getInstance().getLatitud());
-            unLance.setPosIniLon(Punto.getInstance().getLongitud());
+            unLance.setPosIniLat(Punto.getInstance().getLatConNegativo());
+            unLance.setPosIniLon(Punto.getInstance().getLonConNegativo());
             unLance.setfYHIni(Punto.getInstance().getFechaYhora());
             //los fin los dejo en null
             unLance.setComentarios("");
@@ -72,8 +72,8 @@ public class ControllerLance {
                 JOptionPane.WARNING_MESSAGE) == 0) {
             Lance unLance = BrokerLance.getInstance().getLanceFromDB(BrokerLance.getInstance().getIdLanceEnCurso());
             if (unLance.getfYHFin() == null) {
-                unLance.setPosFinLat(Punto.getInstance().getLatitud());
-                unLance.setPosFinLon(Punto.getInstance().getLongitud());
+                unLance.setPosFinLat(Punto.getInstance().getLatConNegativo());
+                unLance.setPosFinLon(Punto.getInstance().getLonConNegativo());
                 unLance.setfYHFin(Punto.getInstance().getFechaYhora());
             } else {
                 return;
