@@ -312,7 +312,7 @@ public class GeneradorKML {
         salida=salida
           +"<Placemark>";
         if (poi.getIdCategoriaPOI() == AdministraCatPoi.getInstance().getIdCatLances()){
-            String idLance = getIdLanceFromDescripcion(poi.getDescripcion());
+            String idLance = getIdLanceFromXML(poi.getDescripcion());
             if (idLance.length()>0){
                 idLance +="-";
             }
@@ -448,6 +448,7 @@ public class GeneradorKML {
                             if (lance != null){
                                 contenidoHtml +="<br><strong>- Comentarios del Lance: </strong>"+lance.getComentarios();
                                 ArrayList<modelo.dataManager.Cajon> cajonesDelLance = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
+                                contenidoHtml += "<span style=\"color:#099;\">";
                                 if (cajonesDelLance != null){
                                     contenidoHtml += "<br><br><strong>CAJONES OBTENIDOS:";
                                     contenidoHtml += "<br><strong>- Total de cajones: </strong> "+BrokerCajon.getInstance().getCajonesFromLance(Integer.valueOf(valor));
@@ -457,6 +458,7 @@ public class GeneradorKML {
                                     //contenidoHtml += "<p style=\"color:#025090; font-size:14px; line-height:14px;\">"+especie.getNombre()+": "+cajon.getCantidad()+"</p>";
                                     contenidoHtml += "<br>   "+especie.getNombre()+": "+cajon.getCantidad();
                                 }
+                                contenidoHtml += "</span>";
                             }else{
                                 contenidoHtml +="<br>Error! No se ha encontrado el lance";
                             }
@@ -498,14 +500,14 @@ public class GeneradorKML {
         return esCatReservada;
     }
 
-    private String getIdLanceFromDescripcion(String descripcion) {
+    public String getIdLanceFromXML(String xml) {
         String salida = "";
         boolean encontro = false;
         // Creamos el builder basado en SAX      
         SAXBuilder builder = new SAXBuilder();  
         try {
             // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
-            Document contenidoXML = builder.build(new StringReader(descripcion));
+            Document contenidoXML = builder.build(new StringReader(xml));
             // Obtenemos la etiqueta raíz  
             Element raiz = contenidoXML.getRootElement();
             // Recorremos los hijos de la etiqueta raíz  

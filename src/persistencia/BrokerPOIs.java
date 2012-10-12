@@ -9,8 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import modelo.dataManager.AdministraCatPoi;
 import modelo.dataManager.Campania;
 import modelo.dataManager.Marca;
+import modelo.dataManager.POI;
+import modelo.gisModule.GeneradorKML;
 //import sun.text.normalizer.Trie.DataManipulate;
 
 /**
@@ -482,6 +485,31 @@ public class BrokerPOIs extends BrokerPpal {
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return POIs;
+    }
+    
+    public boolean deletePoisFromLance(int idLance){
+        boolean sePudo=false;
+        try{
+            ArrayList<modelo.dataManager.POI> poisDeLances = getPOISFromDBSegunCat(AdministraCatPoi.getInstance().getIdCatLances());
+            int cantPoisEncontrados = 0;
+            for (modelo.dataManager.POI poi: poisDeLances){
+                String idLanceDeUnPoi = GeneradorKML.getInstance().getIdLanceFromXML(poi.getDescripcion());
+                if ((idLanceDeUnPoi.length()>0)  &&  (Integer.valueOf(idLanceDeUnPoi)==idLance)){
+                    POI poiAborrar = new POI();
+                    poiAborrar.setId(idLance);
+                    if (deletePOI(poi)){
+                        cantPoisEncontrados++;
+                    }
+                    if (cantPoisEncontrados==2){
+                        break;
+                    }
+                }
+            }
+            sePudo=(cantPoisEncontrados==0) || (cantPoisEncontrados==2);
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("deletePoisFromLance(): "+e.toString());
+        }
+        return sePudo;
     }
     /* No se usa por ahora.
     boolean insertaCatPoi() {

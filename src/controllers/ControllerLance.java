@@ -15,6 +15,7 @@ import modelo.dataManager.Punto;
 import persistencia.BrokerCajon;
 import persistencia.BrokerEspecie;
 import persistencia.BrokerLance;
+import persistencia.BrokerPOIs;
 
 /**
  *
@@ -120,7 +121,7 @@ public class ControllerLance {
     }
 
     public void eliminaLance(Lance unLance) {
-        if (!BrokerLance.getInstance().deleteLance(unLance)) {
+        if (!BrokerLance.getInstance().deleteLance(unLance) || !BrokerPOIs.getInstance().deletePoisFromLance(unLance.getId())) {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar el Lance " + unLance.getId());
         } else {
             System.out.println("Lance eliminado: " + unLance.getId());
