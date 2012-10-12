@@ -86,7 +86,7 @@ public class AdministraCatPoi {
         setNombreCatImgsConMarcas("Imagenes con Marcas");
         setIconoFileNameCatImgsConMarcas("icono-cat-peces50x50.png");
         setIdCatLances(-2);
-        setNombreCatLances("Lances finalizados");
+        setNombreCatLances("Lances");
         setIconoFileNameCatLances("icono-cat-red50x50.png");
     }
 

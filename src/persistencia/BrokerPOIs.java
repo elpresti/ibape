@@ -142,10 +142,12 @@ public class BrokerPOIs extends BrokerPpal {
             }
 
             sqlQuery = "INSERT INTO Pois "
-                    + "(posLat,posLon,fechaHora,pathImg,idCategoriaPOI,IdCampania,descripcion)"
+                    //+ "(posLat,posLon,fechaHora,pathImg,idCategoriaPOI,IdCampania,descripcion)"
+                    + "(posLat,posLon,fechaHora,idCategoriaPOI,IdCampania,descripcion)"
                     + " VALUES "
                     + "(" + poi.getLatitud() + "," + poi.getLongitud() + "," + fechaHora
-                    + "," + PathImg + "," + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/
+                    //+ "," + PathImg + "," + poi.getIdCategoriaPOI()/*poi.getCategoria().getId()*/
+                    + "," + poi.getIdCategoriaPOI()
                     + "," + poi.getIdCampania() + "," + Desc + ")";
             System.out.println("Insert: " + sqlQuery);
             if (getStatement().executeUpdate(sqlQuery) > 0) {

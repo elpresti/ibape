@@ -18,6 +18,9 @@ import modelo.dataManager.PuntoHistorico;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import persistencia.BrokerCajon;
+import persistencia.BrokerEspecie;
+import persistencia.BrokerLance;
 import persistencia.Logueador;
 
 /**
@@ -307,8 +310,16 @@ public class GeneradorKML {
         java.sql.Timestamp fechaYhora=new java.sql.Timestamp(poi.getFechaHora().getTime());
         String horaStr=fechaYhora.getHours()+":"+fechaYhora.getMinutes()+":"+fechaYhora.getSeconds();
         salida=salida
-          +"<Placemark>"
-            +"<name>"+horaStr+"</name>";
+          +"<Placemark>";
+        if (poi.getIdCategoriaPOI() == AdministraCatPoi.getInstance().getIdCatLances()){
+            String idLance = getIdLanceFromDescripcion(poi.getDescripcion());
+            if (idLance.length()>0){
+                idLance +="-";
+            }
+            salida+="<name>"+idLance+horaStr+"</name>";
+        }else{
+            salida+="<name>"+horaStr+"</name>";
+        }
         if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
             salida+="<styleUrl>#"+poi.getCategoria().getPathIcono()+"</styleUrl>";
         }
@@ -397,7 +408,7 @@ public class GeneradorKML {
                             + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
                             + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
                             + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
-        if (noEsCategoriaDePoiReservada(poi.getIdCategoriaPOI())){
+        if (!esCategoriaDePoiReservada(poi.getIdCategoriaPOI())){
                     contenidoHtml += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
         }else{
             //SAXBuilder se encarga de cargar el archivo XML del disco o de un String
@@ -409,17 +420,50 @@ public class GeneradorKML {
                 // Obtenemos la etiqueta raíz  
                 Element raiz = contenidoXML.getRootElement();  
                 // Recorremos los hijos de la etiqueta raíz  
-                List<Element> hijosRaiz = raiz.getChildren();  
-                for(Element parametro: hijosRaiz){
-                    // Obtenemos el nombre y su contenido de tipo texto  
-                    String nombre = parametro.getAttribute("nombre").getValue();
-                    String valor = parametro.getAttribute("valor").getValue();
-                    if (parametro.getName() == "imgFileName"){
-                        htmlImgSonda += "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">";
-                        htmlImgSonda += "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>";
-                        htmlImgSonda += "</a>";
-                    }else{
-                        contenidoHtml += "<br> <strong>- "+nombre+" :</strong> "+valor;
+                List<Element> hijosRaiz = raiz.getChildren();
+                if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatLances()){
+                    for(Element parametro: hijosRaiz){
+                        // Obtenemos el nombre y su contenido de tipo texto  
+                        String nombre = parametro.getAttribute("nombre").getValue();
+                        String valor = parametro.getAttribute("valor").getValue();
+                        if (parametro.getName() == "imgFileName"){
+                            htmlImgSonda += "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">";
+                            htmlImgSonda += "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>";
+                            htmlImgSonda += "</a>";
+                        }else{
+                            contenidoHtml += "<br> <strong>- "+nombre+" :</strong> "+valor;
+                        }
+                    }
+                }else{ //si se trata de Descripcion de lances, hacemos lo siguiente
+                    boolean esFinDeLance = false;
+                    for(Element parametro: hijosRaiz){
+                        // Obtenemos el nombre y su contenido de tipo texto  
+                        String nombre = parametro.getAttribute("nombre").getValue();
+                        String valor = parametro.getAttribute("valor").getValue();
+                        if (parametro.getName() == "finLance"){
+                            esFinDeLance = Boolean.valueOf(valor);
+                        }
+                        if (esFinDeLance && parametro.getName() == "idLance"){
+                            modelo.dataManager.Lance lance = BrokerLance.getInstance().getLanceFromDB(Integer.valueOf(valor));
+                            if (lance != null){
+                                contenidoHtml +="<br><strong>- Comentarios del Lance: </strong>"+lance.getComentarios();
+                                ArrayList<modelo.dataManager.Cajon> cajonesDelLance = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
+                                if (cajonesDelLance != null){
+                                    contenidoHtml += "<br><br><strong>CAJONES OBTENIDOS:";
+                                    contenidoHtml += "<br><strong>- Total de cajones: </strong> "+BrokerCajon.getInstance().getCajonesFromLance(Integer.valueOf(valor));
+                                }
+                                for (modelo.dataManager.Cajon cajon : cajonesDelLance){
+                                    modelo.dataManager.Especie especie = BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie());
+                                    //contenidoHtml += "<p style=\"color:#025090; font-size:14px; line-height:14px;\">"+especie.getNombre()+": "+cajon.getCantidad()+"</p>";
+                                    contenidoHtml += "<br>   "+especie.getNombre()+": "+cajon.getCantidad();
+                                }
+                            }else{
+                                contenidoHtml +="<br>Error! No se ha encontrado el lance";
+                            }
+                        }
+                        if (parametro.getName() != "finLance" && parametro.getName() != "idLance"){
+                            contenidoHtml += "<br><strong>- "+nombre+" :</strong> "+valor;
+                        }
                     }
                 }
             }catch(Exception e){
@@ -445,12 +489,40 @@ public class GeneradorKML {
         return contenidoHtml;
     }
 
-    private boolean noEsCategoriaDePoiReservada(int idCategoriaPOI) {
+    private boolean esCategoriaDePoiReservada(int idCategoriaPOI) {
         boolean esCatReservada=false;
         if (idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatImgsConMarcas() ||
                 idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatLances()){
             esCatReservada=true;
         }
         return esCatReservada;
+    }
+
+    private String getIdLanceFromDescripcion(String descripcion) {
+        String salida = "";
+        boolean encontro = false;
+        // Creamos el builder basado en SAX      
+        SAXBuilder builder = new SAXBuilder();  
+        try {
+            // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
+            Document contenidoXML = builder.build(new StringReader(descripcion));
+            // Obtenemos la etiqueta raíz  
+            Element raiz = contenidoXML.getRootElement();
+            // Recorremos los hijos de la etiqueta raíz  
+            List<Element> hijosRaiz = raiz.getChildren();
+            for(Element parametro: hijosRaiz){
+                // Obtenemos el nombre y su contenido de tipo texto  
+                String nombre = parametro.getAttribute("nombre").getValue();
+                String valor = parametro.getAttribute("valor").getValue();
+                if (parametro.getName() == "idLance"){
+                    salida=valor;
+                    encontro=true;
+                    break;
+                }
+            }
+        }catch(Exception e){
+           Logueador.getInstance().agregaAlLog("getIdLanceFromDescripcion(): "+e.toString()); 
+        }
+        return salida;
     }
 }

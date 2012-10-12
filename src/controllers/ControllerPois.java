@@ -41,7 +41,7 @@ public class ControllerPois {
 
     public void agregaPOI(int idCategoriaPOI, String descripcion, double latitud, double longitud, String pathImgSonda, java.util.Date fechaYhora) {
         modelo.dataManager.POI p = new POI();
-        p.addObserver(controllers.ControllerAlertas.getInstance()); //Modulo Alertas
+        //p.addObserver(controllers.ControllerAlertas.getInstance()); //Modulo Alertas
         if (fechaYhora == null) {
             p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
         }else{
@@ -188,20 +188,16 @@ public class ControllerPois {
             //primero inserto el POI de INICIO del lance, junto con sus datos
             String descripcionPoi = 
                              "<datosLance>";
-            descripcionPoi +=   "<idLance nombre=\"Numero de Lance: \" valor=\"" + unLance.getId() + "\" />";
-            //descripcionPoi +=   "<estadoLance nombre=\"Estado del Lance: \" valor=\"" + unLance.getEstadoLance() + "\" />";
-            descripcionPoi +=   "<fYhInicio nombre=\"Fecha y hora de inicio: \" valor=\"" + unLance.getfYHIni() + "\" />";
-            descripcionPoi +=   "<latitudInicio nombre=\"Latitud de inicio: \" valor=\"" + unLance.getPosIniLat() + "\" />";
-            descripcionPoi +=   "<longitudInicio nombre=\"Longitud de inicio: \" valor=\"" + unLance.getPosIniLon() + "\" />";
+            descripcionPoi +=   "<tituloLance nombre=\"&lt;br&gt;AQUI SE LANZÓ LA RED\" valor=\"\" />";
+            descripcionPoi +=   "<finLance nombre=\"Estado de Lance\" valor=\"false\" />";
+            descripcionPoi +=   "<idLance nombre=\"Numero de Lance\" valor=\"" + unLance.getId() + "\" />";
             descripcionPoi +="</datosLance>";
             ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatLances(), descripcionPoi, unLance.getPosIniLat(), unLance.getPosIniLon(), null, unLance.getfYHIni());
             //luego inserto el POI de FIN del lance, junto con sus datos
-            descripcionPoi +="<datosLance>";
-            descripcionPoi +=   "<idLance nombre=\"Numero de Lance: \" valor=\"" + unLance.getId() + "\" />";
-            descripcionPoi +=   "<estadoLance nombre=\"Estado del Lance: \" valor=\"" + unLance.getEstadoLance() + "\" />";
-            descripcionPoi +=   "<fYhFin nombre=\"Fecha y hora de fin: \" valor=\"" + unLance.getfYHFin() + "\" />";
-            descripcionPoi +=   "<latitudFin nombre=\"Latitud de fin: \" valor=\"" + unLance.getPosFinLat() + "\" />";
-            descripcionPoi +=   "<longitudFin nombre=\"Longitud de fin: \" valor=\"" + unLance.getPosFinLon() + "\" />";
+            descripcionPoi ="<datosLance>";
+            descripcionPoi +=   "<tituloLance nombre=\"&lt;br&gt;AQUI SE RECOGIÓ LA RED\" valor=\"\" />";
+            descripcionPoi +=   "<finLance nombre=\"Estado de Lance\" valor=\"true\" />";
+            descripcionPoi +=   "<idLance nombre=\"Numero de Lance\" valor=\"" + unLance.getId() + "\" />";
             descripcionPoi +="</datosLance>";
             ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatLances(), descripcionPoi, unLance.getPosFinLat(), unLance.getPosFinLon(), null, unLance.getfYHFin());
             sePudo = true;

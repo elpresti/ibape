@@ -193,10 +193,6 @@ public class BrokerLance extends BrokerPpal {
             } else {
                 sePudo = false;
             }
-
-            if (getStatement() != null) {
-                getStatement().close();
-            }
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
