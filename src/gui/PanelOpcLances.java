@@ -35,6 +35,13 @@ public class PanelOpcLances extends javax.swing.JPanel {
                 "idLance", "Fecha Inicio", "Fecha Fin", "Comentarios", "Cant. Cajones"//, "Acciones"
             }) {
 
+        boolean[] canEdit = new boolean[]{
+            false, false, false, false, false
+        };
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit[columnIndex];
+        }
         Class[] types = new Class[]{
             java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };

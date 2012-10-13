@@ -295,6 +295,8 @@ private void lnkCampaniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
 private void lnkPoisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkPoisActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcPOIs.getInstance());
+    PanelOpcPOIs.getInstance().cargaGrillaPOIS();
+    PanelOpcPOIs.getInstance().cargaGrillaCategoriaPOIS();
 }//GEN-LAST:event_lnkPoisActionPerformed
 
 private void lnkInformesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkInformesActionPerformed
@@ -314,6 +316,7 @@ private void btnLanzaRecogeActionPerformed(java.awt.event.ActionEvent evt) {//GE
 private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistraPOIActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcPOIs.getInstance());
     PanelOpcPOIs.getInstance().botonRegPOI();
+    
 }//GEN-LAST:event_btnRegistraPOIActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
