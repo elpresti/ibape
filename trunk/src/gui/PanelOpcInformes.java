@@ -75,12 +75,12 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelRecorrido1 = new org.jdesktop.swingx.JXPanel();
         lblCantPuntosRecorrido1 = new org.jdesktop.swingx.JXLabel();
         lblTxtDatosInforme1 = new java.awt.Label();
-        chkRecorrido1 = new javax.swing.JCheckBox();
-        chkPoisTodos1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
+        chkFechaUbicacion = new javax.swing.JCheckBox();
+        chkBarco = new javax.swing.JCheckBox();
+        chkCampana = new javax.swing.JCheckBox();
+        chkLance = new javax.swing.JCheckBox();
+        chkCajones = new javax.swing.JCheckBox();
+        chkPois = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
         jCheckBox6 = new javax.swing.JCheckBox();
         jCheckBox7 = new javax.swing.JCheckBox();
@@ -96,10 +96,9 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelTitulo.setMinimumSize(new java.awt.Dimension(500, 40));
         panelTitulo.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        lblTituloInformes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
+        lblTituloInformes.setFont(new java.awt.Font("Arial", 0, 18));
         lblTituloInformes.setText("Informes");
         panelTitulo.add(lblTituloInformes);
-        lblTituloInformes.getAccessibleContext().setAccessibleName("Informes");
 
         add(panelTitulo);
 
@@ -165,41 +164,41 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         lblCantPuntosRecorrido1.setFont(new java.awt.Font("Tahoma", 2, 12));
         panelRecorrido1.add(lblCantPuntosRecorrido1);
 
-        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 0, 12));
         lblTxtDatosInforme1.setText("Datos a incluir en el Informe:");
         panelRecorrido1.add(lblTxtDatosInforme1);
 
         panelDatosInforme.add(panelRecorrido1);
 
-        chkRecorrido1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        chkRecorrido1.setText("yy");
-        chkRecorrido1.addActionListener(new java.awt.event.ActionListener() {
+        chkFechaUbicacion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkFechaUbicacion.setText("Datos de Fecha y Ubicación");
+        chkFechaUbicacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkRecorrido1ActionPerformed(evt);
+                chkFechaUbicacionActionPerformed(evt);
             }
         });
-        panelDatosInforme.add(chkRecorrido1);
+        panelDatosInforme.add(chkFechaUbicacion);
 
-        chkPoisTodos1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        chkPoisTodos1.setText("xx");
-        chkPoisTodos1.addActionListener(new java.awt.event.ActionListener() {
+        chkBarco.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkBarco.setText("Datos del Barco");
+        chkBarco.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkPoisTodos1ActionPerformed(evt);
+                chkBarcoActionPerformed(evt);
             }
         });
-        panelDatosInforme.add(chkPoisTodos1);
+        panelDatosInforme.add(chkBarco);
 
-        jCheckBox2.setText("jCheckBox1");
-        panelDatosInforme.add(jCheckBox2);
+        chkCampana.setText("Datos de la Campaña");
+        panelDatosInforme.add(chkCampana);
 
-        jCheckBox1.setText("jCheckBox1");
-        panelDatosInforme.add(jCheckBox1);
+        chkLance.setText("Datos de Lances");
+        panelDatosInforme.add(chkLance);
 
-        jCheckBox3.setText("jCheckBox3");
-        panelDatosInforme.add(jCheckBox3);
+        chkCajones.setText("Datos de Cajones de cada Lance");
+        panelDatosInforme.add(chkCajones);
 
-        jCheckBox4.setText("jCheckBox4");
-        panelDatosInforme.add(jCheckBox4);
+        chkPois.setText("Datos de POIS de la Campaña");
+        panelDatosInforme.add(chkPois);
 
         jCheckBox5.setText("jCheckBox5");
         panelDatosInforme.add(jCheckBox5);
@@ -217,7 +216,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelBtnGenerarInforme.setPreferredSize(new java.awt.Dimension(500, 40));
         panelBtnGenerarInforme.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGenerarInforme.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnGenerarInforme.setFont(new java.awt.Font("Tahoma", 1, 12));
         btnGenerarInforme.setText("Generar Informe");
         btnGenerarInforme.setAutoscrolls(true);
         btnGenerarInforme.addActionListener(new java.awt.event.ActionListener() {
@@ -232,37 +231,46 @@ public class PanelOpcInformes extends javax.swing.JPanel {
 
 
 
-    private void chkRecorrido1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkRecorrido1ActionPerformed
+    private void chkFechaUbicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFechaUbicacionActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_chkRecorrido1ActionPerformed
+}//GEN-LAST:event_chkFechaUbicacionActionPerformed
 
-    private void chkPoisTodos1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPoisTodos1ActionPerformed
+    private void chkBarcoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBarcoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_chkPoisTodos1ActionPerformed
+}//GEN-LAST:event_chkBarcoActionPerformed
 
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
 // TODO add your handling code here:
+     if (getIdCampaniaElegida()>=0){
+         Date fechaHoy = new Date();
+         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+           String fecha,ubicacion,barco,capitan=null;
+           if (getChkFechaUbicacion().isSelected()){
+               fecha= (formato.format(fechaHoy));
+               ubicacion= "Mar del Plata";
+           }
+           if (getChkBarco().isSelected()){
+               barco = (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_BARCO);
+               capitan = (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_CAPITAN);
+           }
+           if (getChkCampana().isSelected()){
+   //            modelo.dataManager.AdministraCampanias.getInstance().getCampania(getIdCampaniaElegida()):modelo.dataManager.Campania;
+           }
+
       generadorPDF pdf=new generadorPDF();  
-       pdf.crear_PDF("Informe de pesca del capitán :","emmanuel","lorena");
+      pdf.crear_PDF("Informe de pesca del capitán :","emmanuel","lorena");
       //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
-
-
-//        setTxtBtnIniciaMapa(btnGenerarInforme.getText());
-//        btnGenerarInforme.setText("Abriendo...");
-//        btnGenerarInforme.setEnabled(false);
-//        if (!(controllers.ControllerHistorico.getInstance().iniciaServerYabreBrowser())) {
-//            JOptionPane.showMessageDialog(this,"Hubo un error al iniciar el Servidor Web ó el Navegador");
-//        }
+     }
 }//GEN-LAST:event_btnGenerarInformeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerarInforme;
-    private javax.swing.JCheckBox chkPoisTodos1;
-    private javax.swing.JCheckBox chkRecorrido1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
+    private javax.swing.JCheckBox chkBarco;
+    private javax.swing.JCheckBox chkCajones;
+    private javax.swing.JCheckBox chkCampana;
+    private javax.swing.JCheckBox chkFechaUbicacion;
+    private javax.swing.JCheckBox chkLance;
+    private javax.swing.JCheckBox chkPois;
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JCheckBox jCheckBox6;
     private javax.swing.JCheckBox jCheckBox7;
@@ -418,6 +426,90 @@ public class PanelOpcInformes extends javax.swing.JPanel {
      */
     public void setTxtBtnGraficarDatos(String txtBtnGraficarDatos) {
         this.txtBtnGraficarDatos = txtBtnGraficarDatos;
+    }
+
+    /**
+     * @return the chkBarco
+     */
+    public javax.swing.JCheckBox getChkBarco() {
+        return chkBarco;
+    }
+
+    /**
+     * @param chkBarco the chkBarco to set
+     */
+    public void setChkBarco(javax.swing.JCheckBox chkBarco) {
+        this.chkBarco = chkBarco;
+    }
+
+    /**
+     * @return the chkCajones
+     */
+    public javax.swing.JCheckBox getChkCajones() {
+        return chkCajones;
+    }
+
+    /**
+     * @param chkCajones the chkCajones to set
+     */
+    public void setChkCajones(javax.swing.JCheckBox chkCajones) {
+        this.chkCajones = chkCajones;
+    }
+
+    /**
+     * @return the chkCampana
+     */
+    public javax.swing.JCheckBox getChkCampana() {
+        return chkCampana;
+    }
+
+    /**
+     * @param chkCampana the chkCampana to set
+     */
+    public void setChkCampana(javax.swing.JCheckBox chkCampana) {
+        this.chkCampana = chkCampana;
+    }
+
+    /**
+     * @return the chkFechaUbicacion
+     */
+    public javax.swing.JCheckBox getChkFechaUbicacion() {
+        return chkFechaUbicacion;
+    }
+
+    /**
+     * @param chkFechaUbicacion the chkFechaUbicacion to set
+     */
+    public void setChkFechaUbicacion(javax.swing.JCheckBox chkFechaUbicacion) {
+        this.chkFechaUbicacion = chkFechaUbicacion;
+    }
+
+    /**
+     * @return the chkLance
+     */
+    public javax.swing.JCheckBox getChkLance() {
+        return chkLance;
+    }
+
+    /**
+     * @param chkLance the chkLance to set
+     */
+    public void setChkLance(javax.swing.JCheckBox chkLance) {
+        this.chkLance = chkLance;
+    }
+
+    /**
+     * @return the chkPois
+     */
+    public javax.swing.JCheckBox getChkPois() {
+        return chkPois;
+    }
+
+    /**
+     * @param chkPois the chkPois to set
+     */
+    public void setChkPois(javax.swing.JCheckBox chkPois) {
+        this.chkPois = chkPois;
     }
 }
 /*  - - -   clases y metodos que cargan y controlan los RADIOBUTTONS en la TABLA CAMPAÑAS   - - -  */
