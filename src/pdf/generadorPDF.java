@@ -47,34 +47,7 @@ public class generadorPDF {
     }
 
     /* metodo que hace uso de la clase itext para manipular archivos PDF*/
-    public void crear_PDF(String t, String a, String s, String k, String c){
-        //abre ventana de dialogo "guardar"
-        Colocar_Destino();
-        //si destino es diferente de null
-        if(this.ruta_destino!=null){
-            try {
-                // se crea instancia del documento
-                Document mipdf = new Document() {};
-                // se establece una instancia a un documento pdf
-                PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));
-                mipdf.open();// se abre el documento
-                mipdf.addTitle(t); // se añade el titulo
-                mipdf.addAuthor(a); // se añade el autor del documento
-                mipdf.addSubject(s); //se añade el asunto del documento
-                mipdf.addKeywords(k); //Se agregan palabras claves
-                mipdf.add(new Paragraph(c)); // se añade el contendio del PDF
-                mipdf.close(); //se cierra el PDF&
-                JOptionPane.showMessageDialog(null,"Documento PDF creado con exito");
-            } catch (DocumentException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-
-    /* metodo que hace uso de la clase itext para manipular archivos PDF*/
-    public void crear_PDF(String a,String c,String e){
+    public void crear_PDF(String titulo,String ubicacion,String fecha,String barco,String capitan,String nombreCampania,String descripcion,String fechaIniciostring,String fechaFinstring){
         //abre ventana de dialogo "guardar"
         Colocar_Destino();
         //si destino es diferente de null
@@ -86,6 +59,7 @@ public class generadorPDF {
                 PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));
                 mipdf.open();// se abre el documento
                 Image im=null;
+                String vacio=" ";
                 try {
                     im = Image.getInstance("src\\imgs\\logoIbapeChico.png");
                 } catch (BadElementException ex) {
@@ -97,11 +71,18 @@ public class generadorPDF {
                 }
 	            im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
 	            mipdf.add(im);
-                mipdf.add(new Paragraph(formato.format(fechaHoy)));
-                mipdf.add(new Paragraph(a, fuenteRojo25));
-                mipdf.add(new Paragraph(c)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(e)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph());
+//                mipdf.add(new Paragraph(formato.format(fechaHoy)));
+//                mipdf.add(new Paragraph(titulo, fuenteRojo25));
+                mipdf.add(new Paragraph(ubicacion+","+fecha)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(barco)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(capitan)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(descripcion)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(fechaIniciostring)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(fechaFinstring)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(nombreCampania)); // se añade el contendio del PDF
                 mipdf.close(); //se cierra el PDF&	           	     
                 JOptionPane.showMessageDialog(null,"Documento PDF creado con exito");
             } catch (DocumentException ex) {

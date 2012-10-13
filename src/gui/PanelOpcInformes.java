@@ -10,6 +10,7 @@
  */
 package gui;
 
+import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 import controllers.ControllerCampania;
 import controllers.ControllerHistorico;
 import java.awt.Component;
@@ -27,6 +28,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import pdf.generadorPDF;
+import persistencia.BrokerCajon;
+import persistencia.BrokerLance;
+
 
 /**
  *
@@ -240,11 +244,12 @@ public class PanelOpcInformes extends javax.swing.JPanel {
 }//GEN-LAST:event_chkBarcoActionPerformed
 
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
+
 // TODO add your handling code here:
-     if (getIdCampaniaElegida()>=0){
          Date fechaHoy = new Date();
          SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-           String fecha,ubicacion,barco,capitan=null;
+         String fecha = null,ubicacion = null,barco= null,capitan= null,nombreCampania= null,descripcion= null,fechaIniciostring= null,fechaFinstring=null;
+        if (getIdCampaniaElegida()>=0){
            if (getChkFechaUbicacion().isSelected()){
                fecha= (formato.format(fechaHoy));
                ubicacion= "Mar del Plata";
@@ -254,11 +259,37 @@ public class PanelOpcInformes extends javax.swing.JPanel {
                capitan = (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_CAPITAN);
            }
            if (getChkCampana().isSelected()){
-   //            modelo.dataManager.AdministraCampanias.getInstance().getCampania(getIdCampaniaElegida()):modelo.dataManager.Campania;
+
+               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
+               int idCampaniaint = Integer.parseInt(idCampania );
+               nombreCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_NOMBRE_CAMP);
+               descripcion = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaint).getDescripcion();
+               Date fechaInicio = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaint).getFechaInicio();
+               Date fechaFin= modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaint).getFechaFin();
+               fechaIniciostring=formato.format(fechaInicio);
+               fechaFinstring=formato.format(fechaFin);
+           }
+           if (getChkLance().isSelected()){
+               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
+               int idCampaniaint = Integer.parseInt(idCampania );
+               BrokerLance.getInstance().getLancesCampaniaFromDB(idCampaniaint);
+           }
+           if (getChkCajones().isSelected()){
+               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
+               int idCampaniaint = Integer.parseInt(idCampania );
+  //             BrokerCajon.getInstance().getCajonesFromDB().;
+  //             getCajonesLanceFromDB(int idLance):ArrayList<modelo.dataManager.Cajon>
+           }
+           if (getChkPois().isSelected()){
+               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
+               int idCampaniaint = Integer.parseInt(idCampania );
+    //           ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaint);
+    //           para obtener la cant de puntos de cada categoria usar el método
+    //           ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCampaniaint,CP.getId());
            }
 
-      generadorPDF pdf=new generadorPDF();  
-      pdf.crear_PDF("Informe de pesca del capitán :","emmanuel","lorena");
+      generadorPDF pdf=new generadorPDF();
+      pdf.crear_PDF("Informe de pesca:",ubicacion,fecha,barco,capitan,nombreCampania,descripcion,fechaIniciostring,fechaFinstring);
       //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
      }
 }//GEN-LAST:event_btnGenerarInformeActionPerformed
