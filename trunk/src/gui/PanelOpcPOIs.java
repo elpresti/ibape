@@ -48,6 +48,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 "id", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"//, "Acciones"
             }) {
 
+        boolean[] canEdit = new boolean[]{
+            false, false, false, false, false
+        };
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit[columnIndex];
+        }
         Class[] types = new Class[]{
             java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };
@@ -63,6 +70,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 "id", "Nombre de Categoria", "Icono"//, "Acciones"
             }) {
 
+        boolean[] canEdit = new boolean[]{
+            false, false, false
+        };
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit[columnIndex];
+        }
         Class[] types = new Class[]{
             java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };
@@ -588,80 +602,80 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         if (tablaCategorias.getSelectedRowCount() != 0) {
             int[] listaCatPOIsSeleccionados = tablaCategorias.getSelectedRows();
             /*if (JOptionPane.showConfirmDialog(null,
-                    "Desea eliminar " + listaCatPOIsSeleccionados.length + " Categorias de POIs seleccionados?",
-                    "Eliminar categorias",
-                    JOptionPane.YES_NO_OPTION,
-                    JOptionPane.WARNING_MESSAGE) == 0) {*/
-                int i = 0;
-                while (i < listaCatPOIsSeleccionados.length) {
-                    CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(listaCatPOIsSeleccionados[i], 1);
-                    if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
-                        //ver que no sea la ultima
-                        if (JOptionPane.showConfirmDialog(null,
-                                "Eliminar la categoria: " + unaCatPOI.getTitulo() + " ?",
-                                "Eliminar categorias",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.WARNING_MESSAGE) == 0) {
+            "Desea eliminar " + listaCatPOIsSeleccionados.length + " Categorias de POIs seleccionados?",
+            "Eliminar categorias",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE) == 0) {*/
+            int i = 0;
+            while (i < listaCatPOIsSeleccionados.length) {
+                CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(listaCatPOIsSeleccionados[i], 1);
+                if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
+                    //ver que no sea la ultima
+                    if (JOptionPane.showConfirmDialog(null,
+                            "Eliminar la categoria: " + unaCatPOI.getTitulo() + " ?",
+                            "Eliminar categorias",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE) == 0) {
+                        ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                    }
+                } else {
+                    //JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
+                    int opcion = JOptionPane.showOptionDialog(
+                            null,
+                            "Existen POIs en alguna campaña con la categoria:" + unaCatPOI.getTitulo() + ", ¿que desea hacer con la categoria?",
+                            "Seleccione una opcion",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            new Object[]{"Eliminar los POIs con dicha categoria", "Asignar otra categoria a los POIs dependientes"}, // null para YES, NO y CANCEL
+                            null);
+                    switch (opcion) {
+                        case 0: {
+                            System.out.println("borro todos los poi");
+                            for (POI unPOI : BrokerPOIs.getInstance().getPOISFromDBSegunCat(unaCatPOI.getId())) {
+                                ControllerPois.getInstance().eliminaPOI(unPOI);
+                            }
+                            //borro la categoria
                             ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                            break;
                         }
-                    } else {
-                        //JOptionPane.showMessageDialog(null, "Existen POIs con la categoria que se quiere eliminar");
-                        int opcion = JOptionPane.showOptionDialog(
-                                null,
-                                "Existen POIs en alguna campaña con la categoria:" + unaCatPOI.getTitulo() + ", ¿que desea hacer con la categoria?",
-                                "Seleccione una opcion",
-                                JOptionPane.YES_NO_CANCEL_OPTION,
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                new Object[]{"Eliminar los POIs con dicha categoria", "Asignar otra categoria a los POIs dependientes"}, // null para YES, NO y CANCEL
-                                null);
-                        switch (opcion) {
-                            case 0: {
-                                System.out.println("borro todos los poi");
-                                for (POI unPOI : BrokerPOIs.getInstance().getPOISFromDBSegunCat(unaCatPOI.getId())) {
-                                    ControllerPois.getInstance().eliminaPOI(unPOI);
-                                }
-                                //borro la categoria
-                                ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
-                                break;
-                            }
-                            case 1: {
-                                System.out.println("asigno");
-                                ArrayList a = controllers.ControllerPois.getInstance().cargaCategoriasPOI();
-                                unaCatPOI.setPathIcono(Sistema.getInstance().getRutaIconosCatPois() + unaCatPOI.getPathIcono());
-                                a.remove(unaCatPOI); //saco la categoria que se elimina
-                                Object[] o = a.toArray();
+                        case 1: {
+                            System.out.println("asigno");
+                            ArrayList a = controllers.ControllerPois.getInstance().cargaCategoriasPOI();
+                            unaCatPOI.setPathIcono(Sistema.getInstance().getRutaIconosCatPois() + unaCatPOI.getPathIcono());
+                            a.remove(unaCatPOI); //saco la categoria que se elimina
+                            Object[] o = a.toArray();
 
-                                Object nuevaCat = JOptionPane.showInputDialog(
-                                        null,
-                                        "Seleccione la nueva categoria",
-                                        "Selector de opciones",
-                                        JOptionPane.QUESTION_MESSAGE,
-                                        null,
-                                        o,
-                                        null);
-                                if (nuevaCat != null) {
-                                    ControllerPois.getInstance().actualizarCategoria(unaCatPOI, (CategoriaPoi) nuevaCat); //cambia todos los pois con la categoria vieja por la nueva
-                                    //tendria q ser una transaccion
-                                    if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
-                                        ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
-                                    } else {
-                                        JOptionPane.showMessageDialog(null, "No se pudieron actualizar todos los POIs");
-                                    }
-
+                            Object nuevaCat = JOptionPane.showInputDialog(
+                                    null,
+                                    "Seleccione la nueva categoria",
+                                    "Selector de opciones",
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    o,
+                                    null);
+                            if (nuevaCat != null) {
+                                ControllerPois.getInstance().actualizarCategoria(unaCatPOI, (CategoriaPoi) nuevaCat); //cambia todos los pois con la categoria vieja por la nueva
+                                //tendria q ser una transaccion
+                                if (ControllerPois.getInstance().isCategoriaPOILibre(unaCatPOI.getId())) {
+                                    ControllerPois.getInstance().eliminaCategoriaPOI(unaCatPOI);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "No se pudieron actualizar todos los POIs");
                                 }
-                                break;
+
                             }
+                            break;
                         }
                     }
-                    i++;
-                    /*cargaGrillaPOIS();
-                    cargaGrillaCategoriaPOIS();
-                    cargaComboCategorias();*///pierdo los indices para borrar el siguiente
                 }
-                cargaGrillaPOIS();
+                i++;
+                /*cargaGrillaPOIS();
                 cargaGrillaCategoriaPOIS();
-                cargaComboCategorias();
+                cargaComboCategorias();*///pierdo los indices para borrar el siguiente
+            }
+            cargaGrillaPOIS();
+            cargaGrillaCategoriaPOIS();
+            cargaComboCategorias();
             //}
         }
     }//GEN-LAST:event_btnEliminaCatPOIActionPerformed
@@ -713,14 +727,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         } else {
             JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
         }
-        /*Este es el codigo de resgistra POI
-         * habilitaPanelDatosPOIs(true);
-        campoLatitud.setText(String.valueOf(ControllerNavegacion.getInstance().getLatitudActual()));
-        campoLatitud.setEnabled(false);//no lo puedo modificar
-        campoLongitud.setText(String.valueOf(ControllerNavegacion.getInstance().getLongitudActual()));
-        campoLongitud.setEnabled(false);//no lo puedo modificar
-        //controlaPanelNuevaCondicion(true);
-        setModificandoPOI(false);*/
     }
 
     private void btnModificarPOIActionPerformed(java.awt.event.ActionEvent evt) {
@@ -917,7 +923,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
     }
 
-    private void cargaGrillaCategoriaPOIS() {
+    public void cargaGrillaCategoriaPOIS() {
         modeloTablaCategoriasPOI.setRowCount(0);
         int cantCols = 4;
         //Cabecera
@@ -965,7 +971,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         ControllerPpal.getInstance().ocultarColJTable(tablaCategorias, 0);
     }
 
-    private void cargaGrillaPOIS() {
+    public void cargaGrillaPOIS() {
         try {
             modeloTablaPOIS.setRowCount(0);//vacia la tabla
             int cantCols = 6;
@@ -1106,9 +1112,10 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
     void botonRegPOI() {
         btnInsertarPOIActionPerformed(null);
-        campoLatitud.setText(String.valueOf(Punto.getInstance().getLatitud()));
-        campoLongitud.setText(String.valueOf(Punto.getInstance().getLatitud()));
-
+        campoLatitud.setText(String.valueOf(Punto.getInstance().getLatConNegativo()));
+        campoLongitud.setText(String.valueOf(Punto.getInstance().getLonConNegativo()));
+        campoLatitud.setEnabled(false);
+        campoLongitud.setEnabled(false);
     }
 
     class Cls_ManejoTeclas extends KeyAdapter {

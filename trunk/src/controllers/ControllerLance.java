@@ -52,8 +52,18 @@ public class ControllerLance {
 
             Lance unLance = new Lance();
             unLance.setIdCampania(ControllerCampania.getInstance().getIdCampaniaEnCurso());
-            unLance.setPosIniLat(Punto.getInstance().getLatConNegativo());
-            unLance.setPosIniLon(Punto.getInstance().getLonConNegativo());
+            if (Punto.getInstance().getLatConNegativo() == 0 || !(Punto.getInstance().getLatConNegativo() >= -90 && Punto.getInstance().getLatConNegativo() <= 90)) {
+                JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
+                return;
+            } else {
+                unLance.setPosIniLat(Punto.getInstance().getLatConNegativo());
+            }
+            if (Punto.getInstance().getLonConNegativo() == 0 || !(Punto.getInstance().getLonConNegativo() >= -180 && Punto.getInstance().getLonConNegativo() <= 180)) {
+                JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
+                return;
+            } else {
+                unLance.setPosIniLon(Punto.getInstance().getLonConNegativo());
+            }
             unLance.setfYHIni(Punto.getInstance().getFechaYhora());
             //los fin los dejo en null
             unLance.setComentarios("");
@@ -73,8 +83,18 @@ public class ControllerLance {
                 JOptionPane.WARNING_MESSAGE) == 0) {
             Lance unLance = BrokerLance.getInstance().getLanceFromDB(BrokerLance.getInstance().getIdLanceEnCurso());
             if (unLance.getfYHFin() == null) {
-                unLance.setPosFinLat(Punto.getInstance().getLatConNegativo());
-                unLance.setPosFinLon(Punto.getInstance().getLonConNegativo());
+                if (Punto.getInstance().getLatConNegativo() == 0 || !(Punto.getInstance().getLatConNegativo() >= -90 && Punto.getInstance().getLatConNegativo() <= 90)) {
+                    JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
+                    return;
+                } else {
+                    unLance.setPosFinLat(Punto.getInstance().getLatConNegativo());
+                }
+                if (Punto.getInstance().getLonConNegativo() == 0 || !(Punto.getInstance().getLonConNegativo() >= -180 && Punto.getInstance().getLonConNegativo() <= 180)) {
+                    JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
+                    return;
+                } else {
+                    unLance.setPosFinLon(Punto.getInstance().getLonConNegativo());
+                }
                 unLance.setfYHFin(Punto.getInstance().getFechaYhora());
             } else {
                 return;
