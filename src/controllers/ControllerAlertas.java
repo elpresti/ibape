@@ -854,23 +854,23 @@ public class ControllerAlertas extends Observable implements Observer{
     }
 
     public void analizaActivacionesLongitud() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void analizaActivacionesVelocidad() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void analizaActivacionesRumbo() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void analizaActivacionesvelocidadAgua() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void analizaActivacionesTempAgua() {
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void analizaActivacionesFechaYhora() {
