@@ -150,7 +150,8 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
             }
             try{//ya la use, asique cierro Statements usados
                 if (getPsInsert() != null){
-                    getPsInsert().close();psInsert = null;
+                    //getPsInsert().close();psInsert = null;
+                    psInsert = null;
                 }
             }
             catch(Exception e){
@@ -185,7 +186,8 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
         }
         try{//ya la use, asique cierro Statements usados
             if (getPsUpdate() != null){
-                getPsUpdate().close();psUpdate = null;
+                //getPsUpdate().close();psUpdate = null;
+                psUpdate = null;
             }
         }
         catch(Exception e){
@@ -207,7 +209,8 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
         }
         try{//ya la use, asique cierro Statements usados
             if (getPsDelete() != null){
-                getPsDelete().close();psDelete = null;
+                //getPsDelete().close();psDelete = null;
+                psDelete = null;
             }
         }
         catch(Exception e){
@@ -375,7 +378,8 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 rs.close();
             }
             if (getPsInsert() != null){
-                getPsInsert().close();psInsert = null;
+                //getPsInsert().close();psInsert = null;
+                psInsert = null;
             }
         }
         catch(Exception e){
