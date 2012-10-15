@@ -49,7 +49,7 @@ public class ControllerLance {
                 "Registrar lances",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE) == 0) {
-
+            PanelOpcLances.getInstance().cargaCamposLatLongInicio();
             Lance unLance = new Lance();
             unLance.setIdCampania(ControllerCampania.getInstance().getIdCampaniaEnCurso());
             if (Punto.getInstance().getLatConNegativo() == 0 || !(Punto.getInstance().getLatConNegativo() >= -90 && Punto.getInstance().getLatConNegativo() <= 90)) {
@@ -81,6 +81,7 @@ public class ControllerLance {
                 "Finalizar lances",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE) == 0) {
+            PanelOpcLances.getInstance().cargaCamposLatLongFin();
             Lance unLance = BrokerLance.getInstance().getLanceFromDB(BrokerLance.getInstance().getIdLanceEnCurso());
             if (unLance.getfYHFin() == null) {
                 if (Punto.getInstance().getLatConNegativo() == 0 || !(Punto.getInstance().getLatConNegativo() >= -90 && Punto.getInstance().getLatConNegativo() <= 90)) {

@@ -17,7 +17,9 @@ import controllers.ControllerLance;
  * @author Sebastian
  */
 public class PanelSelector extends javax.swing.JPanel {
+
     static PanelSelector unicaInstancia;
+
     /** Creates new form PanelSelector */
     private PanelSelector() {
         initComponents();
@@ -272,7 +274,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
 private void lnkNavegacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkNavegacionActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelNavegacion.getInstance());
-    controllers.ControllerNavegacion.getInstance().actualizaDatosEnGui();    
+    controllers.ControllerNavegacion.getInstance().actualizaDatosEnGui();
 }//GEN-LAST:event_lnkNavegacionActionPerformed
 
 private void lnkHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkHistoricoActionPerformed
@@ -316,9 +318,8 @@ private void btnLanzaRecogeActionPerformed(java.awt.event.ActionEvent evt) {//GE
 private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistraPOIActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcPOIs.getInstance());
     PanelOpcPOIs.getInstance().botonRegPOI();
-    
-}//GEN-LAST:event_btnRegistraPOIActionPerformed
 
+}//GEN-LAST:event_btnRegistraPOIActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane PanelScrollBotones;
     private javax.swing.JButton btnLanzaRecoge;
@@ -352,25 +353,21 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
     private org.jdesktop.swingx.JXTaskPane taskPaneOpciones;
     // End of variables declaration//GEN-END:variables
 
-
     public static PanelSelector getInstance() {
-       if (unicaInstancia == null) {
-          unicaInstancia = new PanelSelector();          
-       }
-       return unicaInstancia;
-    }    
-    
-    
-    
-/* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
-    public static void main(String[] args) {
-        javax.swing.JFrame elFrame = new javax.swing.JFrame();
-        elFrame.setSize(500, 510);
-        elFrame.add(new PanelSelector()); 
-        elFrame.setVisible(true);
+        if (unicaInstancia == null) {
+            unicaInstancia = new PanelSelector();
+        }
+        return unicaInstancia;
     }
-*/
 
+    /* codigo de prueba para poder probar un panel simplemente haciendo "Run File" sobre su clase
+    public static void main(String[] args) {
+    javax.swing.JFrame elFrame = new javax.swing.JFrame();
+    elFrame.setSize(500, 510);
+    elFrame.add(new PanelSelector()); 
+    elFrame.setVisible(true);
+    }
+     */
     private void inicializador() {
         setGuiEnNavegacion(false);
         cargaIconosAbotones();
@@ -380,19 +377,19 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
         mostrarBtnPanelNavegacion(b);
         mostrarBtnRegistraPOI(b);
     }
-    
+
     public void mostrarBtnPanelNavegacion(boolean b) {
         taskPaneNavegacion.setVisible(b);
     }
-    
-    public void mostrarBtnRegistraPOI(boolean estado){
+
+    public void mostrarBtnRegistraPOI(boolean estado) {
         btnRegistraPOI.setVisible(estado);
     }
 
-    public void mostrarBtnLanzaRecoge(boolean estado){
+    public void mostrarBtnLanzaRecoge(boolean estado) {
         btnLanzaRecoge.setVisible(estado);
-    }    
-    
+    }
+
     private void cargaIconosAbotones() {
         //lnkNavegacion.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-navegacion.png"));
         //lnkAlertas.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-alertas.png"));
@@ -402,15 +399,13 @@ private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GE
         //lnkHistorico.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-historial.png"));
         //lnkInformes.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-informes.png"));
         //lnkPois.setIcon(new javax.swing.ImageIcon("imgs\\iconos\\icono-pois.png"));
-        
     }
-        public void setTxtBtnIniciaLance() {
+
+    public void setTxtBtnIniciaLance() {
         btnLanzaRecoge.setText("Iniciar lance");
     }
 
     public void setTxtBtnFinLance() {
         btnLanzaRecoge.setText("Finalizar lance");
     }
-    
-    
 }

@@ -762,10 +762,6 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "Longitud incorrecta");
                 return;
             }
-            if (campoDescripcionNuevoPoi.getText().length() < 3) {
-                JOptionPane.showMessageDialog(null, "La descripcion no es valida");
-                return;
-            }
             if (campoLatitud.getText().isEmpty() || Double.valueOf(campoLatitud.getText()) == 0 || !(Double.valueOf(campoLatitud.getText()) >= -90 && Double.valueOf(campoLatitud.getText()) <= 90)) {
                 JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
                 return;
@@ -774,6 +770,11 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
                 return;
             }
+            if (campoDescripcionNuevoPoi.getText().length() < 3) {
+                JOptionPane.showMessageDialog(null, "La descripcion no es valida");
+                return;
+            }
+
             if (comboCategorias.getSelectedItem() == null) {
                 JOptionPane.showMessageDialog(null, "Seleccione una categoria");
                 return;

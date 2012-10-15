@@ -12,11 +12,15 @@ package gui;
 
 import controllers.ControllerLance;
 import controllers.ControllerPpal;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.Lance;
+import modelo.dataManager.Punto;
 import persistencia.BrokerCajon;
 import persistencia.BrokerLance;
 
@@ -84,16 +88,26 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnEliminarLance = new org.jdesktop.swingx.JXHyperlink();
         btnInsertarLance = new org.jdesktop.swingx.JXHyperlink();
         panelDatosLance = new org.jdesktop.swingx.JXPanel();
+        panelLatitud = new org.jdesktop.swingx.JXPanel();
+        lblLatitudI = new org.jdesktop.swingx.JXLabel();
+        campoLatitudI = new javax.swing.JTextField();
+        lblLatitudF = new org.jdesktop.swingx.JXLabel();
+        campoLatitudF = new javax.swing.JTextField();
+        panelLongitud = new org.jdesktop.swingx.JXPanel();
+        lblLongitudI = new org.jdesktop.swingx.JXLabel();
+        campoLongitudI = new javax.swing.JTextField();
+        lblLongitudF = new org.jdesktop.swingx.JXLabel();
+        campoLongitudF = new javax.swing.JTextField();
         panelFechaInicio = new org.jdesktop.swingx.JXPanel();
         lblFechaInicio = new org.jdesktop.swingx.JXLabel();
-        comboFechaInicio = new org.jdesktop.swingx.JXDatePicker();
+        comboFechaInicio = new javax.swing.JSpinner();
         panelFechaFin = new org.jdesktop.swingx.JXPanel();
         lblFechaFin = new org.jdesktop.swingx.JXLabel();
-        comboFechaFin = new org.jdesktop.swingx.JXDatePicker();
+        comboFechaFin = new javax.swing.JSpinner();
         panelComentario = new org.jdesktop.swingx.JXPanel();
         lblComentario = new org.jdesktop.swingx.JXLabel();
         campoComentario = new org.jdesktop.swingx.JXTextField();
-        panelBtnAgregar = new org.jdesktop.swingx.JXPanel();
+        panelBtnAdmCajones = new org.jdesktop.swingx.JXPanel();
         btnAdmCajones = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
         btnInicFinLance = new javax.swing.JButton();
@@ -114,9 +128,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         add(panelSuperior, java.awt.BorderLayout.NORTH);
 
-        panelMedio.setMaximumSize(new java.awt.Dimension(500, 420));
-        panelMedio.setMinimumSize(new java.awt.Dimension(500, 420));
-        panelMedio.setPreferredSize(new java.awt.Dimension(500, 420));
+        panelMedio.setPreferredSize(new java.awt.Dimension(500, 500));
 
         panelLances.setMaximumSize(new java.awt.Dimension(500, 400));
         panelLances.setMinimumSize(new java.awt.Dimension(500, 400));
@@ -242,17 +254,74 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         panelDatosLance.setMaximumSize(new java.awt.Dimension(500, 32767));
         panelDatosLance.setMinimumSize(new java.awt.Dimension(500, 60));
-        panelDatosLance.setPreferredSize(new java.awt.Dimension(500, 300));
+        panelDatosLance.setPreferredSize(new java.awt.Dimension(500, 200));
+        panelDatosLance.setLayout(new java.awt.GridLayout(6, 1));
+
+        panelLatitud.setPreferredSize(new java.awt.Dimension(142, 10));
+
+        lblLatitudI.setText("Latitud inicial: ");
+        lblLatitudI.setFont(new java.awt.Font("Tahoma", 0, 12));
+        panelLatitud.add(lblLatitudI);
+
+        campoLatitudI.setEnabled(false);
+        campoLatitudI.setMaximumSize(new java.awt.Dimension(100, 20));
+        campoLatitudI.setMinimumSize(new java.awt.Dimension(100, 20));
+        campoLatitudI.setPreferredSize(new java.awt.Dimension(100, 20));
+        campoLatitudI.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoLatitudIKeyPressed(evt);
+            }
+        });
+        panelLatitud.add(campoLatitudI);
+
+        lblLatitudF.setText("Latitud Final: ");
+        lblLatitudF.setFont(new java.awt.Font("Tahoma", 0, 12));
+        panelLatitud.add(lblLatitudF);
+
+        campoLatitudF.setEnabled(false);
+        campoLatitudF.setMaximumSize(new java.awt.Dimension(100, 20));
+        campoLatitudF.setMinimumSize(new java.awt.Dimension(100, 20));
+        campoLatitudF.setPreferredSize(new java.awt.Dimension(100, 20));
+        campoLatitudF.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                campoLatitudFKeyPressed(evt);
+            }
+        });
+        panelLatitud.add(campoLatitudF);
+
+        panelDatosLance.add(panelLatitud);
+
+        lblLongitudI.setText("Longitud inicial:");
+        lblLongitudI.setFont(new java.awt.Font("Tahoma", 0, 12));
+        panelLongitud.add(lblLongitudI);
+
+        campoLongitudI.setEnabled(false);
+        campoLongitudI.setMaximumSize(new java.awt.Dimension(100, 20));
+        campoLongitudI.setMinimumSize(new java.awt.Dimension(100, 20));
+        campoLongitudI.setPreferredSize(new java.awt.Dimension(100, 20));
+        panelLongitud.add(campoLongitudI);
+
+        lblLongitudF.setText("Longitud Final:");
+        lblLongitudF.setFont(new java.awt.Font("Tahoma", 0, 12));
+        panelLongitud.add(lblLongitudF);
+
+        campoLongitudF.setEnabled(false);
+        campoLongitudF.setMaximumSize(new java.awt.Dimension(100, 20));
+        campoLongitudF.setMinimumSize(new java.awt.Dimension(100, 20));
+        campoLongitudF.setPreferredSize(new java.awt.Dimension(100, 20));
+        panelLongitud.add(campoLongitudF);
+
+        panelDatosLance.add(panelLongitud);
 
         panelFechaInicio.setMaximumSize(new java.awt.Dimension(150, 50));
         panelFechaInicio.setMinimumSize(new java.awt.Dimension(150, 50));
         panelFechaInicio.setPreferredSize(new java.awt.Dimension(150, 50));
-        panelFechaInicio.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblFechaInicio.setText("Fecha inicio");
         lblFechaInicio.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelFechaInicio.add(lblFechaInicio);
 
+        comboFechaInicio.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR_OF_DAY));
         comboFechaInicio.setEnabled(false);
         panelFechaInicio.add(comboFechaInicio);
 
@@ -261,12 +330,12 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelFechaFin.setMaximumSize(new java.awt.Dimension(150, 50));
         panelFechaFin.setMinimumSize(new java.awt.Dimension(150, 50));
         panelFechaFin.setPreferredSize(new java.awt.Dimension(150, 50));
-        panelFechaFin.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblFechaFin.setText("Fecha fin");
         lblFechaFin.setFont(new java.awt.Font("Tahoma", 0, 12));
         panelFechaFin.add(lblFechaFin);
 
+        comboFechaFin.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR_OF_DAY));
         comboFechaFin.setEnabled(false);
         panelFechaFin.add(comboFechaFin);
 
@@ -275,7 +344,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelComentario.setMaximumSize(new java.awt.Dimension(470, 50));
         panelComentario.setMinimumSize(new java.awt.Dimension(470, 50));
         panelComentario.setPreferredSize(new java.awt.Dimension(470, 50));
-        panelComentario.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         lblComentario.setText("Comentarios sobre el lance:");
         lblComentario.setFont(new java.awt.Font("Tahoma", 0, 12));
@@ -292,22 +360,20 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         panelDatosLance.add(panelComentario);
 
-        panelBtnAgregar.setMaximumSize(new java.awt.Dimension(80, 50));
-        panelBtnAgregar.setMinimumSize(new java.awt.Dimension(80, 50));
-        panelBtnAgregar.setPreferredSize(new java.awt.Dimension(150, 50));
-        panelBtnAgregar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
+        panelBtnAdmCajones.setMaximumSize(new java.awt.Dimension(80, 50));
+        panelBtnAdmCajones.setMinimumSize(new java.awt.Dimension(80, 50));
+        panelBtnAdmCajones.setPreferredSize(new java.awt.Dimension(150, 50));
 
-        btnAdmCajones.setFont(new java.awt.Font("Tahoma", 0, 12));
-        btnAdmCajones.setText("Agregar cajones");
+        btnAdmCajones.setText("Administrar cajones");
         btnAdmCajones.setEnabled(false);
         btnAdmCajones.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAdmCajonesActionPerformed(evt);
             }
         });
-        panelBtnAgregar.add(btnAdmCajones);
+        panelBtnAdmCajones.add(btnAdmCajones);
 
-        panelDatosLance.add(panelBtnAgregar);
+        panelDatosLance.add(panelBtnAdmCajones);
 
         panelLances.add(panelDatosLance);
 
@@ -336,18 +402,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
         ControllerLance.getInstance().registrarLance();
     }//GEN-LAST:event_btnInicFinLanceActionPerformed
 
-    private void btnAdmCajonesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmCajonesActionPerformed
-        // TODO add your handling code here:
-        if (tablaLances.getSelectedRowCount() > 0) {
-            VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcCajones.getInstance());
-            Lance unLance = (Lance) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
-            PanelOpcCajones.getInstance().setTempLanceSeleccionado(unLance);
-            PanelOpcCajones.getInstance().cargaGrillaCajones();
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un lance primero");
-        }
-    }//GEN-LAST:event_btnAdmCajonesActionPerformed
-
     private void btnModificarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarLanceActionPerformed
         if (tablaLances.getSelectedRowCount() != 0) {
             habilitaPanelDatosLances(true);
@@ -359,6 +413,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
             btnGuardarLance.setEnabled(true);
             Lance unLance = (Lance) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
             campoComentario.setText(String.valueOf(unLance.getComentarios()));
+            comboFechaInicio.setValue(new Date(unLance.getfYHIni().getTime()));
+            comboFechaFin.setValue(new Date(unLance.getfYHFin().getTime()));
+
+            campoLatitudI.setText(String.valueOf(unLance.getPosIniLat()));
+            campoLongitudI.setText(String.valueOf(unLance.getPosIniLon()));
+            campoLatitudF.setText(String.valueOf(unLance.getPosFinLat()));
+            campoLongitudF.setText(String.valueOf(unLance.getPosFinLon()));
+
             setTempLance(unLance);
         } else {
             //habilitaPanelDatosLances(false);
@@ -368,20 +430,65 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_btnModificarLanceActionPerformed
 
     private void btnGuardarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarLanceActionPerformed
-        if (comboFechaInicio.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "Seleccionar fecha de inicio");
-            return;
+        /*if (comboFechaInicio.getDate() == null) {
+        JOptionPane.showMessageDialog(null, "Seleccionar fecha de inicio");
+        return;
         }
         if (comboFechaFin.getDate() == null) {
-            JOptionPane.showMessageDialog(null, "Seleccionar fecha de fin");
+        JOptionPane.showMessageDialog(null, "Seleccionar fecha de fin");
+        return;
+        }*/
+        if (campoLatitudI.getText().substring(campoLatitudI.getText().indexOf(".") + 1).contains(".")) {
+            JOptionPane.showMessageDialog(null, "Latitud inicial incorrecta");
+            return;
+        }
+        if (campoLongitudI.getText().substring(campoLongitudI.getText().indexOf(".") + 1).contains(".")) {
+            JOptionPane.showMessageDialog(null, "Longitud inicial incorrecta");
+            return;
+        }
+        if (campoLatitudI.getText().isEmpty() || Double.valueOf(campoLatitudI.getText()) == 0 || !(Double.valueOf(campoLatitudI.getText()) >= -90 && Double.valueOf(campoLatitudI.getText()) <= 90)) {
+            JOptionPane.showMessageDialog(null, "La latitud inicial debe estar entre -90 y 90, y no puede ser igual a 0");
+            return;
+        }
+        if (campoLongitudI.getText().isEmpty() || Double.valueOf(campoLongitudI.getText()) == 0 || !(Double.valueOf(campoLongitudI.getText()) >= -180 && Double.valueOf(campoLongitudI.getText()) <= 180)) {
+            JOptionPane.showMessageDialog(null, "La longitud inicial debe estar entre -180 y 180, y no puede ser igual a 0");
+            return;
+        }
+        if (campoLatitudF.getText().substring(campoLatitudF.getText().indexOf(".") + 1).contains(".")) {
+            JOptionPane.showMessageDialog(null, "Latitud final incorrecta");
+            return;
+        }
+        if (campoLongitudF.getText().substring(campoLongitudF.getText().indexOf(".") + 1).contains(".")) {
+            JOptionPane.showMessageDialog(null, "Longitud final incorrecta");
+            return;
+        }
+        if (campoLatitudF.getText().isEmpty() || Double.valueOf(campoLatitudF.getText()) == 0 || !(Double.valueOf(campoLatitudF.getText()) >= -90 && Double.valueOf(campoLatitudF.getText()) <= 90)) {
+            JOptionPane.showMessageDialog(null, "La latitud final debe estar entre -90 y 90, y no puede ser igual a 0");
+            return;
+        }
+        if (campoLongitudF.getText().isEmpty() || Double.valueOf(campoLongitudF.getText()) == 0 || !(Double.valueOf(campoLongitudF.getText()) >= -180 && Double.valueOf(campoLongitudF.getText()) <= 180)) {
+            JOptionPane.showMessageDialog(null, "La longitud final debe estar entre -180 y 180, y no puede ser igual a 0");
+            return;
+        }
+        
+        Date fechaInicio=(Date) comboFechaInicio.getValue();
+        Date fechaFin=(Date) comboFechaFin.getValue();
+        if(fechaInicio.after(fechaFin)||fechaFin.before(fechaInicio)){
+            JOptionPane.showMessageDialog(null, "Las fechas de inicio y/o fin son invalidas");
             return;
         }
         if (modificandoLance) {
             //modifica POI
             Lance unLance = getTempLance();
             unLance.setComentarios("" + campoComentario.getText());
-            unLance.setfYHIni(comboFechaInicio.getDate());
-            unLance.setfYHFin(comboFechaFin.getDate());
+            unLance.setfYHIni(fechaInicio);
+            unLance.setfYHFin(fechaFin);
+
+            unLance.setPosIniLat(Double.valueOf(campoLatitudI.getText()));
+            unLance.setPosIniLon(Double.valueOf(campoLongitudI.getText()));
+            unLance.setPosFinLat(Double.valueOf(campoLatitudF.getText()));
+            unLance.setPosFinLon(Double.valueOf(campoLongitudF.getText()));
+
             controllers.ControllerLance.getInstance().modificaLance(unLance);
             setModificandoLance(false);
         } else {
@@ -437,12 +544,31 @@ public class PanelOpcLances extends javax.swing.JPanel {
     }//GEN-LAST:event_campoComentarioActionPerformed
 
     private void tablaLancesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaLancesMouseReleased
-        if (tablaLances.getSelectedRowCount() == 0) {
+        if (tablaLances.getSelectedRowCount() == 0 || tablaLances.getValueAt(tablaLances.getSelectedRow(), 2) == "En curso") {
             habilitaPanelDatosLances(false);
         } else {
             habilitaPanelDatosLances(true);
         }
     }//GEN-LAST:event_tablaLancesMouseReleased
+
+    private void campoLatitudIKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoLatitudIKeyPressed
+        // TODO add your handling code here:}//GEN-LAST:event_campoLatitudIKeyPressed
+    }
+        private void btnAdmCajonesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdmCajonesActionPerformed
+            // TODO add your handling code here:
+            if (tablaLances.getSelectedRowCount() > 0) {
+                VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcCajones.getInstance());
+                Lance unLance = (Lance) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
+                PanelOpcCajones.getInstance().setTempLanceSeleccionado(unLance);
+                PanelOpcCajones.getInstance().cargaGrillaCajones();
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un lance primero");
+            }
+    }//GEN-LAST:event_btnAdmCajonesActionPerformed
+
+    private void campoLatitudFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoLatitudFKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_campoLatitudFKeyPressed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmCajones;
     private org.jdesktop.swingx.JXHyperlink btnEliminarLance;
@@ -451,24 +577,34 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXHyperlink btnInsertarLance;
     private org.jdesktop.swingx.JXHyperlink btnModificarLance;
     private org.jdesktop.swingx.JXTextField campoComentario;
-    private org.jdesktop.swingx.JXDatePicker comboFechaFin;
-    private org.jdesktop.swingx.JXDatePicker comboFechaInicio;
+    private javax.swing.JTextField campoLatitudF;
+    private javax.swing.JTextField campoLatitudI;
+    private javax.swing.JTextField campoLongitudF;
+    private javax.swing.JTextField campoLongitudI;
+    private javax.swing.JSpinner comboFechaFin;
+    private javax.swing.JSpinner comboFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXLabel lblAccionesLances;
     private org.jdesktop.swingx.JXLabel lblComentario;
     private org.jdesktop.swingx.JXLabel lblFechaFin;
     private org.jdesktop.swingx.JXLabel lblFechaInicio;
+    private org.jdesktop.swingx.JXLabel lblLatitudF;
+    private org.jdesktop.swingx.JXLabel lblLatitudI;
+    private org.jdesktop.swingx.JXLabel lblLongitudF;
+    private org.jdesktop.swingx.JXLabel lblLongitudI;
     private org.jdesktop.swingx.JXLabel lblTitulo;
     private org.jdesktop.swingx.JXLabel lblTituloTabla;
     private org.jdesktop.swingx.JXPanel panelAcciones;
     private org.jdesktop.swingx.JXPanel panelAccionesLances;
-    private org.jdesktop.swingx.JXPanel panelBtnAgregar;
+    private org.jdesktop.swingx.JXPanel panelBtnAdmCajones;
     private org.jdesktop.swingx.JXPanel panelComentario;
     private org.jdesktop.swingx.JXPanel panelDatosLance;
     private org.jdesktop.swingx.JXPanel panelFechaFin;
     private org.jdesktop.swingx.JXPanel panelFechaInicio;
     private org.jdesktop.swingx.JXPanel panelInferior;
     private org.jdesktop.swingx.JXPanel panelLances;
+    private org.jdesktop.swingx.JXPanel panelLatitud;
+    private org.jdesktop.swingx.JXPanel panelLongitud;
     private org.jdesktop.swingx.JXPanel panelMedio;
     private org.jdesktop.swingx.JXPanel panelSuperior;
     private org.jdesktop.swingx.JXPanel panelTabla;
@@ -497,13 +633,26 @@ public class PanelOpcLances extends javax.swing.JPanel {
         cargaGrillaLances();
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
-        //btnInsertarLance.setVisible(false);
+        Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
+        campoLatitudI.addKeyListener(obj_teclas);
+        campoLongitudI.addKeyListener(obj_teclas);
+        campoLatitudF.addKeyListener(obj_teclas);
+        campoLongitudF.addKeyListener(obj_teclas);
+    }
+
+    public void cargaCamposLatLongInicio() {
+        campoLatitudI.setText(String.valueOf(Punto.getInstance().getLatConNegativo()));
+        campoLongitudI.setText(String.valueOf(Punto.getInstance().getLonConNegativo()));
+    }
+
+    public void cargaCamposLatLongFin() {
+        campoLatitudF.setText(String.valueOf(Punto.getInstance().getLatConNegativo()));
+        campoLongitudF.setText(String.valueOf(Punto.getInstance().getLonConNegativo()));
     }
 
     public void cargaGrillaLances() {
         modeloTablaLances.setRowCount(0);//vacia la tabla
-        SimpleDateFormat horaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaFromDB(AdministraCampanias.getInstance().getCampaniaEnCurso().getId())) {
             String fechaFin = "En curso";
             if (unLance.getfYHFin() != null) {
@@ -527,18 +676,28 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnInsertarLance.setEnabled(true);
         btnModificarLance.setEnabled(estado);
         btnGuardarLance.setEnabled(false);
-        btnAdmCajones.setEnabled(estado);
-
     }
 
     private void habilitaCamposLances(boolean estado) {
         comboFechaInicio.setEnabled(estado);
         comboFechaFin.setEnabled(estado);
         campoComentario.setEnabled(estado);
-
-        //campoFechaInicio.setText("");
-        //campoFechaFin.setText("");
+        campoLatitudI.setEnabled(estado);
+        campoLongitudI.setEnabled(estado);
+        campoLatitudF.setEnabled(estado);
+        campoLongitudF.setEnabled(estado);
+        campoComentario.setEnabled(estado);
+        campoLatitudI.setText("");
+        campoLongitudI.setText("");
+        campoLatitudF.setText("");
+        campoLongitudF.setText("");
+        /*if (!estado) {
+        comboFechaInicio.setValue(null);
+        comboFechaFin.setValue(null);
+        }*/
         campoComentario.setText("");
+        btnAdmCajones.setEnabled(estado);
+
     }
 
     public void setTxtBtnIniciaLance() {
@@ -575,5 +734,23 @@ public class PanelOpcLances extends javax.swing.JPanel {
      */
     public void setModificandoLance(boolean modificandoLance) {
         this.modificandoLance = modificandoLance;
+    }
+}
+
+class Cls_ManejoTeclas extends KeyAdapter {
+
+    public void keyTyped(KeyEvent ke) {
+        char loc_caracter = ke.getKeyChar();
+        /*
+        if(((loc_caracter < '0') || (loc_caracter > '9' )) && (loc_caracter != KeyEvent.VK_BACK_SPACE) &&
+        ((loc_caracter < 'a' ) || (loc_caracter > 'z')) &&
+        ((loc_caracter < 'A' ) || (loc_caracter > 'Z')) &&
+        (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.') && (loc_caracter != '_'))
+        ke.consume();
+         */
+        if (((loc_caracter < '0') || (loc_caracter > '9')) && (loc_caracter != KeyEvent.VK_BACK_SPACE)
+                && (loc_caracter != KeyEvent.VK_ACCEPT) && (loc_caracter != '.') && (loc_caracter != '-')) {
+            ke.consume();
+        }
     }
 }
