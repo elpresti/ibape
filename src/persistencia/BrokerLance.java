@@ -34,7 +34,7 @@ public class BrokerLance extends BrokerPpal {
         ArrayList<modelo.dataManager.Lance> lances = new ArrayList();
         ResultSet rs = null;
         try {
-            rs = getStatement().executeQuery("SELECT * FROM Lances WHERE idCampania= " + idCamp+ " ORDER BY fYHIni DESC");
+            rs = getStatement().executeQuery("SELECT * FROM Lances WHERE idCampania= " + idCamp+ " ORDER BY id DESC");
             while (rs.next()) {
                 modelo.dataManager.Lance unLance = new modelo.dataManager.Lance();
                 // Get the data from the row using the column name
@@ -43,7 +43,7 @@ public class BrokerLance extends BrokerPpal {
                 unLance.setPosIniLat(rs.getDouble("posIniLat"));
                 unLance.setPosIniLon(rs.getDouble("posIniLon"));
                 unLance.setPosFinLat(rs.getDouble("posFinLat"));
-                unLance.setPosFinLat(rs.getDouble("posFinLon"));
+                unLance.setPosFinLon(rs.getDouble("posFinLon"));
                 unLance.setfYHIni(rs.getDate("fYHIni"));
                 unLance.setfYHFin(rs.getDate("fYHFin"));
                 unLance.setComentarios(rs.getString("comentarios"));
@@ -78,7 +78,7 @@ public class BrokerLance extends BrokerPpal {
                 unlance.setPosIniLat(rs.getDouble("posIniLat"));
                 unlance.setPosIniLon(rs.getDouble("posIniLon"));
                 unlance.setPosFinLat(rs.getDouble("posFinLat"));
-                unlance.setPosFinLat(rs.getDouble("posFinLon"));
+                unlance.setPosFinLon(rs.getDouble("posFinLon"));
                 unlance.setfYHIni(rs.getDate("fYHIni"));
                 unlance.setfYHFin(rs.getDate("fYHFin"));
                 unlance.setComentarios(rs.getString("comentarios"));
@@ -183,6 +183,8 @@ public class BrokerLance extends BrokerPpal {
             sqlQuery = "UPDATE Lances SET "
                     + " fYHFin= " + fechaHoraFin+ ", "
                     + " fYHIni= " + fechaHoraInicio+ ", "
+                    + " posIniLat= " + unLance.getPosIniLat()+ ", "
+                    + " posIniLon= " + unLance.getPosIniLon()+ ", "
                     + " posFinLat= " + unLance.getPosFinLat()+ ", "
                     + " posFinLon= " + unLance.getPosFinLon()+ ", "
                     + " comentarios= '" + unLance.getComentarios() + "'"
