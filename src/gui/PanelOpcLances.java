@@ -19,6 +19,7 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataManager.AdministraCampanias;
+import modelo.dataManager.Campania;
 import modelo.dataManager.Lance;
 import modelo.dataManager.Punto;
 import persistencia.BrokerCajon;
@@ -470,10 +471,10 @@ public class PanelOpcLances extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "La longitud final debe estar entre -180 y 180, y no puede ser igual a 0");
             return;
         }
-        
-        Date fechaInicio=(Date) comboFechaInicio.getValue();
-        Date fechaFin=(Date) comboFechaFin.getValue();
-        if(fechaInicio.after(fechaFin)||fechaFin.before(fechaInicio)){
+
+        Date fechaInicio = (Date) comboFechaInicio.getValue();
+        Date fechaFin = (Date) comboFechaFin.getValue();
+        if (fechaInicio.after(fechaFin) || fechaFin.before(fechaInicio)) {
             JOptionPane.showMessageDialog(null, "Las fechas de inicio y/o fin son invalidas");
             return;
         }
@@ -494,7 +495,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         } else {
             // Agrega/inserta lance:
             //controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Double.valueOf(campoLatitud.getText()), Double.valueOf(campoLongitud.getText()), null, null);
-            //ControllerLance.getInstance().agregaLance();
+            ControllerLance.getInstance().agregaLance(AdministraCampanias.getInstance().getCampaniaEnCurso().getId(),fechaInicio,fechaFin,Double.valueOf(campoLatitudI.getText()),Double.valueOf(campoLongitudI.getText()),Double.valueOf(campoLatitudF.getText()),Double.valueOf(campoLongitudF.getText()),"" + campoComentario.getText());
         }
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
@@ -526,7 +527,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private void btnInsertarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarLanceActionPerformed
         // TODO add your handling code here:
         if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
-
             habilitaPanelDatosLances(true);
             habilitaCamposLances(true);
             btnModificarLance.setEnabled(false);
@@ -652,21 +652,23 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     public void cargaGrillaLances() {
         modeloTablaLances.setRowCount(0);//vacia la tabla
-        SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaFromDB(AdministraCampanias.getInstance().getCampaniaEnCurso().getId())) {
-            String fechaFin = "En curso";
-            if (unLance.getfYHFin() != null) {
-                fechaFin = horaCompleta.format(unLance.getfYHFin());
+        Campania unaCamp = AdministraCampanias.getInstance().getCampaniaEnCurso();
+        if (unaCamp != null) {
+            SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+            for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaFromDB(unaCamp.getId())) {
+                String fechaFin = "En curso";
+                if (unLance.getfYHFin() != null) {
+                    fechaFin = horaCompleta.format(unLance.getfYHFin());
+                }
+                modeloTablaLances.addRow(new Object[]{
+                            unLance,//<--Aca esta el objeto -muestra idLance
+                            horaCompleta.format(unLance.getfYHIni()),
+                            fechaFin,
+                            unLance.getComentarios(),
+                            BrokerCajon.getInstance().getCajonesFromLance(unLance.getId())
+                        });
             }
-            modeloTablaLances.addRow(new Object[]{
-                        unLance,//<--Aca esta el objeto -muestra idLance
-                        horaCompleta.format(unLance.getfYHIni()),
-                        fechaFin,
-                        unLance.getComentarios(),
-                        BrokerCajon.getInstance().getCajonesFromLance(unLance.getId())
-                    });
         }
-
         tablaLances.setModel(modeloTablaLances);
         ControllerPpal.getInstance().ocultarColJTable(tablaLances, 0);
     }

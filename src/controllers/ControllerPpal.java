@@ -5,22 +5,15 @@
 package controllers;
 
 import gui.PanelBarraDeEstado;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
-import modelo.gisModule.Browser;
 import persistencia.BrokerConfig;
 import persistencia.BrokerDbMapa;
 import persistencia.Logueador;
@@ -44,6 +37,7 @@ public class ControllerPpal {
                 && (AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado() == 1)) {
             controllers.ControllerCampania.getInstance().setEstadoCampaniaEnCurso(2); //si hay alguna campania en curso, la pauso
         }
+        ControllerLance.getInstance().cierraAppMientrasHayLance(); //que hacer si hay un lance en curso
         //ControllerAlertas contAlertas=controllers.ControllerAlertas.getInstance();
         //contAlertas.guardaOcurAlertas();
     }
