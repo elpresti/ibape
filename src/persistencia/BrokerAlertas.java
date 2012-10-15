@@ -842,6 +842,43 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         return alertas;
     }
    
+      public ArrayList<modelo.alertas.AlertaListaOn> getOcurAlertasFromDB(){
+        ArrayList<modelo.alertas.AlertaListaOn> ocurAlertas = new ArrayList();        
+        ResultSet rs = null;
+        try {
+            rs = getStatement().executeQuery("SELECT * FROM OcurAlertas");
+
+            while (rs.next()) {    
+                modelo.alertas.AlertaListaOn ocurAlerta = new modelo.alertas.AlertaListaOn();
+                ocurAlerta.setIdOcur(rs.getInt("id"));
+                ocurAlerta.setLatitud(Double.parseDouble(rs.getString("latitud")));
+                ocurAlerta.setLongitud(Double.parseDouble(rs.getString("longitud")));
+                ocurAlerta.getAlerta().setId(rs.getInt("idAlerta"));
+                //falta obtener valores
+                ocurAlerta.setFechaActivacion(rs.getTimestamp("fyhini"));
+                ocurAlerta.setFechaDesactivacion(rs.getTimestamp("fyhfin"));  
+                ocurAlerta.setVista(rs.getInt("vista"));  
+                ocurAlertas.add(ocurAlerta);
+            }
+            
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        } 
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return ocurAlertas;
+    }
+   
+   
       public ArrayList<modelo.alertas.Condicion> getCondicionesFromDB(int idAlerta){
         ArrayList<modelo.alertas.Condicion> condiciones = new ArrayList();
         ResultSet rs=null;
@@ -930,10 +967,11 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         return relaciones;
     }
 
-public boolean guardaOcurAlerta(AlertaListaOn ocurAlerta){
+public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
         boolean sePudo = false;
         String sqlQuery="";
         ResultSet rs=null;
+        int result=-1;
 
         
         try {                                
@@ -954,6 +992,7 @@ public boolean guardaOcurAlerta(AlertaListaOn ocurAlerta){
                 fechaDes = ocurAlerta.getFechaDesactivacion();
             }
             int idAlerta=ocurAlerta.getAlerta().getId();
+            int vista=ocurAlerta.getVista();
             
             //ciclo para guardar lista de valores;
             String valor1="";
@@ -967,14 +1006,25 @@ public boolean guardaOcurAlerta(AlertaListaOn ocurAlerta){
             String valor9="";
 
                         sqlQuery = "INSERT INTO OcurAlertas"
-                        + "(valor1,valor2,valor3,valor4,valor5,valor6,valor7,valor8,valor9,latitud,longitud,fyhini,fyhfin,idAlerta)"
+                        + "(valor1,valor2,valor3,valor4,valor5,valor6,valor7,valor8,valor9,latitud,longitud,fyhini,fyhfin,vista,idAlerta)"
                         + "VALUES"
-                        +"('"+valor1+"','"+valor2+"','"+valor3+"','"+valor4+"','"+valor5+"','"+valor6+"','"+valor7+"','"+valor8+"','"+valor9+"',"+latitud+","+longitud+",'"+fechaAct+"','"+fechaDes+"',"+idAlerta+")";
+                        +"('"+valor1+"','"+valor2+"','"+valor3+"','"+valor4+"','"+valor5+"','"+valor6+"','"+valor7+"','"+valor8+"','"+valor9+"',"+latitud+","+longitud+",'"+fechaAct+"','"+fechaDes+"','"+vista+"','"+idAlerta+"')";
                 System.out.println("Insert: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;
                 }else{sePudo=false;}
-
+                
+            if (sePudo){
+                sqlQuery = "SELECT max(id) as id from OcurAlertas";
+                System.out.println("Select: "+sqlQuery);
+                rs= getStatement().executeQuery(sqlQuery);
+                if ( rs != null) {
+                    result=rs.getInt("id");
+                    sePudo = true;
+                }else{sePudo=false;}
+            } 
+                
+                
         } catch (SQLException ex) {
             Logueador.getInstance().agregaAlLog(ex.toString());
         }
@@ -989,6 +1039,44 @@ public boolean guardaOcurAlerta(AlertaListaOn ocurAlerta){
         catch(Exception e){
             Logueador.getInstance().agregaAlLog(e.toString());
         }
-        return sePudo;
+        
+        return result;
+
     }    
+
+    public boolean actualizaOcurAlerta(int idOcurDesactivada, Timestamp fecha) {
+        boolean sePudo = false;
+        String sqlQuery="";
+        ResultSet rs=null;
+
+        
+        try {     
+            
+                        sqlQuery ="Update OcurAlertas "
+                        + "SET fyhfin='"+fecha+"' WHERE "
+                        + "id="+idOcurDesactivada;
+                System.out.println("Update: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                 
+                             
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        
+        return sePudo;
+
+    }
 }

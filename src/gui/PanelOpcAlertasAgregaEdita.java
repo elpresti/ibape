@@ -560,6 +560,7 @@ private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
 private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
 // TODO add your handling code here:
     setVisible(false);
+    PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
     PanelOpcAlertas.getInstance().getPanelAlertasPpal().setVisible(true);
 }//GEN-LAST:event_btnVolverActionPerformed
 

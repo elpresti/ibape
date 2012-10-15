@@ -6,6 +6,7 @@ package controllers;
 
 import gui.AlertWin;
 import gui.PanelAlertaActiva;
+import gui.PanelOpcAlertas;
 import gui.PanelSelector;
 import gui.VentanaIbape;
 import java.sql.Timestamp;
@@ -26,6 +27,7 @@ import modelo.alertas.Variable;
 import modelo.dataManager.POI;
 import modelo.dataManager.Punto;
 import modelo.dataManager.SondaSet;
+import modelo.dataManager.UltimaImgProcesada;
 import org.jdom.Element;
 import persistencia.BrokerConfig;
 import persistencia.Logueador;
@@ -49,12 +51,13 @@ public class ControllerAlertas extends Observable implements Observer{
     private int idUltAlertaInsertada;
     private Punto punto=modelo.dataManager.Punto.getInstance();
     private SondaSet sonda=modelo.dataManager.SondaSet.getInstance();
-    private POI poi=new modelo.dataManager.POI();
+    private UltimaImgProcesada ultImg=modelo.dataManager.UltimaImgProcesada.getInstance();
     private AdministraAlertas administraAlertas=modelo.alertas.AdministraAlertas.getInstance();
     private ArrayList<Alerta> alertasEnFuncionamiento= new ArrayList<Alerta>();
     private ArrayList<AlertaListaOn> alertasActivadas= new ArrayList<AlertaListaOn>();
     private boolean estadoAlertas=AdministraAlertas.getInstance().isEstadoAlertas();
     private int idOcurProv;
+    private int indexVariable;
     private static int indexProfundidad=1;
     private static int indexCantDeMarcas=2;
     private static int indexLatitud=3;
@@ -64,11 +67,13 @@ public class ControllerAlertas extends Observable implements Observer{
     private static int indexVelocidadAgua=7;
     private static int indexTempAgua=8;
     private static int indexFechaYhora=9;
+    private int cantOcurNoVistas;
     
    
     public static ControllerAlertas getInstance() {
-       if (unicaInstancia == null)
+       if (unicaInstancia == null){
           unicaInstancia = new ControllerAlertas();
+       }
        return unicaInstancia;
     }
 
@@ -449,43 +454,29 @@ public class ControllerAlertas extends Observable implements Observer{
 
     public void update(Observable o, Object arg) {
     if (arg!=null){ 
-      String indexS=(String) arg.toString();
-      int index=Integer.parseInt(indexS);
-      if (o == punto){
-          if (index==indexProfundidad){
-              analizaActivacionesProfundidad(); 
-          }else if (index==indexLatitud){
-              analizaActivacionesLatitud();
-          }else if (index==indexLongitud){
-              analizaActivacionesLongitud();
-          }else if (index==indexVelocidad){
-              analizaActivacionesVelocidad();
-          }else if (index==indexRumbo){
-              analizaActivacionesRumbo();
-          }else if (index==indexVelocidadAgua){
-              analizaActivacionesvelocidadAgua();
-          }else if (index==indexTempAgua){
-              analizaActivacionesTempAgua();
-          }else if (index==indexFechaYhora){
-              analizaActivacionesFechaYhora();
+          String indexS=(String) arg.toString();
+          int index=Integer.parseInt(indexS);
+          if (o == punto){
+                AnalizaActivaciones thAnalizaActivaciones = new AnalizaActivaciones();
+                thAnalizaActivaciones.setIndex(index);
+                thAnalizaActivaciones.start();
           }
-          
-      }
-      else
-          if (o == sonda){
-           
-          }
-          else 
-              if (o == administraAlertas){
-               
-              }else if (o==poi){
-                if (index==indexCantDeMarcas){
-                    analizaActivacionesCantDeMarcas();
-                }
+          else
+              if (o == sonda){
+
+              }
+              else 
+                  if (o == administraAlertas){
+
+                  }else if (o==ultImg){
+                    if (index==indexCantDeMarcas){
+                        analizaActivacionesCantDeMarcas();
+                    }
+
+                    }
+        }
+        }
     
-                }
-    }
-    }
     public void alertasOn() {
         
    
@@ -493,7 +484,8 @@ public class ControllerAlertas extends Observable implements Observer{
         if (modelo.alertas.AdministraAlertas.getInstance().isEstadoAlertas()){
             
             if ((modelo.alertas.AdministraAlertas.getInstance().getAlertas() == null) || (modelo.alertas.AdministraAlertas.getInstance().getAlertas().isEmpty()) ) {
-                modelo.alertas.AdministraAlertas.getInstance().leerAlertasDeLaDB();       
+                modelo.alertas.AdministraAlertas.getInstance().leerAlertasDeLaDB();
+                leerOcurAlertasDeLaDB();
             }
             alertasEnFuncionamiento = modelo.alertas.AdministraAlertas.getInstance().getAlertasEnFuncionamiento();            
 
@@ -501,7 +493,19 @@ public class ControllerAlertas extends Observable implements Observer{
     
 }
 
-    private void analizaActivacionesProfundidad() {
+        public boolean leerOcurAlertasDeLaDB() {
+        boolean sePudo=false;
+        try {
+            setAlertasActivadas(persistencia.BrokerAlertas.getInstance().getOcurAlertasFromDB());
+            sePudo=true;
+        }
+        catch (Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        return sePudo;
+    }    
+    
+    public void analizaActivacionesProfundidad() {
         ArrayList<Condicion> condiciones;
         boolean activacion;
         boolean activacionAnt;
@@ -528,20 +532,23 @@ public class ControllerAlertas extends Observable implements Observer{
                     alertaListaOn.setAlerta(al);
                     alertaListaOn.setEstadoActivacion(true);
                     alertaListaOn.setFechaActivacion(fecha);
-                    alertaListaOn.setIdOcur(idOcurProv);
+                    alertaListaOn.setVista(0);
+                    setCantOcurNoVistas(getCantOcurNoVistas()+1);
                     alertaListaOn.setLatitud(modelo.dataManager.Punto.getInstance().getLatitud());
                     alertaListaOn.setLongitud(modelo.dataManager.Punto.getInstance().getLongitud());
+                    int id=persistencia.BrokerAlertas.getInstance().guardaOcurAlerta(alertaListaOn);
+                    alertaListaOn.setIdOcur(id);
                     getAlertasActivadas().add(alertaListaOn);
-                    AlertWin.getInstance().setIdShowing(idOcurProv);                    
+                    AlertWin.getInstance().setIdShowing(id);                    
                     setChanged();
                     notifyObservers();
                     AlertWin.getInstance().muestraAlerta();
-                    idOcurProv=idOcurProv+1;
     
                 }
             }else{
                 if (activacionAnt){
-                    desactivaAlerta(al,fecha);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
                     setChanged();
                     notifyObservers();
                 }else{
@@ -585,27 +592,27 @@ public class ControllerAlertas extends Observable implements Observer{
     private boolean cumpleCondicionProfundidad(Condicion c) {
         boolean cumpleTodo=true;
         if (c.getIdRelacion()==1){
-                        if ((Float.parseFloat(c.getValorMinimo())==punto.getProfundidad())){
+                        if ((Float.parseFloat(c.getValorMinimo())==(float) punto.getProfundidad())){
                             cumpleTodo=cumpleTodo && true;
                         }else{
                             cumpleTodo=cumpleTodo && false;
                         }
                     }else{
                         if (c.getIdRelacion()==2){
-                            if (Float.parseFloat(c.getValorMinimo())<=punto.getProfundidad()){
+                            if (Float.parseFloat(c.getValorMinimo())<=(float) punto.getProfundidad()){
                                 cumpleTodo=cumpleTodo && true;
                             }else{
                                 cumpleTodo=cumpleTodo && false;
                             }
                         }else{
                             if (c.getIdRelacion()==3){
-                                if (Float.parseFloat(c.getValorMinimo())>=punto.getProfundidad()){
+                                if (Float.parseFloat(c.getValorMinimo())>=(float) punto.getProfundidad()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
                                 }
                             }else{
-                                if (Float.parseFloat(c.getValorMinimo())<=punto.getProfundidad() && Float.parseFloat(c.getValorMaximo())>=punto.getProfundidad()){
+                                if (Float.parseFloat(c.getValorMinimo())<=(float) punto.getProfundidad() && Float.parseFloat(c.getValorMaximo())>=(float) punto.getProfundidad()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
@@ -657,27 +664,27 @@ public class ControllerAlertas extends Observable implements Observer{
     private boolean cumpleCondicionCantDeMarcas(Condicion c) {
         boolean cumpleTodo=true;
         if (c.getIdRelacion()==1){
-                        if ((Float.parseFloat(c.getValorMinimo())==poi.getMarcas().size())){
+                        if ((Float.parseFloat(c.getValorMinimo())==ultImg.getMarcas().size())){
                             cumpleTodo=cumpleTodo && true;
                         }else{
                             cumpleTodo=cumpleTodo && false;
                         }
                     }else{
                         if (c.getIdRelacion()==2){
-                            if (Float.parseFloat(c.getValorMinimo())<=poi.getMarcas().size()){
+                            if (Float.parseFloat(c.getValorMinimo())<=ultImg.getMarcas().size()){
                                 cumpleTodo=cumpleTodo && true;
                             }else{
                                 cumpleTodo=cumpleTodo && false;
                             }
                         }else{
                             if (c.getIdRelacion()==3){
-                                if (Float.parseFloat(c.getValorMinimo())>=poi.getMarcas().size()){
+                                if (Float.parseFloat(c.getValorMinimo())>=ultImg.getMarcas().size()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
                                 }
                             }else{
-                                if (Float.parseFloat(c.getValorMinimo())<=poi.getMarcas().size() && Float.parseFloat(c.getValorMaximo())>=poi.getMarcas().size()){
+                                if (Float.parseFloat(c.getValorMinimo())<=ultImg.getMarcas().size() && Float.parseFloat(c.getValorMaximo())>=ultImg.getMarcas().size()){
                                     cumpleTodo=cumpleTodo && true;
                                 }else{
                                     cumpleTodo=cumpleTodo && false;
@@ -793,7 +800,7 @@ public class ControllerAlertas extends Observable implements Observer{
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void analizaActivacionesLatitud() {
+    public void analizaActivacionesLatitud() {
         ArrayList<Condicion> condiciones;
         boolean activacion;
         boolean activacionAnt;
@@ -820,15 +827,17 @@ public class ControllerAlertas extends Observable implements Observer{
                     alertaListaOn.setAlerta(al);
                     alertaListaOn.setEstadoActivacion(true);
                     alertaListaOn.setFechaActivacion(fecha);
-                    alertaListaOn.setIdOcur(idOcurProv);
+                    alertaListaOn.setVista(0);
+                    setCantOcurNoVistas(getCantOcurNoVistas()+1);
                     alertaListaOn.setLatitud(modelo.dataManager.Punto.getInstance().getLatitud());
                     alertaListaOn.setLongitud(modelo.dataManager.Punto.getInstance().getLongitud());
+                    int id=persistencia.BrokerAlertas.getInstance().guardaOcurAlerta(alertaListaOn);
+                    alertaListaOn.setIdOcur(id);
                     getAlertasActivadas().add(alertaListaOn);
-                    AlertWin.getInstance().setIdShowing(idOcurProv);                    
+                    AlertWin.getInstance().setIdShowing(id);                    
                     setChanged();
                     notifyObservers();
                     AlertWin.getInstance().muestraAlerta();
-                    idOcurProv=idOcurProv+1;
                 }
             }else{
                 if (activacionAnt){
@@ -844,27 +853,27 @@ public class ControllerAlertas extends Observable implements Observer{
 
     }
 
-    private void analizaActivacionesLongitud() {
+    public void analizaActivacionesLongitud() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void analizaActivacionesVelocidad() {
+    public void analizaActivacionesVelocidad() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void analizaActivacionesRumbo() {
+    public void analizaActivacionesRumbo() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void analizaActivacionesvelocidadAgua() {
+    public void analizaActivacionesvelocidadAgua() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void analizaActivacionesTempAgua() {
+    public void analizaActivacionesTempAgua() {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void analizaActivacionesFechaYhora() {
+    public void analizaActivacionesFechaYhora() {
         ArrayList<Condicion> condiciones;
         boolean activacion;
         boolean activacionAnt;
@@ -886,10 +895,21 @@ public class ControllerAlertas extends Observable implements Observer{
                 if (activacionAnt){
                     //Alerta continua activada
                 }else{                   
-                    //alertasActivadas.add(al);                   
-                    PanelAlertaActiva panelAlertaActiva=new PanelAlertaActiva(al.getTitulo(),al.getMensaje(),fecha.toString()); 
-                    VentanaIbape.getInstance().ponerEnPanelDerecho(panelAlertaActiva);
-                    
+                    AlertaListaOn alertaListaOn=new AlertaListaOn();
+                    alertaListaOn.setAlerta(al);
+                    alertaListaOn.setEstadoActivacion(true);
+                    alertaListaOn.setFechaActivacion(fecha);
+                    alertaListaOn.setVista(0);
+                    setCantOcurNoVistas(getCantOcurNoVistas()+1);
+                    alertaListaOn.setLatitud(modelo.dataManager.Punto.getInstance().getLatitud());
+                    alertaListaOn.setLongitud(modelo.dataManager.Punto.getInstance().getLongitud());
+                    int id=persistencia.BrokerAlertas.getInstance().guardaOcurAlerta(alertaListaOn);
+                    alertaListaOn.setIdOcur(id);
+                    getAlertasActivadas().add(alertaListaOn);
+                    AlertWin.getInstance().setIdShowing(id);                    
+                    setChanged();
+                    notifyObservers();
+                    AlertWin.getInstance().muestraAlerta();
                 }
             }else{
                 if (activacionAnt){
@@ -903,7 +923,7 @@ public class ControllerAlertas extends Observable implements Observer{
 
     }
 
-    private void analizaActivacionesCantDeMarcas() {
+    public void analizaActivacionesCantDeMarcas() {
     
         ArrayList<Condicion> condiciones;
         boolean activacion;
@@ -931,15 +951,17 @@ public class ControllerAlertas extends Observable implements Observer{
                     alertaListaOn.setAlerta(al);
                     alertaListaOn.setEstadoActivacion(true);
                     alertaListaOn.setFechaActivacion(fecha);
-                    alertaListaOn.setIdOcur(idOcurProv);
+                    alertaListaOn.setVista(0);
+                    setCantOcurNoVistas(getCantOcurNoVistas()+1);
                     alertaListaOn.setLatitud(modelo.dataManager.Punto.getInstance().getLatitud());
                     alertaListaOn.setLongitud(modelo.dataManager.Punto.getInstance().getLongitud());
+                    int id=persistencia.BrokerAlertas.getInstance().guardaOcurAlerta(alertaListaOn);
+                    alertaListaOn.setIdOcur(id);
                     getAlertasActivadas().add(alertaListaOn);
-                    AlertWin.getInstance().setIdShowing(idOcurProv);                    
+                    AlertWin.getInstance().setIdShowing(id);                    
                     setChanged();
                     notifyObservers();
                     AlertWin.getInstance().muestraAlerta();
-                    idOcurProv=idOcurProv+1;
     
                 }
             }else{
@@ -964,18 +986,20 @@ public class ControllerAlertas extends Observable implements Observer{
         } 
     }
 */
-    private boolean desactivaAlerta(Alerta al,Timestamp fechaDes) {
+    private int desactivaAlerta(Alerta al,Timestamp fechaDes) {
         boolean desactivacion=false;
+        int result=-1;
         int i=getAlertasActivadas().size()-1;
         while ((i>=0) && (!desactivacion)){
             if (getAlertasActivadas().get(i).getAlerta().getId()==al.getId()){
                 getAlertasActivadas().get(i).setEstadoActivacion(false);
                 getAlertasActivadas().get(i).setFechaDesactivacion(fechaDes);
-                desactivacion=true;                
+                desactivacion=true;
+                result=getAlertasActivadas().get(i).getIdOcur();
             }
             i--;
         }
-        return desactivacion;
+        return result;
     }
 
     private void actualizaDatosAlertWin() {
@@ -1010,7 +1034,6 @@ public class ControllerAlertas extends Observable implements Observer{
             setChanged();
             notifyObservers();
         }
-        
     }
     
     public void muestraOcurAnt(int idShowing) {
@@ -1041,7 +1064,22 @@ public class ControllerAlertas extends Observable implements Observer{
         }
         return getAlertasActivadas().get(idAnt);
     }
-
+    
+        public int getIndexAlertaShowing(int idShowing) {
+        int i=getAlertasActivadas().size()-1;
+        boolean encontro=false;
+        int idAnt=getAlertasActivadas().size()-1;
+        while ((i>=0) && (!encontro)){
+            if (getAlertasActivadas().get(i).getIdOcur()==idShowing){
+                idAnt=i;
+                encontro=true;
+            }
+            i--;
+        }
+        return idAnt;
+    }
+    
+/*
     public boolean guardaOcurAlertas() {
         
         boolean sePudo=true;
@@ -1056,5 +1094,51 @@ public class ControllerAlertas extends Observable implements Observer{
         }
         return sePudo;
     }
+*/
 
+    public void muestraOcurUlt() {
+        int i=getAlertasActivadas().size()-1;
+        if (i>=0){
+            gui.AlertWin.getInstance().setIdShowing(getAlertasActivadas().get(i).getIdOcur());
+            setChanged();
+            notifyObservers();
+            AlertWin.getInstance().muestraAlertaSinPreload();
+        }
+      
+    }
+
+    /**
+     * @return the alertasActivadasVista
+     */
+   
+    public void calculaCantOcurNoVistas() {
+        int i=0;
+        int cant=0;
+        while (i<=getAlertasActivadas().size()-1){
+            if (getAlertasActivadas().get(i).getVista()==0){
+               cant=cant++;
+            }
+            i++;
+        }
+        setCantOcurNoVistas(cant); 
+    }
+
+    /**
+     * @return the cantOcurNoVistas
+     */
+    public int getCantOcurNoVistas() {
+        return cantOcurNoVistas;
+    }
+
+    /**
+     * @param cantOcurNoVistas the cantOcurNoVistas to set
+     */
+    public void setCantOcurNoVistas(int cantOcurNoVistas) {
+    if (cantOcurNoVistas!=this.cantOcurNoVistas){
+        this.cantOcurNoVistas = cantOcurNoVistas;
+        gui.PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
+    }
+
+    }    
+    
 }
