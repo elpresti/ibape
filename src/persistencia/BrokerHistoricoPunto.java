@@ -101,7 +101,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 getPsInsert().setDouble(7,pto.getProfundidad());
                 getPsInsert().setDouble(8,pto.getVelocidadAgua());
                 getPsInsert().setDouble(9,pto.getTempAgua());
-                System.out.println("Insert PH: "+getPsInsert().toString());
+                System.out.println("Insert Punto: "+Calendar.getInstance().getTime()+"  "+getPsInsert().toString());
                 if (getPsInsert().executeUpdate() > 0) {
                     setfYhUltimoInsert(Calendar.getInstance().getTime());                    
                     sePudo = true;
@@ -111,14 +111,15 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 ControllerCampania.getInstance().setEstadoHistoricoDeCampEnCurso(0);
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
-        }
-        try{//ya la use, asique cierro Statements usados
-            if (getPsInsert() != null){
-                getPsInsert().close();psInsert = null;
+            try{//ya la use, asique cierro Statements usados
+                if (getPsInsert() != null){
+                    //getPsInsert().close();psInsert = null;
+                    psInsert = null; 
+                }
             }
-        }
-        catch(Exception e){
-            Logueador.getInstance().agregaAlLog(e.toString());
+            catch(Exception e){
+                Logueador.getInstance().agregaAlLog(e.toString());
+            }
         }
         return sePudo;
     }
@@ -140,21 +141,21 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
                 getPsInsert().setDouble(8,ph.getVelocidadAgua());
                 getPsInsert().setDouble(9,ph.getTempAgua());
 
-                System.out.println("Insert PH: "+getPsInsert().toString());
+                System.out.println("Insert PuntoHistorico: "+Calendar.getInstance().getTime()+"  "+getPsInsert().toString());
                 if (getPsInsert().executeUpdate() > 0) {
                     sePudo = true;
                 }
             } catch (SQLException ex) {
                 Logueador.getInstance().agregaAlLog(ex.toString());
             }
-        }
-        try{//ya la use, asique cierro Statements usados
-            if (getPsInsert() != null){
-                getPsInsert().close();psInsert = null;
+            try{//ya la use, asique cierro Statements usados
+                if (getPsInsert() != null){
+                    getPsInsert().close();psInsert = null;
+                }
             }
-        }
-        catch(Exception e){
-            Logueador.getInstance().agregaAlLog(e.toString());
+            catch(Exception e){
+                Logueador.getInstance().agregaAlLog(e.toString());
+            }
         }
         return sePudo;
     }
@@ -307,7 +308,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
      */
     public PreparedStatement getPsUpdate() {
         try {
-            if (psUpdate == null || psUpdate.isClosed()){
+            if (psUpdate == null){
                 setPsUpdate(getConexion().prepareStatement(
                         "UPDATE Puntos "
                         + "SET fechaYhora = ?, "
@@ -339,7 +340,7 @@ public class BrokerHistoricoPunto extends BrokerHistorico {
      */
     public PreparedStatement getPsDelete() {
         try {
-            if (psDelete == null || psDelete.isClosed()){
+            if (psDelete == null){
                 setPsDelete(getConexion().prepareStatement(
                             "DELETE FROM Puntos "
                             + "WHERE id = ?"));
