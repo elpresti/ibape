@@ -7,7 +7,9 @@ package controllers;
 import gui.PanelOpcLances;
 import gui.PanelSelector;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.Cajon;
 import modelo.dataManager.Especie;
 import modelo.dataManager.Lance;
@@ -39,9 +41,8 @@ public class ControllerLance {
     }
 
     public void iniciaLance() {
-        //if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
-        //  if (ControllerCampania.getInstance().getEstadoCampaniaEnCurso() == 1) { //tengo una campaña en curso
-        //  if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) { //tengo un lance en curso
+        // if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+
         PanelOpcLances.getInstance().setTxtBtnIniciaLance();
         PanelSelector.getInstance().setTxtBtnIniciaLance();
         if (JOptionPane.showConfirmDialog(null,
@@ -53,13 +54,13 @@ public class ControllerLance {
             Lance unLance = new Lance();
             unLance.setIdCampania(ControllerCampania.getInstance().getIdCampaniaEnCurso());
             if (Punto.getInstance().getLatConNegativo() == 0 || !(Punto.getInstance().getLatConNegativo() >= -90 && Punto.getInstance().getLatConNegativo() <= 90)) {
-                JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
+                JOptionPane.showMessageDialog(null, "NO GPS-La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
                 return;
             } else {
                 unLance.setPosIniLat(Punto.getInstance().getLatConNegativo());
             }
             if (Punto.getInstance().getLonConNegativo() == 0 || !(Punto.getInstance().getLonConNegativo() >= -180 && Punto.getInstance().getLonConNegativo() <= 180)) {
-                JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
+                JOptionPane.showMessageDialog(null, "NO GPS-La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
                 return;
             } else {
                 unLance.setPosIniLon(Punto.getInstance().getLonConNegativo());
@@ -70,10 +71,15 @@ public class ControllerLance {
             agregaLance(unLance);
             PanelOpcLances.getInstance().cargaGrillaLances();
             PanelOpcLances.getInstance().setTxtBtnFinLance();
+            PanelSelector.getInstance().setTxtBtnFinLance();
         }
+        /*} else {
+        JOptionPane.showMessageDialog(null, "No se pueden registrar lances sin estar en una campaña");
+        }*/
     }
 
     public void finalizarLance() {
+        // if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
         PanelOpcLances.getInstance().setTxtBtnFinLance();
         PanelSelector.getInstance().setTxtBtnFinLance();
         if (JOptionPane.showConfirmDialog(null,
@@ -85,13 +91,13 @@ public class ControllerLance {
             Lance unLance = BrokerLance.getInstance().getLanceFromDB(BrokerLance.getInstance().getIdLanceEnCurso());
             if (unLance.getfYHFin() == null) {
                 if (Punto.getInstance().getLatConNegativo() == 0 || !(Punto.getInstance().getLatConNegativo() >= -90 && Punto.getInstance().getLatConNegativo() <= 90)) {
-                    JOptionPane.showMessageDialog(null, "La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
+                    JOptionPane.showMessageDialog(null, "NO GPS-La latitud debe estar entre -90 y 90, y no puede ser igual a 0");
                     return;
                 } else {
                     unLance.setPosFinLat(Punto.getInstance().getLatConNegativo());
                 }
                 if (Punto.getInstance().getLonConNegativo() == 0 || !(Punto.getInstance().getLonConNegativo() >= -180 && Punto.getInstance().getLonConNegativo() <= 180)) {
-                    JOptionPane.showMessageDialog(null, "La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
+                    JOptionPane.showMessageDialog(null, "NO GPS-La longitud debe estar entre -180 y 180, y no puede ser igual a 0");
                     return;
                 } else {
                     unLance.setPosFinLon(Punto.getInstance().getLonConNegativo());
@@ -104,8 +110,11 @@ public class ControllerLance {
             ControllerPois.getInstance().guardaPoisDelLance(unLance);
             PanelOpcLances.getInstance().cargaGrillaLances();
             PanelOpcLances.getInstance().setTxtBtnIniciaLance();
+            PanelSelector.getInstance().setTxtBtnIniciaLance();
         }
-
+        /* } else {
+        JOptionPane.showMessageDialog(null, "No se pueden finalizar lances sin estar en una campaña");
+        }*/
     }
 
     private void agregaLance(Lance unLance) {
@@ -151,10 +160,42 @@ public class ControllerLance {
 
     public void registrarLance() {
         //supongo que se controla que estoy en curso afuera para ocultar el boton
-        if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) {
-            iniciaLance();
+        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+            if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) {
+                iniciaLance();
+            } else {
+                finalizarLance();
+            }
         } else {
-            finalizarLance();
+            JOptionPane.showMessageDialog(null, "No se pueden registrar lances directos sin estar en una campaña");
         }
+
+    }
+
+    public void cierraAppMientrasHayLance() {
+        //supongo que se controla que estoy en curso afuera para ocultar el boton
+        if (BrokerLance.getInstance().getIdLanceEnCurso() > 0) {
+            /* if (JOptionPane.showConfirmDialog(null,
+            "Se detecto un lance en curso ¿Desea finalizarlo?", //<---
+            "Finalizar lance",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE) == 0) {*/
+            finalizarLance();
+            /* }*/
+        }
+    }
+
+    public void agregaLance(int idCamp, Date fechaInicio, Date fechaFin, Double latIni, Double lonIni, Double latFin, Double lonFin, String comentarios) {
+        Lance unLance = new Lance();
+        unLance.setIdCampania(idCamp);
+        unLance.setComentarios(comentarios);
+        unLance.setfYHIni(fechaInicio);
+        unLance.setfYHFin(fechaFin);
+        unLance.setPosIniLat(latIni);
+        unLance.setPosIniLon(lonIni);
+        unLance.setPosFinLat(latFin);
+        unLance.setPosFinLon(lonFin);
+
+        BrokerLance.getInstance().insertLance(unLance);
     }
 }
