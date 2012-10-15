@@ -152,9 +152,9 @@ public class BrokerDbMapa implements Runnable{
              }
              else { salida=false; }
          } catch (Exception e){             
-             String mensaje = "Error al conectar y crear la db y la tabla! ExisteConexionDbMapa:"+isConectado()+", ExisteDbMapa:"+isDbExiste()+", ExisteTablaMapa:"+isTablaExiste();
+             String mensaje = "BrokerDbMapa.dbLista(): Error al conectar y crear la db y la tabla! ExisteConexionDbMapa:"+isConectado()+", ExisteDbMapa:"+isDbExiste()+", ExisteTablaMapa:"+isTablaExiste();
              System.out.println(mensaje);
-             Logueador.getInstance().agregaAlLog(mensaje+"\n"+e.toString());
+             Logueador.getInstance().agregaAlLog(mensaje+"  \n"+e.toString());
          }
       }
       else { salida=true; }
@@ -181,6 +181,7 @@ public class BrokerDbMapa implements Runnable{
              existe=true;
         }
          catch (Exception e){
+             Logueador.getInstance().agregaAlLog("BrokerDbMapa.existeDb(): (Existe la db? NO)"+e.toString());
              //no existe
         }
         return existe;
