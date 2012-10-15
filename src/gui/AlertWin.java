@@ -293,9 +293,10 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
             }
             i++;
         }
+        setCounter(false);
         int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
         if (i==11){
-
+            
         }else{
             if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
@@ -321,8 +322,14 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     
     public void muestraAlerta(){
         setAccionMouse(false);
-        setVisible(true);
         setCounter(true);
+        if (isCounter()){
+            setShow(false); //Termina con ciclo actual para dar lugar al nuevo ciclo
+            setVisible(true); //Como al salir del preload de la ocur anterior se oculta la ventana, la muestro devuelta
+            
+        }else{
+            setCounter(true);
+        }
         hacePreLoad();
         setVisible(false);
         gui.PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
