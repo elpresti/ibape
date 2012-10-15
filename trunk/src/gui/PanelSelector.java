@@ -285,7 +285,7 @@ private void lnkConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//
 }//GEN-LAST:event_lnkConfiguracionActionPerformed
 
 private void lnkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkAlertasActionPerformed
-
+    PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());
 }//GEN-LAST:event_lnkAlertasActionPerformed
 

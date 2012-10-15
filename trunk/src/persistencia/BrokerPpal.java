@@ -1038,6 +1038,7 @@ public abstract class BrokerPpal {
                     + "  longitud    float(30) NOT NULL,"                    
                     + "  fyhini      TIMESTAMP NOT NULL,"
                     + "  fyhfin      TIMESTAMP NOT NULL,"
+                    + "  vista       integer NOT NULL,"
                     + "  idAlerta    integer NOT NULL,"
                     + "  /* Foreign keys */ "
                     + "  FOREIGN KEY (idAlerta)"

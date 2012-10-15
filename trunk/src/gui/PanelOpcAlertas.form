@@ -28,6 +28,14 @@
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
   <SubComponents>
     <Container class="org.jdesktop.swingx.JXPanel" name="panelAlertasPpal">
+      <Properties>
+        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[500, 500]"/>
+        </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[500, 500]"/>
+        </Property>
+      </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
           <BorderConstraints direction="After"/>
@@ -39,13 +47,13 @@
         <Container class="org.jdesktop.swingx.JXPanel" name="panelTitulo">
           <Properties>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 40]"/>
+              <Dimension value="[500, 20]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 40]"/>
+              <Dimension value="[500, 20]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 40]"/>
+              <Dimension value="[500, 20]"/>
             </Property>
           </Properties>
           <Constraints>
@@ -56,15 +64,17 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
             <Property name="horizontalGap" type="int" value="0"/>
-            <Property name="verticalGap" type="int" value="10"/>
+            <Property name="verticalGap" type="int" value="1"/>
           </Layout>
           <SubComponents>
             <Component class="org.jdesktop.swingx.JXLabel" name="lblTitulo">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Alertas"/>
+                <Property name="verticalAlignment" type="int" value="1"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Arial" size="18" style="0"/>
                 </Property>
+                <Property name="verticalTextPosition" type="int" value="1"/>
               </Properties>
             </Component>
           </SubComponents>
@@ -78,7 +88,7 @@
               <Dimension value="[500, 420]"/>
             </Property>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 420]"/>
+              <Dimension value="[500, 480]"/>
             </Property>
           </Properties>
           <Constraints>
@@ -97,10 +107,10 @@
                   <Dimension value="[500, 60]"/>
                 </Property>
                 <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[500, 60]"/>
+                  <Dimension value="[500, 20]"/>
                 </Property>
                 <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                  <Dimension value="[500, 60]"/>
+                  <Dimension value="[500, 40]"/>
                 </Property>
               </Properties>
 
@@ -114,7 +124,13 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="14" style="0"/>
                     </Property>
-                    <Property name="label" type="java.lang.String" value="Usar Alertas"/>
+                    <Property name="text" type="java.lang.String" value="Alertas Activadas"/>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[131, 15]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[131, 20]"/>
+                    </Property>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkAlertasActionPerformed"/>
@@ -126,13 +142,30 @@
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Tahoma" size="14" style="0"/>
                     </Property>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[103, 20]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[103, 15]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[103, 20]"/>
+                    </Property>
                   </Properties>
                 </Component>
               </SubComponents>
             </Container>
             <Container class="org.jdesktop.swingx.JXPanel" name="panelTablaAlertas">
+              <Properties>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[947, 200]"/>
+                </Property>
+              </Properties>
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+                <Property name="horizontalGap" type="int" value="0"/>
+                <Property name="verticalGap" type="int" value="0"/>
+              </Layout>
               <SubComponents>
                 <Container class="javax.swing.JScrollPane" name="jScrollPane1">
                   <Properties>
@@ -143,7 +176,7 @@
                       <Dimension value="[482, 27]"/>
                     </Property>
                     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[482, 220]"/>
+                      <Dimension value="[482, 150]"/>
                     </Property>
                   </Properties>
                   <AuxValues>
@@ -155,7 +188,7 @@
                     <Component class="org.jdesktop.swingx.JXTable" name="tablaAlertas">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="6" rowCount="4">
+                          <Table columnCount="6" rowCount="10">
                             <Column editable="false" title="Id_Alerta" type="java.lang.Object"/>
                             <Column editable="false" title="Estado" type="java.lang.Boolean"/>
                             <Column editable="false" title="Nombre" type="java.lang.String"/>
@@ -200,16 +233,16 @@
                         </Property>
                         <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[480, 72]"/>
+                          <Dimension value="[480, 270]"/>
                         </Property>
                         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[480, 72]"/>
                         </Property>
                         <Property name="preferredScrollableViewportSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[480, 250]"/>
+                          <Dimension value="[480, 22700]"/>
                         </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[480, 72]"/>
+                          <Dimension value="[480, 150]"/>
                         </Property>
                         <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                           <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
@@ -221,7 +254,7 @@
                     </Component>
                   </SubComponents>
                 </Container>
-                <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesCampElegida">
+                <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesAlertaElegida">
                   <Properties>
                     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                       <Dimension value="[450, 30]"/>
@@ -237,6 +270,7 @@
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
                     <Property name="columns" type="int" value="2"/>
                     <Property name="rows" type="int" value="1"/>
+                    <Property name="verticalGap" type="int" value="10"/>
                   </Layout>
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXLabel" name="lblAccionesAlerta">
@@ -249,19 +283,41 @@
                       </Properties>
                     </Component>
                     <Container class="org.jdesktop.swingx.JXPanel" name="panelAcciones">
+                      <Properties>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[239, 30]"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[239, 30]"/>
+                        </Property>
+                      </Properties>
 
                       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                         <Property name="alignment" type="int" value="0"/>
                         <Property name="horizontalGap" type="int" value="20"/>
+                        <Property name="verticalGap" type="int" value="10"/>
                       </Layout>
                       <SubComponents>
+                        <Component class="org.jdesktop.swingx.JXHyperlink" name="btnInsertar">
+                          <Properties>
+                            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                              <Image iconType="3" name="/imgs/tabla-icono-insertar.png"/>
+                            </Property>
+                            <Property name="text" type="java.lang.String" value=""/>
+                            <Property name="toolTipText" type="java.lang.String" value="Insertar Alerta"/>
+                            <Property name="horizontalAlignment" type="int" value="0"/>
+                          </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInsertarActionPerformed"/>
+                          </Events>
+                        </Component>
                         <Component class="org.jdesktop.swingx.JXHyperlink" name="btnModificar">
                           <Properties>
                             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                               <Image iconType="3" name="/imgs/tabla-icono-editar.png"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value=""/>
-                            <Property name="toolTipText" type="java.lang.String" value="Modificar campa&#xf1;a"/>
+                            <Property name="toolTipText" type="java.lang.String" value="Modificar alerta"/>
                             <Property name="horizontalAlignment" type="int" value="0"/>
                           </Properties>
                           <Events>
@@ -274,7 +330,7 @@
                               <Image iconType="3" name="/imgs/tabla-icono-eliminar.png"/>
                             </Property>
                             <Property name="text" type="java.lang.String" value=""/>
-                            <Property name="toolTipText" type="java.lang.String" value="Eliminar campa&#xf1;a"/>
+                            <Property name="toolTipText" type="java.lang.String" value="Eliminar alerta"/>
                             <Property name="horizontalAlignment" type="int" value="0"/>
                           </Properties>
                           <Events>
@@ -287,39 +343,138 @@
                 </Container>
               </SubComponents>
             </Container>
-          </SubComponents>
-        </Container>
-        <Container class="org.jdesktop.swingx.JXPanel" name="panelBtnAgregar">
-          <Properties>
-            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 40]"/>
-            </Property>
-            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 40]"/>
-            </Property>
-            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[500, 40]"/>
-            </Property>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-              <BorderConstraints direction="South"/>
-            </Constraint>
-          </Constraints>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
-          <SubComponents>
-            <Component class="javax.swing.JButton" name="btnAgregar">
+            <Container class="org.jdesktop.swingx.JXPanel" name="panelTablaOcurAlertas">
               <Properties>
-                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                  <Font name="Tahoma" size="14" style="0"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[947, 250]"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Agregar alerta"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarActionPerformed"/>
-              </Events>
-            </Component>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+                <Property name="horizontalGap" type="int" value="0"/>
+                <Property name="verticalGap" type="int" value="0"/>
+              </Layout>
+              <SubComponents>
+                <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+                  <Properties>
+                    <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[482, 32767]"/>
+                    </Property>
+                    <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[482, 27]"/>
+                    </Property>
+                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                      <Dimension value="[482, 220]"/>
+                    </Property>
+                    <Property name="requestFocusEnabled" type="boolean" value="false"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+                  </AuxValues>
+
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+                  <SubComponents>
+                    <Component class="org.jdesktop.swingx.JXTable" name="tablaAlertas1">
+                      <Properties>
+                        <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
+                          <Table columnCount="6" rowCount="10">
+                            <Column editable="false" title="Id_Alerta" type="java.lang.Object"/>
+                            <Column editable="false" title="Estado" type="java.lang.Boolean"/>
+                            <Column editable="false" title="Nombre" type="java.lang.String"/>
+                            <Column editable="false" title="Acciones" type="java.lang.Object"/>
+                            <Column editable="false" title="Mensaje" type="java.lang.String"/>
+                            <Column editable="false" title="Flags" type="java.lang.Object"/>
+                          </Table>
+                        </Property>
+                        <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
+                          <TableColumnModel selectionModel="1">
+                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="60" minWidth="60" prefWidth="60" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="false">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                              <Title/>
+                              <Editor/>
+                              <Renderer/>
+                            </Column>
+                          </TableColumnModel>
+                        </Property>
+                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[480, 220]"/>
+                        </Property>
+                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[480, 72]"/>
+                        </Property>
+                        <Property name="preferredScrollableViewportSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[480, 100]"/>
+                        </Property>
+                        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                          <Dimension value="[480, 220]"/>
+                        </Property>
+                        <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
+                          <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
+                        </Property>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaAlertas1MouseClicked"/>
+                      </Events>
+                    </Component>
+                  </SubComponents>
+                </Container>
+              </SubComponents>
+            </Container>
+            <Container class="org.jdesktop.swingx.JXPanel" name="panelInfoOcurAlertas">
+              <Properties>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[947, 25]"/>
+                </Property>
+              </Properties>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+                <Property name="alignment" type="int" value="2"/>
+                <Property name="horizontalGap" type="int" value="0"/>
+                <Property name="verticalGap" type="int" value="0"/>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="lblOcurNoVistas">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="(0)  "/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton1">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Navegaci&#xf3;n Alertas"/>
+                    <Property name="horizontalAlignment" type="int" value="4"/>
+                    <Property name="horizontalTextPosition" type="int" value="4"/>
+                    <Property name="verticalAlignment" type="int" value="3"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+                  </Events>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
       </SubComponents>

@@ -20,6 +20,7 @@ public class AlertaListaOn {
     private ArrayList<Object> valores;
     private double latitud;
     private double longitud;
+    private int vista;
     private int idOcur;
 
     /**
@@ -146,5 +147,19 @@ public class AlertaListaOn {
      */
     public void setValores(ArrayList<Object> valores) {
         this.valores = valores;
+    }
+
+    /**
+     * @return the vista
+     */
+    public int getVista() {
+        return vista;
+    }
+
+    /**
+     * @param vista the vista to set
+     */
+    public void setVista(int vista) {
+        this.vista = vista;
     }
 }

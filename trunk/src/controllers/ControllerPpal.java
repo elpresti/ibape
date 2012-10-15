@@ -44,8 +44,8 @@ public class ControllerPpal {
                 && (AdministraCampanias.getInstance().getCampaniaEnCurso().getEstado() == 1)) {
             controllers.ControllerCampania.getInstance().setEstadoCampaniaEnCurso(2); //si hay alguna campania en curso, la pauso
         }
-        ControllerAlertas contAlertas=controllers.ControllerAlertas.getInstance();
-        contAlertas.guardaOcurAlertas();
+        //ControllerAlertas contAlertas=controllers.ControllerAlertas.getInstance();
+        //contAlertas.guardaOcurAlertas();
     }
 
     public void accionesAlIniciar() {

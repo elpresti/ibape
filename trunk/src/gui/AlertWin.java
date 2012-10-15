@@ -23,6 +23,7 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     private Thread threadAlertWin;
     private boolean accionMouse=false;
     private boolean show;
+    private boolean counter;
     private int idShowing;
     /**
      * Creates new form Splash
@@ -200,6 +201,11 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         setShow(false);
         this.setVisible(false);
+        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+        }
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void f(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_f
@@ -211,11 +217,35 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     }//GEN-LAST:event_mouseMoved
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+
+        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+        }
         controllers.ControllerAlertas.getInstance().muestraOcurAnt(getIdShowing());
+        muestraAlertaSinPreload();
+        index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+        }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+
+        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+        }
         controllers.ControllerAlertas.getInstance().muestraOcurSig(getIdShowing());
+        muestraAlertaSinPreload();
+        index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+        }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -254,7 +284,7 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
                    threadAlertWin.sleep(1000);
                }else{
                    i=0;
-                   threadAlertWin.sleep(3000);
+                   threadAlertWin.sleep(200);
                    setAccionMouse(false);
                }
              
@@ -262,6 +292,15 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
                 Logger.getLogger(AlertWin.class.getName()).log(Level.SEVERE, null, ex);
             }
             i++;
+        }
+        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+        if (i==11){
+
+        }else{
+            if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+            }
         }
     }
 
@@ -283,9 +322,18 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     public void muestraAlerta(){
         setAccionMouse(false);
         setVisible(true);
+        setCounter(true);
         hacePreLoad();
         setVisible(false);
+        gui.PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
+        gui.PanelOpcAlertas.getInstance().revalidate();
         
+    }
+    
+   public void muestraAlertaSinPreload(){
+        setAccionMouse(false);
+        //setShow(true);
+        setVisible(true);        
     }
     
     public void disparaVentanaAlertas(){
@@ -384,6 +432,27 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
 
     public void run() {
         inicializador();
+    }
+
+    void muestraUltAlerta() {
+        setAccionMouse(true);
+        setVisible(true);
+        hacePreLoad();
+        setVisible(false);
+    }
+
+    /**
+     * @return the counter
+     */
+    public boolean isCounter() {
+        return counter;
+    }
+
+    /**
+     * @param counter the counter to set
+     */
+    public void setCounter(boolean counter) {
+        this.counter = counter;
     }
     
 }

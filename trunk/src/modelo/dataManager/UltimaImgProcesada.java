@@ -7,12 +7,13 @@ package modelo.dataManager;
 import controllers.ControllerNavegacion;
 import controllers.ControllerPois;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  *
  * @author Sebastian
  */
-public class UltimaImgProcesada {
+public class UltimaImgProcesada extends Observable{
     private java.util.Date fechaYhora;
     private ArrayList<modelo.dataManager.Marca> marcas;
     private ArrayList<Float> porcentajesColores;
