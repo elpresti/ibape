@@ -4,11 +4,33 @@
  */
 package controllers;
 
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import gui.PanelHistorico;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
+import org.apache.log4j.chainsaw.Main;
 import persistencia.BrokerDbMapa;
 import persistencia.BrokerDbMapaHistorico;
 import persistencia.BrokerHistoricoPunto;
@@ -181,4 +203,123 @@ public class ControllerInforme {
         BrokerDbMapaHistorico.getInstance().vaciaMapaHistorico();
     }
 
+    public boolean generaInforme(int idCampania,boolean chkBarco,boolean chkCampana,boolean chkLances,boolean chkCajones,boolean chkCatPois ){
+         boolean sepudo=false;
+         try{
+
+             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+             String fecha= (formato.format(Calendar.getInstance().getTime()));
+             String barco= "",capitan= "",descripcion= "",fechaIniciostring= "",fechaFinstring="";
+             int idCampaniaElegida2 = idCampania;
+             if (idCampaniaElegida2>=0){
+
+               if (chkBarco){
+                   barco = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getBarco();
+                   capitan = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getCapitan();
+               }
+               if (chkCampana){
+
+                   descripcion = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getDescripcion();
+                   Date fechaInicio = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getFechaInicio();
+                   Date fechaFin= modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getFechaFin();
+                   fechaIniciostring=formato.format(fechaInicio);
+                   fechaFinstring=formato.format(fechaFin);
+               }
+               if (chkLances){
+                   persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampaniaElegida2);
+               }
+               if (chkCajones){
+      //             BrokerCajon.getInstance().getCajonesFromDB().;
+      //             getCajonesLanceFromDB(int idLance):ArrayList<modelo.dataManager.Cajon>
+               }
+               if (chkCatPois){
+        //           ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaElegida2);
+        //           para obtener la cant de puntos de cada categoria usar el método
+        //           ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCampaniaint,CP.getId());
+               }
+
+          generadorPDF pdf=new generadorPDF();
+          pdf.crear_PDF("Informe de pesca",fecha,barco,capitan,descripcion,fechaIniciostring,fechaFinstring);
+          sepudo = true;
+          //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
+
+          }
+             } catch(Exception e){
+             Logueador.getInstance().agregaAlLog("ControllerInforme.generaInforme(): "+e.toString());
+         }
+         return sepudo;
+    }
+
+
 }
+class generadorPDF {
+
+ private File ruta_destino=null;
+ private Font fuenteRojo25= new Font(Font.getFamily("ARIAL"),25,Font.BOLDITALIC,BaseColor.RED);
+ private Date fechaHoy = new Date();
+ private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+
+    public generadorPDF(){
+    }
+
+    /* metodo que hace uso de la clase itext para manipular archivos PDF*/
+    public void crear_PDF(String titulo,String fecha,String barco,String capitan,String descripcion,String fechaIniciostring,String fechaFinstring){
+        //abre ventana de dialogo "guardar"
+        Colocar_Destino();
+        //si destino es diferente de null
+        if(this.ruta_destino!=null){
+            try {
+                // se crea instancia del documento
+                Document mipdf = new Document() {};
+                // se establece una instancia a un documento pdf
+                PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));
+                mipdf.open();// se abre el documento
+                Image im=null;
+                String vacio=" ";
+                try {
+                    im = Image.getInstance("src\\imgs\\logoIbapeChico.png");
+             //         im = new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"));
+               } catch (Exception ex) {
+                    Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF: "+ex.toString());
+                }
+        //        java.awt.Image img = (java.awt.Image)im.getImage();
+        //        Image imgFinal = Image.getInstance(img);
+	            im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
+	            mipdf.add(im);
+//                mipdf.add(new Paragraph(formato.format(fechaHoy)));
+                mipdf.add(new Paragraph(titulo, fuenteRojo25));
+                if (!fecha.isEmpty()){
+                    mipdf.add(new Paragraph(fecha)); // se añade el contendio del PDF
+                }
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph("Barco: "+barco)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph("Capitán: "+capitan)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(descripcion)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(fechaIniciostring)); // se añade el contendio del PDF
+                mipdf.add(new Paragraph(fechaFinstring)); // se añade el contendio del PDF
+                mipdf.close(); //se cierra el PDF&
+                JOptionPane.showMessageDialog(null,"Documento PDF creado con exito");
+            } catch (DocumentException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    /* abre la ventana de dialogo GUARDAR*/
+    public void Colocar_Destino(){
+       FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivo PDF","pdf","PDF");
+       JFileChooser fileChooser = new JFileChooser();
+       fileChooser.setFileFilter(filter);
+       int result = fileChooser.showSaveDialog(null);
+       if ( result == JFileChooser.APPROVE_OPTION ){
+           this.ruta_destino = fileChooser.getSelectedFile().getAbsoluteFile();
+        }
+    }
+}
+
