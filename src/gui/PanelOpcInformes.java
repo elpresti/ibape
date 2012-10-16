@@ -10,9 +10,8 @@
  */
 package gui;
 
-import com.sun.org.apache.bcel.internal.generic.CPInstruction;
 import controllers.ControllerCampania;
-import controllers.ControllerHistorico;
+import controllers.ControllerInforme;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -22,14 +21,10 @@ import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import pdf.generadorPDF;
-import persistencia.BrokerCajon;
-import persistencia.BrokerLance;
 
 
 /**
@@ -61,6 +56,17 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         inicializador();
     }
 
+    private void habilitaChkDatosInforme(boolean estado) {
+        //habilitaria los check de abajo
+        lblTxtDatosInforme1.setEnabled(estado);
+        chkBarco.setEnabled(estado);
+        chkCampana.setEnabled(estado);
+        chkLance.setEnabled(estado);
+        chkCajones.setEnabled(estado);
+        chkPois.setEnabled(estado);
+        btnGenerarInforme.setEnabled(estado);
+    }
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -79,15 +85,11 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelRecorrido1 = new org.jdesktop.swingx.JXPanel();
         lblCantPuntosRecorrido1 = new org.jdesktop.swingx.JXLabel();
         lblTxtDatosInforme1 = new java.awt.Label();
-        chkFechaUbicacion = new javax.swing.JCheckBox();
         chkBarco = new javax.swing.JCheckBox();
         chkCampana = new javax.swing.JCheckBox();
         chkLance = new javax.swing.JCheckBox();
         chkCajones = new javax.swing.JCheckBox();
         chkPois = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jCheckBox6 = new javax.swing.JCheckBox();
-        jCheckBox7 = new javax.swing.JCheckBox();
         javax.swing.JPanel panelBtnGenerarInforme = new javax.swing.JPanel();
         btnGenerarInforme = new javax.swing.JButton();
 
@@ -168,20 +170,11 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         lblCantPuntosRecorrido1.setFont(new java.awt.Font("Tahoma", 2, 12));
         panelRecorrido1.add(lblCantPuntosRecorrido1);
 
-        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblTxtDatosInforme1.setText("Datos a incluir en el Informe:");
         panelRecorrido1.add(lblTxtDatosInforme1);
 
         panelDatosInforme.add(panelRecorrido1);
-
-        chkFechaUbicacion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        chkFechaUbicacion.setText("Datos de Fecha y Ubicación");
-        chkFechaUbicacion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkFechaUbicacionActionPerformed(evt);
-            }
-        });
-        panelDatosInforme.add(chkFechaUbicacion);
 
         chkBarco.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         chkBarco.setText("Datos del Barco");
@@ -204,15 +197,6 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         chkPois.setText("Datos de POIS de la Campaña");
         panelDatosInforme.add(chkPois);
 
-        jCheckBox5.setText("jCheckBox5");
-        panelDatosInforme.add(jCheckBox5);
-
-        jCheckBox6.setText("jCheckBox6");
-        panelDatosInforme.add(jCheckBox6);
-
-        jCheckBox7.setText("jCheckBox7");
-        panelDatosInforme.add(jCheckBox7);
-
         add(panelDatosInforme);
 
         panelBtnGenerarInforme.setMaximumSize(new java.awt.Dimension(500, 40));
@@ -220,7 +204,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelBtnGenerarInforme.setPreferredSize(new java.awt.Dimension(500, 40));
         panelBtnGenerarInforme.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
 
-        btnGenerarInforme.setFont(new java.awt.Font("Tahoma", 1, 12));
+        btnGenerarInforme.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGenerarInforme.setText("Generar Informe");
         btnGenerarInforme.setAutoscrolls(true);
         btnGenerarInforme.addActionListener(new java.awt.event.ActionListener() {
@@ -235,63 +219,12 @@ public class PanelOpcInformes extends javax.swing.JPanel {
 
 
 
-    private void chkFechaUbicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkFechaUbicacionActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_chkFechaUbicacionActionPerformed
-
     private void chkBarcoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBarcoActionPerformed
         // TODO add your handling code here:
 }//GEN-LAST:event_chkBarcoActionPerformed
 
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
-
-// TODO add your handling code here:
-         Date fechaHoy = new Date();
-         SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-         String fecha = null,ubicacion = null,barco= null,capitan= null,nombreCampania= null,descripcion= null,fechaIniciostring= null,fechaFinstring=null;
-        if (getIdCampaniaElegida()>=0){
-           if (getChkFechaUbicacion().isSelected()){
-               fecha= (formato.format(fechaHoy));
-               ubicacion= "Mar del Plata";
-           }
-           if (getChkBarco().isSelected()){
-               barco = (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_BARCO);
-               capitan = (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_CAPITAN);
-           }
-           if (getChkCampana().isSelected()){
-
-               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
-               int idCampaniaint = Integer.parseInt(idCampania );
-               nombreCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_NOMBRE_CAMP);
-               descripcion = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaint).getDescripcion();
-               Date fechaInicio = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaint).getFechaInicio();
-               Date fechaFin= modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaint).getFechaFin();
-               fechaIniciostring=formato.format(fechaInicio);
-               fechaFinstring=formato.format(fechaFin);
-           }
-           if (getChkLance().isSelected()){
-               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
-               int idCampaniaint = Integer.parseInt(idCampania );
-               BrokerLance.getInstance().getLancesCampaniaFromDB(idCampaniaint);
-           }
-           if (getChkCajones().isSelected()){
-               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
-               int idCampaniaint = Integer.parseInt(idCampania );
-  //             BrokerCajon.getInstance().getCajonesFromDB().;
-  //             getCajonesLanceFromDB(int idLance):ArrayList<modelo.dataManager.Cajon>
-           }
-           if (getChkPois().isSelected()){
-               String idCampania =  (String) modeloTabla.getValueAt(tablaCampanias.getSelectedRow(), NRO_COL_ID_CAMP);
-               int idCampaniaint = Integer.parseInt(idCampania );
-    //           ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaint);
-    //           para obtener la cant de puntos de cada categoria usar el método
-    //           ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCampaniaint,CP.getId());
-           }
-
-      generadorPDF pdf=new generadorPDF();
-      pdf.crear_PDF("Informe de pesca:",ubicacion,fecha,barco,capitan,nombreCampania,descripcion,fechaIniciostring,fechaFinstring);
-      //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
-     }
+        ControllerInforme.getInstance().generaInforme(getIdCampaniaElegida(), chkBarco.isSelected(),chkCampana.isSelected(), chkLance.isSelected(),chkCajones.isSelected(),chkPois.isSelected());
 }//GEN-LAST:event_btnGenerarInformeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -299,12 +232,8 @@ public class PanelOpcInformes extends javax.swing.JPanel {
     private javax.swing.JCheckBox chkBarco;
     private javax.swing.JCheckBox chkCajones;
     private javax.swing.JCheckBox chkCampana;
-    private javax.swing.JCheckBox chkFechaUbicacion;
     private javax.swing.JCheckBox chkLance;
     private javax.swing.JCheckBox chkPois;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
     private javax.swing.JScrollPane jScrollPane1;
     private org.jdesktop.swingx.JXLabel lblCantPuntosRecorrido1;
     private java.awt.Label lblTituloInformes;
@@ -366,6 +295,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         grupoElijeCampania = new ButtonGroup();
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer2());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor2(new JCheckBox()));
+        habilitaChkDatosInforme(false);
 
       
     }
@@ -391,7 +321,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         }
     }
 
-    /**
+      /**
      * @return the idCampaniaElegida
      */
     public int getIdCampaniaElegida() {
@@ -402,14 +332,15 @@ public class PanelOpcInformes extends javax.swing.JPanel {
      * @param idCampaniaElegida the idCampaniaElegida to set
      */
     public void setIdCampaniaElegida(int idCampaniaElegida) {
-        if (idCampaniaElegida >= 0) {
-            this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, 0).toString());
-        } else {
-            this.idCampaniaElegida = idCampaniaElegida;
+        if (idCampaniaElegida>=0){
+            this.idCampaniaElegida = Integer.parseInt(modeloTabla.getValueAt(idCampaniaElegida, NRO_COL_ID_CAMP).toString());
+            habilitaChkDatosInforme(true);
         }
-
+        else
+          { this.idCampaniaElegida = idCampaniaElegida;
+            habilitaChkDatosInforme(false);
+                      }
     }
-
 
 
     public void habilitaPanelTablaCampanias(boolean estado) {
@@ -501,19 +432,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         this.chkCampana = chkCampana;
     }
 
-    /**
-     * @return the chkFechaUbicacion
-     */
-    public javax.swing.JCheckBox getChkFechaUbicacion() {
-        return chkFechaUbicacion;
-    }
-
-    /**
-     * @param chkFechaUbicacion the chkFechaUbicacion to set
-     */
-    public void setChkFechaUbicacion(javax.swing.JCheckBox chkFechaUbicacion) {
-        this.chkFechaUbicacion = chkFechaUbicacion;
-    }
+    
 
     /**
      * @return the chkLance
@@ -582,4 +501,5 @@ class RadioButtonEditor2 extends DefaultCellEditor implements ItemListener {
     public void itemStateChanged(ItemEvent e) {
         super.fireEditingStopped();
     }
+
 }
