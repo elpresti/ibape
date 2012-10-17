@@ -34,6 +34,7 @@ public class BrokerDbMapa implements Runnable{
     private boolean conectado;
     private boolean dbExiste;
     private boolean tablaExiste;
+    private boolean inicializandoDb;
     private boolean conCamara;
     private Connection connect;
     private Statement statement;
@@ -142,6 +143,13 @@ public class BrokerDbMapa implements Runnable{
     
    public boolean dbLista(){
       boolean salida=false;
+      if (isInicializandoDb()){
+          try{
+              Thread.sleep(2000);//lo aguanto 2 segundos
+          }catch(Exception e){
+              Logueador.getInstance().agregaAlLog("BrokerDbMapa.dbLista(): "+e.toString());
+          }
+      }
       if (!(isConectado() && isDbExiste() && isTablaExiste())) {
          try {
              if (creaDbyTabla()) {
@@ -181,7 +189,7 @@ public class BrokerDbMapa implements Runnable{
              existe=true;
         }
          catch (Exception e){
-             Logueador.getInstance().agregaAlLog("BrokerDbMapa.existeDb(): (Existe la db? NO)"+e.toString());
+             //Logueador.getInstance().agregaAlLog("BrokerDbMapa.existeDb(): (Existe la db? NO)"+e.toString());
              //no existe
         }
         return existe;
@@ -193,45 +201,48 @@ public class BrokerDbMapa implements Runnable{
 
         try {
             // Statements allow to issue SQL queries to the database
-            setStatement(getConnection().createStatement());
-            boolean a;
-            String creacion;                      
+            setInicializandoDb(true);
+            if (!(isConectado() && isDbExiste() && isTablaExiste())){
+                setStatement(getConnection().createStatement());
+                boolean a;
+                String creacion;                      
 
-            //creamos la base, si no existe
-            if (!(this.existeDb())) {
-                creacion = "create database "+getDbName()+";";
-                getStatement().execute(creacion);
-                setDbExiste(true);
-                creacion = "use "+getDbName()+";";
-                setResultSet(getStatement().executeQuery(creacion));
-            }
-            else { setDbExiste(true); }
+                //creamos la base, si no existe
+                if (!(this.existeDb())) {
+                    creacion = "create database "+getDbName()+";";
+                    getStatement().execute(creacion);
+                    setDbExiste(true);
+                    creacion = "use "+getDbName()+";";
+                    setResultSet(getStatement().executeQuery(creacion));
+                }
+                else { setDbExiste(true); }
 
-            //creamos la tabla de PUNTOS, si no existe
-            if (!(this.existeTabla())) {
-                creacion = "CREATE TABLE "+getTableName()+" ("
-                +"ID INT NOT NULL AUTO_INCREMENT, "
-                +"FECHA DATETIME NOT NULL, "
-                +"LATITUD VARCHAR(30) NOT NULL, "        
-                +"LONGITUD VARCHAR(30) NOT NULL, "
-                +"VELOCIDAD VARCHAR(30) NOT NULL, "
-                +"PROFUNDIDAD VARCHAR(30) NOT NULL, " 
-                +"OBJETO VARCHAR(40), "   
-                +"TEMPAGUA VARCHAR(40), "   
-                +"COMENTARIOS TEXT, "
-                +"LEIDO BOOLEAN NOT NULL DEFAULT 0, "
-                +"KML TEXT NOT NULL, "
-                +" PRIMARY KEY (ID)"
-                +");";  
-                a = getStatement().execute(creacion);
-                setTablaExiste(true);
+                //creamos la tabla de PUNTOS, si no existe
+                if (!(this.existeTabla())) {
+                    creacion = "CREATE TABLE "+getTableName()+" ("
+                    +"ID INT NOT NULL AUTO_INCREMENT, "
+                    +"FECHA DATETIME NOT NULL, "
+                    +"LATITUD VARCHAR(30) NOT NULL, "        
+                    +"LONGITUD VARCHAR(30) NOT NULL, "
+                    +"VELOCIDAD VARCHAR(30) NOT NULL, "
+                    +"PROFUNDIDAD VARCHAR(30) NOT NULL, " 
+                    +"OBJETO VARCHAR(40), "   
+                    +"TEMPAGUA VARCHAR(40), "   
+                    +"COMENTARIOS TEXT, "
+                    +"LEIDO BOOLEAN NOT NULL DEFAULT 0, "
+                    +"KML TEXT NOT NULL, "
+                    +" PRIMARY KEY (ID)"
+                    +");";  
+                    a = getStatement().execute(creacion);
+                    setTablaExiste(true);
+                }
+                else { setTablaExiste(true); }
             }
-            else { setTablaExiste(true); }
         }
         catch (Exception e) {
             Logueador.getInstance().agregaAlLog("BrokerDbMapa.creaDbyTabla(): "+e.toString());
         } finally {
-            //close();
+            setInicializandoDb(false);
         }                        
         return (isConectado() && isDbExiste() && isTablaExiste());
     }
@@ -309,7 +320,7 @@ public class BrokerDbMapa implements Runnable{
 
     private boolean inicializaBrokerDbMapa(){
         boolean sePudo=false;                                     
-        
+        setInicializandoDb(false);
         setUsarMapaNavegacion(false);
         setConectado(false);
         setDbExiste(false);
@@ -868,6 +879,20 @@ public class BrokerDbMapa implements Runnable{
             Logueador.getInstance().agregaAlLog(e.toString());
         }
         return sePudo;
+    }
+
+    /**
+     * @return the inicializandoDb
+     */
+    public boolean isInicializandoDb() {
+        return inicializandoDb;
+    }
+
+    /**
+     * @param inicializandoDb the inicializandoDb to set
+     */
+    public void setInicializandoDb(boolean inicializandoDb) {
+        this.inicializandoDb = inicializandoDb;
     }
     
     

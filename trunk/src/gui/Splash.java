@@ -17,7 +17,6 @@ import persistencia.Logueador;
  */
 public class Splash extends javax.swing.JFrame implements Runnable{
     private Thread threadSplash;
-    private Thread threadAlertWin;
     /**
      * Creates new form Splash
      */
@@ -81,8 +80,7 @@ public class Splash extends javax.swing.JFrame implements Runnable{
     }
 
     private void inicializador() {
-        //VentanaIbape.getInstance();
-        this.setVisible(false);
+        VentanaIbape.getInstance();        
         initComponents();
         this.setVisible(true);
         panelLogo.setOpaque(false);
@@ -99,11 +97,6 @@ public class Splash extends javax.swing.JFrame implements Runnable{
         setVisible(false);
         dispose();
         VentanaIbape.getInstance().setVisible(true);
-        
-        threadAlertWin = new Thread(gui.AlertWin.getInstance());
-        threadAlertWin.setPriority(Thread.MIN_PRIORITY);
-        threadAlertWin.start();
-        gui.AlertWin.getInstance().start();
     }
     
     public void run(){ 
