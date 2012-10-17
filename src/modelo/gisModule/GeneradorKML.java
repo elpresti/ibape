@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import modelo.dataCapture.Sistema;
@@ -151,8 +152,11 @@ public class GeneradorKML {
                   //+"<altitudeMode>absolute</altitudeMode>";
                   +"<altitudeMode>clampToGround</altitudeMode>";  
             int i=0;
+            Calendar fechaGmtArg = Calendar.getInstance();
             while (i<puntos.size()){
-                salida+="<when>"+sdfFecha.format(puntos.get(i).getFechaYhora())+"T"+sdfHora.format(puntos.get(i).getFechaYhora())+"Z</when>";
+                fechaGmtArg.setTime(puntos.get(i).getFechaYhora());
+                fechaGmtArg.add(Calendar.HOUR, 3);
+                salida+="<when>"+sdfFecha.format(fechaGmtArg.getTime())+"T"+sdfHora.format(fechaGmtArg.getTime())+"Z</when>";
                 i++;
             }
             i=0;
@@ -399,9 +403,13 @@ public class GeneradorKML {
         java.sql.Timestamp fechaYhora=new java.sql.Timestamp(poi.getFechaHora().getTime());
         String horaStr=fechaYhora.getHours()+":"+fechaYhora.getMinutes()+":"+fechaYhora.getSeconds();
         String contenidoHtml=
-                "<div>"
-                  + "<table border=0>"
-                    + "<tr>"
+                "<div>";
+        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatLances()){
+ contenidoHtml+= "<table border=0>";
+        }else{
+ contenidoHtml+= "<table border=0 bgcolor=\"#99CCFF\" >";
+        }
+      contenidoHtml+= "<tr>"
                     +    "<td valign=\"top\">"
                             + "Datos de este punto "
                             + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
@@ -448,7 +456,6 @@ public class GeneradorKML {
                             if (lance != null){
                                 contenidoHtml +="<br><strong>- Comentarios del Lance: </strong>"+lance.getComentarios();
                                 ArrayList<modelo.dataManager.Cajon> cajonesDelLance = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
-                                contenidoHtml += "<span style=\"color:#099;\">";
                                 if (cajonesDelLance != null){
                                     contenidoHtml += "<br><br><strong>CAJONES OBTENIDOS:";
                                     contenidoHtml += "<br><strong>- Total de cajones: </strong> "+BrokerCajon.getInstance().getCajonesFromLance(Integer.valueOf(valor));
@@ -458,7 +465,6 @@ public class GeneradorKML {
                                     //contenidoHtml += "<p style=\"color:#025090; font-size:14px; line-height:14px;\">"+especie.getNombre()+": "+cajon.getCantidad()+"</p>";
                                     contenidoHtml += "<br>   "+especie.getNombre()+": "+cajon.getCantidad();
                                 }
-                                contenidoHtml += "</span>";
                             }else{
                                 contenidoHtml +="<br>Error! No se ha encontrado el lance";
                             }
