@@ -19,6 +19,7 @@ import modelo.dataManager.PuntoHistorico;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
+import persistencia.BrokerAlertas;
 import persistencia.BrokerCajon;
 import persistencia.BrokerEspecie;
 import persistencia.BrokerLance;
@@ -30,6 +31,7 @@ import persistencia.Logueador;
  */
 public class GeneradorKML {
     private static GeneradorKML unicaInstancia;
+    private String htmlImgSonda;
     
     private GeneradorKML(){
     }
@@ -316,7 +318,7 @@ public class GeneradorKML {
         salida=salida
           +"<Placemark>";
         if (poi.getIdCategoriaPOI() == AdministraCatPoi.getInstance().getIdCatLances()){
-            String idLance = getIdLanceFromXML(poi.getDescripcion());
+            String idLance = getValorDeParametroFromXML(poi.getDescripcion(),"idLance");
             if (idLance.length()>0){
                 idLance +="-";
             }
@@ -399,95 +401,29 @@ public class GeneradorKML {
     }
 
     public String getContenidoHtmlDelGlobo(modelo.dataManager.POI poi){
-        String htmlImgSonda="";
         java.sql.Timestamp fechaYhora=new java.sql.Timestamp(poi.getFechaHora().getTime());
         String horaStr=fechaYhora.getHours()+":"+fechaYhora.getMinutes()+":"+fechaYhora.getSeconds();
         String contenidoHtml=
                 "<div>";
-        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatLances()){
- contenidoHtml+= "<table border=0>";
-        }else{
- contenidoHtml+= "<table border=0 bgcolor=\"#99CCFF\" >";
-        }
-      contenidoHtml+= "<tr>"
+        contenidoHtml += getHtmlTableBgSegunCatPoi(poi);
+        contenidoHtml+="<tr>"
                     +    "<td valign=\"top\">"
                             + "Datos de este punto "
                             + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
                             + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
                             + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
                             + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
-        if (!esCategoriaDePoiReservada(poi.getIdCategoriaPOI())){
-                    contenidoHtml += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
-        }else{
-            //SAXBuilder se encarga de cargar el archivo XML del disco o de un String
-            // Creamos el builder basado en SAX      
-            SAXBuilder builder = new SAXBuilder();  
-            try {
-                // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
-                Document contenidoXML = builder.build(new StringReader(poi.getDescripcion()));
-                // Obtenemos la etiqueta raíz  
-                Element raiz = contenidoXML.getRootElement();  
-                // Recorremos los hijos de la etiqueta raíz  
-                List<Element> hijosRaiz = raiz.getChildren();
-                if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatLances()){
-                    for(Element parametro: hijosRaiz){
-                        // Obtenemos el nombre y su contenido de tipo texto  
-                        String nombre = parametro.getAttribute("nombre").getValue();
-                        String valor = parametro.getAttribute("valor").getValue();
-                        if (parametro.getName() == "imgFileName"){
-                            htmlImgSonda += "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">";
-                            htmlImgSonda += "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>";
-                            htmlImgSonda += "</a>";
-                        }else{
-                            contenidoHtml += "<br> <strong>- "+nombre+" :</strong> "+valor;
-                        }
-                    }
-                }else{ //si se trata de Descripcion de lances, hacemos lo siguiente
-                    boolean esFinDeLance = false;
-                    for(Element parametro: hijosRaiz){
-                        // Obtenemos el nombre y su contenido de tipo texto  
-                        String nombre = parametro.getAttribute("nombre").getValue();
-                        String valor = parametro.getAttribute("valor").getValue();
-                        if (parametro.getName() == "finLance"){
-                            esFinDeLance = Boolean.valueOf(valor);
-                        }
-                        if (esFinDeLance && parametro.getName() == "idLance"){
-                            modelo.dataManager.Lance lance = BrokerLance.getInstance().getLanceFromDB(Integer.valueOf(valor));
-                            if (lance != null){
-                                contenidoHtml +="<br><strong>- Comentarios del Lance: </strong>"+lance.getComentarios();
-                                ArrayList<modelo.dataManager.Cajon> cajonesDelLance = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
-                                if (cajonesDelLance != null){
-                                    contenidoHtml += "<br><br><strong>CAJONES OBTENIDOS:";
-                                    contenidoHtml += "<br><strong>- Total de cajones: </strong> "+BrokerCajon.getInstance().getCajonesFromLance(Integer.valueOf(valor));
-                                }
-                                for (modelo.dataManager.Cajon cajon : cajonesDelLance){
-                                    modelo.dataManager.Especie especie = BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie());
-                                    //contenidoHtml += "<p style=\"color:#025090; font-size:14px; line-height:14px;\">"+especie.getNombre()+": "+cajon.getCantidad()+"</p>";
-                                    contenidoHtml += "<br>   "+especie.getNombre()+": "+cajon.getCantidad();
-                                }
-                            }else{
-                                contenidoHtml +="<br>Error! No se ha encontrado el lance";
-                            }
-                        }
-                        if (parametro.getName() != "finLance" && parametro.getName() != "idLance"){
-                            contenidoHtml += "<br><strong>- "+nombre+" :</strong> "+valor;
-                        }
-                    }
-                }
-            }catch(Exception e){
-                Logueador.getInstance().agregaAlLog("conviertePOIaKml(): "+e.toString());
-            }
-        }
+        contenidoHtml+=getHtmlFromDescripcionDePoi(poi);
         contenidoHtml+=  "</td>"
                     +    "<td valign=\"top\" align=\"right\">";
-                    if (htmlImgSonda.length()==0){
+                    if (getHtmlImgSonda().length()==0){
                         if (Sistema.getInstance().pathIconoEsValido(poi.getCategoria().getPathIcono())){
                         contenidoHtml+= "<img src=\"http://"+persistencia.BrokerDbMapa.getInstance().getDirecWebServer()+":"
                                         +persistencia.BrokerDbMapa.getInstance().getPuertoWebServer()+"/imgs/"
                                         +poi.getCategoria().getPathIcono()+"\">";                        
                         }
                     }else{
-                        contenidoHtml+=htmlImgSonda;
+                        contenidoHtml+=getHtmlImgSonda();
                     }
                     contenidoHtml+=
                          "</td>"                
@@ -500,16 +436,17 @@ public class GeneradorKML {
     private boolean esCategoriaDePoiReservada(int idCategoriaPOI) {
         boolean esCatReservada=false;
         if (idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatImgsConMarcas() ||
-                idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatLances()){
+                idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatLances()  || 
+                idCategoriaPOI == AdministraCatPoi.getInstance().getIdCatOcurrencias()){
             esCatReservada=true;
         }
         return esCatReservada;
     }
 
-    public String getIdLanceFromXML(String xml) {
+    public String getValorDeParametroFromXML(String xml, String paramName) {
         String salida = "";
         boolean encontro = false;
-        // Creamos el builder basado en SAX      
+        // Creamos el builder basado en SAX
         SAXBuilder builder = new SAXBuilder();  
         try {
             // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
@@ -522,15 +459,142 @@ public class GeneradorKML {
                 // Obtenemos el nombre y su contenido de tipo texto  
                 String nombre = parametro.getAttribute("nombre").getValue();
                 String valor = parametro.getAttribute("valor").getValue();
-                if (parametro.getName() == "idLance"){
+                if (parametro.getName().toLowerCase().equals(paramName.toLowerCase())){
                     salida=valor;
                     encontro=true;
                     break;
                 }
             }
         }catch(Exception e){
-           Logueador.getInstance().agregaAlLog("getIdLanceFromDescripcion(): "+e.toString()); 
+           Logueador.getInstance().agregaAlLog("getValorDeParametroFromXML(): "+e.toString()); 
         }
         return salida;
+    }
+    
+    private String getHtmlTableBgSegunCatPoi(modelo.dataManager.POI poi){
+        String htmlTabla = "";
+        if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatLances()){
+            htmlTabla+= "<table border=0>";
+        }else{
+            htmlTabla+= "<table border=0 bgcolor=\"#99CCFF\" >";
+        }
+        return htmlTabla;
+    }
+    
+    private String getHtmlFromDescripcionDePoi(modelo.dataManager.POI poi){
+        String htmlDescripcion="";
+        setHtmlImgSonda("");
+        if (!esCategoriaDePoiReservada(poi.getIdCategoriaPOI())){
+            htmlDescripcion += "<br>  <strong>- Descripcion:</strong> "+poi.getDescripcion();
+        }else{
+            //SAXBuilder se encarga de cargar el archivo XML del disco o de un String //Creamos el builder basado en SAX
+            SAXBuilder builder = new SAXBuilder();  
+            try {
+                // Construimos el arbol DOM a partir del fichero xml  y Cargamos el documento
+                Document contenidoXML = builder.build(new StringReader(poi.getDescripcion()));
+                Element raiz = contenidoXML.getRootElement();// Obtenemos la etiqueta raíz
+                List<Element> hijosRaiz = raiz.getChildren();// Recorremos los hijos de la etiqueta raíz
+                if (poi.getIdCategoriaPOI() != AdministraCatPoi.getInstance().getIdCatLances()){
+                    for(Element parametro: hijosRaiz){
+                        String nombre = parametro.getAttribute("nombre").getValue();//Obtenemos el nombre y su contenido de tipo texto
+                        String valor = parametro.getAttribute("valor").getValue();
+                        if (parametro.getName() == "imgFileName"){
+                            setHtmlImgSonda(getHtmlImgSonda() + "<a href=\""+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"\" target=\"_blank\">");
+                            setHtmlImgSonda(getHtmlImgSonda() + "<img src='"+modelo.gisModule.Browser.getInstance().getUrl()+"/getImage.php?ruta="+System.getProperty("user.dir")+"\\"+valor+"' height='200' width='350'/>");
+                            setHtmlImgSonda(getHtmlImgSonda() + "</a>");
+                        }else{
+                            htmlDescripcion += "<br> <strong>- "+nombre+" :</strong> "+valor;
+                        }
+                    }
+                }else{ //si se trata de Descripcion de lances, hacemos lo siguiente
+                    htmlDescripcion+=getHtmlDescripcionDeLances(hijosRaiz);
+                }
+            }catch(Exception e){
+                Logueador.getInstance().agregaAlLog("conviertePOIaKml(): "+e.toString());
+            }
+        }
+        return htmlDescripcion;
+    }
+
+    /**
+     * @return the htmlImgSonda
+     */
+    public String getHtmlImgSonda() {
+        return htmlImgSonda;
+    }
+
+    /**
+     * @param htmlImgSonda the htmlImgSonda to set
+     */
+    public void setHtmlImgSonda(String htmlImgSonda) {
+        this.htmlImgSonda = htmlImgSonda;
+    }
+    
+    private String getHtmlDescripcionDeLances(List<Element> hijosRaiz){
+        String htmlDescripcion = "";
+        boolean esFinDeLance = false;
+        for(Element parametro: hijosRaiz){
+            // Obtenemos el nombre y su contenido de tipo texto
+            String nombre = parametro.getAttribute("nombre").getValue();
+            String valor = parametro.getAttribute("valor").getValue();
+            if (parametro.getName() == "finLance"){
+                esFinDeLance = Boolean.valueOf(valor);
+            }
+            if (esFinDeLance && parametro.getName() == "idLance"){
+                modelo.dataManager.Lance lance = BrokerLance.getInstance().getLanceFromDB(Integer.valueOf(valor));
+                if (lance != null){
+                    htmlDescripcion +="<br><strong>- Comentarios del Lance: </strong>"+lance.getComentarios();
+                    ArrayList<modelo.dataManager.Cajon> cajonesDelLance = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
+                    if (cajonesDelLance != null){
+                        htmlDescripcion += "<br><br><strong>CAJONES OBTENIDOS:";
+                        htmlDescripcion += "<br><strong>- Total de cajones: </strong> "+BrokerCajon.getInstance().getCajonesFromLance(Integer.valueOf(valor));
+                    }
+                    for (modelo.dataManager.Cajon cajon : cajonesDelLance){
+                        modelo.dataManager.Especie especie = BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie());
+                        //contenidoHtml += "<p style=\"color:#025090; font-size:14px; line-height:14px;\">"+especie.getNombre()+": "+cajon.getCantidad()+"</p>";
+                        htmlDescripcion += "<br>   "+especie.getNombre()+": "+cajon.getCantidad();
+                    }
+                }else{
+                    htmlDescripcion +="<br>Error! No se ha encontrado el lance";
+                }
+            }
+            if (parametro.getName() != "finLance" && parametro.getName() != "idLance"){
+                htmlDescripcion += "<br><strong>- "+nombre+" :</strong> "+valor;
+            }
+        }
+        return htmlDescripcion;
+    }
+
+    private String getHtmlDescripcionDeOcurrencias(List<Element> hijosRaiz){
+        String htmlDescripcion = "";
+        for(Element parametro: hijosRaiz){
+            // Obtenemos el nombre y su contenido de tipo texto
+            String nombre = parametro.getAttribute("nombre").getValue();
+            String valor = parametro.getAttribute("valor").getValue();
+            if (parametro.getName() == "idOcurrencia"){
+                modelo.alertas.AlertaListaOn ocurrencia = BrokerAlertas.getInstance().getOcurrenciaDeAlertaFromDB(Integer.valueOf(valor));
+                if (ocurrencia != null){
+                    /*  ---PENDIENTE!
+                    htmlDescripcion +="<br><strong>- Comentarios del Lance: </strong>"+ocurrencia.getComentarios();
+                    ArrayList<modelo.dataManager.Cajon> cajonesDelLance = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
+                    if (cajonesDelLance != null){
+                        htmlDescripcion += "<br><br><strong>CAJONES OBTENIDOS:";
+                        htmlDescripcion += "<br><strong>- Total de cajones: </strong> "+BrokerCajon.getInstance().getCajonesFromLance(Integer.valueOf(valor));
+                    }
+                    for (modelo.dataManager.Cajon cajon : cajonesDelLance){
+                        modelo.dataManager.Especie especie = BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie());
+                        //contenidoHtml += "<p style=\"color:#025090; font-size:14px; line-height:14px;\">"+especie.getNombre()+": "+cajon.getCantidad()+"</p>";
+                        htmlDescripcion += "<br>   "+especie.getNombre()+": "+cajon.getCantidad();
+                    }
+                    */
+                }else{
+                    htmlDescripcion +="<br>Error! No se ha encontrado el lance";
+                }
+            }
+            if (parametro.getName() != "finLance" && parametro.getName() != "idLance"){
+                htmlDescripcion += "<br><strong>- "+nombre+" :</strong> "+valor;
+            }
+        }
+        return htmlDescripcion;
     }
 }
