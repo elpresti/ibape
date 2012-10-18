@@ -21,6 +21,10 @@ public class AdministraCatPoi {
     private int idCatLances;
     private String nombreCatLances;
     private String iconoFileNameCatLances;
+    //atributos de la categoria reservada "Alertas ocurridas"
+    private int idCatOcurrencias;
+    private String nombreCatOcurrencias;
+    private String iconoFileNameCatOcurrencias;
     
     
     private AdministraCatPoi(){
@@ -88,6 +92,9 @@ public class AdministraCatPoi {
         setIdCatLances(-2);
         setNombreCatLances("Lances");
         setIconoFileNameCatLances("icono-cat-red50x50.png");
+        setIdCatOcurrencias(-3);
+        setNombreCatOcurrencias("Alertas Ocurridas");
+        setIconoFileNameCatOcurrencias("icono-ocurrenciaAlerta50x50.png");
     }
 
     /**
@@ -144,6 +151,48 @@ public class AdministraCatPoi {
      */
     public void setIconoFileNameCatLances(String iconoFileNameCatLances) {
         this.iconoFileNameCatLances = iconoFileNameCatLances;
+    }
+
+    /**
+     * @return the idCatOcurrencias
+     */
+    public int getIdCatOcurrencias() {
+        return idCatOcurrencias;
+    }
+
+    /**
+     * @param idCatOcurrencias the idCatOcurrencias to set
+     */
+    public void setIdCatOcurrencias(int idCatOcurrencias) {
+        this.idCatOcurrencias = idCatOcurrencias;
+    }
+
+    /**
+     * @return the nombreCatOcurrencias
+     */
+    public String getNombreCatOcurrencias() {
+        return nombreCatOcurrencias;
+    }
+
+    /**
+     * @param nombreCatOcurrencias the nombreCatOcurrencias to set
+     */
+    public void setNombreCatOcurrencias(String nombreCatOcurrencias) {
+        this.nombreCatOcurrencias = nombreCatOcurrencias;
+    }
+
+    /**
+     * @return the iconoFileNameCatOcurrencias
+     */
+    public String getIconoFileNameCatOcurrencias() {
+        return iconoFileNameCatOcurrencias;
+    }
+
+    /**
+     * @param iconoFileNameCatOcurrencias the iconoFileNameCatOcurrencias to set
+     */
+    public void setIconoFileNameCatOcurrencias(String iconoFileNameCatOcurrencias) {
+        this.iconoFileNameCatOcurrencias = iconoFileNameCatOcurrencias;
     }
 
 }

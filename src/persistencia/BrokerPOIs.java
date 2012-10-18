@@ -493,7 +493,7 @@ public class BrokerPOIs extends BrokerPpal {
             ArrayList<modelo.dataManager.POI> poisDeLances = getPOISFromDBSegunCat(AdministraCatPoi.getInstance().getIdCatLances());
             int cantPoisEncontrados = 0;
             for (modelo.dataManager.POI poi: poisDeLances){
-                String idLanceDeUnPoi = GeneradorKML.getInstance().getIdLanceFromXML(poi.getDescripcion());
+                String idLanceDeUnPoi = GeneradorKML.getInstance().getValorDeParametroFromXML(poi.getDescripcion(), "idLance");
                 if ((idLanceDeUnPoi.length()>0)  &&  (Integer.valueOf(idLanceDeUnPoi)==idLance)){
                     POI poiAborrar = new POI();
                     poiAborrar.setId(idLance);

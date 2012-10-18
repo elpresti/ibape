@@ -877,8 +877,7 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
         }
         return ocurAlertas;
     }
-   
-   
+      
       public ArrayList<modelo.alertas.Condicion> getCondicionesFromDB(int idAlerta){
         ArrayList<modelo.alertas.Condicion> condiciones = new ArrayList();
         ResultSet rs=null;
@@ -1078,5 +1077,37 @@ public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
         
         return sePudo;
 
+    }
+
+    public modelo.alertas.AlertaListaOn getOcurrenciaDeAlertaFromDB(int idOcurrencia){
+        modelo.alertas.AlertaListaOn ocurAlertas = null;
+        ResultSet rs = null;
+        try {
+            rs = getStatement().executeQuery("SELECT * FROM OcurAlertas WHERE id="+idOcurrencia);
+            if (rs.next()) {
+                modelo.alertas.AlertaListaOn ocurAlerta = new modelo.alertas.AlertaListaOn();
+                ocurAlerta.setIdOcur(rs.getInt("id"));
+                ocurAlerta.setLatitud(Double.parseDouble(rs.getString("latitud")));
+                ocurAlerta.setLongitud(Double.parseDouble(rs.getString("longitud")));
+                ocurAlerta.getAlerta().setId(rs.getInt("idAlerta"));
+                //falta obtener valores
+                ocurAlerta.setFechaActivacion(rs.getTimestamp("fyhini"));
+                ocurAlerta.setFechaDesactivacion(rs.getTimestamp("fyhfin"));  
+                ocurAlerta.setVista(rs.getInt("vista"));
+            }
+        } catch (Exception ex) {
+            Logueador.getInstance().agregaAlLog("BrokerAlertas.getOcurrenciaDeAlertaFromDB(): "+ex.toString());
+        } 
+        try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("BrokerAlertas.getOcurrenciaDeAlertaFromDB(): "+e.toString());
+        }
+        return ocurAlertas;
     }
 }
