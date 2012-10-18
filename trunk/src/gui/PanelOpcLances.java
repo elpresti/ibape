@@ -88,6 +88,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnGuardarLance = new org.jdesktop.swingx.JXHyperlink();
         btnEliminarLance = new org.jdesktop.swingx.JXHyperlink();
         btnInsertarLance = new org.jdesktop.swingx.JXHyperlink();
+        btnCancelarLance = new javax.swing.JButton();
         panelDatosLance = new org.jdesktop.swingx.JXPanel();
         panelLatitud = new org.jdesktop.swingx.JXPanel();
         lblLatitudI = new org.jdesktop.swingx.JXLabel();
@@ -190,7 +191,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         lblAccionesLances.setFont(new java.awt.Font("Tahoma", 0, 14));
 
         panelAcciones.setMaximumSize(new java.awt.Dimension(184, 30));
-        panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+        panelAcciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
 
         btnModificarLance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
         btnModificarLance.setText("");
@@ -235,6 +236,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
             }
         });
         panelAcciones.add(btnInsertarLance);
+
+        btnCancelarLance.setText("Cancelar");
+        btnCancelarLance.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarLanceActionPerformed(evt);
+            }
+        });
+        panelAcciones.add(btnCancelarLance);
 
         javax.swing.GroupLayout panelAccionesLancesLayout = new javax.swing.GroupLayout(panelAccionesLances);
         panelAccionesLances.setLayout(panelAccionesLancesLayout);
@@ -412,6 +421,8 @@ public class PanelOpcLances extends javax.swing.JPanel {
             btnInsertarLance.setEnabled(false);
             btnModificarLance.setEnabled(false);
             btnGuardarLance.setEnabled(true);
+            btnCancelarLance.setVisible(true);
+
             Lance unLance = (Lance) tablaLances.getValueAt(tablaLances.getSelectedRow(), 0);
             campoComentario.setText(String.valueOf(unLance.getComentarios()));
             comboFechaInicio.setValue(new Date(unLance.getfYHIni().getTime()));
@@ -495,10 +506,11 @@ public class PanelOpcLances extends javax.swing.JPanel {
         } else {
             // Agrega/inserta lance:
             //controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Double.valueOf(campoLatitud.getText()), Double.valueOf(campoLongitud.getText()), null, null);
-            ControllerLance.getInstance().agregaLance(AdministraCampanias.getInstance().getCampaniaEnCurso().getId(),fechaInicio,fechaFin,Double.valueOf(campoLatitudI.getText()),Double.valueOf(campoLongitudI.getText()),Double.valueOf(campoLatitudF.getText()),Double.valueOf(campoLongitudF.getText()),"" + campoComentario.getText());
+            ControllerLance.getInstance().agregaLance(AdministraCampanias.getInstance().getCampaniaEnCurso().getId(), fechaInicio, fechaFin, Double.valueOf(campoLatitudI.getText()), Double.valueOf(campoLongitudI.getText()), Double.valueOf(campoLatitudF.getText()), Double.valueOf(campoLongitudF.getText()), "" + campoComentario.getText());
         }
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
+        btnCancelarLance.setVisible(false);
         cargaGrillaLances();
     }//GEN-LAST:event_btnGuardarLanceActionPerformed
 
@@ -533,6 +545,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
             btnEliminarLance.setEnabled(false);
             btnInsertarLance.setEnabled(false);
             btnGuardarLance.setEnabled(true);
+            btnCancelarLance.setVisible(true);
 
         } else {
             JOptionPane.showMessageDialog(null, "No se pueden registrar lances sin estar en una campaña");
@@ -569,8 +582,15 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private void campoLatitudFKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoLatitudFKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_campoLatitudFKeyPressed
+
+    private void btnCancelarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarLanceActionPerformed
+        habilitaPanelDatosLances(false);
+        habilitaCamposLances(false);
+        btnCancelarLance.setVisible(false);
+    }//GEN-LAST:event_btnCancelarLanceActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmCajones;
+    private javax.swing.JButton btnCancelarLance;
     private org.jdesktop.swingx.JXHyperlink btnEliminarLance;
     private org.jdesktop.swingx.JXHyperlink btnGuardarLance;
     private javax.swing.JButton btnInicFinLance;
@@ -633,6 +653,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         cargaGrillaLances();
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
+        btnCancelarLance.setVisible(false);
         Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
         campoLatitudI.addKeyListener(obj_teclas);
         campoLongitudI.addKeyListener(obj_teclas);
