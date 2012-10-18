@@ -128,6 +128,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnGuardarPOI = new org.jdesktop.swingx.JXHyperlink();
         btnEliminarPOI = new org.jdesktop.swingx.JXHyperlink();
         btnInsertarPOI = new org.jdesktop.swingx.JXHyperlink();
+        btnCancelarPOI = new javax.swing.JButton();
         panelDatosPoi = new org.jdesktop.swingx.JXPanel();
         panelLatitud = new org.jdesktop.swingx.JXPanel();
         lblLatitud = new org.jdesktop.swingx.JXLabel();
@@ -155,6 +156,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnGuardarCatPOI = new org.jdesktop.swingx.JXHyperlink();
         btnEliminaCatPOI = new org.jdesktop.swingx.JXHyperlink();
         btnInsertarCatPOI = new org.jdesktop.swingx.JXHyperlink();
+        btnCancelarCatPOI = new javax.swing.JButton();
         panelAgregaCategoria = new org.jdesktop.swingx.JXPanel();
         panelNombreNuevaCat = new org.jdesktop.swingx.JXPanel();
         lblNombreNuevaCat = new org.jdesktop.swingx.JXLabel();
@@ -242,17 +244,16 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelSurPois.setMinimumSize(new java.awt.Dimension(500, 170));
         panelSurPois.setPreferredSize(new java.awt.Dimension(500, 170));
 
-        panelAccionesPOIElegido.setMaximumSize(new java.awt.Dimension(450, 30));
-        panelAccionesPOIElegido.setMinimumSize(new java.awt.Dimension(450, 30));
-        panelAccionesPOIElegido.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelAccionesPOIElegido.setPreferredSize(new java.awt.Dimension(500, 30));
         panelAccionesPOIElegido.setLayout(new java.awt.GridLayout(1, 2));
 
         lblAccionesPOI.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblAccionesPOI.setText("Acciones sobre los POIs elegidos:");
-        lblAccionesPOI.setFont(new java.awt.Font("Tahoma", 0, 14));
+        lblAccionesPOI.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelAccionesPOIElegido.add(lblAccionesPOI);
 
-        panelAccionesMenuPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+        panelAccionesMenuPOI.setPreferredSize(new java.awt.Dimension(300, 33));
+        panelAccionesMenuPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
 
         btnModificarPOI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
         btnModificarPOI.setText("");
@@ -297,6 +298,14 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             }
         });
         panelAccionesMenuPOI.add(btnInsertarPOI);
+
+        btnCancelarPOI.setText("Cancelar");
+        btnCancelarPOI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarPOIActionPerformed(evt);
+            }
+        });
+        panelAccionesMenuPOI.add(btnCancelarPOI);
 
         panelAccionesPOIElegido.add(panelAccionesMenuPOI);
 
@@ -437,9 +446,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         panelSurCatPois.setMinimumSize(new java.awt.Dimension(500, 170));
         panelSurCatPois.setPreferredSize(new java.awt.Dimension(500, 170));
 
-        panelAccionesCatPOIElegido.setMaximumSize(new java.awt.Dimension(450, 30));
-        panelAccionesCatPOIElegido.setMinimumSize(new java.awt.Dimension(450, 30));
-        panelAccionesCatPOIElegido.setPreferredSize(new java.awt.Dimension(450, 30));
+        panelAccionesCatPOIElegido.setPreferredSize(new java.awt.Dimension(500, 30));
         panelAccionesCatPOIElegido.setLayout(new java.awt.GridLayout(1, 2));
 
         lblAccionesCampania1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -447,7 +454,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         lblAccionesCampania1.setFont(new java.awt.Font("Tahoma", 0, 14));
         panelAccionesCatPOIElegido.add(lblAccionesCampania1);
 
-        panelAccionesMenuCatPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 20, 5));
+        panelAccionesMenuCatPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 15, 5));
 
         btnModificarCatPOI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/tabla-icono-editar.png"))); // NOI18N
         btnModificarCatPOI.setText("");
@@ -492,6 +499,14 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             }
         });
         panelAccionesMenuCatPOI.add(btnInsertarCatPOI);
+
+        btnCancelarCatPOI.setText("Cancelar");
+        btnCancelarCatPOI.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarCatPOIActionPerformed(evt);
+            }
+        });
+        panelAccionesMenuCatPOI.add(btnCancelarCatPOI);
 
         panelAccionesCatPOIElegido.add(panelAccionesMenuCatPOI);
 
@@ -554,6 +569,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             btnInsertarCatPOI.setEnabled(false);
             btnModificarCatPOI.setEnabled(false);
             btnGuardarCatPOI.setEnabled(true);
+            btnCancelarCatPOI.setVisible(true);
+
             CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(tablaCategorias.getSelectedRow(), 1);
             campoNombreNuevaCat.setText(unaCatPOI.getTitulo());
             //icono tiene q compara contra el description comboIconoCatPoi.setSelectedItem(unaCatPOI.getPathIcono());
@@ -597,6 +614,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
         habilitaPanelDatosCatPOIs(false);
         habilitaPanelCamposCatPOIs(false);
+        btnCancelarCatPOI.setVisible(false);
         cargaGrillaPOIS();
         cargaGrillaCategoriaPOIS();
         cargaComboCategorias();
@@ -692,6 +710,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnEliminaCatPOI.setEnabled(false);
         btnInsertarCatPOI.setEnabled(false);
         btnGuardarCatPOI.setEnabled(true);
+        btnCancelarCatPOI.setVisible(true);
     }//GEN-LAST:event_btnInsertarCatPOIActionPerformed
 
     private void campoLatitudKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoLatitudKeyPressed
@@ -711,9 +730,26 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         if (tablaCategorias.getSelectedRowCount() == 0) {
             habilitaPanelDatosCatPOIs(false);
         } else {
-            habilitaPanelDatosCatPOIs(true);
+            CategoriaPoi unaCatPOI = (CategoriaPoi) tablaCategorias.getValueAt(tablaCategorias.getSelectedRow(), 1);
+            if (unaCatPOI.getId() < 0) {//Categoria reservada
+                habilitaPanelDatosCatPOIs(false);
+            } else {
+                habilitaPanelDatosCatPOIs(true);
+            }
         }
     }//GEN-LAST:event_tablaCategoriasMouseReleased
+
+    private void btnCancelarPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarPOIActionPerformed
+        habilitaPanelDatosPOIs(false);
+        habilitaPanelCamposPOIs(false);
+        btnCancelarPOI.setVisible(false);
+    }//GEN-LAST:event_btnCancelarPOIActionPerformed
+
+    private void btnCancelarCatPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCatPOIActionPerformed
+        habilitaPanelDatosCatPOIs(false);
+        habilitaPanelCamposCatPOIs(false);
+        btnCancelarCatPOI.setVisible(false);
+    }//GEN-LAST:event_btnCancelarCatPOIActionPerformed
 
     private void btnInsertarPOIActionPerformed(java.awt.event.ActionEvent evt) {
         //INSERTA un POI
@@ -727,6 +763,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 btnEliminarPOI.setEnabled(false);
                 btnInsertarPOI.setEnabled(false);
                 btnGuardarPOI.setEnabled(true);
+                btnCancelarPOI.setVisible(true);
             }
         } else {
             JOptionPane.showMessageDialog(null, "No se pueden agregar POIS sin estar en una campaña");
@@ -742,6 +779,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             btnInsertarPOI.setEnabled(false);
             btnModificarPOI.setEnabled(false);
             btnGuardarPOI.setEnabled(true);
+            btnCancelarPOI.setVisible(true);
 
             POI unPOI = (POI) tablaPois.getValueAt(tablaPois.getSelectedRow(), 0);
             campoLatitud.setText(String.valueOf(unPOI.getLatitud()));
@@ -810,6 +848,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
         habilitaPanelDatosPOIs(false);
         habilitaPanelCamposPOIs(false);
+        btnCancelarPOI.setVisible(false);
         cargaGrillaPOIS();
     }
 
@@ -837,6 +876,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelarCatPOI;
+    private javax.swing.JButton btnCancelarPOI;
     private org.jdesktop.swingx.JXHyperlink btnEliminaCatPOI;
     private org.jdesktop.swingx.JXHyperlink btnEliminarPOI;
     private org.jdesktop.swingx.JXHyperlink btnGuardarCatPOI;
@@ -905,6 +946,8 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             cargaComboIconosCategorias();
             habilitaPanelDatosPOIs(false);
             habilitaPanelDatosCatPOIs(false);
+            btnCancelarPOI.setVisible(false);
+            btnCancelarCatPOI.setVisible(false);
             //validadores de los campos
             Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
             campoLatitud.addKeyListener(obj_teclas);
@@ -924,7 +967,9 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         comboCategorias.removeAllItems();
         for (CategoriaPoi cP : controllers.ControllerPois.getInstance().cargaCategoriasPOI()) {
             cP.setPathIcono(Sistema.getInstance().getRutaIconosCatPois() + "\\" + cP.getPathIcono());
-            comboCategorias.addItem(cP);
+            if (cP.getId() > 0) { //lo agrego si no es reservado
+                comboCategorias.addItem(cP);
+            }
         }
     }
 
@@ -985,18 +1030,20 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
             modeloTablaPOIS.addColumn("Fecha y Hora");
             modeloTablaPOIS.addColumn("Categoria");
             modeloTablaPOIS.addColumn("Coordenadas");
-            modeloTablaPOIS.addColumn("Descripcion");
-            modeloTablaPOIS.addColumn("Acciones");*/
+            modeloTablaPOIS.addColumn("Descripcion");*/
             //Cuerpo
             SimpleDateFormat horaCompleta = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (POI p : BrokerPOIs.getInstance().getPOISFromDB()) {
+                String descripcion = p.getDescripcion();
+                if (p.getIdCategoriaPOI() < 0) {
+                    descripcion = "";
+                } //no muestro nada si la categoria es reservada
                 modeloTablaPOIS.addRow(new Object[]{
                             p, //agrega el objeto POI, pero muestra el id
                             horaCompleta.format(p.getFechaHora()),
-                            ("" +/*<-me muestra el null*/ BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo()),
+                            ("" + BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo()),
                             (String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud())),
-                            p.getDescripcion()//,
-                        //false
+                            descripcion//p.getDescripcion()
                         });
             }
         } catch (Exception e) {

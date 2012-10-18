@@ -218,7 +218,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                     <Property name="alignment" type="int" value="0"/>
-                    <Property name="horizontalGap" type="int" value="20"/>
+                    <Property name="horizontalGap" type="int" value="15"/>
                   </Layout>
                   <SubComponents>
                     <Component class="org.jdesktop.swingx.JXHyperlink" name="btnModificarLance">
@@ -271,6 +271,14 @@
                       </Properties>
                       <Events>
                         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInsertarLanceActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="btnCancelarLance">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Cancelar"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarLanceActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>

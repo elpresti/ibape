@@ -213,14 +213,8 @@
                   <SubComponents>
                     <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesPOIElegido">
                       <Properties>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[450, 30]"/>
-                        </Property>
-                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[450, 30]"/>
-                        </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[450, 30]"/>
+                          <Dimension value="[500, 30]"/>
                         </Property>
                       </Properties>
 
@@ -239,10 +233,15 @@
                           </Properties>
                         </Component>
                         <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesMenuPOI">
+                          <Properties>
+                            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                              <Dimension value="[300, 33]"/>
+                            </Property>
+                          </Properties>
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                             <Property name="alignment" type="int" value="0"/>
-                            <Property name="horizontalGap" type="int" value="20"/>
+                            <Property name="horizontalGap" type="int" value="15"/>
                           </Layout>
                           <SubComponents>
                             <Component class="org.jdesktop.swingx.JXHyperlink" name="btnModificarPOI">
@@ -295,6 +294,14 @@
                               </Properties>
                               <Events>
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInsertarPOIActionPerformed"/>
+                              </Events>
+                            </Component>
+                            <Component class="javax.swing.JButton" name="btnCancelarPOI">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" value="Cancelar"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarPOIActionPerformed"/>
                               </Events>
                             </Component>
                           </SubComponents>
@@ -602,14 +609,8 @@
                   <SubComponents>
                     <Container class="org.jdesktop.swingx.JXPanel" name="panelAccionesCatPOIElegido">
                       <Properties>
-                        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[450, 30]"/>
-                        </Property>
-                        <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[450, 30]"/>
-                        </Property>
                         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                          <Dimension value="[450, 30]"/>
+                          <Dimension value="[500, 30]"/>
                         </Property>
                       </Properties>
 
@@ -631,7 +632,7 @@
 
                           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
                             <Property name="alignment" type="int" value="0"/>
-                            <Property name="horizontalGap" type="int" value="20"/>
+                            <Property name="horizontalGap" type="int" value="15"/>
                           </Layout>
                           <SubComponents>
                             <Component class="org.jdesktop.swingx.JXHyperlink" name="btnModificarCatPOI">
@@ -684,6 +685,14 @@
                               </Properties>
                               <Events>
                                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnInsertarCatPOIActionPerformed"/>
+                              </Events>
+                            </Component>
+                            <Component class="javax.swing.JButton" name="btnCancelarCatPOI">
+                              <Properties>
+                                <Property name="text" type="java.lang.String" value="Cancelar"/>
+                              </Properties>
+                              <Events>
+                                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarCatPOIActionPerformed"/>
                               </Events>
                             </Component>
                           </SubComponents>
