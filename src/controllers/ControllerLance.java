@@ -161,12 +161,15 @@ public class ControllerLance {
     public void registrarLance() {
         //supongo que se controla que estoy en curso afuera para ocultar el boton
         if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+            PanelOpcLances.getInstance().setTempCampania(AdministraCampanias.getInstance().getCampaniaEnCurso());
             if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) {
                 iniciaLance();
             } else {
                 finalizarLance();
             }
         } else {
+            PanelOpcLances.getInstance().setTempCampania(null);
+            PanelOpcLances.getInstance().cargaGrillaLances();
             JOptionPane.showMessageDialog(null, "No se pueden registrar lances directos sin estar en una campaña");
         }
 

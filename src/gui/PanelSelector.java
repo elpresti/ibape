@@ -312,13 +312,12 @@ private void lnkAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
 private void btnLanzaRecogeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLanzaRecogeActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
-    ControllerLance.getInstance().registrarLance();
+    ControllerLance.getInstance().registrarLance();  
 }//GEN-LAST:event_btnLanzaRecogeActionPerformed
 
 private void btnRegistraPOIActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistraPOIActionPerformed
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcPOIs.getInstance());
     PanelOpcPOIs.getInstance().botonRegPOI();
-
 }//GEN-LAST:event_btnRegistraPOIActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane PanelScrollBotones;

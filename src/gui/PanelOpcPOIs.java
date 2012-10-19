@@ -1106,7 +1106,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private void cargaComboIconosCategorias() {
         //carga combo iconos   
         comboIconoCatPoi.removeAllItems();
-        for (String rutaIcono : ControllerPpal.getInstance().listadoIconosCatPOI()) {
+        for (String rutaIcono : ControllerPois.getInstance().listadoIconosCatPOI()) {
             Image img = new ImageIcon(rutaIcono).getImage();
             Image newimg = img.getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH);
             ImageIcon unIcono = new ImageIcon(newimg);
@@ -1218,7 +1218,7 @@ class RenderCombo extends JLabel implements ListCellRenderer {
     //ImageIcon imgnull = new ImageIcon(this.getClass().getResource("../imgnull.png"));
     public RenderCombo() {
         elementos = new Hashtable<Object, ImageIcon>();
-        for (String rutaIcono : ControllerPpal.getInstance().listadoIconosCatPOI()) {
+        for (String rutaIcono : ControllerPois.getInstance().listadoIconosCatPOI()) {
             //ImageIcon img1 = new ImageIcon(this.getClass().getResource(rutaIcono));
             ImageIcon img1 = new ImageIcon(rutaIcono);
             //etc
