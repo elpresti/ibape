@@ -25,6 +25,7 @@ import modelo.dataManager.Punto;
 import persistencia.BrokerCajon;
 import persistencia.BrokerLance;
 
+
 /**
  *
  * @author Sebastian
@@ -34,6 +35,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     static PanelOpcLances unicaInstancia;
     private boolean modificandoLance;
     private Lance tempLance;
+    private Campania tempCampania;
     private DefaultTableModel modeloTablaLances = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
@@ -506,7 +508,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         } else {
             // Agrega/inserta lance:
             //controllers.ControllerPois.getInstance().agregaPOI(cP.getId(), campoDescripcionNuevoPoi.getText(), Double.valueOf(campoLatitud.getText()), Double.valueOf(campoLongitud.getText()), null, null);
-            ControllerLance.getInstance().agregaLance(AdministraCampanias.getInstance().getCampaniaEnCurso().getId(), fechaInicio, fechaFin, Double.valueOf(campoLatitudI.getText()), Double.valueOf(campoLongitudI.getText()), Double.valueOf(campoLatitudF.getText()), Double.valueOf(campoLongitudF.getText()), "" + campoComentario.getText());
+            ControllerLance.getInstance().agregaLance(getTempCampania().getId(), fechaInicio, fechaFin, Double.valueOf(campoLatitudI.getText()), Double.valueOf(campoLongitudI.getText()), Double.valueOf(campoLatitudF.getText()), Double.valueOf(campoLongitudF.getText()), "" + campoComentario.getText());
         }
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
@@ -538,7 +540,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     private void btnInsertarLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarLanceActionPerformed
         // TODO add your handling code here:
-        if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
+        if (getTempCampania() != null) {
             habilitaPanelDatosLances(true);
             habilitaCamposLances(true);
             btnModificarLance.setEnabled(false);
@@ -639,16 +641,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
         return unicaInstancia;
     }
 
-    //main de prueba 
-    public static void main(String[] args) {
-        javax.swing.JFrame elFrame = new javax.swing.JFrame();
-        elFrame.setSize(500, 500);
-        PanelOpcLances a = new PanelOpcLances();
-        //cargaEspecies();
-        elFrame.add(a);
-        elFrame.setVisible(true);
-    }
-
     private void inicializador() {
         cargaGrillaLances();
         habilitaPanelDatosLances(false);
@@ -673,10 +665,9 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
     public void cargaGrillaLances() {
         modeloTablaLances.setRowCount(0);//vacia la tabla
-        Campania unaCamp = AdministraCampanias.getInstance().getCampaniaEnCurso();
-        if (unaCamp != null) {
-            SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-            for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaFromDB(unaCamp.getId())) {
+        if (getTempCampania() != null) {
+            SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            for (Lance unLance : BrokerLance.getInstance().getLancesCampaniaFromDB(getTempCampania().getId())) {
                 String fechaFin = "En curso";
                 if (unLance.getfYHFin() != null) {
                     fechaFin = horaCompleta.format(unLance.getfYHFin());
@@ -731,6 +722,13 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnInicFinLance.setText("Finalizar lance");
     }
 
+    public void admCampaniaFinalizada(Campania unaCampania) {
+        VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
+        setTempCampania(unaCampania);
+        cargaGrillaLances();
+    }
+    
+    
     /**
      * @return the tempLance
      */
@@ -758,8 +756,21 @@ public class PanelOpcLances extends javax.swing.JPanel {
     public void setModificandoLance(boolean modificandoLance) {
         this.modificandoLance = modificandoLance;
     }
-}
 
+    /**
+     * @return the tempCampania
+     */
+    public Campania getTempCampania() {
+        return tempCampania;
+    }
+
+    /**
+     * @param tempCampania the tempCampania to set
+     */
+    public void setTempCampania(Campania tempCampania) {
+        this.tempCampania = tempCampania;
+    }
+}
 class Cls_ManejoTeclas extends KeyAdapter {
 
     public void keyTyped(KeyEvent ke) {

@@ -287,32 +287,6 @@ public class ControllerPpal {
         return fila;
     }
 
-    public ArrayList<String> listadoIconosCatPOI() {
-        String rutaIconos = modelo.dataCapture.Sistema.getInstance().getRutaIconosCatPois();
-
-        File dir = new File(rutaIconos);
-        ArrayList<String> listRutaIconos = new ArrayList();
-        String[] chld = dir.list();
-
-        //filtrado
-        FilenameFilter filter = new FilenameFilter() {
-
-            public boolean accept(File dir, String name) {
-                return name.endsWith("png");
-            }
-        };
-        chld = dir.list(filter);
-
-        if (chld == null) {
-            System.out.println("La ruta no existe o no se puede acceder.");
-        } else {
-            for (int i = 0; i < chld.length; i++) {
-                listRutaIconos.add(rutaIconos + chld[i]);
-            }
-        }
-        return listRutaIconos;
-    }
-
     public void actualizaBarraProgresoProcesaImg(int progresoProcesamiento) {
         PanelBarraDeEstado.getInstance().setProgresoProcesaImg(progresoProcesamiento);
     }
