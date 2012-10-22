@@ -6,6 +6,7 @@ package controllers;
 
 import gui.PanelOpcLances;
 import gui.PanelSelector;
+import gui.VentanaIbape;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JOptionPane;
@@ -163,6 +164,7 @@ public class ControllerLance {
         //supongo que se controla que estoy en curso afuera para ocultar el boton
         if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null) {
             PanelOpcLances.getInstance().setTempCampania(AdministraCampanias.getInstance().getCampaniaEnCurso());
+            PanelOpcLances.getInstance().modBtnAdmLancesDeUnaCamp(false);
             if (BrokerLance.getInstance().getIdLanceEnCurso() < 0) {
                 iniciaLance();
             } else {
@@ -202,17 +204,20 @@ public class ControllerLance {
 
         BrokerLance.getInstance().insertLance(unLance);
     }
-    
+
     public boolean modificaLancesDeCampania(int idDeCampaniaSeleccionada) {
         boolean sePudo = false;
-        try{
-            if (idDeCampaniaSeleccionada>=0){
+        try {
+            if (idDeCampaniaSeleccionada >= 0) {
                 modelo.dataManager.Campania campElegida = AdministraCampanias.getInstance().getCampania(idDeCampaniaSeleccionada);
-                PanelOpcLances.getInstance().admCampaniaFinalizada(campElegida);
-                sePudo=true;
+                VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
+                PanelOpcLances.getInstance().modBtnAdmLancesDeUnaCamp(true);
+                PanelOpcLances.getInstance().setTempCampania(campElegida);
+                PanelOpcLances.getInstance().cargaGrillaLances();
+                sePudo = true;
             }
-        }catch(Exception e){
-            Logueador.getInstance().agregaAlLog("modificaLancesDeCampania(): "+e.toString());
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("modificaLancesDeCampania(): " + e.toString());
         }
         return sePudo;
     }
