@@ -25,7 +25,6 @@ import modelo.dataManager.Punto;
 import persistencia.BrokerCajon;
 import persistencia.BrokerLance;
 
-
 /**
  *
  * @author Sebastian
@@ -117,6 +116,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnAdmCajones = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
         btnInicFinLance = new javax.swing.JButton();
+        btnVolverAdmCampanias = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(520, 500));
         setMinimumSize(new java.awt.Dimension(520, 500));
@@ -124,6 +124,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         setLayout(new java.awt.BorderLayout());
 
         jScrollPane2.setAutoscrolls(true);
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(525, 602));
 
         panelTodo.setPreferredSize(new java.awt.Dimension(500, 600));
         panelTodo.setScrollableTracksViewportHeight(false);
@@ -414,6 +415,14 @@ public class PanelOpcLances extends javax.swing.JPanel {
         });
         panelInferior.add(btnInicFinLance);
 
+        btnVolverAdmCampanias.setLabel("Volver");
+        btnVolverAdmCampanias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverAdmCampaniasActionPerformed(evt);
+            }
+        });
+        panelInferior.add(btnVolverAdmCampanias);
+
         panelTodo.add(panelInferior, java.awt.BorderLayout.SOUTH);
 
         jScrollPane2.setViewportView(panelTodo);
@@ -603,6 +612,11 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnCancelarLance.setVisible(false);
     }//GEN-LAST:event_btnCancelarLanceActionPerformed
 
+    private void btnVolverAdmCampaniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverAdmCampaniasActionPerformed
+        // TODO add your handling code here:
+        modBtnAdmLancesDeUnaCamp(false);
+        VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcCampanias.getInstance());
+    }//GEN-LAST:event_btnVolverAdmCampaniasActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmCajones;
     private javax.swing.JButton btnCancelarLance;
@@ -611,6 +625,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private javax.swing.JButton btnInicFinLance;
     private org.jdesktop.swingx.JXHyperlink btnInsertarLance;
     private org.jdesktop.swingx.JXHyperlink btnModificarLance;
+    private javax.swing.JButton btnVolverAdmCampanias;
     private org.jdesktop.swingx.JXTextField campoComentario;
     private javax.swing.JTextField campoLatitudF;
     private javax.swing.JTextField campoLatitudI;
@@ -661,6 +676,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         habilitaPanelDatosLances(false);
         habilitaCamposLances(false);
         btnCancelarLance.setVisible(false);
+        btnVolverAdmCampanias.setVisible(false);
         Cls_ManejoTeclas obj_teclas = new Cls_ManejoTeclas();
         campoLatitudI.addKeyListener(obj_teclas);
         campoLongitudI.addKeyListener(obj_teclas);
@@ -737,13 +753,6 @@ public class PanelOpcLances extends javax.swing.JPanel {
         btnInicFinLance.setText("Finalizar lance");
     }
 
-    public void admCampaniaFinalizada(Campania unaCampania) {
-        VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcLances.getInstance());
-        setTempCampania(unaCampania);
-        cargaGrillaLances();
-    }
-    
-    
     /**
      * @return the tempLance
      */
@@ -785,7 +794,13 @@ public class PanelOpcLances extends javax.swing.JPanel {
     public void setTempCampania(Campania tempCampania) {
         this.tempCampania = tempCampania;
     }
+
+    public void modBtnAdmLancesDeUnaCamp(boolean editandoCamp) {
+        btnVolverAdmCampanias.setVisible(editandoCamp);
+        btnInicFinLance.setVisible(!editandoCamp);
+    }
 }
+
 class Cls_ManejoTeclas extends KeyAdapter {
 
     public void keyTyped(KeyEvent ke) {
