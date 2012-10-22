@@ -74,6 +74,8 @@ public class PanelOpcLances extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        panelTodo = new org.jdesktop.swingx.JXPanel();
         panelSuperior = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panelMedio = new org.jdesktop.swingx.JXPanel();
@@ -116,10 +118,16 @@ public class PanelOpcLances extends javax.swing.JPanel {
         panelInferior = new org.jdesktop.swingx.JXPanel();
         btnInicFinLance = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(500, 32767));
-        setMinimumSize(new java.awt.Dimension(500, 300));
+        setMaximumSize(new java.awt.Dimension(520, 500));
+        setMinimumSize(new java.awt.Dimension(520, 500));
         setPreferredSize(new java.awt.Dimension(500, 500));
         setLayout(new java.awt.BorderLayout());
+
+        jScrollPane2.setAutoscrolls(true);
+
+        panelTodo.setPreferredSize(new java.awt.Dimension(500, 600));
+        panelTodo.setScrollableTracksViewportHeight(false);
+        panelTodo.setLayout(new java.awt.BorderLayout());
 
         panelSuperior.setMaximumSize(new java.awt.Dimension(500, 32767));
         panelSuperior.setMinimumSize(new java.awt.Dimension(500, 30));
@@ -130,7 +138,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         lblTitulo.setTextAlignment(org.jdesktop.swingx.JXLabel.TextAlignment.CENTER);
         panelSuperior.add(lblTitulo);
 
-        add(panelSuperior, java.awt.BorderLayout.NORTH);
+        panelTodo.add(panelSuperior, java.awt.BorderLayout.NORTH);
 
         panelMedio.setPreferredSize(new java.awt.Dimension(500, 500));
 
@@ -391,7 +399,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         panelMedio.add(panelLances);
 
-        add(panelMedio, java.awt.BorderLayout.CENTER);
+        panelTodo.add(panelMedio, java.awt.BorderLayout.CENTER);
 
         panelInferior.setMaximumSize(new java.awt.Dimension(500, 50));
         panelInferior.setMinimumSize(new java.awt.Dimension(500, 50));
@@ -406,7 +414,11 @@ public class PanelOpcLances extends javax.swing.JPanel {
         });
         panelInferior.add(btnInicFinLance);
 
-        add(panelInferior, java.awt.BorderLayout.SOUTH);
+        panelTodo.add(panelInferior, java.awt.BorderLayout.SOUTH);
+
+        jScrollPane2.setViewportView(panelTodo);
+
+        add(jScrollPane2, java.awt.BorderLayout.LINE_END);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInicFinLanceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInicFinLanceActionPerformed
@@ -590,6 +602,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         habilitaCamposLances(false);
         btnCancelarLance.setVisible(false);
     }//GEN-LAST:event_btnCancelarLanceActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdmCajones;
     private javax.swing.JButton btnCancelarLance;
@@ -606,6 +619,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private javax.swing.JSpinner comboFechaFin;
     private javax.swing.JSpinner comboFechaInicio;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXLabel lblAccionesLances;
     private org.jdesktop.swingx.JXLabel lblComentario;
     private org.jdesktop.swingx.JXLabel lblFechaFin;
@@ -631,6 +645,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private org.jdesktop.swingx.JXPanel panelSuperior;
     private org.jdesktop.swingx.JXPanel panelTabla;
     private org.jdesktop.swingx.JXPanel panelTituloTabla;
+    private org.jdesktop.swingx.JXPanel panelTodo;
     private org.jdesktop.swingx.JXTable tablaLances;
     // End of variables declaration//GEN-END:variables
 
