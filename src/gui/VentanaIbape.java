@@ -59,6 +59,7 @@ public class VentanaIbape extends JXFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IBaPE v1.0");
         setMinimumSize(new java.awt.Dimension(520, 500));
+        setName("VentanaIbape"); // NOI18N
 
         splitPanePpal.setDividerSize(9);
         splitPanePpal.setPreferredSize(new java.awt.Dimension(700, 530));
@@ -79,7 +80,8 @@ public class VentanaIbape extends JXFrame {
         //posiciono el Frame en el centro de la pantalla
         int posicionX = (Toolkit.getDefaultToolkit().getScreenSize().width/2)-(getWidth()/2);
         int posicionY = Toolkit.getDefaultToolkit().getScreenSize().height/2-(getHeight()/2);
-        this.setLocation(posicionX,posicionY);          
+        this.setLocation(posicionX,posicionY); 
+        this.setMaximumSize(new Dimension(750, 9999));
         
         //cargo el icono de la aplicacion
         java.net.URL imgURL = getClass().getResource("/imgs/iconoIbape32x32.png");
