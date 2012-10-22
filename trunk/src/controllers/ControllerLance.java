@@ -18,6 +18,7 @@ import persistencia.BrokerCajon;
 import persistencia.BrokerEspecie;
 import persistencia.BrokerLance;
 import persistencia.BrokerPOIs;
+import persistencia.Logueador;
 
 /**
  *
@@ -200,5 +201,19 @@ public class ControllerLance {
         unLance.setPosFinLon(lonFin);
 
         BrokerLance.getInstance().insertLance(unLance);
+    }
+    
+    public boolean modificaLancesDeCampania(int idDeCampaniaSeleccionada) {
+        boolean sePudo = false;
+        try{
+            if (idDeCampaniaSeleccionada>=0){
+                modelo.dataManager.Campania campElegida = AdministraCampanias.getInstance().getCampania(idDeCampaniaSeleccionada);
+                PanelOpcLances.getInstance().admCampaniaFinalizada(campElegida);
+                sePudo=true;
+            }
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("modificaLancesDeCampania(): "+e.toString());
+        }
+        return sePudo;
     }
 }
