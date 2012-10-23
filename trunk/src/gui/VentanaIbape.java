@@ -58,6 +58,7 @@ public class VentanaIbape extends JXFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("IBaPE v1.0");
+        setMaximizedBounds(new java.awt.Rectangle(0, 0, 750, 0));
         setMinimumSize(new java.awt.Dimension(520, 500));
         setName("VentanaIbape"); // NOI18N
 
