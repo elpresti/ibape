@@ -120,7 +120,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
 
         setMaximumSize(new java.awt.Dimension(520, 500));
         setMinimumSize(new java.awt.Dimension(520, 500));
-        setPreferredSize(new java.awt.Dimension(500, 500));
+        setPreferredSize(new java.awt.Dimension(525, 500));
         setLayout(new java.awt.BorderLayout());
 
         jScrollPane2.setAutoscrolls(true);
