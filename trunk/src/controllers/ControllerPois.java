@@ -107,6 +107,10 @@ public class ControllerPois {
         ArrayList<String> listRutaIconos = new ArrayList();
         String[] chld = dir.list();
 
+        for (int i = 1; i < chld.length; i++) { //todos a minusculas
+            chld[i] = chld[i].toLowerCase();
+        }
+
         //filtrado
         FilenameFilter filterInicio = new FilenameFilter() {
 
