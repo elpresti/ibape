@@ -31,8 +31,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import org.apache.log4j.chainsaw.Main;
+import persistencia.BrokerCajon;
 import persistencia.BrokerDbMapa;
 import persistencia.BrokerDbMapaHistorico;
+import persistencia.BrokerEspecie;
 import persistencia.BrokerHistoricoPunto;
 import persistencia.BrokerHistoricoSondaSet;
 import persistencia.Logueador;
@@ -44,8 +46,6 @@ import persistencia.Logueador;
  */
 public class ControllerInforme {
     static ControllerInforme unicaInstancia;
-    private BrokerHistoricoPunto brokerHistoricoPunto;
-    private BrokerHistoricoSondaSet brokerHistoricoSondaSet;
     private int idCampaniaElegida;
             
     private ControllerInforme(){
@@ -59,16 +59,7 @@ public class ControllerInforme {
     }
 
     private void inicializador() {
-        brokerHistoricoPunto = BrokerHistoricoPunto.getInstance();
-        brokerHistoricoSondaSet = BrokerHistoricoSondaSet.getInstance();
         setIdCampaniaElegida(-1);
-    }
-
-    public void configuraBrokerHistorico() {
-        brokerHistoricoPunto.setGuardaDatosGps(gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected());
-        brokerHistoricoPunto.setGuardaDatosSonda(gui.PanelOpcCampanias.getInstance().getChkHistoricoGpsSonda().isSelected());
-        brokerHistoricoPunto.setGuardaDatosPeces(gui.PanelOpcCampanias.getInstance().getChkHistoricoPeces().isSelected());
-        brokerHistoricoSondaSet.setGuardaDatosSondaSets(gui.PanelOpcCampanias.getInstance().getChkHistoricoSondaSets().isSelected());
     }
 
     public void cargaGrillaCampanias() {
@@ -117,60 +108,6 @@ public class ControllerInforme {
         return BrokerHistoricoPunto.getInstance().cuantosPuntosTiene(idCamp);
     }        
 
-    public boolean iniciaServerYabreBrowser() {
-        boolean sePudo=false;
-        try{
-            if (ControllerPpal.getInstance().abrirWebServer()){
-                if (BrokerDbMapa.getInstance().disparaEjecucion()){
-                    if (persistencia.BrokerDbMapaHistorico.getInstance().disparaEjecucion()){                        
-                        //do what you want to do after sleeptig
-                        modelo.gisModule.Browser.getInstance().setUrlTemp(modelo.gisModule.Browser.getInstance().getUrl()+"/historico.php");
-                        modelo.gisModule.Browser.getInstance().start();
-                        //modelo.gisModule.Browser.getInstance().abrirPaginaEnPestania(modelo.gisModule.Browser.getInstance().getUrlTemp());
-                        sePudo=true;
-                    
-                    }
-                    else{
-                        restauraBtnIniciarMapa();
-                    }
-                }
-                else{
-                    restauraBtnIniciarMapa();
-                }
-            }
-            else{
-                restauraBtnIniciarMapa();
-            }
-        }
-        catch(Exception e){
-            restauraBtnIniciarMapa();
-            Logueador.getInstance().agregaAlLog(e.toString());
-        }
-        return sePudo;
-    }
-    
-    public void restauraBtnIniciarMapa(){
-        PanelHistorico.getInstance().restauraBtnIniciarMapa();
-        PanelHistorico.getInstance().seteaBotonesMapa();    
-    }
-
-    public void restauraBtnGraficarDatos(){
-        PanelHistorico.getInstance().restauraBtnGraficarDatos();
-    }
-
-    public void cargaRecorridoEnMapa(int idCampaniaElegida) {
-        setIdCampaniaElegida(idCampaniaElegida);
-        if (!BrokerDbMapaHistorico.getInstance().cargarRecorridoDeCamp(getIdCampaniaElegida())){
-            JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
-        }
-    }
-
-    public void cargaPoisEnMapa(int idCampaniaElegida, ArrayList<Integer> categoriasSeleccionadas) {
-        if (!BrokerDbMapaHistorico.getInstance().cargarPoisDeCamp(idCampaniaElegida,categoriasSeleccionadas)){
-            JOptionPane.showMessageDialog(null, "No se pudieron cargar los datos en el Mapa");
-        }
-    }
-
     public void actualizaDatosEnGui() {
         controllers.ControllerInforme.getInstance().cargaGrillaCampanias();
         //PanelHistorico.getInstance().inicializaTablaCategoriasPois(); 
@@ -206,43 +143,29 @@ public class ControllerInforme {
     public boolean generaInforme(int idCampania,boolean chkBarco,boolean chkCampana,boolean chkLances,boolean chkCajones,boolean chkCatPois ){
          boolean sepudo=false;
          try{
-
-             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-             String fecha= (formato.format(Calendar.getInstance().getTime()));
-             String barco= "",capitan= "",descripcion= "",fechaIniciostring= "",fechaFinstring="";
-             int idCampaniaElegida2 = idCampania;
-             if (idCampaniaElegida2>=0){
-
-               if (chkBarco){
-                   barco = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getBarco();
-                   capitan = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getCapitan();
-               }
-               if (chkCampana){
-
-                   descripcion = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getDescripcion();
-                   Date fechaInicio = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getFechaInicio();
-                   Date fechaFin= modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampaniaElegida2).getFechaFin();
-                   fechaIniciostring=formato.format(fechaInicio);
-                   fechaFinstring=formato.format(fechaFin);
-               }
+             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+             ArrayList<modelo.dataManager.Lance> lances = new ArrayList<modelo.dataManager.Lance>();
+             ArrayList<modelo.dataManager.CategoriaPoi> catPois = new ArrayList<modelo.dataManager.CategoriaPoi>();
+             if (idCampania>=0){
+               modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania);
                if (chkLances){
-                   persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampaniaElegida2);
-               }
-               if (chkCajones){
-      //             BrokerCajon.getInstance().getCajonesFromDB().;
-      //             getCajonesLanceFromDB(int idLance):ArrayList<modelo.dataManager.Cajon>
+                  lances = persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampania);
                }
                if (chkCatPois){
-        //           ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampaniaElegida2);
-        //           para obtener la cant de puntos de cada categoria usar el método
-        //           ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCampaniaint,CP.getId());
+                  catPois = ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampania);
                }
-
-          generadorPDF pdf=new generadorPDF();
-          pdf.crear_PDF("Informe de pesca",fecha,barco,capitan,descripcion,fechaIniciostring,fechaFinstring);
-          sepudo = true;
-          //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
-
+               generadorPDF pdf=new generadorPDF();
+               pdf.crear_PDF("Informe de Campaña", //titulo del informe
+                       formato.format(Calendar.getInstance().getTime()), //fecha de hoy
+                       campania.getBarco(), //nombre del barco
+                       campania.getCapitan(), //nombre del capitan
+                       campania.getDescripcion(),
+                       formato.format(campania.getFechaInicio()), //fecha de inicio de la campania
+                       formato.format(campania.getFechaFin()), //fecha de fin de la campania
+                       lances, //ArrayList de lances de la campaña
+                       catPois); //ArrayList de Categoria de POIs de la campaña
+               sepudo = true;
+               //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
           }
              } catch(Exception e){
              Logueador.getInstance().agregaAlLog("ControllerInforme.generaInforme(): "+e.toString());
@@ -253,17 +176,14 @@ public class ControllerInforme {
 
 }
 class generadorPDF {
-
  private File ruta_destino=null;
- private Font fuenteRojo25= new Font(Font.getFamily("ARIAL"),25,Font.BOLDITALIC,BaseColor.RED);
  private Date fechaHoy = new Date();
  private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-
     public generadorPDF(){
     }
-
     /* metodo que hace uso de la clase itext para manipular archivos PDF*/
-    public void crear_PDF(String titulo,String fecha,String barco,String capitan,String descripcion,String fechaIniciostring,String fechaFinstring){
+    public void crear_PDF(String titulo,String fecha,String barco,String capitan,String descripcion,String fechaIniciostring,String fechaFinstring,
+            ArrayList<modelo.dataManager.Lance> lances, ArrayList<modelo.dataManager.CategoriaPoi> catPois){
         //abre ventana de dialogo "guardar"
         Colocar_Destino();
         //si destino es diferente de null
@@ -280,30 +200,44 @@ class generadorPDF {
                     im = Image.getInstance("src\\imgs\\logoIbapeChico.png");
              //         im = new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"));
                } catch (Exception ex) {
-                    Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF: "+ex.toString());
-                }
-        //        java.awt.Image img = (java.awt.Image)im.getImage();
-        //        Image imgFinal = Image.getInstance(img);
-	            im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
-	            mipdf.add(im);
-//                mipdf.add(new Paragraph(formato.format(fechaHoy)));
-                mipdf.add(new Paragraph(titulo, fuenteRojo25));
-                if (!fecha.isEmpty()){
-                    mipdf.add(new Paragraph(fecha)); // se añade el contendio del PDF
-                }
-                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph("Barco: "+barco)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph("Capitán: "+capitan)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(descripcion)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(fechaIniciostring)); // se añade el contendio del PDF
-                mipdf.add(new Paragraph(fechaFinstring)); // se añade el contendio del PDF
-                mipdf.close(); //se cierra el PDF&
-                JOptionPane.showMessageDialog(null,"Documento PDF creado con exito");
+                    Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF(): "+ex.toString());
+               }
+        //     java.awt.Image img = (java.awt.Image)im.getImage();
+        //     Image imgFinal = Image.getInstance(img);
+	       im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
+	       mipdf.add(im);
+//             mipdf.add(new Paragraph(formato.format(fechaHoy)));
+               mipdf.add(new Paragraph(titulo, new Font(Font.getFamily("ARIAL"),25,Font.BOLDITALIC,BaseColor.RED)));  //fuente rojo
+               if (!fecha.isEmpty()){
+                  mipdf.add(new Paragraph(fecha)); // se añade el contendio del PDF
+               }
+               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph("Barco: "+barco)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph("Capitán: "+capitan)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph("Descripción: "+descripcion)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph("Fecha de Inicio: "+fechaIniciostring)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph("Fecha de Fin: "+fechaFinstring)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(""));
+               if (lances.size()>0){
+                   mipdf.add(new Paragraph("Lances:"));
+                   insertaLancesEnInforme(mipdf, lances);
+               }else{
+                   mipdf.add(new Paragraph("Lances: No hubo"));
+               }
+               mipdf.add(new Paragraph(""));
+               if (catPois.size()>0){
+                   mipdf.add(new Paragraph("Resumen de POIs registrados (agrupados por Categoria):"));
+                   insertaCatPoisEnInforme(mipdf, catPois);
+               }else{
+                   mipdf.add(new Paragraph("POIs registrados: No hubo"));
+               }
+               mipdf.close(); //se cierra el PDF&
+               JOptionPane.showMessageDialog(null,"Documento PDF creado con exito");
             } catch (DocumentException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } catch (FileNotFoundException ex) {
@@ -320,6 +254,50 @@ class generadorPDF {
        if ( result == JFileChooser.APPROVE_OPTION ){
            this.ruta_destino = fileChooser.getSelectedFile().getAbsoluteFile();
         }
+    }
+    private boolean insertaLancesEnInforme(Document mipdf, ArrayList<modelo.dataManager.Lance> lances) {
+        boolean sePudo=false;
+        try{
+            for (modelo.dataManager.Lance lance : lances){
+                mipdf.add(new Paragraph(""));
+                mipdf.add(new Paragraph(""));
+                mipdf.add(new Paragraph("   Número de Lance: "+lance.getId()));
+                mipdf.add(new Paragraph("   Comentarios del Lance: "+lance.getComentarios()));
+                mipdf.add(new Paragraph(""));
+                mipdf.add(new Paragraph("   Datos al lanzar la red:"));
+                mipdf.add(new Paragraph("       Fecha y hora: "+lance.getfYHIni()));
+                mipdf.add(new Paragraph("       Longitud: "+lance.getPosIniLon()));
+                mipdf.add(new Paragraph("       Latitud: "+lance.getPosIniLat()));
+                mipdf.add(new Paragraph(""));
+                mipdf.add(new Paragraph("   Datos al recoger la red: "));
+                mipdf.add(new Paragraph("       Fecha y hora: "+lance.getfYHFin()));
+                mipdf.add(new Paragraph("       Longitud: "+lance.getPosFinLon()));
+                mipdf.add(new Paragraph("       Latitud: "+lance.getPosFinLat()));
+                ArrayList<modelo.dataManager.Cajon> cajones = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
+                if (cajones.size()>0){
+                    mipdf.add(new Paragraph("   Cantidad de cajones obtenidos:"));
+                    for (modelo.dataManager.Cajon cajon : cajones){
+                        mipdf.add(new Paragraph("       "+BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie()).getNombre()+
+                                ": "+cajon.getCantidad()));
+                    }
+                }else{
+                    mipdf.add(new Paragraph("   Cantidad de cajones obtenidos: 0"));
+                }
+            }
+            
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("generadorPDF.insertaLancesEnInforme(): "+e.toString());
+        }
+        return sePudo;
+    }
+    private boolean insertaCatPoisEnInforme(Document mipdf, ArrayList<modelo.dataManager.CategoriaPoi> catPois) {
+        boolean sePudo=false;
+        try{
+            mipdf.add(new Paragraph(""));
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("generadorPDF.insertaCatPoisEnInforme(): "+e.toString());
+        }
+        return sePudo;
     }
 }
 
