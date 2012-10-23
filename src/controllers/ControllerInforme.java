@@ -143,31 +143,12 @@ public class ControllerInforme {
     public boolean generaInforme(int idCampania,boolean chkBarco,boolean chkCampana,boolean chkLances,boolean chkCajones,boolean chkCatPois ){
          boolean sepudo=false;
          try{
-
-             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-             String fecha= (formato.format(Calendar.getInstance().getTime()));
-             String barco= "",capitan= "",descripcion= "",fechaIniciostring= "",fechaFinstring="";
-             if (idCampania>=0){
-
-               if (chkBarco){
-                   barco = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania).getBarco();
-                   capitan = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania).getCapitan();
-               }
-               if (chkCampana){
-
-                   descripcion = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania).getDescripcion();
-                   Date fechaInicio = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania).getFechaInicio();
-                   Date fechaFin= modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania).getFechaFin();
-                   fechaIniciostring=formato.format(fechaInicio);
-                   fechaFinstring=formato.format(fechaFin);
-               }
              SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
              ArrayList<modelo.dataManager.Lance> lances = new ArrayList<modelo.dataManager.Lance>();
              ArrayList<modelo.dataManager.CategoriaPoi> catPois = new ArrayList<modelo.dataManager.CategoriaPoi>();
              if (idCampania>=0){
                modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania);
                if (chkLances){
-                   persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampania);             
                   lances = persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampania);
                }
                if (chkCatPois){
