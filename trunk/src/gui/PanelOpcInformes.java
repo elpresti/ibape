@@ -59,10 +59,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
     private void habilitaChkDatosInforme(boolean estado) {
         //habilitaria los check de abajo
         lblTxtDatosInforme1.setEnabled(estado);
-        chkBarco.setEnabled(estado);
-        chkCampana.setEnabled(estado);
         chkLance.setEnabled(estado);
-        chkCajones.setEnabled(estado);
         chkPois.setEnabled(estado);
         btnGenerarInforme.setEnabled(estado);
     }
@@ -85,10 +82,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelRecorrido1 = new org.jdesktop.swingx.JXPanel();
         lblCantPuntosRecorrido1 = new org.jdesktop.swingx.JXLabel();
         lblTxtDatosInforme1 = new java.awt.Label();
-        chkBarco = new javax.swing.JCheckBox();
-        chkCampana = new javax.swing.JCheckBox();
         chkLance = new javax.swing.JCheckBox();
-        chkCajones = new javax.swing.JCheckBox();
         chkPois = new javax.swing.JCheckBox();
         javax.swing.JPanel panelBtnGenerarInforme = new javax.swing.JPanel();
         btnGenerarInforme = new javax.swing.JButton();
@@ -102,7 +96,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelTitulo.setMinimumSize(new java.awt.Dimension(500, 40));
         panelTitulo.setPreferredSize(new java.awt.Dimension(500, 40));
 
-        lblTituloInformes.setFont(new java.awt.Font("Arial", 0, 18));
+        lblTituloInformes.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         lblTituloInformes.setText("Informes");
         panelTitulo.add(lblTituloInformes);
 
@@ -167,34 +161,21 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         panelRecorrido1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
 
         lblCantPuntosRecorrido1.setForeground(new java.awt.Color(0, 204, 51));
-        lblCantPuntosRecorrido1.setFont(new java.awt.Font("Tahoma", 2, 12));
+        lblCantPuntosRecorrido1.setFont(new java.awt.Font("Tahoma", 2, 12)); // NOI18N
         panelRecorrido1.add(lblCantPuntosRecorrido1);
 
-        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblTxtDatosInforme1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblTxtDatosInforme1.setText("Datos a incluir en el Informe:");
         panelRecorrido1.add(lblTxtDatosInforme1);
 
         panelDatosInforme.add(panelRecorrido1);
 
-        chkBarco.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        chkBarco.setText("Datos del Barco");
-        chkBarco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkBarcoActionPerformed(evt);
-            }
-        });
-        panelDatosInforme.add(chkBarco);
-
-        chkCampana.setText("Datos de la Campaña");
-        panelDatosInforme.add(chkCampana);
-
+        chkLance.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         chkLance.setText("Datos de Lances");
         panelDatosInforme.add(chkLance);
 
-        chkCajones.setText("Datos de Cajones de cada Lance");
-        panelDatosInforme.add(chkCajones);
-
-        chkPois.setText("Datos de POIS de la Campaña");
+        chkPois.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        chkPois.setText("Resumen de POIS de la Campaña");
         panelDatosInforme.add(chkPois);
 
         add(panelDatosInforme);
@@ -219,19 +200,12 @@ public class PanelOpcInformes extends javax.swing.JPanel {
 
 
 
-    private void chkBarcoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkBarcoActionPerformed
-        // TODO add your handling code here:
-}//GEN-LAST:event_chkBarcoActionPerformed
-
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
-        ControllerInforme.getInstance().generaInforme(getIdCampaniaElegida(), chkBarco.isSelected(),chkCampana.isSelected(), chkLance.isSelected(),chkCajones.isSelected(),chkPois.isSelected());
+        ControllerInforme.getInstance().generaInforme(getIdCampaniaElegida(), true,true, chkLance.isSelected(),true,chkPois.isSelected());
 }//GEN-LAST:event_btnGenerarInformeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerarInforme;
-    private javax.swing.JCheckBox chkBarco;
-    private javax.swing.JCheckBox chkCajones;
-    private javax.swing.JCheckBox chkCampana;
     private javax.swing.JCheckBox chkLance;
     private javax.swing.JCheckBox chkPois;
     private javax.swing.JScrollPane jScrollPane1;
@@ -388,51 +362,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
      */
     public void setTxtBtnGraficarDatos(String txtBtnGraficarDatos) {
         this.txtBtnGraficarDatos = txtBtnGraficarDatos;
-    }
-
-    /**
-     * @return the chkBarco
-     */
-    public javax.swing.JCheckBox getChkBarco() {
-        return chkBarco;
-    }
-
-    /**
-     * @param chkBarco the chkBarco to set
-     */
-    public void setChkBarco(javax.swing.JCheckBox chkBarco) {
-        this.chkBarco = chkBarco;
-    }
-
-    /**
-     * @return the chkCajones
-     */
-    public javax.swing.JCheckBox getChkCajones() {
-        return chkCajones;
-    }
-
-    /**
-     * @param chkCajones the chkCajones to set
-     */
-    public void setChkCajones(javax.swing.JCheckBox chkCajones) {
-        this.chkCajones = chkCajones;
-    }
-
-    /**
-     * @return the chkCampana
-     */
-    public javax.swing.JCheckBox getChkCampana() {
-        return chkCampana;
-    }
-
-    /**
-     * @param chkCampana the chkCampana to set
-     */
-    public void setChkCampana(javax.swing.JCheckBox chkCampana) {
-        this.chkCampana = chkCampana;
-    }
-
-    
+    }   
 
     /**
      * @return the chkLance
@@ -463,9 +393,7 @@ public class PanelOpcInformes extends javax.swing.JPanel {
     }
 }
 /*  - - -   clases y metodos que cargan y controlan los RADIOBUTTONS en la TABLA CAMPAÑAS   - - -  */
-
 class RadioButtonRenderer2 implements TableCellRenderer {
-
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
         if (value == null) {
@@ -474,15 +402,11 @@ class RadioButtonRenderer2 implements TableCellRenderer {
         return (Component) value;
     }
 }
-
 class RadioButtonEditor2 extends DefaultCellEditor implements ItemListener {
-
     private JRadioButton button;
-
     public RadioButtonEditor2(JCheckBox checkBox) {
         super(checkBox);
     }
-
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         if (value == null) {
             return null;
@@ -492,14 +416,11 @@ class RadioButtonEditor2 extends DefaultCellEditor implements ItemListener {
         PanelOpcInformes.getInstance().setIdCampaniaElegida(row);
         return (Component) value;
     }
-
     public Object getCellEditorValue() {
         button.removeItemListener(this);
         return button;
     }
-
     public void itemStateChanged(ItemEvent e) {
         super.fireEditingStopped();
     }
-
 }
