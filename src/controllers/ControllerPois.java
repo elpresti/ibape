@@ -44,7 +44,7 @@ public class ControllerPois {
         //p.addObserver(controllers.ControllerAlertas.getInstance()); //Modulo Alertas
         if (fechaYhora == null) {
             p.setFechaHora(Calendar.getInstance().getTime());//fecha y hora actual
-        }else{
+        } else {
             p.setFechaHora(fechaYhora);
         }
         p.setIdCategoriaPOI(idCategoriaPOI);
@@ -70,8 +70,8 @@ public class ControllerPois {
         cP.setTitulo(titulo);
         cP.setPathIcono(path);
         BrokerCategoriasPOI.getInstance().insertCategoriaPOI(cP);
-    }    
-    
+    }
+
     public void eliminaPOI(POI unPoi) {
         if (!BrokerPOIs.getInstance().deletePOI(unPoi)) {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar el POI " + unPoi.getId());
@@ -108,13 +108,20 @@ public class ControllerPois {
         String[] chld = dir.list();
 
         //filtrado
-        FilenameFilter filter = new FilenameFilter() {
+        FilenameFilter filterInicio = new FilenameFilter() {
+
+            public boolean accept(File dir, String name) {
+                return name.startsWith("icono-cat-");
+            }
+        };
+        FilenameFilter filterFin = new FilenameFilter() {
 
             public boolean accept(File dir, String name) {
                 return name.endsWith("png");
             }
         };
-        chld = dir.list(filter);
+        chld = dir.list(filterFin);
+        chld = dir.list(filterInicio);
 
         if (chld == null) {
             System.out.println("La ruta no existe o no se puede acceder.");
@@ -141,15 +148,15 @@ public class ControllerPois {
             ControllerPois.getInstance().modificaPOI(unPOI);
         }
     }
-    
-    public boolean existeCategoria(int id){
+
+    public boolean existeCategoria(int id) {
         boolean encontro = false;
         ArrayList<modelo.dataManager.CategoriaPoi> categorias = cargaCategoriasPOI();
         int i = 0;
-        while (i<categorias.size()  && !encontro){
-            if (categorias.get(i).getId() == id){
-                encontro=true;
-            }else{
+        while (i < categorias.size() && !encontro) {
+            if (categorias.get(i).getId() == id) {
+                encontro = true;
+            } else {
                 i++;
             }
         }
@@ -186,19 +193,19 @@ public class ControllerPois {
                 ControllerPois.getInstance().agregaCategoriaPOI(AdministraCatPoi.getInstance().getIdCatLances(), AdministraCatPoi.getInstance().getNombreCatLances(), AdministraCatPoi.getInstance().getIconoFileNameCatLances());
             }
             //primero inserto el POI de INICIO del lance, junto con sus datos
-            String descripcionPoi = 
-                             "<datosLance>";
-            descripcionPoi +=   "<tituloLance nombre=\"&lt;br&gt;AQUI SE LANZÓ LA RED\" valor=\"\" />";
-            descripcionPoi +=   "<finLance nombre=\"Estado de Lance\" valor=\"false\" />";
-            descripcionPoi +=   "<idLance nombre=\"Numero de Lance\" valor=\"" + unLance.getId() + "\" />";
-            descripcionPoi +="</datosLance>";
+            String descripcionPoi =
+                    "<datosLance>";
+            descripcionPoi += "<tituloLance nombre=\"&lt;br&gt;AQUI SE LANZÓ LA RED\" valor=\"\" />";
+            descripcionPoi += "<finLance nombre=\"Estado de Lance\" valor=\"false\" />";
+            descripcionPoi += "<idLance nombre=\"Numero de Lance\" valor=\"" + unLance.getId() + "\" />";
+            descripcionPoi += "</datosLance>";
             ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatLances(), descripcionPoi, unLance.getPosIniLat(), unLance.getPosIniLon(), null, unLance.getfYHIni());
             //luego inserto el POI de FIN del lance, junto con sus datos
-            descripcionPoi ="<datosLance>";
-            descripcionPoi +=   "<tituloLance nombre=\"&lt;br&gt;AQUI SE RECOGIÓ LA RED\" valor=\"\" />";
-            descripcionPoi +=   "<finLance nombre=\"Estado de Lance\" valor=\"true\" />";
-            descripcionPoi +=   "<idLance nombre=\"Numero de Lance\" valor=\"" + unLance.getId() + "\" />";
-            descripcionPoi +="</datosLance>";
+            descripcionPoi = "<datosLance>";
+            descripcionPoi += "<tituloLance nombre=\"&lt;br&gt;AQUI SE RECOGIÓ LA RED\" valor=\"\" />";
+            descripcionPoi += "<finLance nombre=\"Estado de Lance\" valor=\"true\" />";
+            descripcionPoi += "<idLance nombre=\"Numero de Lance\" valor=\"" + unLance.getId() + "\" />";
+            descripcionPoi += "</datosLance>";
             ControllerPois.getInstance().agregaPOI(AdministraCatPoi.getInstance().getIdCatLances(), descripcionPoi, unLance.getPosFinLat(), unLance.getPosFinLon(), null, unLance.getfYHFin());
             sePudo = true;
         } catch (Exception e) {
