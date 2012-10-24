@@ -21,6 +21,7 @@ import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -201,7 +202,14 @@ public class PanelOpcInformes extends javax.swing.JPanel {
 
 
     private void btnGenerarInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarInformeActionPerformed
-        ControllerInforme.getInstance().generaInforme(getIdCampaniaElegida(), true,true, chkLance.isSelected(),true,chkPois.isSelected());
+        int idCampElegida = getIdCampaniaElegida();
+        if (idCampElegida>=0){
+            if (!(ControllerInforme.getInstance().generaInforme(idCampElegida, true,true, chkLance.isSelected(),true,chkPois.isSelected()))){
+                JOptionPane.showMessageDialog(null, "Ha ocurrido un error y el informe no ha sido generado correctamente");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "No ha elejido una campaña válida");
+        }
 }//GEN-LAST:event_btnGenerarInformeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
