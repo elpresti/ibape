@@ -338,4 +338,3 @@ class generadorPDF {
         return sePudo;
     }
 }
-
