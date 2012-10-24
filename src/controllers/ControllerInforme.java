@@ -11,6 +11,10 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import gui.PanelHistorico;
 import java.io.File;
@@ -28,6 +32,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import org.apache.log4j.chainsaw.Main;
@@ -46,7 +51,6 @@ import persistencia.Logueador;
  */
 public class ControllerInforme {
     static ControllerInforme unicaInstancia;
-    private int idCampaniaElegida;
             
     private ControllerInforme(){
         inicializador();
@@ -59,7 +63,6 @@ public class ControllerInforme {
     }
 
     private void inicializador() {
-        setIdCampaniaElegida(-1);
     }
 
     public void cargaGrillaCampanias() {
@@ -122,83 +125,66 @@ public class ControllerInforme {
         return persistencia.BrokerPOIs.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCampaniaElegida, idCategoria);
     }
 
-    /**
-     * @return the idCampaniaElegida
-     */
-    public int getIdCampaniaElegida() {
-        return idCampaniaElegida;
+    public void abrirPdfGenerado(String ruta){
+        try{
+            Process p = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+ruta); 
+            p.waitFor();
+        }catch(Exception e){
+            Logueador.getInstance().agregaAlLog("abrirPdfGenerado(): "+e.toString());
+        }
     }
-
-    /**
-     * @param idCampaniaElegida the idCampaniaElegida to set
-     */
-    public void setIdCampaniaElegida(int idCampaniaElegida) {
-        this.idCampaniaElegida = idCampaniaElegida;
-    }
-
-    public void vaciaMapaHistorico() {
-        BrokerDbMapaHistorico.getInstance().vaciaMapaHistorico();
-    }
-
+    
     public boolean generaInforme(int idCampania,boolean chkBarco,boolean chkCampana,boolean chkLances,boolean chkCajones,boolean chkCatPois ){
-         boolean sepudo=false;
-         try{
-             SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-             ArrayList<modelo.dataManager.Lance> lances = new ArrayList<modelo.dataManager.Lance>();
-             ArrayList<modelo.dataManager.CategoriaPoi> catPois = new ArrayList<modelo.dataManager.CategoriaPoi>();
-             if (idCampania>=0){
-               modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania);
-               if (chkLances){
-                  lances = persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampania);
-               }
-               if (chkCatPois){
-                  catPois = ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampania);
-               }
-               generadorPDF pdf=new generadorPDF();
-               pdf.crear_PDF("Informe de Campaña", //titulo del informe
-                       formato.format(Calendar.getInstance().getTime()), //fecha de hoy
-                       campania.getBarco(), //nombre del barco
-                       campania.getCapitan(), //nombre del capitan
-                       campania.getDescripcion(),
-                       formato.format(campania.getFechaInicio()), //fecha de inicio de la campania
-                       formato.format(campania.getFechaFin()), //fecha de fin de la campania
-                       lances, //ArrayList de lances de la campaña
-                       catPois); //ArrayList de Categoria de POIs de la campaña
-               sepudo = true;
-               //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
-          }
-             } catch(Exception e){
-             Logueador.getInstance().agregaAlLog("ControllerInforme.generaInforme(): "+e.toString());
-         }
-         return sepudo;
+        boolean sepudo = false;
+        try {
+            ArrayList<modelo.dataManager.Lance> lances = new ArrayList<modelo.dataManager.Lance>();
+            ArrayList<modelo.dataManager.CategoriaPoi> catPois = new ArrayList<modelo.dataManager.CategoriaPoi>();
+            modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania);
+            if (chkLances) {
+                lances = persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampania);
+            }
+            if (chkCatPois) {
+                catPois = ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampania);
+            }
+            generadorPDF pdf = new generadorPDF();
+            pdf.crear_PDF(idCampania,"Informe de Campaña", //titulo del informe
+                    Calendar.getInstance().getTime(), //fecha de hoy
+                    campania.getBarco(), //nombre del barco
+                    campania.getCapitan(), //nombre del capitan
+                    campania.getDescripcion(),
+                    campania.getFechaInicio(), //fecha de inicio de la campania
+                    campania.getFechaFin(), //fecha de fin de la campania
+                    lances, //ArrayList de lances de la campaña
+                    catPois); //ArrayList de Categoria de POIs de la campaña
+            sepudo = true;
+            //pdf.crear_PDF(TITULO.getText(), AUTOR.getText(), ASUNTO.getText(), CLAVE.getText(), TEXTO.getText());
+        } catch (Exception e) {
+            Logueador.getInstance().agregaAlLog("ControllerInforme.generaInforme(): " + e.toString());
+        }
+        return sepudo;
     }
 
 
 }
 class generadorPDF {
  private File ruta_destino=null;
- private Date fechaHoy = new Date();
- private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+ private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy  HH:mm:ss");
     public generadorPDF(){
     }
     /* metodo que hace uso de la clase itext para manipular archivos PDF*/
-    public void crear_PDF(String titulo,String fecha,String barco,String capitan,String descripcion,String fechaIniciostring,String fechaFinstring,
+    public void crear_PDF(int idCamp, String titulo,Date fechaHoy,String barco,String capitan,String descripcion,Date fechaInicio,Date fechaFin,
             ArrayList<modelo.dataManager.Lance> lances, ArrayList<modelo.dataManager.CategoriaPoi> catPois){
         //abre ventana de dialogo "guardar"
         Colocar_Destino();
         //si destino es diferente de null
         if(this.ruta_destino!=null){
             try {
-                // se crea instancia del documento
-                Document mipdf = new Document() {};
-                // se establece una instancia a un documento pdf
-                PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));
+                Document mipdf = new Document() {};//se crea instancia del documento
+                PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));//se establece una instancia a un documento pdf
                 mipdf.open();// se abre el documento
                 Image im=null;
-                String vacio=" ";
                 try {
-                    im = Image.getInstance("src\\imgs\\logoIbapeChico.png");
-             //         im = new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"));
+                    im = Image.getInstance(getClass().getResource("/imgs/logoIbapeChico.png"));
                } catch (Exception ex) {
                     Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF(): "+ex.toString());
                }
@@ -206,42 +192,60 @@ class generadorPDF {
         //     Image imgFinal = Image.getInstance(img);
 	       im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
 	       mipdf.add(im);
-//             mipdf.add(new Paragraph(formato.format(fechaHoy)));
                mipdf.add(new Paragraph(titulo, new Font(Font.getFamily("ARIAL"),25,Font.BOLDITALIC,BaseColor.RED)));  //fuente rojo
-               if (!fecha.isEmpty()){
-                  mipdf.add(new Paragraph(fecha)); // se añade el contendio del PDF
-               }
-               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph(vacio)); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(formato.format(fechaHoy))); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(" ")); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(" ")); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(" ")); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(" ")); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(" ")); // se añade el contendio del PDF
+               mipdf.add(new Paragraph(" ")); // se añade el contendio del PDF
                mipdf.add(new Paragraph("Barco: "+barco)); // se añade el contendio del PDF
                mipdf.add(new Paragraph("Capitán: "+capitan)); // se añade el contendio del PDF
                mipdf.add(new Paragraph("Descripción: "+descripcion)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph("Fecha de Inicio: "+fechaIniciostring)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph("Fecha de Fin: "+fechaFinstring)); // se añade el contendio del PDF
-               mipdf.add(new Paragraph(""));
+               mipdf.add(new Paragraph("Fecha de Inicio: "+formato.format(fechaInicio))); // se añade el contendio del PDF
+               if (fechaFin == null){
+                   mipdf.add(new Paragraph("Fecha de Fin: -- EN CURSO -- "));
+               }else{
+                   mipdf.add(new Paragraph("Fecha de Fin: "+formato.format(fechaFin))); // se añade el contendio del PDF
+               }
+               String rutaIconoLances = Sistema.getInstance().getRutaIconosCatPois();
+               rutaIconoLances+="\\"+modelo.dataManager.AdministraCatPoi.getInstance().getIconoFileNameCatLances();
+               try {
+                   im = Image.getInstance(rutaIconoLances);
+               }catch(Exception ex){
+                   Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF(): "+ex.toString());
+               }
+               im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
+               mipdf.add(im);
+               mipdf.add(new Paragraph(" "));
+               mipdf.add(new Paragraph("Lances:"));
                if (lances.size()>0){
-                   mipdf.add(new Paragraph("Lances:"));
                    insertaLancesEnInforme(mipdf, lances);
                }else{
-                   mipdf.add(new Paragraph("Lances: No hubo"));
+                   mipdf.add(new Paragraph("-- No hubo --"));
                }
-               mipdf.add(new Paragraph(""));
+               mipdf.add(new Paragraph(" "));
                if (catPois.size()>0){
-                   mipdf.add(new Paragraph("Resumen de POIs registrados (agrupados por Categoria):"));
-                   insertaCatPoisEnInforme(mipdf, catPois);
+                   mipdf.add(new Paragraph("Cantidad de POIs registrados (agrupados por Categoria):"));
+                   insertaCatPoisEnInforme(mipdf, catPois, idCamp);
                }else{
                    mipdf.add(new Paragraph("POIs registrados: No hubo"));
                }
-               mipdf.close(); //se cierra el PDF&
-               JOptionPane.showMessageDialog(null,"Documento PDF creado con exito");
-            } catch (DocumentException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+               mipdf.close(); //se cierra el PDF
+               int opcion = JOptionPane.showOptionDialog(null,
+                            "Documento PDF creado con exito",
+                            "Seleccione una opcion",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            new Object[]{"Aceptar", "Abrir PDF"}, // null para YES, NO y CANCEL
+                            null);
+                if (opcion==1) {
+                    ControllerInforme.getInstance().abrirPdfGenerado(this.ruta_destino.getAbsolutePath());
+                }
+            } catch (Exception ex) {
+                Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF(): "+ex.toString());
             }
         }
     }
@@ -259,23 +263,11 @@ class generadorPDF {
         boolean sePudo=false;
         try{
             for (modelo.dataManager.Lance lance : lances){
-                mipdf.add(new Paragraph(""));
-                mipdf.add(new Paragraph(""));
                 mipdf.add(new Paragraph("   Número de Lance: "+lance.getId()));
                 mipdf.add(new Paragraph("   Comentarios del Lance: "+lance.getComentarios()));
-                mipdf.add(new Paragraph(""));
-                mipdf.add(new Paragraph("   Datos al lanzar la red:"));
-                mipdf.add(new Paragraph("       Fecha y hora: "+lance.getfYHIni()));
-                mipdf.add(new Paragraph("       Longitud: "+lance.getPosIniLon()));
-                mipdf.add(new Paragraph("       Latitud: "+lance.getPosIniLat()));
-                mipdf.add(new Paragraph(""));
-                mipdf.add(new Paragraph("   Datos al recoger la red: "));
-                mipdf.add(new Paragraph("       Fecha y hora: "+lance.getfYHFin()));
-                mipdf.add(new Paragraph("       Longitud: "+lance.getPosFinLon()));
-                mipdf.add(new Paragraph("       Latitud: "+lance.getPosFinLat()));
                 ArrayList<modelo.dataManager.Cajon> cajones = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
                 if (cajones.size()>0){
-                    mipdf.add(new Paragraph("   Cantidad de cajones obtenidos:"));
+                    mipdf.add(new Paragraph("   Cantidad de cajones obtenidos: "+BrokerCajon.getInstance().getCajonesFromLance(lance.getId())));
                     for (modelo.dataManager.Cajon cajon : cajones){
                         mipdf.add(new Paragraph("       "+BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie()).getNombre()+
                                 ": "+cajon.getCantidad()));
@@ -283,17 +275,63 @@ class generadorPDF {
                 }else{
                     mipdf.add(new Paragraph("   Cantidad de cajones obtenidos: 0"));
                 }
+                mipdf.add(new Paragraph(" "));
+                
+                PdfPTable tablaLance = new PdfPTable(3); //tabla de tres columnas
+                PdfPCell celda = new PdfPCell(new Phrase(" "));celda.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                celda = new PdfPCell(new Phrase("Al lanzar la red"));celda.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                celda = new PdfPCell(new Phrase("Al recoger la red"));celda.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);                
+                
+                celda = new PdfPCell(new Phrase("Fecha y hora     "));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                
+                celda = new PdfPCell(new Phrase(formato.format(lance.getfYHIni())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                
+                celda = new PdfPCell(new Phrase(formato.format(lance.getfYHFin())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);                
+                
+                celda = new PdfPCell(new Phrase("Latitud     "));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                
+                celda = new PdfPCell(new Phrase(String.valueOf(lance.getPosIniLat())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+
+                celda = new PdfPCell(new Phrase(String.valueOf(String.valueOf(lance.getPosFinLat()))));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+
+                celda = new PdfPCell(new Phrase("Longitud     "));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                
+                celda = new PdfPCell(new Phrase(String.valueOf(lance.getPosIniLon())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+
+                celda = new PdfPCell(new Phrase(String.valueOf(lance.getPosFinLon())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                tablaLance.addCell(celda);
+                
+                mipdf.add(tablaLance);
+
+                PdfPTable tablaSeparador = new PdfPTable(1);
+                PdfPCell separador = new PdfPCell(new Paragraph(" ") );
+                separador.setBorder(Rectangle.BOTTOM);tablaSeparador.addCell(separador);
+                mipdf.add(tablaSeparador);
+                mipdf.add(new Paragraph(" "));
             }
-            
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("generadorPDF.insertaLancesEnInforme(): "+e.toString());
         }
         return sePudo;
     }
-    private boolean insertaCatPoisEnInforme(Document mipdf, ArrayList<modelo.dataManager.CategoriaPoi> catPois) {
+    private boolean insertaCatPoisEnInforme(Document mipdf, ArrayList<modelo.dataManager.CategoriaPoi> catPois, int idCamp) {
         boolean sePudo=false;
         try{
-            mipdf.add(new Paragraph(""));
+           for (modelo.dataManager.CategoriaPoi catPoi : catPois){
+                mipdf.add(new Paragraph("   "+catPoi.getTitulo()+": "+ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCamp,catPoi.getId())));
+           }
+           mipdf.add(new Paragraph(" "));
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("generadorPDF.insertaCatPoisEnInforme(): "+e.toString());
         }
