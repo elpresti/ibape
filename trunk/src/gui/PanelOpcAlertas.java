@@ -79,7 +79,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         tablaAlertas1 = new org.jdesktop.swingx.JXTable();
         panelInfoOcurAlertas = new org.jdesktop.swingx.JXPanel();
         lblOcurNoVistas = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnNavegacionAlertas = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(500, 500));
         setMinimumSize(new java.awt.Dimension(500, 500));
@@ -338,16 +338,16 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         lblOcurNoVistas.setText("(0)  ");
         panelInfoOcurAlertas.add(lblOcurNoVistas);
 
-        jButton1.setText("Navegación Alertas");
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        jButton1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnNavegacionAlertas.setText("Navegación Alertas");
+        btnNavegacionAlertas.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnNavegacionAlertas.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnNavegacionAlertas.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        btnNavegacionAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnNavegacionAlertasActionPerformed(evt);
             }
         });
-        panelInfoOcurAlertas.add(jButton1);
+        panelInfoOcurAlertas.add(btnNavegacionAlertas);
 
         panelCentro.add(panelInfoOcurAlertas);
 
@@ -397,7 +397,11 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         setModificandoAlerta(false);
     }//GEN-LAST:event_btnInsertarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    public void clickEnBtnNavegacionAlertas(){
+        btnNavegacionAlertasActionPerformed(null);
+    }
+    
+    private void btnNavegacionAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNavegacionAlertasActionPerformed
         controllers.ControllerAlertas.getInstance().muestraOcurUlt();
         int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(gui.AlertWin.getInstance().getIdShowing());
         if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
@@ -405,14 +409,14 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
         }
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnNavegacionAlertasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private org.jdesktop.swingx.JXHyperlink btnEliminar;
     private org.jdesktop.swingx.JXHyperlink btnInsertar;
     private org.jdesktop.swingx.JXHyperlink btnModificar;
+    private javax.swing.JButton btnNavegacionAlertas;
     private javax.swing.JCheckBox chkAlertas;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private org.jdesktop.swingx.JXLabel lblAccionesAlerta;

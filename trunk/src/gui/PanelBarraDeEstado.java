@@ -10,6 +10,7 @@
  */
 package gui;
 
+import controllers.ControllerAlertas;
 import controllers.ControllerNavegacion;
 import controllers.ControllerPpal;
 import java.awt.Color;
@@ -19,6 +20,7 @@ import java.util.Timer;
 import modelo.dataManager.UltimaImgProcesada;
 import persistencia.Logueador;
 
+
 /**
  *
  * @author Sebastian
@@ -27,6 +29,8 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
     Thread threadBarraEstado;
     static PanelBarraDeEstado unicaInstancia;
     ArrayList<String> colaMensajes=new ArrayList<String>();
+    private String txtOriginalAlertas;
+    private boolean alertasClickeable;
     
     
     /** Creates new form PanelBarraDeEstado */
@@ -113,12 +117,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         HistoricoEstado.setLayout(HistoricoEstadoLayout);
         HistoricoEstadoLayout.setHorizontalGroup(
             HistoricoEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 54, Short.MAX_VALUE)
+            .addGap(0, 39, Short.MAX_VALUE)
             .addGroup(HistoricoEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(HistoricoEstadoLayout.createSequentialGroup()
-                    .addGap(0, 15, Short.MAX_VALUE)
+                    .addGap(0, 8, Short.MAX_VALUE)
                     .addComponent(lblHistoricoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 16, Short.MAX_VALUE)))
+                    .addGap(0, 8, Short.MAX_VALUE)))
         );
         HistoricoEstadoLayout.setVerticalGroup(
             HistoricoEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,6 +142,11 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         AlertasEstado.setEnabled(false);
         AlertasEstado.setMaximumSize(new java.awt.Dimension(30, 20));
         AlertasEstado.setMinimumSize(new java.awt.Dimension(30, 20));
+        AlertasEstado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AlertasEstadoMouseClicked(evt);
+            }
+        });
 
         lblAlertasEstado.setForeground(new java.awt.Color(255, 255, 255));
         lblAlertasEstado.setText("ALERT");
@@ -146,12 +155,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         AlertasEstado.setLayout(AlertasEstadoLayout);
         AlertasEstadoLayout.setHorizontalGroup(
             AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 54, Short.MAX_VALUE)
+            .addGap(0, 39, Short.MAX_VALUE)
             .addGroup(AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(AlertasEstadoLayout.createSequentialGroup()
-                    .addGap(0, 11, Short.MAX_VALUE)
+                    .addGap(0, 4, Short.MAX_VALUE)
                     .addComponent(lblAlertasEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 12, Short.MAX_VALUE)))
+                    .addGap(0, 4, Short.MAX_VALUE)))
         );
         AlertasEstadoLayout.setVerticalGroup(
             AlertasEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,12 +189,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         GpsEstado.setLayout(GpsEstadoLayout);
         GpsEstadoLayout.setHorizontalGroup(
             GpsEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 54, Short.MAX_VALUE)
+            .addGap(0, 39, Short.MAX_VALUE)
             .addGroup(GpsEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(GpsEstadoLayout.createSequentialGroup()
-                    .addGap(0, 17, Short.MAX_VALUE)
+                    .addGap(0, 10, Short.MAX_VALUE)
                     .addComponent(lblGpsEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 18, Short.MAX_VALUE)))
+                    .addGap(0, 10, Short.MAX_VALUE)))
         );
         GpsEstadoLayout.setVerticalGroup(
             GpsEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,12 +222,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         SondaEstado.setLayout(SondaEstadoLayout);
         SondaEstadoLayout.setHorizontalGroup(
             SondaEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 54, Short.MAX_VALUE)
+            .addGap(0, 39, Short.MAX_VALUE)
             .addGroup(SondaEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(SondaEstadoLayout.createSequentialGroup()
-                    .addGap(0, 12, Short.MAX_VALUE)
+                    .addGap(0, 5, Short.MAX_VALUE)
                     .addComponent(lblSondaEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 12, Short.MAX_VALUE)))
+                    .addGap(0, 4, Short.MAX_VALUE)))
         );
         SondaEstadoLayout.setVerticalGroup(
             SondaEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -246,12 +255,12 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         LanEstado.setLayout(LanEstadoLayout);
         LanEstadoLayout.setHorizontalGroup(
             LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 54, Short.MAX_VALUE)
+            .addGap(0, 39, Short.MAX_VALUE)
             .addGroup(LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(LanEstadoLayout.createSequentialGroup()
-                    .addGap(0, 17, Short.MAX_VALUE)
+                    .addGap(0, 10, Short.MAX_VALUE)
                     .addComponent(lblLanEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 18, Short.MAX_VALUE)))
+                    .addGap(0, 10, Short.MAX_VALUE)))
         );
         LanEstadoLayout.setVerticalGroup(
             LanEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,6 +278,13 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
 
         add(barraEstado, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void AlertasEstadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AlertasEstadoMouseClicked
+        if (isAlertasClickeable()){
+            PanelOpcAlertas.getInstance().clickEnBtnNavegacionAlertas();
+        }
+    }//GEN-LAST:event_AlertasEstadoMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel AlertasEstado;
     private javax.swing.JPanel GpsEstado;
@@ -480,7 +496,8 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         getBarraProcesaImg().setVisible(false);
         getBarraProcesaImg().setStringPainted(true);
         getBarraProcesaImg().setBorderPainted(true);
-
+        setTxtOriginalAlertas(lblAlertasEstado.getText());
+        setAlertasClickeable(false);
     }
 
     public void setProgresoProcesaImg(int estado){
@@ -570,8 +587,45 @@ public class PanelBarraDeEstado extends javax.swing.JPanel implements Runnable {
         return barraProcesaImg;
     }
 
-}
+    public void setAlertasCantOcurNoVistas(int cantOcurNoVistas) {
+        if (ControllerAlertas.getInstance().isEstadoAlertas()  && cantOcurNoVistas>0){
+            lblAlertasEstado.setText("("+cantOcurNoVistas+")");
+            setAlertasClickeable(true);
+        }else{
+            lblAlertasEstado.setText(getTxtOriginalAlertas());
+            setAlertasClickeable(false);
+        }
+    }
 
+    /**
+     * @return the txtOriginalAlertas
+     */
+    public String getTxtOriginalAlertas() {
+        return txtOriginalAlertas;
+    }
+
+    /**
+     * @param txtOriginalAlertas the txtOriginalAlertas to set
+     */
+    public void setTxtOriginalAlertas(String txtOriginalAlertas) {
+        this.txtOriginalAlertas = txtOriginalAlertas;
+    }
+
+    /**
+     * @return the alertasClickeable
+     */
+    public boolean isAlertasClickeable() {
+        return alertasClickeable;
+    }
+
+    /**
+     * @param alertasClickeable the alertasClickeable to set
+     */
+    public void setAlertasClickeable(boolean alertasClickeable) {
+        this.alertasClickeable = alertasClickeable;
+    }
+
+}
 class MuestraMsgEnBarraProcesaImg implements Runnable{
     Thread thMsgBarraProcesaImg;
     private String[] mensaje;

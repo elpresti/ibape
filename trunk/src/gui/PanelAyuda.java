@@ -33,6 +33,26 @@ public class PanelAyuda extends javax.swing.JPanel {
         panelSuperior = new org.jdesktop.swingx.JXPanel();
         lblTitulo = new org.jdesktop.swingx.JXLabel();
         panerMedio = new org.jdesktop.swingx.JXPanel();
+        panelInfoGrupo = new org.jdesktop.swingx.JXPanel();
+        panelDatosIbape = new org.jdesktop.swingx.JXPanel();
+        lblLogoIbape = new org.jdesktop.swingx.JXLabel();
+        lblVersionIbape = new org.jdesktop.swingx.JXLabel();
+        panelSeparaDatos = new org.jdesktop.swingx.JXPanel();
+        lblAnio = new org.jdesktop.swingx.JXLabel();
+        panelDatosGrupo = new org.jdesktop.swingx.JXPanel();
+        panelAlumnos = new org.jdesktop.swingx.JXPanel();
+        lblTituloAlumnos = new org.jdesktop.swingx.JXLabel();
+        lblAlumno1 = new org.jdesktop.swingx.JXLabel();
+        lblAlumno2 = new org.jdesktop.swingx.JXLabel();
+        lblAlumno3 = new org.jdesktop.swingx.JXLabel();
+        lblAlumno4 = new org.jdesktop.swingx.JXLabel();
+        panelResto = new org.jdesktop.swingx.JXPanel();
+        lblDt = new org.jdesktop.swingx.JXLabel();
+        lblDf = new org.jdesktop.swingx.JXLabel();
+        lblAuditor = new org.jdesktop.swingx.JXLabel();
+        panelBtnsAyuda = new org.jdesktop.swingx.JXPanel();
+        btnAyudaPdf = new javax.swing.JButton();
+        btnAyudaOnline = new javax.swing.JButton();
         panelInferior = new org.jdesktop.swingx.JXPanel();
 
         setPreferredSize(new java.awt.Dimension(500, 500));
@@ -46,16 +66,92 @@ public class PanelAyuda extends javax.swing.JPanel {
 
         add(panelSuperior, java.awt.BorderLayout.PAGE_START);
 
-        javax.swing.GroupLayout panerMedioLayout = new javax.swing.GroupLayout(panerMedio);
-        panerMedio.setLayout(panerMedioLayout);
-        panerMedioLayout.setHorizontalGroup(
-            panerMedioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        panerMedioLayout.setVerticalGroup(
-            panerMedioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 220, Short.MAX_VALUE)
-        );
+        panerMedio.setPreferredSize(new java.awt.Dimension(500, 500));
+        panerMedio.setLayout(new java.awt.BorderLayout());
+
+        panelInfoGrupo.setPreferredSize(new java.awt.Dimension(606, 300));
+        panelInfoGrupo.setLayout(new java.awt.BorderLayout());
+
+        panelDatosIbape.setLayout(new java.awt.BorderLayout());
+
+        lblLogoIbape.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogoIbape.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"))); // NOI18N
+        lblLogoIbape.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblLogoIbape.setTextAlignment(org.jdesktop.swingx.JXLabel.TextAlignment.CENTER);
+        panelDatosIbape.add(lblLogoIbape, java.awt.BorderLayout.NORTH);
+
+        lblVersionIbape.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblVersionIbape.setText("IBaPE v1.0");
+        lblVersionIbape.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblVersionIbape.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lblVersionIbape.setTextAlignment(org.jdesktop.swingx.JXLabel.TextAlignment.CENTER);
+        panelDatosIbape.add(lblVersionIbape, java.awt.BorderLayout.SOUTH);
+
+        panelInfoGrupo.add(panelDatosIbape, java.awt.BorderLayout.NORTH);
+
+        panelSeparaDatos.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
+
+        lblAnio.setText("DICIEMBRE DE 2012");
+        lblAnio.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelSeparaDatos.add(lblAnio);
+
+        panelInfoGrupo.add(panelSeparaDatos, java.awt.BorderLayout.CENTER);
+
+        panelDatosGrupo.setLayout(new java.awt.BorderLayout());
+
+        panelAlumnos.setPreferredSize(new java.awt.Dimension(260, 100));
+        panelAlumnos.setLayout(new java.awt.GridLayout(5, 1, 10, 0));
+
+        lblTituloAlumnos.setText("Alumnos:");
+        lblTituloAlumnos.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        panelAlumnos.add(lblTituloAlumnos);
+
+        lblAlumno1.setText("Prestifilippo, Sebastián");
+        lblAlumno1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelAlumnos.add(lblAlumno1);
+
+        lblAlumno2.setText("Cazzaro, Facundo");
+        lblAlumno2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelAlumnos.add(lblAlumno2);
+
+        lblAlumno3.setText("Arco, Martin");
+        lblAlumno3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelAlumnos.add(lblAlumno3);
+
+        lblAlumno4.setText("Legrottaglie, Emmanuel");
+        lblAlumno4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelAlumnos.add(lblAlumno4);
+
+        panelDatosGrupo.add(panelAlumnos, java.awt.BorderLayout.WEST);
+
+        panelResto.setPreferredSize(new java.awt.Dimension(270, 100));
+        panelResto.setLayout(new java.awt.GridLayout(3, 1));
+
+        lblDt.setText("Director Técnico: Ing. Carballo, Lorena");
+        lblDt.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelResto.add(lblDt);
+
+        lblDf.setText("Director Funcional: Capitán Gavilan, Gustavo");
+        lblDf.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelResto.add(lblDf);
+
+        lblAuditor.setText("Auditor: Ing. Di Iorio, Ana");
+        lblAuditor.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        panelResto.add(lblAuditor);
+
+        panelDatosGrupo.add(panelResto, java.awt.BorderLayout.CENTER);
+
+        panelInfoGrupo.add(panelDatosGrupo, java.awt.BorderLayout.SOUTH);
+
+        panerMedio.add(panelInfoGrupo, java.awt.BorderLayout.NORTH);
+
+        btnAyudaPdf.setText("Manual Local");
+        panelBtnsAyuda.add(btnAyudaPdf);
+
+        btnAyudaOnline.setText("Manual Online");
+        panelBtnsAyuda.add(btnAyudaOnline);
+
+        panerMedio.add(panelBtnsAyuda, java.awt.BorderLayout.SOUTH);
 
         add(panerMedio, java.awt.BorderLayout.CENTER);
 
@@ -65,7 +161,7 @@ public class PanelAyuda extends javax.swing.JPanel {
         panelInferior.setLayout(panelInferiorLayout);
         panelInferiorLayout.setHorizontalGroup(
             panelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 883, Short.MAX_VALUE)
         );
         panelInferiorLayout.setVerticalGroup(
             panelInferiorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -75,8 +171,28 @@ public class PanelAyuda extends javax.swing.JPanel {
         add(panelInferior, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAyudaOnline;
+    private javax.swing.JButton btnAyudaPdf;
+    private org.jdesktop.swingx.JXLabel lblAlumno1;
+    private org.jdesktop.swingx.JXLabel lblAlumno2;
+    private org.jdesktop.swingx.JXLabel lblAlumno3;
+    private org.jdesktop.swingx.JXLabel lblAlumno4;
+    private org.jdesktop.swingx.JXLabel lblAnio;
+    private org.jdesktop.swingx.JXLabel lblAuditor;
+    private org.jdesktop.swingx.JXLabel lblDf;
+    private org.jdesktop.swingx.JXLabel lblDt;
+    private org.jdesktop.swingx.JXLabel lblLogoIbape;
     private org.jdesktop.swingx.JXLabel lblTitulo;
+    private org.jdesktop.swingx.JXLabel lblTituloAlumnos;
+    private org.jdesktop.swingx.JXLabel lblVersionIbape;
+    private org.jdesktop.swingx.JXPanel panelAlumnos;
+    private org.jdesktop.swingx.JXPanel panelBtnsAyuda;
+    private org.jdesktop.swingx.JXPanel panelDatosGrupo;
+    private org.jdesktop.swingx.JXPanel panelDatosIbape;
     private org.jdesktop.swingx.JXPanel panelInferior;
+    private org.jdesktop.swingx.JXPanel panelInfoGrupo;
+    private org.jdesktop.swingx.JXPanel panelResto;
+    private org.jdesktop.swingx.JXPanel panelSeparaDatos;
     private org.jdesktop.swingx.JXPanel panelSuperior;
     private org.jdesktop.swingx.JXPanel panerMedio;
     // End of variables declaration//GEN-END:variables
