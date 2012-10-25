@@ -142,9 +142,13 @@ public class ControllerInforme {
             modelo.dataManager.Campania campania = modelo.dataManager.AdministraCampanias.getInstance().getCampania(idCampania);
             if (chkLances) {
                 lances = persistencia.BrokerLance.getInstance().getLancesCampaniaFromDB(idCampania);
+            }else{
+                lances = null;
             }
             if (chkCatPois) {
                 catPois = ControllerHistorico.getInstance().getCatPOISDeUnaCampFromDB(idCampania);
+            }else{
+                catPois = null;
             }
             generadorPDF pdf = new generadorPDF();
             pdf.crear_PDF(idCampania,"Informe de Campaña", //titulo del informe
@@ -220,18 +224,26 @@ class generadorPDF {
                mipdf.add(im);
                mipdf.add(new Paragraph(" "));
                mipdf.add(new Paragraph("Lances:"));
-               if (lances.size()>0){
-                   insertaLancesEnInforme(mipdf, lances);
+               if (lances != null){
+                   if (lances.size()>0){
+                       insertaLancesEnInforme(mipdf, lances);
+                   }else{
+                       mipdf.add(new Paragraph("-- No hubo --"));
+                   }
                }else{
-                   mipdf.add(new Paragraph("-- No hubo --"));
+                   mipdf.add(new Paragraph(" ")); //no se pidió incluir este item en el informe
                }
                mipdf.add(new Paragraph(" "));
-               if (catPois.size()>0){
-                   mipdf.add(new Paragraph("Cantidad de POIs registrados (agrupados por Categoria):"));
-                   insertaCatPoisEnInforme(mipdf, catPois, idCamp);
+               if (catPois != null){
+                   if (catPois.size()>0){
+                       mipdf.add(new Paragraph("Cantidad de POIs registrados (agrupados por Categoria):"));
+                       insertaCatPoisEnInforme(mipdf, catPois, idCamp);
+                   }else{
+                       mipdf.add(new Paragraph("POIs registrados: No hubo"));
+                   }
                }else{
-                   mipdf.add(new Paragraph("POIs registrados: No hubo"));
-               }
+                   mipdf.add(new Paragraph(" ")); //no se pidió incluir este item en el informe
+               }    
                mipdf.close(); //se cierra el PDF
                int opcion = JOptionPane.showOptionDialog(null,
                             "Documento PDF creado con exito",

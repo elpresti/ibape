@@ -646,7 +646,7 @@ public class ControllerAlertas extends Observable implements Observer{
     }
 
     public boolean getEstadoAlertas() {
-        return estadoAlertas;
+        return isEstadoAlertas();
     }
 
     public String creaMensaje() {
@@ -1137,9 +1137,17 @@ public class ControllerAlertas extends Observable implements Observer{
     if (cantOcurNoVistas!=this.cantOcurNoVistas){
         this.cantOcurNoVistas = cantOcurNoVistas;
         gui.PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
+        gui.PanelBarraDeEstado.getInstance().setAlertasCantOcurNoVistas(cantOcurNoVistas);
     }
 
     }    
+
+    /**
+     * @return the estadoAlertas
+     */
+    public boolean isEstadoAlertas() {
+        return estadoAlertas;
+    }
     
 }
 class AnalizaActivaciones implements Runnable{
