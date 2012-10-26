@@ -213,17 +213,8 @@ class generadorPDF {
                }else{
                    mipdf.add(new Paragraph("Fecha de Fin: "+formato.format(fechaFin))); // se añade el contendio del PDF
                }
-               String rutaIconoLances = Sistema.getInstance().getRutaIconosCatPois();
-               rutaIconoLances+="\\"+modelo.dataManager.AdministraCatPoi.getInstance().getIconoFileNameCatLances();
-               try {
-                   im = Image.getInstance(rutaIconoLances);
-               }catch(Exception ex){
-                   Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF(): "+ex.toString());
-               }
-               im.setAlignment(Image.ALIGN_RIGHT | Image.TEXTWRAP );
-               mipdf.add(im);
                mipdf.add(new Paragraph(" "));
-               mipdf.add(new Paragraph("Lances:"));
+               mipdf.add(new Paragraph("Lances:", new Font(Font.getFamily("ARIAL"),16,Font.BOLD,BaseColor.BLACK)));
                if (lances != null){
                    if (lances.size()>0){
                        insertaLancesEnInforme(mipdf, lances);
@@ -236,7 +227,9 @@ class generadorPDF {
                mipdf.add(new Paragraph(" "));
                if (catPois != null){
                    if (catPois.size()>0){
-                       mipdf.add(new Paragraph("Cantidad de POIs registrados (agrupados por Categoria):"));
+                       mipdf.add(new Paragraph("Cantidad de POIs registrados (agrupados por Categoria):", 
+                               new Font(Font.getFamily("ARIAL"),16,Font.BOLD,BaseColor.BLACK)));
+                       mipdf.add(new Paragraph(" "));
                        insertaCatPoisEnInforme(mipdf, catPois, idCamp);
                    }else{
                        mipdf.add(new Paragraph("POIs registrados: No hubo"));
@@ -274,14 +267,25 @@ class generadorPDF {
     private boolean insertaLancesEnInforme(Document mipdf, ArrayList<modelo.dataManager.Lance> lances) {
         boolean sePudo=false;
         try{
+            Image im = null;
+            String rutaIconoLances = Sistema.getInstance().getRutaIconosCatPois();
+            rutaIconoLances+="\\"+modelo.dataManager.AdministraCatPoi.getInstance().getIconoFileNameCatLances();
             for (modelo.dataManager.Lance lance : lances){
+                try {
+                    im = Image.getInstance(rutaIconoLances);
+                    im.scaleAbsolute(22, 22);
+                }catch(Exception ex){
+                    Logueador.getInstance().agregaAlLog("generadorPDF.insertaLancesEnInforme(): "+ex.toString());
+                }
+                im.setAlignment(Image.TEXTWRAP);
+                mipdf.add(im);
                 mipdf.add(new Paragraph("   Número de Lance: "+lance.getId()));
                 mipdf.add(new Paragraph("   Comentarios del Lance: "+lance.getComentarios()));
                 ArrayList<modelo.dataManager.Cajon> cajones = BrokerCajon.getInstance().getCajonesLanceFromDB(lance.getId());
                 if (cajones.size()>0){
                     mipdf.add(new Paragraph("   Cantidad de cajones obtenidos: "+BrokerCajon.getInstance().getCajonesFromLance(lance.getId())));
                     for (modelo.dataManager.Cajon cajon : cajones){
-                        mipdf.add(new Paragraph("       "+BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie()).getNombre()+
+                        mipdf.add(new Paragraph("               •  "+BrokerEspecie.getInstance().getEspecieFromDB(cajon.getIdEspecie()).getNombre()+
                                 ": "+cajon.getCantidad()));
                     }
                 }else{
@@ -340,8 +344,21 @@ class generadorPDF {
     private boolean insertaCatPoisEnInforme(Document mipdf, ArrayList<modelo.dataManager.CategoriaPoi> catPois, int idCamp) {
         boolean sePudo=false;
         try{
+           Image im = null;
+           String rutaIconoCatPois = "";
            for (modelo.dataManager.CategoriaPoi catPoi : catPois){
+                rutaIconoCatPois=Sistema.getInstance().getRutaIconosCatPois()+"\\"+catPoi.getPathIcono();
+                try {
+                    im = Image.getInstance(rutaIconoCatPois);
+                    im.scaleAbsolute(15, 15);
+                    im.setAlignment(Image.TEXTWRAP); 
+                    mipdf.add(im);
+                }catch(Exception ex){
+                    Logueador.getInstance().agregaAlLog("generadorPDF.insertaCatPoisEnInforme(): "+ex.toString());
+                }
+                mipdf.add(new Paragraph("   "));
                 mipdf.add(new Paragraph("   "+catPoi.getTitulo()+": "+ControllerHistorico.getInstance().getCantPOISDeUnaCampSegunCatPoi(idCamp,catPoi.getId())));
+                mipdf.add(new Paragraph("   "));
            }
            mipdf.add(new Paragraph(" "));
         }catch(Exception e){
