@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.Campania;
 import modelo.dataManager.Lance;
 import modelo.dataManager.Punto;
@@ -582,8 +581,10 @@ public class PanelOpcLances extends javax.swing.JPanel {
     private void tablaLancesMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaLancesMouseReleased
         if (tablaLances.getSelectedRowCount() == 0 || tablaLances.getValueAt(tablaLances.getSelectedRow(), 2) == "En curso") {
             habilitaPanelDatosLances(false);
+            btnAdmCajones.setEnabled(false);
         } else {
             habilitaPanelDatosLances(true);
+            btnAdmCajones.setEnabled(true);
         }
     }//GEN-LAST:event_tablaLancesMouseReleased
 
@@ -741,7 +742,7 @@ public class PanelOpcLances extends javax.swing.JPanel {
         comboFechaFin.setValue(null);
         }*/
         campoComentario.setText("");
-        btnAdmCajones.setEnabled(estado);
+        //btnAdmCajones.setEnabled(estado);
 
     }
 
