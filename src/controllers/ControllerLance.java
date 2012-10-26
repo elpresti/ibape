@@ -203,7 +203,9 @@ public class ControllerLance {
         unLance.setPosFinLat(latFin);
         unLance.setPosFinLon(lonFin);
 
-        BrokerLance.getInstance().insertLance(unLance);
+        if (BrokerLance.getInstance().insertLance(unLance)){
+            ControllerPois.getInstance().guardaPoisDelLance(unLance);
+        }
     }
 
     public boolean modificaLancesDeCampania(int idDeCampaniaSeleccionada) {
