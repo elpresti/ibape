@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Sebastian
  */
-public class Campania {
+public class Campania{
     private int id;
     private String descripcion;
     private String barco;
@@ -201,5 +201,7 @@ public class Campania {
         // (no importa la especie) que correspondan al ID de esta campaña (JOIN con los lances q sean de esta campaña)
         return cantTotal;
     }
+
+ 
     
 }

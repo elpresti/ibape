@@ -29,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.ListCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import modelo.dataCapture.Gps;
 import modelo.dataCapture.Sistema;
 import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
@@ -1038,10 +1039,18 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                 if (p.getIdCategoriaPOI() < 0) {
                     descripcion = "";
                 } //no muestro nada si la categoria es reservada
+
+                Image source = new ImageIcon(Sistema.getInstance().getRutaIconosCatPois() + BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getPathIcono()).getImage();
+                BufferedImage image = new BufferedImage(source.getWidth(null), source.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = (Graphics2D) image.getGraphics();
+                g2d.drawImage(source, 0, 0, null);
+                g2d.dispose();
+
                 modeloTablaPOIS.addRow(new Object[]{
                             p, //agrega el objeto POI, pero muestra el id
                             horaCompleta.format(p.getFechaHora()),
                             ("" + BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo()),
+                            //modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(20, 20, image),
                             (String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud())),
                             descripcion//p.getDescripcion()
                         });
@@ -1166,8 +1175,13 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
         btnInsertarPOIActionPerformed(null);
         campoLatitud.setText(String.valueOf(Punto.getInstance().getLatConNegativo()));
         campoLongitud.setText(String.valueOf(Punto.getInstance().getLonConNegativo()));
-        campoLatitud.setEnabled(false);
-        campoLongitud.setEnabled(false);
+        if (Gps.getInstance().getEstadoConexion() == 2) { //GPS Conectado
+            campoLatitud.setEnabled(false);
+            campoLongitud.setEnabled(false);
+        } else {
+            campoLatitud.setEnabled(true);
+            campoLongitud.setEnabled(true);
+        }
     }
 
     class Cls_ManejoTeclas extends KeyAdapter {
@@ -1212,10 +1226,13 @@ g2d.dispose();
 combo.addItem(modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(25, 32, image));//en la columna 2 va el Icono
 }
 }
- */ 
+ */
+
 class RenderCombo extends JLabel implements ListCellRenderer {
+
     Hashtable<Object, ImageIcon> elementos;
     //ImageIcon imgnull = new ImageIcon(this.getClass().getResource("../imgnull.png"));
+
     public RenderCombo() {
         elementos = new Hashtable<Object, ImageIcon>();
         for (String rutaIcono : ControllerPois.getInstance().listadoIconosCatPOI()) {
@@ -1229,9 +1246,11 @@ class RenderCombo extends JLabel implements ListCellRenderer {
         //agregarElemento("Icono1",img1);
         //etc
     }
+
     private void agregarElemento(Object o, ImageIcon img) {
         elementos.put(o, img);
     }
+
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
         if (elementos.get(value) != null) {
             setIcon(elementos.get(value));
