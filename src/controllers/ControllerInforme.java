@@ -127,8 +127,16 @@ public class ControllerInforme {
 
     public void abrirPdfGenerado(String ruta){
         try{
-            Process p = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+ruta); 
-            p.waitFor();
+//            String file = "src/systemgq/numeracionPDF/prueba.pdf";
+//            RandomAccessFile raf = new RandomAccessFile(file, "r");
+//            FileChannel channel = raf.getChannel();
+//            ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,0                                                                                     ,channel.size());
+//            PDFFile pdfFile = new PDFFile(buf);
+//            PDFPage page = pdfFile.getPage(0);
+//            mN.getPagePanel().showPage(page);            
+            
+//            Process p = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+ruta); 
+//            p.waitFor();
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("abrirPdfGenerado(): "+e.toString());
         }
@@ -181,10 +189,10 @@ class generadorPDF {
         //abre ventana de dialogo "guardar"
         Colocar_Destino();
         //si destino es diferente de null
-        if(this.ruta_destino!=null){
+        if(this.getRuta_destino()!=null){
             try {
                 Document mipdf = new Document() {};//se crea instancia del documento
-                PdfWriter.getInstance(mipdf, new FileOutputStream(this.ruta_destino + ".pdf"));//se establece una instancia a un documento pdf
+                PdfWriter.getInstance(mipdf, new FileOutputStream(this.getRuta_destino() + ".pdf"));//se establece una instancia a un documento pdf
                 mipdf.open();// se abre el documento
                 Image im=null;
                 try {
@@ -247,7 +255,7 @@ class generadorPDF {
                             new Object[]{"Aceptar", "Abrir PDF"}, // null para YES, NO y CANCEL
                             null);
                 if (opcion==1) {
-                    ControllerInforme.getInstance().abrirPdfGenerado(this.ruta_destino.getAbsolutePath());
+                    ControllerInforme.getInstance().abrirPdfGenerado(this.getRuta_destino().getAbsolutePath());
                 }
             } catch (Exception ex) {
                 Logueador.getInstance().agregaAlLog("generadorPDF.crear_PDF(): "+ex.toString());
@@ -365,5 +373,8 @@ class generadorPDF {
             Logueador.getInstance().agregaAlLog("generadorPDF.insertaCatPoisEnInforme(): "+e.toString());
         }
         return sePudo;
+    }
+    public File getRuta_destino() {
+        return ruta_destino;
     }
 }
