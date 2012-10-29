@@ -940,6 +940,18 @@ public abstract class BrokerPpal {
             if (getStatement().executeUpdate(codigoCreacion) == 0){
                 sePudo = sePudo && false;
             }
+            
+            /*Borrado en cascada */
+            codigoCreacion =
+                    "CREATE TRIGGER fkd_OcurAlertas_Alerta_id "
+                    + "BEFORE DELETE ON Alertas "
+                    + "FOR EACH ROW BEGIN "
+                    + "   DELETE from OcurAlertas WHERE idAlerta = OLD.id; "
+                    + "END; ";
+            if (getStatement().executeUpdate(codigoCreacion) == 0){
+                sePudo = sePudo && false;
+            }
+            
         } catch (Exception e) {
             Logueador.getInstance().agregaAlLog(e.toString());
             sePudo = false;

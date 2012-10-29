@@ -374,16 +374,14 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="org.jdesktop.swingx.JXTable" name="tablaAlertas1">
+                    <Component class="org.jdesktop.swingx.JXTable" name="tablaOcurAlertas">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                          <Table columnCount="6" rowCount="10">
-                            <Column editable="false" title="Id_Alerta" type="java.lang.Object"/>
-                            <Column editable="false" title="Estado" type="java.lang.Boolean"/>
-                            <Column editable="false" title="Nombre" type="java.lang.String"/>
-                            <Column editable="false" title="Acciones" type="java.lang.Object"/>
-                            <Column editable="false" title="Mensaje" type="java.lang.String"/>
-                            <Column editable="false" title="Flags" type="java.lang.Object"/>
+                          <Table columnCount="4" rowCount="10">
+                            <Column editable="false" title="IdOcurAlerta" type="java.lang.Object"/>
+                            <Column editable="false" title="Alerta" type="java.lang.String"/>
+                            <Column editable="false" title="FechaAct" type="java.lang.String"/>
+                            <Column editable="false" title="FechaDes" type="java.lang.String"/>
                           </Table>
                         </Property>
                         <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -393,33 +391,24 @@
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="60" minWidth="60" prefWidth="60" resizable="true">
+                            <Column maxWidth="100" minWidth="100" prefWidth="100" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="-1" minWidth="-1" prefWidth="100" resizable="false">
+                            <Column maxWidth="200" minWidth="200" prefWidth="200" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>
                             </Column>
-                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
-                              <Title/>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
-                              <Title/>
-                              <Editor/>
-                              <Renderer/>
-                            </Column>
-                            <Column maxWidth="0" minWidth="0" prefWidth="0" resizable="true">
+                            <Column maxWidth="200" minWidth="200" prefWidth="200" resizable="true">
                               <Title/>
                               <Editor/>
                               <Renderer/>
                             </Column>
                           </TableColumnModel>
                         </Property>
+                        <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                           <Dimension value="[480, 220]"/>
                         </Property>
@@ -437,7 +426,7 @@
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaAlertas1MouseClicked"/>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tablaOcurAlertasMouseClicked"/>
                       </Events>
                     </Component>
                   </SubComponents>

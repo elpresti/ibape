@@ -13,6 +13,8 @@ package gui;
 import controllers.ControllerAlertas;
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
@@ -30,6 +32,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
     private PanelOpcAlertasAgregaEdita panelAgregaEdita = PanelOpcAlertasAgregaEdita.getInstance();
     private Color colorOriginalBtnIniciar;
     private DefaultTableModel modeloTabla;
+    private DefaultTableModel modeloTablaOcur;
     private boolean modificandoAlerta;
     private int NRO_COL_ID_ALERTA;
     private int NRO_COL_ESTADO;
@@ -37,7 +40,13 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
     private int NRO_COL_MENSAJE;
     private int NRO_COL_FLAGS;
     private int NRO_COL_ACCIONES;
+    
+    private int NRO_COL_ID_OCUR_ALERTA;
+    private int NRO_COL_FECHA_ACT;
+    private int NRO_COL_FECHA_DES;
+    private int NRO_COL_TITULO_OCUR;
     private int cantColumnas;
+    private int cantColumnasTablaOcur;
     private static Font negrita=new Font("Tahoma",Font.BOLD,14);
     private static Font comun=new Font("Tahoma",Font.PLAIN,13);
     
@@ -76,7 +85,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         btnEliminar = new org.jdesktop.swingx.JXHyperlink();
         panelTablaOcurAlertas = new org.jdesktop.swingx.JXPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tablaAlertas1 = new org.jdesktop.swingx.JXTable();
+        tablaOcurAlertas = new org.jdesktop.swingx.JXTable();
         panelInfoOcurAlertas = new org.jdesktop.swingx.JXPanel();
         lblOcurNoVistas = new javax.swing.JLabel();
         btnNavegacionAlertas = new javax.swing.JButton();
@@ -266,28 +275,28 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         jScrollPane2.setPreferredSize(new java.awt.Dimension(482, 220));
         jScrollPane2.setRequestFocusEnabled(false);
 
-        tablaAlertas1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaOcurAlertas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Id_Alerta", "Estado", "Nombre", "Acciones", "Mensaje", "Flags"
+                "IdOcurAlerta", "Alerta", "FechaAct", "FechaDes"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -298,35 +307,31 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaAlertas1.setMaximumSize(new java.awt.Dimension(480, 220));
-        tablaAlertas1.setMinimumSize(new java.awt.Dimension(480, 72));
-        tablaAlertas1.setPreferredScrollableViewportSize(new java.awt.Dimension(480, 100));
-        tablaAlertas1.setPreferredSize(new java.awt.Dimension(480, 220));
-        tablaAlertas1.getTableHeader().setReorderingAllowed(false);
-        tablaAlertas1.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablaOcurAlertas.setColumnSelectionAllowed(true);
+        tablaOcurAlertas.setMaximumSize(new java.awt.Dimension(480, 220));
+        tablaOcurAlertas.setMinimumSize(new java.awt.Dimension(480, 72));
+        tablaOcurAlertas.setPreferredScrollableViewportSize(new java.awt.Dimension(480, 100));
+        tablaOcurAlertas.setPreferredSize(new java.awt.Dimension(480, 220));
+        tablaOcurAlertas.getTableHeader().setReorderingAllowed(false);
+        tablaOcurAlertas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaAlertas1MouseClicked(evt);
+                tablaOcurAlertasMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tablaAlertas1);
-        tablaAlertas1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tablaAlertas1.getColumnModel().getColumn(0).setMinWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(0).setPreferredWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(0).setMaxWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(1).setMinWidth(60);
-        tablaAlertas1.getColumnModel().getColumn(1).setPreferredWidth(60);
-        tablaAlertas1.getColumnModel().getColumn(1).setMaxWidth(60);
-        tablaAlertas1.getColumnModel().getColumn(2).setResizable(false);
-        tablaAlertas1.getColumnModel().getColumn(2).setPreferredWidth(100);
-        tablaAlertas1.getColumnModel().getColumn(3).setMinWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(3).setPreferredWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(3).setMaxWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(4).setMinWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(4).setPreferredWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(4).setMaxWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(5).setMinWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(5).setPreferredWidth(0);
-        tablaAlertas1.getColumnModel().getColumn(5).setMaxWidth(0);
+        jScrollPane2.setViewportView(tablaOcurAlertas);
+        tablaOcurAlertas.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaOcurAlertas.getColumnModel().getColumn(0).setMinWidth(0);
+        tablaOcurAlertas.getColumnModel().getColumn(0).setPreferredWidth(0);
+        tablaOcurAlertas.getColumnModel().getColumn(0).setMaxWidth(0);
+        tablaOcurAlertas.getColumnModel().getColumn(1).setMinWidth(100);
+        tablaOcurAlertas.getColumnModel().getColumn(1).setPreferredWidth(100);
+        tablaOcurAlertas.getColumnModel().getColumn(1).setMaxWidth(100);
+        tablaOcurAlertas.getColumnModel().getColumn(2).setMinWidth(200);
+        tablaOcurAlertas.getColumnModel().getColumn(2).setPreferredWidth(200);
+        tablaOcurAlertas.getColumnModel().getColumn(2).setMaxWidth(200);
+        tablaOcurAlertas.getColumnModel().getColumn(3).setMinWidth(200);
+        tablaOcurAlertas.getColumnModel().getColumn(3).setPreferredWidth(200);
+        tablaOcurAlertas.getColumnModel().getColumn(3).setMaxWidth(200);
 
         panelTablaOcurAlertas.add(jScrollPane2);
 
@@ -385,9 +390,9 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     controlaPanelAccionesAlerta();
 }//GEN-LAST:event_tablaAlertasMouseClicked
 
-    private void tablaAlertas1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaAlertas1MouseClicked
+    private void tablaOcurAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaOcurAlertasMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tablaAlertas1MouseClicked
+    }//GEN-LAST:event_tablaOcurAlertasMouseClicked
 
     private void btnInsertarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertarActionPerformed
                 // TODO add your handling code here:
@@ -433,7 +438,7 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     private org.jdesktop.swingx.JXPanel panelTablaOcurAlertas;
     private org.jdesktop.swingx.JXPanel panelTitulo;
     private org.jdesktop.swingx.JXTable tablaAlertas;
-    private org.jdesktop.swingx.JXTable tablaAlertas1;
+    private org.jdesktop.swingx.JXTable tablaOcurAlertas;
     // End of variables declaration//GEN-END:variables
 
     public JCheckBox getChkAlertas() {
@@ -553,11 +558,19 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         NRO_COL_MENSAJE=3;
         NRO_COL_ACCIONES=5;
         NRO_COL_FLAGS=4;
-        cantColumnas=6;        
+        cantColumnas=6;
+        NRO_COL_ID_OCUR_ALERTA=0;
+        NRO_COL_FECHA_ACT=2;
+        NRO_COL_FECHA_DES=3;
+        NRO_COL_TITULO_OCUR=1;
+        cantColumnasTablaOcur=4;
         modeloTabla = (DefaultTableModel) tablaAlertas.getModel();
         tablaAlertas.setModel(modeloTabla);
+        modeloTablaOcur = (DefaultTableModel) tablaOcurAlertas.getModel();
+        tablaOcurAlertas.setModel(modeloTablaOcur);
         cargaIconosDeBotones();
-        cargaGrillaAlertas();        
+        cargaGrillaAlertas();
+        cargaGrillaOcurAlertas();
         controlaPanelAccionesAlerta(); 
         chkAlertas.setSelected(controllers.ControllerAlertas.getInstance().getEstadoAlertas());
         
@@ -654,6 +667,53 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         elFrame.setVisible(true);
     }
      * */
+
+    private void cargaGrillaOcurAlertas() {
+        vaciaTablaOcur();
+        
+        ArrayList<modelo.alertas.AlertaListaOn> ocurAlertas = controllers.ControllerAlertas.getInstance().getAlertasActivadas();
+  
+        if ((ocurAlertas == null) || (ocurAlertas.isEmpty()) ) {
+            controllers.ControllerAlertas.getInstance().leerOcurAlertasDeLaDB();
+            ocurAlertas = controllers.ControllerAlertas.getInstance().getAlertasActivadas();
+            
+        }    
+     
+        if ((!(ocurAlertas == null)) && (ocurAlertas.size() > 0)) {
+            // while (), pongo cada objeto Alerta en la grilla de alertas                    
+            int i = ocurAlertas.size()-1;
+            while (i >= 0) {
+                if (!(ocurAlertas.get(i).getAlerta()==null)){
+                        agregaUnaFilaOcurAlerta(
+                        ocurAlertas.get(i).getIdOcur(),
+                        ocurAlertas.get(i).getAlerta().getTitulo(),
+                        ocurAlertas.get(i).getFechaActivacion(),
+                        ocurAlertas.get(i).getFechaDesactivacion()
+                        );
+                }
+
+                i--;
+            }
+            
+        }
+    }
+
+    private void vaciaTablaOcur() {
+         modeloTablaOcur.setRowCount(0);
+    }
+
+    private void agregaUnaFilaOcurAlerta(int idOcur, String titulo, Timestamp fechaActivacion, Timestamp fechaDesactivacion) {
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        Object[] filaOcur = new Object[cantColumnasTablaOcur]; //creamos la fila
+        filaOcur[NRO_COL_ID_OCUR_ALERTA]=idOcur;
+        filaOcur[NRO_COL_TITULO_OCUR]=titulo;
+        filaOcur[NRO_COL_FECHA_ACT]=sdf.format(fechaActivacion);
+        filaOcur[NRO_COL_FECHA_DES]=sdf.format(fechaDesactivacion);
+
+        modeloTablaOcur.addRow(filaOcur);
+    }
      
  
 
