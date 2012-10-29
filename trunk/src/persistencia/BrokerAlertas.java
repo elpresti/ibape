@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import modelo.alertas.AdministraAlertas;
 import modelo.alertas.Alerta;
 import modelo.alertas.AlertaListaOn;
 import modelo.alertas.Condicion;
@@ -844,20 +845,28 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
    
       public ArrayList<modelo.alertas.AlertaListaOn> getOcurAlertasFromDB(){
         ArrayList<modelo.alertas.AlertaListaOn> ocurAlertas = new ArrayList();        
-        ResultSet rs = null;
+        ResultSet rs2 = null;
+        int idAlerta;
+        Alerta alerta;
         try {
-            rs = getStatement().executeQuery("SELECT * FROM OcurAlertas");
 
-            while (rs.next()) {    
+           
+            
+            String sqlQuery="SELECT * FROM OcurAlertas order by id desc limit 100";
+            rs2 = getStatement().executeQuery(sqlQuery);
+
+            while (rs2.next()) {    
                 modelo.alertas.AlertaListaOn ocurAlerta = new modelo.alertas.AlertaListaOn();
-                ocurAlerta.setIdOcur(rs.getInt("id"));
-                ocurAlerta.setLatitud(Double.parseDouble(rs.getString("latitud")));
-                ocurAlerta.setLongitud(Double.parseDouble(rs.getString("longitud")));
-                ocurAlerta.getAlerta().setId(rs.getInt("idAlerta"));
+                ocurAlerta.setIdOcur(rs2.getInt("id"));
+                ocurAlerta.setLatitud(Double.parseDouble(rs2.getString("latitud")));
+                ocurAlerta.setLongitud(Double.parseDouble(rs2.getString("longitud")));
+                idAlerta=rs2.getInt("idAlerta");
+                alerta=AdministraAlertas.getInstance().getAlerta(idAlerta);             
+                ocurAlerta.setAlerta(alerta);
                 //falta obtener valores
-                ocurAlerta.setFechaActivacion(rs.getTimestamp("fyhini"));
-                ocurAlerta.setFechaDesactivacion(rs.getTimestamp("fyhfin"));  
-                ocurAlerta.setVista(rs.getInt("vista"));  
+                ocurAlerta.setFechaActivacion(rs2.getTimestamp("fyhini"));
+                ocurAlerta.setFechaDesactivacion(rs2.getTimestamp("fyhfin"));  
+                ocurAlerta.setVista(rs2.getInt("vista"));  
                 ocurAlertas.add(ocurAlerta);
             }
             
@@ -865,15 +874,15 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
             Logueador.getInstance().agregaAlLog(ex.toString());
         } 
         try{//ya la use, asique cierro ResultSets y Statements usados, para evitar la excepcion DatabaseLocked
-            if (rs != null){
-                rs.close();
+            if (rs2 != null){
+                rs2.close();
             }
             if (getStatement() != null){
                 getStatement().close();
             }
         }
         catch(Exception e){
-            Logueador.getInstance().agregaAlLog(e.toString());
+            Logueador.getInstance().agregaAlLog("BrokerAlertas.getocurAlertasFromDB(): "+e.toString());
         }
         return ocurAlertas;
     }
@@ -994,15 +1003,15 @@ public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
             int vista=ocurAlerta.getVista();
             
             //ciclo para guardar lista de valores;
-            String valor1="";
-            String valor2="";
-            String valor3="";
-            String valor4="";
-            String valor5="";
-            String valor6="";
-            String valor7="";
-            String valor8="";
-            String valor9="";
+            String valor1=""+ocurAlerta.getValores().get(0);
+            String valor2=""+ocurAlerta.getValores().get(1);
+            String valor3=""+ocurAlerta.getValores().get(2);
+            String valor4=""+ocurAlerta.getValores().get(3);
+            String valor5=""+ocurAlerta.getValores().get(4);
+            String valor6=""+ocurAlerta.getValores().get(5);
+            String valor7=""+ocurAlerta.getValores().get(6);
+            String valor8=""+ocurAlerta.getValores().get(7);
+            String valor9=""+ocurAlerta.getValores().get(8);
 
                         sqlQuery = "INSERT INTO OcurAlertas"
                         + "(valor1,valor2,valor3,valor4,valor5,valor6,valor7,valor8,valor9,latitud,longitud,fyhini,fyhfin,vista,idAlerta)"
@@ -1054,6 +1063,42 @@ public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
                         sqlQuery ="Update OcurAlertas "
                         + "SET fyhfin='"+fecha+"' WHERE "
                         + "id="+idOcurDesactivada;
+                System.out.println("Update: "+sqlQuery);
+                if (getStatement().executeUpdate(sqlQuery) > 0) {
+                    sePudo = true;
+                }else{sePudo=false;}
+                 
+                             
+        } catch (SQLException ex) {
+            Logueador.getInstance().agregaAlLog(ex.toString());
+        }
+        try{//ya la use, asique cierro ResultSets y Statements usados para evitar la excepcion DatabaseLocked
+            if (rs != null){
+                rs.close();
+            }
+            if (getStatement() != null){
+                getStatement().close();
+            }
+        }
+        catch(Exception e){
+            Logueador.getInstance().agregaAlLog(e.toString());
+        }
+        
+        return sePudo;
+
+    }
+    
+        public boolean actualizaValorVistaOcurAlerta(int idOcur) {
+        boolean sePudo = false;
+        String sqlQuery="";
+        ResultSet rs=null;
+
+        
+        try {     
+            
+                        sqlQuery ="Update OcurAlertas "
+                        + "SET vista=1 WHERE "
+                        + "id="+idOcur;
                 System.out.println("Update: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
                     sePudo = true;

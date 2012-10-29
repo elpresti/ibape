@@ -133,7 +133,7 @@ public class Punto extends Observable{
         if (this.rumbo != rumbo) {
             this.rumbo = rumbo;
             setChanged();        
-            notifyObservers();                     
+            notifyObservers(controllers.ControllerAlertas.getInstance().getIndexRumbo());                     
             seModifico=true;
         }
         return seModifico;
@@ -154,7 +154,7 @@ public class Punto extends Observable{
         if (this.velocidad != velocidad){
             this.velocidad = velocidad;    
             setChanged();
-            notifyObservers();            
+            notifyObservers(controllers.ControllerAlertas.getIndexVelocidad());            
             seModifico=true;
         }
         return seModifico;
@@ -217,7 +217,7 @@ public class Punto extends Observable{
         if (this.tempAgua != tempAgua) {
             this.tempAgua = tempAgua;
             setChanged();
-            notifyObservers();
+            notifyObservers(controllers.ControllerAlertas.getIndexTempAgua());
             seModifico=true;
         }
         return seModifico;

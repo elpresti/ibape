@@ -22,13 +22,14 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     static AlertWin unicaInstancia;
     private Thread threadAlertWin;
     private boolean accionMouse=false;
-    private boolean show;
-    private boolean counter;
+    private boolean intHum;
+    private boolean intNew;
     private int idShowing;
     /**
      * Creates new form Splash
      */
     public AlertWin(){
+       inicializador();
        controllers.ControllerAlertas.getInstance().addObserver(this);
     }
     public static AlertWin getInstance() {
@@ -96,8 +97,8 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
         panelTitulo.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
         panelTitulo.setPreferredSize(new java.awt.Dimension(300, 50));
 
-        lblTituloAlerta.setForeground(new java.awt.Color(0, 0, 255));
-        lblTituloAlerta.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        lblTituloAlerta.setForeground(new java.awt.Color(0, 0, 102));
+        lblTituloAlerta.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         panelTitulo.add(lblTituloAlerta);
 
         panelDatosAlerta.add(panelTitulo, java.awt.BorderLayout.NORTH);
@@ -199,13 +200,13 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        setShow(false);
+        setIntHum(true);
         this.setVisible(false);
-        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
-        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
-            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
-            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
-        }
+//        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
+//        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+//            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+//            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+//        }
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void f(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_f
@@ -217,11 +218,12 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     }//GEN-LAST:event_mouseMoved
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
-
+        setIntHum(true);
         int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
         if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
             controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+            controllers.ControllerAlertas.getInstance().actualizaEstadoVistaOcur(getIdShowing());
         }
         controllers.ControllerAlertas.getInstance().muestraOcurAnt(getIdShowing());
         muestraAlertaSinPreload();
@@ -229,15 +231,17 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
         if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
             controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+            controllers.ControllerAlertas.getInstance().actualizaEstadoVistaOcur(getIdShowing());
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
-
+        setIntHum(true);
         int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
         if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
             controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+            controllers.ControllerAlertas.getInstance().actualizaEstadoVistaOcur(getIdShowing());
         }
         controllers.ControllerAlertas.getInstance().muestraOcurSig(getIdShowing());
         muestraAlertaSinPreload();
@@ -245,6 +249,7 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
         if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
             controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+            controllers.ControllerAlertas.getInstance().actualizaEstadoVistaOcur(getIdShowing());
         }
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -275,8 +280,7 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     
     public void hacePreLoad(){
         int i=0;
-        setShow(true);
-        while((i<=10)&&(isShow())){
+        while((i<=10)&&(!isIntHum()&&(!isIntNew()))){
             barraTimeout.setString("Alerta se cerrara en: "+Integer.toString(10-i)+" segs.");
             barraTimeout.setValue(i*10);
             try {
@@ -293,17 +297,23 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
             }
             i++;
         }
-        setCounter(false);
         int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
         if (i==11){
-            
+            setVisible(false);
         }else{
-            if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
-            controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
-            controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
-            }
-        }
+            if (isIntHum()){
+                if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+                        controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
+                        controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
+                }
+            }else{
+                                if (isIntNew()){
+                                    i=0;
+                                }
+                }
+       }
     }
+    
 
     private void inicializador() {
         this.setVisible(false);
@@ -321,17 +331,17 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     }
     
     public void muestraAlerta(){
-        setAccionMouse(false);
-        setCounter(true);
-        if (isCounter()){
-            setShow(false); //Termina con ciclo actual para dar lugar al nuevo ciclo
-            setVisible(true); //Como al salir del preload de la ocur anterior se oculta la ventana, la muestro devuelta
-            
-        }else{
-            setCounter(true);
+        try {
+            threadAlertWin.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(AlertWin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        setAccionMouse(false);
+        setIntHum(false);
+        AlertWin.getInstance().setIntNew(false);
+        setVisible(true);        
         hacePreLoad();
-        setVisible(false);
+
         gui.PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
         gui.PanelOpcAlertas.getInstance().revalidate();
         
@@ -377,7 +387,17 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
             AlertaListaOn a=c.getAlertaShowing(getIdShowing());
             lblTituloAlerta.setText(a.getAlerta().getTitulo());
             int cantCondiciones=a.getAlerta().getCondiciones().size();
-            String descripcion=a.getAlerta().getMensaje();    
+            String descripcion=a.getAlerta().getMensaje()+"                                 "+
+                    "***Profundidad: "+a.getValores().get(0)+"***"+
+                    "***Cant. Marcas: "+a.getValores().get(1)+"***"+
+                    "***Latitud: "+a.getValores().get(2)+"***"+
+                    "***Longitud: "+a.getValores().get(3)+"***"+
+                    "***Velocidad: "+a.getValores().get(4)+"***"+
+                    "***Rumbo: "+a.getValores().get(5)+"***"+
+                    "***Vel. agua: "+a.getValores().get(6)+"***"+
+                    "***Temp. agua: "+a.getValores().get(7)+"***"+
+                    "***Fecha: "+a.getValores().get(8)+"***";
+                    
             /*for (int i=0;i<=cantCondiciones-1;i++){
                     descripcion=descripcion+c.getAlertasActivadas().get(c.getAlertasActivadas().size()-1).getAlerta().getCondiciones().get(i).getDescripcion();
             }*/
@@ -412,16 +432,12 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     /**
      * @return the show
      */
-    public boolean isShow() {
-        return show;
-    }
+
 
     /**
      * @param show the show to set
      */
-    public void setShow(boolean show) {
-        this.show = show;
-    }
+
 
     /**
      * @return the idShowing
@@ -448,18 +464,33 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
         setVisible(false);
     }
 
+
     /**
-     * @return the counter
+     * @return the intHum
      */
-    public boolean isCounter() {
-        return counter;
+    public boolean isIntHum() {
+        return intHum;
     }
 
     /**
-     * @param counter the counter to set
+     * @param intHum the intHum to set
      */
-    public void setCounter(boolean counter) {
-        this.counter = counter;
+    public void setIntHum(boolean intHum) {
+        this.intHum = intHum;
+    }
+
+    /**
+     * @return the intNew
+     */
+    public boolean isIntNew() {
+        return intNew;
+    }
+
+    /**
+     * @param intNew the intNew to set
+     */
+    public void setIntNew(boolean intNew) {
+        this.intNew = intNew;
     }
     
 }
