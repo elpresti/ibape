@@ -1464,7 +1464,14 @@ public class ControllerAlertas extends Observable implements Observer{
 
         return valores;
     }
-
+    /**
+     * @return the estadoAlertas
+     */
+    public boolean isEstadoAlertas() {
+        return estadoAlertas;
+    }
+}
+    
 class AnalizaActivaciones implements Runnable{
     Thread thAa;
     private int index;
@@ -1507,4 +1514,3 @@ class AnalizaActivaciones implements Runnable{
     }
 }    
     
-}
