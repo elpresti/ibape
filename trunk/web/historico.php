@@ -235,7 +235,7 @@ function mueveCamaraApunto(latitud,longitud) {
             <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:16px;">Recuerde que no deben haber otras instancias corriendo del <span style="color:#06F;">Mapa de Historico</span>, en caso contrario cierre las demas</p></td>
         </tr>
         <tr>
-            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:12px;">Sitio optimizado para visualizar con Google Chrome <img src="imgs\logoChome30x30.png" width="30" height="30" border="0"></p></td>
+            <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:12px;">Sitio optimizado para visualizar con Google Chrome <img src="imgs/logoChome30x30.png" width="30" height="30" border="0"></p></td>
         </tr>
     </table>
 </div>
