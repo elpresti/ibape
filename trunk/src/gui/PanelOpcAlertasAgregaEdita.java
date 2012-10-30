@@ -561,23 +561,28 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 // TODO add your handling code here:
     setVisible(false);
     PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
+    PanelOpcAlertas.getInstance().setModificandoAlerta(false);
     PanelOpcAlertas.getInstance().getPanelAlertasPpal().setVisible(true);
 }//GEN-LAST:event_btnVolverActionPerformed
 
 private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
     setModificandoCondicion(true);
-    setGuiModificarFilaElegida();
-    cargaPanelConfigCondicion();
-    controlaPanelAccionesCondicion();
+    if (tablaCondiciones.getSelectedRow()>=0){
+            setGuiModificarFilaElegida();
+            controlaPanelAccionesCondicion();
+    }
+
 }//GEN-LAST:event_btnModificarActionPerformed
 
 private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
     int fila=tablaCondiciones.getSelectedRow();
+    if (fila>=0){
     String txtPregunta = "Está por eliminar una condición, está usted seguro?";
     if (JOptionPane.showConfirmDialog(null, txtPregunta, "Eliminar condición seleccionada", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
         controllers.ControllerAlertas.getInstance().borrarCondicion(getIdDeCondicionSeleccionada());
         eliminaUnaFilaCondicion(fila);
         controlaPanelAccionesCondicion();
+    }
     }
 }//GEN-LAST:event_btnEliminarActionPerformed
 
@@ -649,6 +654,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             }
         }
     PanelOpcAlertas.getInstance().setModificandoAlerta(false);
+    setModificandoCondicion(false);
   
 }//GEN-LAST:event_btnGuardarActionPerformed
 
