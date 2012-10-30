@@ -409,7 +409,7 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     private void btnNavegacionAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNavegacionAlertasActionPerformed
         controllers.ControllerAlertas.getInstance().muestraOcurUlt();
         int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(gui.AlertWin.getInstance().getIdShowing());
-        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
+        if ((index!=-1)&&(controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0)){
             controllers.ControllerAlertas.getInstance().setCantOcurNoVistas(controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()-1);
             controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).setVista(1);
         }

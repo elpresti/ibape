@@ -955,7 +955,8 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
             }else{
                 if (activacionAnt){
-                    desactivaAlerta(al,fecha);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
                     setChanged();
                     notifyObservers();
                 }else{
@@ -1009,7 +1010,8 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
             }else{
                 if (activacionAnt){
-                    desactivaAlerta(al,fecha);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
                     setChanged();
                     notifyObservers();
                 }else{
@@ -1063,7 +1065,8 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
             }else{
                 if (activacionAnt){
-                    desactivaAlerta(al,fecha);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
                     setChanged();
                     notifyObservers();
                 }else{
@@ -1117,7 +1120,8 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
             }else{
                 if (activacionAnt){
-                    desactivaAlerta(al,fecha);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
                     setChanged();
                     notifyObservers();
                 }else{
@@ -1180,7 +1184,10 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
             }else{
                 if (activacionAnt){
-                    getAlertasActivadas().remove(al);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
+                    setChanged();
+                    notifyObservers();
                 }else{
                     //Alerta continua desactivada
                 }
@@ -1235,7 +1242,8 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
             }else{
                 if (activacionAnt){
-                    desactivaAlerta(al,fecha);
+                    int idOcurDesactivada=desactivaAlerta(al,fecha);
+                    persistencia.BrokerAlertas.getInstance().actualizaOcurAlerta(idOcurDesactivada,fecha);
                     setChanged();
                     notifyObservers();
                 }else{
