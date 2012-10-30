@@ -16,12 +16,19 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sun.pdfview.PDFFile;
+import com.sun.pdfview.PDFPage;
+import com.sun.pdfview.PDFViewer;
+import com.sun.pdfview.PagePanel;
 import gui.PanelHistorico;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +57,7 @@ import persistencia.Logueador;
  * @author emmmau
  */
 public class ControllerInforme {
-    static ControllerInforme unicaInstancia;
+    private static ControllerInforme unicaInstancia;
             
     private ControllerInforme(){
         inicializador();
@@ -127,16 +134,8 @@ public class ControllerInforme {
 
     public void abrirPdfGenerado(String ruta){
         try{
-//            String file = "src/systemgq/numeracionPDF/prueba.pdf";
-//            RandomAccessFile raf = new RandomAccessFile(file, "r");
-//            FileChannel channel = raf.getChannel();
-//            ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY,0                                                                                     ,channel.size());
-//            PDFFile pdfFile = new PDFFile(buf);
-//            PDFPage page = pdfFile.getPage(0);
-//            mN.getPagePanel().showPage(page);            
-            
-//            Process p = Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler "+ruta); 
-//            p.waitFor();
+            String[] rutaPdf = {GeneradorPDF.getInstance().getRuta_destino().getAbsolutePath()+".pdf"};
+            PDFViewer.main(rutaPdf);
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("abrirPdfGenerado(): "+e.toString());
         }
@@ -158,8 +157,7 @@ public class ControllerInforme {
             }else{
                 catPois = null;
             }
-            generadorPDF pdf = new generadorPDF();
-            pdf.crear_PDF(idCampania,"Informe de Campaña", //titulo del informe
+            GeneradorPDF.getInstance().crear_PDF(idCampania,"Informe de Campaña", //titulo del informe
                     Calendar.getInstance().getTime(), //fecha de hoy
                     campania.getBarco(), //nombre del barco
                     campania.getCapitan(), //nombre del capitan
@@ -178,12 +176,18 @@ public class ControllerInforme {
 
 
 }
-class generadorPDF {
- private File ruta_destino=null;
- private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy  HH:mm:ss");
-    public generadorPDF(){
+class GeneradorPDF {
+    private File ruta_destino=null;
+    private static GeneradorPDF unicaInstancia;
+    private SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy  HH:mm:ss");
+    private GeneradorPDF(){
     }
-    /* metodo que hace uso de la clase itext para manipular archivos PDF*/
+    public static GeneradorPDF getInstance() {
+       if (unicaInstancia == null)
+          unicaInstancia = new GeneradorPDF();
+       return unicaInstancia;
+    }
+    /* metodo que hace uso de la clase itext para manipular archivos PDF */
     public void crear_PDF(int idCamp, String titulo,Date fechaHoy,String barco,String capitan,String descripcion,Date fechaInicio,Date fechaFin,
             ArrayList<modelo.dataManager.Lance> lances, ArrayList<modelo.dataManager.CategoriaPoi> catPois){
         //abre ventana de dialogo "guardar"
