@@ -249,7 +249,7 @@ addKmlFromString(textoKml);
 <div class="msgMultiplesInstancias" style="display:none;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-            <td align="center" valign="middle"><img src="imgs\logoIbapeChico.png" width="140" height="140" border="0"></td>
+            <td align="center" valign="middle"><img src="imgs/logoIbapeChico.png" width="140" height="140" border="0"></td>
         </tr>
         <tr>
             <td align="center" valign="middle"><p style="font-family:Arial, Helvetica, sans-serif; font-size:18px; line-height:18px;">Cargado <span style="color:#0C3;">Mapa de Navegación</span>...</p></td>
