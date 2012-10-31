@@ -100,30 +100,34 @@ public class BrokerDbMapaHistorico implements Runnable{
     public boolean insertRecorrido(ArrayList<modelo.dataManager.PuntoHistorico> puntos) {
         boolean sePudo=false;
         try {     
-             if (tablaLista() && puntos.size()>0){
-                PreparedStatement preparedStatement = getBmNavegacion().getConnection()
-                .prepareStatement("INSERT INTO "+getBmNavegacion().getDbName()+"."+getTableName()+
-                        " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                preparedStatement.setTimestamp(Integer.valueOf(getBmNavegacion().getCampoFECHApos()), 
-                        new Timestamp(puntos.get(0).getFechaYhora().getTime()));
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLATITUDpos()), String.valueOf(puntos.get(0).getLatitud()));
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLONGITUDpos()), String.valueOf(puntos.get(0).getLongitud()));
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoPROFUNDIDADpos()), String.valueOf(puntos.get(0).getProfundidad()));
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoVELOCIDADpos()), String.valueOf(puntos.get(0).getVelocidad()));
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), String.valueOf(puntos.get(0).getTempAgua()));
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "RECORRIDO Historico");
-                preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
-                String kml = "";
-                //kml += modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos);
-                kml +=modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKmlGxTrack(true,puntos);
-                preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), kml);
-                
-                preparedStatement.executeUpdate(); 
-                sePudo=true;
-                setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
-             }
-             return sePudo;
+            if  (puntos.size()>0){
+                if (tablaLista()){
+                    PreparedStatement preparedStatement = getBmNavegacion().getConnection()
+                    .prepareStatement("INSERT INTO "+getBmNavegacion().getDbName()+"."+getTableName()+
+                            " values (default, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    preparedStatement.setTimestamp(Integer.valueOf(getBmNavegacion().getCampoFECHApos()), 
+                            new Timestamp(puntos.get(0).getFechaYhora().getTime()));
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLATITUDpos()), String.valueOf(puntos.get(0).getLatitud()));
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoLONGITUDpos()), String.valueOf(puntos.get(0).getLongitud()));
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoPROFUNDIDADpos()), String.valueOf(puntos.get(0).getProfundidad()));
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoVELOCIDADpos()), String.valueOf(puntos.get(0).getVelocidad()));
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoTEMPAGUApos()), String.valueOf(puntos.get(0).getTempAgua()));
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoOBJETOpos()), "RECORRIDO Historico");
+                    preparedStatement.setBoolean(Integer.valueOf(getBmNavegacion().getCampoLEIDOpos()), false);
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoCOMENTARIOSpos()),puntos.get(0).getComentarios());
+                    String kml = "";
+                    //kml += modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKml(true,puntos);
+                    kml +=modelo.gisModule.GeneradorKML.getInstance().conviertePuntosARecorridoKmlGxTrack(true,puntos);
+                    preparedStatement.setString(Integer.valueOf(getBmNavegacion().getCampoKMLpos()), kml);
+
+                    preparedStatement.executeUpdate(); 
+                    sePudo=true;
+                    setUltimoInsert(new Timestamp(java.util.Calendar.getInstance().getTime().getTime()));
+                }
+            }else{
+               sePudo=true;
+            }    
+            return sePudo;
         }
         catch(Exception e) {
             System.out.println(e);

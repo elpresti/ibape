@@ -243,7 +243,7 @@ public class BrokerDbMapa implements Runnable{
             //Logueador.getInstance().agregaAlLog("BrokerDbMapa.creaDbyTabla(): "+e.toString());
             Logueador.getInstance().agregaAlLog("Abriendo Mapa, aguarde un instante...");
             try{
-                Thread.sleep(2000);
+                //Thread.sleep(2000);
             }catch(Exception ex){
                 Logueador.getInstance().agregaAlLog("BrokerDbMapa.creaDbyTabla(): "+ex.toString());
             }

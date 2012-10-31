@@ -240,7 +240,7 @@ function mueveCamaraApunto(latitud,longitud) {
     </table>
 </div>
 
-<div id="map3d" style="height: 100%; width: 100%"></div>  
+<div id="map3d" align="center" style="height: 650px; width: 1200px;"></div>  
 <div id="botonardi">
 <!--
 <form action="#" method="get" onsubmit="return false;">
