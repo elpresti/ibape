@@ -263,7 +263,7 @@ addKmlFromString(textoKml);
     </table>
 </div>
 
-<div id="map3d" style="height: 100%; width: 100%"></div>  
+<div id="map3d" style="margin:0 auto; height: 100%; width: 100%;"></div>  
 <div id="botonardi">
 <!--
 <form action="#" method="get" onsubmit="return false;">
