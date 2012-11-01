@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" style="height:100%; width:100%;">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Mapa de Hist&oacuterico - IBaPE v1.0</title>
@@ -219,7 +219,7 @@ function mueveCamaraApunto(latitud,longitud) {
  
 </head>
 
-<body onLoad="actionsOnLoad();">
+<body onLoad="actionsOnLoad();" style="height:100%; width:100%;">
 <div id="titulo">
 	<p align="center" style="color:#000; font-family:Arial, Helvetica, sans-serif; font-size:24px; line-height:24px;">Mapa de Hist&oacute;rico</p>
 </div>
@@ -240,7 +240,7 @@ function mueveCamaraApunto(latitud,longitud) {
     </table>
 </div>
 
-<div id="map3d" align="center" style="height: 650px; width: 1200px;"></div>  
+<div id="map3d" style="margin:0 auto; height: 100%; width: 100%;"></div>  
 <div id="botonardi">
 <!--
 <form action="#" method="get" onsubmit="return false;">
