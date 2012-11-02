@@ -223,7 +223,7 @@ function mueveCamaraApunto(latitud,longitud) {
 <div id="titulo">
 	<p align="center" style="color:#000; font-family:Arial, Helvetica, sans-serif; font-size:24px; line-height:24px;">Mapa de Hist&oacute;rico</p>
 </div>
-<div class="msgMultiplesInstancias" style="display:none;">
+<div class="msgMultiplesInstancias"  id="msgMultiplesInstancias" style="display:none;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
             <td align="center" valign="middle"><img src="imgs/logoIbapeChico.png" width="140" height="140" border="0"></td>

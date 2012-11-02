@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"  style="height:100%; width:100%;">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Mapa de Navegaci&oacuten - IBaPE v1.0</title>
@@ -242,11 +242,11 @@ addKmlFromString(textoKml);
  
 </head>
 
-<body onLoad="actionsOnLoad();">
+<body onLoad="actionsOnLoad();"  style="height:100%; width:100%;">
 <div id="titulo">
 	<p align="center" style="color:#000; font-family:Arial, Helvetica, sans-serif; font-size:24px; line-height:24px;">Mapa de Navegaci&oacute;n</p>
 </div>
-<div class="msgMultiplesInstancias" style="display:none;">
+<div class="msgMultiplesInstancias" id="msgMultiplesInstancias" style="display:none;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
             <td align="center" valign="middle"><img src="imgs/logoIbapeChico.png" width="140" height="140" border="0"></td>
