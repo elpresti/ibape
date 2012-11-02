@@ -82,7 +82,7 @@
         }
 		
 		function msgInicial(){
-			$('.msgMultiplesInstancias').show().delay(12000).fadeOut("slow");
+			$('#msgMultiplesInstancias').show().delay(12000).fadeOut("slow");
 		}
 		
         //esta funcion es para el boton cancelar del form
