@@ -435,4 +435,71 @@ public class Sistema {
         }
         return sePudo;
     }
+
+    public double getLonEnGradosDecimalesFromString(String stringFromByteArray) {
+        String longitudStr = stringFromByteArray.substring(0, stringFromByteArray.length() - 1);
+        String lonHemisf = stringFromByteArray.substring(stringFromByteArray.length() - 1, stringFromByteArray.length());
+        double longitud = Double.valueOf(longitudStr.substring(0, 3)) + (Double.valueOf(longitudStr.substring(3, longitudStr.length())) / 60);
+        if (lonHemisf.toLowerCase().contains("w")) {
+            longitud = longitud * (-1);
+        }
+        return longitud;
+    }
+
+    public double getLatEnGradosDecimalesFromString(String stringFromByteArray) {
+        String latitudStr = stringFromByteArray.substring(0, stringFromByteArray.length() - 1);
+        String latHemisf = stringFromByteArray.substring(stringFromByteArray.length() - 1, stringFromByteArray.length());
+        double latitud = Double.valueOf(latitudStr.substring(0, 2)) + (Double.valueOf(latitudStr.substring(2, latitudStr.length())) / 60);
+        if (latHemisf.toLowerCase().contains("s")) {
+            latitud = latitud * (-1);
+        }
+        return latitud;
+    }
+    
+    public String getLatEnGradosSexagecimalesFromDecimales(double latEnGradosDecimales) {
+        String hemisferio = "";
+        if (latEnGradosDecimales<0){
+            hemisferio = "S";
+            latEnGradosDecimales=latEnGradosDecimales*(-1);
+        }else{
+            hemisferio = "N";
+        }
+        int grados = (int)latEnGradosDecimales;
+        double tmp = latEnGradosDecimales-grados;
+        tmp = tmp*60;
+        int minutos = (int)tmp;
+        tmp = tmp-minutos;
+        tmp = tmp*60;
+        double segundos = tmp;
+        return grados+"º "+minutos+"' "+truncarNro(segundos,2)+"'' "+hemisferio;
+    }    
+    
+    public String getLonEnGradosSexagecimalesFromDecimales(double lonEnGradosDecimales) {
+        String hemisferio = "";
+        if (lonEnGradosDecimales<0){
+            hemisferio = "W";
+            lonEnGradosDecimales=lonEnGradosDecimales*(-1);
+        }else{
+            hemisferio = "E";
+        }
+        int grados = (int)lonEnGradosDecimales;
+        double tmp = lonEnGradosDecimales-grados;
+        tmp = tmp*60;
+        int minutos = (int)tmp;
+        tmp = tmp-minutos;
+        tmp = tmp*60;
+        double segundos = tmp;
+        return grados+"º "+minutos+"' "+truncarNro(segundos,2)+"'' "+hemisferio;
+    }
+    
+    public double truncarNro(double nD, int nDec)
+    {
+      if(nD > 0)
+        nD = Math.floor(nD * Math.pow(10,nDec))/Math.pow(10,nDec);
+      else
+        nD = Math.ceil(nD * Math.pow(10,nDec))/Math.pow(10,nDec);
+
+      return nD;
+    }    
+    
 }
