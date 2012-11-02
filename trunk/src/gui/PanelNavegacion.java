@@ -35,6 +35,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import modelo.dataCapture.Sistema;
 import modelo.dataManager.CategoriaPoi;
 
 
@@ -667,12 +668,12 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
       modelo.dataManager.Punto p = modelo.dataManager.Punto.getInstance();
       if (obs == p){
           //lblFechaHora.setText(p.getFechaYhora().toString());
-          lblLatitud.setText(p.getLatitud() + p.getLatHemisf());
-          lblLongitud.setText(p.getLongitud() + p.getLonHemisf());
-          lblProf.setText(String.valueOf(p.getProfundidad()));
-          lblRumbo.setText(String.valueOf(p.getRumbo()));
-          lblTemp.setText(String.valueOf(p.getTempAgua()));
-          lblVelocidad.setText(String.valueOf(p.getVelocidad()));
+          lblLatitud.setText(Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(p.getLatConNegativo()));
+          lblLongitud.setText(Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(p.getLonConNegativo()));
+          lblProf.setText(String.valueOf(p.getProfundidad())+" m");
+          lblRumbo.setText(String.valueOf(p.getRumbo())+" º");
+          lblTemp.setText(String.valueOf(p.getTempAgua())+" º C");
+          lblVelocidad.setText(String.valueOf(p.getVelocidad())+" km/h");
       }
   }
   

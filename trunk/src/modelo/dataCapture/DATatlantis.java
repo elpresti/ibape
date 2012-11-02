@@ -196,8 +196,8 @@ public class DATatlantis{
         PuntoHistorico ph = new PuntoHistorico();
         ph.setFechaYhora(armaDate(Integer.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_FECHA))), 
                 Integer.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_HORA)))));
-        ph.setLatitud(getLatEnGradosDecimalesFromString(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LATITUD))));
-        ph.setLongitud(getLonEnGradosDecimalesFromString(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LONGITUD))));
+        ph.setLatitud(Sistema.getInstance().getLatEnGradosDecimalesFromString(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LATITUD))));
+        ph.setLongitud(Sistema.getInstance().getLonEnGradosDecimalesFromString(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_LONGITUD))));
         ph.setProfundidad((double)getLongFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_PROFUNDIDAD)));
         ph.setRumbo(Double.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_RUMBO))));
         ph.setVelocidad(Double.valueOf(getStringFromByteArray((byte[]) valoresByteDeUnPixel.get(NRO_COL_VELOCIDAD))));
@@ -208,8 +208,8 @@ public class DATatlantis{
         PuntoHistorico ph = new PuntoHistorico();
         ph.setFechaYhora(armaDate(Integer.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_FECHA[0],BYTES_FECHA[1]+1))), 
                 Integer.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_HORA[0],BYTES_HORA[1]+1)))));
-        ph.setLatitud(getLatEnGradosDecimalesFromString(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LATITUD[0],BYTES_LATITUD[1]+1))));
-        ph.setLongitud(getLonEnGradosDecimalesFromString(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LONGITUD[0],BYTES_LONGITUD[1]+1))));
+        ph.setLatitud(Sistema.getInstance().getLatEnGradosDecimalesFromString(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LATITUD[0],BYTES_LATITUD[1]+1))));
+        ph.setLongitud(Sistema.getInstance().getLonEnGradosDecimalesFromString(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_LONGITUD[0],BYTES_LONGITUD[1]+1))));
         ph.setProfundidad((double)getLongFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_PROFUNDIDAD[0],BYTES_PROFUNDIDAD[1]+1)));
         ph.setRumbo(Double.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_RUMBO[0],BYTES_RUMBO[1]+1))));
         ph.setVelocidad(Double.valueOf(getStringFromByteArray(Arrays.copyOfRange(valoresByteDeUnPixel, BYTES_VELOCIDAD[0],BYTES_VELOCIDAD[1]+1))));
@@ -361,26 +361,6 @@ public class DATatlantis{
         Calendar calendario = Calendar.getInstance();
         calendario.set(2000+anio, mes-1, dia, hora, minutos, segundos);        
         return calendario.getTime();
-    }
-    
-    public double getLatEnGradosDecimalesFromString(String stringFromByteArray) {
-       String latitudStr = stringFromByteArray.substring(0,stringFromByteArray.length()-1);
-       String latHemisf = stringFromByteArray.substring(stringFromByteArray.length()-1,stringFromByteArray.length());
-       double latitud = Double.valueOf(latitudStr.substring(0, 2)) + (Double.valueOf(latitudStr.substring(2, latitudStr.length()))/60);
-       if (latHemisf.toLowerCase().contains("s")){
-           latitud=latitud*(-1);
-       }
-       return latitud;
-    }
-
-    public double getLonEnGradosDecimalesFromString(String stringFromByteArray) {
-       String longitudStr = stringFromByteArray.substring(0,stringFromByteArray.length()-1);
-       String lonHemisf = stringFromByteArray.substring(stringFromByteArray.length()-1,stringFromByteArray.length());
-       double longitud = Double.valueOf(longitudStr.substring(0, 3)) + (Double.valueOf(longitudStr.substring(3, longitudStr.length()))/60);
-       if (lonHemisf.toLowerCase().contains("w")){
-           longitud=longitud*(-1);
-       }
-       return longitud;
     }
 
     public byte[] byteArrayConcat(byte[] array1, byte[] array2){
