@@ -289,7 +289,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
         lblTituloDC.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelTituloDC.add(lblTituloDC);
 
-        btnProcesaImg.setText("Detección de cardúmenes");
+        btnProcesaImg.setText("Detección de marcas");
         btnProcesaImg.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnProcesaImg.setMaximumSize(new java.awt.Dimension(195, 23));
         btnProcesaImg.setPreferredSize(new java.awt.Dimension(135, 23));
