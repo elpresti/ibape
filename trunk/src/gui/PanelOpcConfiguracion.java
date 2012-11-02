@@ -1168,8 +1168,8 @@ private void btnEscaneaPuertosActionPerformed(java.awt.event.ActionEvent evt) {/
 
     private void btnExaminarRutaHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExaminarRutaHistoricoActionPerformed
         JFileChooser fc = new JFileChooser();
-        int resp = fc.showOpenDialog(this);
-
+        fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY);
+        int resp = fc.showOpenDialog(this); 
         if(resp == JFileChooser.APPROVE_OPTION){
             File archivo = fc.getSelectedFile();
             campoRutaHistorico.setText(archivo.getAbsolutePath());
