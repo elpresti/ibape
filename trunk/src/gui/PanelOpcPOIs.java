@@ -35,6 +35,7 @@ import modelo.dataManager.AdministraCampanias;
 import modelo.dataManager.CategoriaPoi;
 import modelo.dataManager.POI;
 import modelo.dataManager.Punto;
+import persistencia.BrokerCampania;
 import persistencia.BrokerCategoriasPOI;
 import persistencia.BrokerPOIs;
 
@@ -50,18 +51,18 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaPOIS = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
-                "id", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"//, "Acciones"
+                "id","Campaña", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"//, "Acciones"
             }) {
 
         boolean[] canEdit = new boolean[]{
-            false, false, false, false, false
+            false, false, false, false, false, false
         };
 
         public boolean isCellEditable(int rowIndex, int columnIndex) {
             return canEdit[columnIndex];
         }
         Class[] types = new Class[]{
-            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
+            java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class//, java.lang.Boolean.class
         };
 
         @Override
@@ -1048,6 +1049,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
 
                 modeloTablaPOIS.addRow(new Object[]{
                             p, //agrega el objeto POI, pero muestra el id
+                            BrokerCampania.getInstance().getCampaniaFromDb(p.getIdCampania()).getDescripcion(),//p.getIdCampania(),
                             horaCompleta.format(p.getFechaHora()),
                             ("" + BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo()),
                             //modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(20, 20, image),
