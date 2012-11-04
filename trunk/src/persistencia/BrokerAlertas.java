@@ -7,7 +7,9 @@ package persistencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import modelo.alertas.AdministraAlertas;
@@ -863,11 +865,23 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
                 idAlerta=rs2.getInt("idAlerta");
                 alerta=AdministraAlertas.getInstance().getAlerta(idAlerta);             
                 ocurAlerta.setAlerta(alerta);
-                //falta obtener valores
-                ocurAlerta.setFechaActivacion(rs2.getTimestamp("fyhini"));
-                ocurAlerta.setFechaDesactivacion(rs2.getTimestamp("fyhfin"));  
+                
+                ArrayList<Object> valores=new ArrayList<Object>();
+                valores.add(Double.parseDouble(rs2.getString("Valor1")));
+                valores.add(Double.parseDouble(rs2.getString("Valor2")));
+                valores.add(Double.parseDouble(rs2.getString("Valor3")));
+                valores.add(Double.parseDouble(rs2.getString("Valor4")));
+                valores.add(Double.parseDouble(rs2.getString("Valor5")));
+                valores.add(Double.parseDouble(rs2.getString("Valor6")));
+                valores.add(Double.parseDouble(rs2.getString("Valor7")));
+                valores.add(Double.parseDouble(rs2.getString("Valor8")));
+                valores.add(rs2.getDate("Valor9"));
+                ocurAlerta.setValores(valores);
+
+                ocurAlerta.setFechaActivacion(rs2.getDate("fyhini"));
+                ocurAlerta.setFechaDesactivacion(rs2.getDate("fyhini"));  
                 ocurAlerta.setVista(rs2.getInt("vista"));  
-                ocurAlertas.add(ocurAlerta);
+                ocurAlertas.add(0,ocurAlerta);
             }
             
         } catch (SQLException ex) {
@@ -991,13 +1005,13 @@ public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
             if (String.valueOf(ocurAlerta.getLongitud())!=null) {
                 longitud = Float.parseFloat(String.valueOf(ocurAlerta.getLongitud()));
             }
-            Timestamp fechaAct=null;
-            if (String.valueOf(ocurAlerta.getFechaActivacion())!=null) {
-                fechaAct = ocurAlerta.getFechaActivacion();
+            String fechaAct="";
+            if (ocurAlerta.getFechaActivacion()!=null) {
+                fechaAct =""+ ocurAlerta.getFechaActivacion().getTime()+"";
             }
-            Timestamp fechaDes=null;
-            if (String.valueOf(ocurAlerta.getFechaDesactivacion())!=null) {
-                fechaDes = ocurAlerta.getFechaDesactivacion();
+            String fechaDes="";
+            if (ocurAlerta.getFechaDesactivacion()!=null) {
+                fechaDes = ""+ocurAlerta.getFechaDesactivacion().getTime()+"";
             }
             int idAlerta=ocurAlerta.getAlerta().getId();
             int vista=ocurAlerta.getVista();
@@ -1052,16 +1066,21 @@ public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
 
     }    
 
-    public boolean actualizaOcurAlerta(int idOcurDesactivada, Timestamp fecha) {
+    public boolean actualizaOcurAlerta(int idOcurDesactivada, Date fecha) {
         boolean sePudo = false;
         String sqlQuery="";
         ResultSet rs=null;
+        String fechaS="";
+        if (fecha!=null){
+            fechaS=""+fecha.getTime()+"";
+        }
+        
 
         
         try {     
             
                         sqlQuery ="Update OcurAlertas "
-                        + "SET fyhfin='"+fecha+"' WHERE "
+                        + "SET fyhfin='"+fechaS+"' WHERE "
                         + "id="+idOcurDesactivada;
                 System.out.println("Update: "+sqlQuery);
                 if (getStatement().executeUpdate(sqlQuery) > 0) {
@@ -1135,9 +1154,19 @@ public int guardaOcurAlerta(AlertaListaOn ocurAlerta){
                 ocurAlerta.setLatitud(Double.parseDouble(rs.getString("latitud")));
                 ocurAlerta.setLongitud(Double.parseDouble(rs.getString("longitud")));
                 ocurAlerta.getAlerta().setId(rs.getInt("idAlerta"));
-                //falta obtener valores
-                ocurAlerta.setFechaActivacion(rs.getTimestamp("fyhini"));
-                ocurAlerta.setFechaDesactivacion(rs.getTimestamp("fyhfin"));  
+                ArrayList<Object> valores=new ArrayList<Object>();
+                valores.add(Double.parseDouble(rs.getString("Valor1")));
+                valores.add(Double.parseDouble(rs.getString("Valor2")));
+                valores.add(Double.parseDouble(rs.getString("Valor3")));
+                valores.add(Double.parseDouble(rs.getString("Valor4")));
+                valores.add(Double.parseDouble(rs.getString("Valor5")));
+                valores.add(Double.parseDouble(rs.getString("Valor6")));
+                valores.add(Double.parseDouble(rs.getString("Valor7")));
+                valores.add(Double.parseDouble(rs.getString("Valor8")));
+                valores.add(rs.getDate("Valor9"));
+                ocurAlerta.setValores(valores);
+                ocurAlerta.setFechaActivacion(rs.getDate("fyhini"));
+                ocurAlerta.setFechaDesactivacion(rs.getDate("fyhfin"));  
                 ocurAlerta.setVista(rs.getInt("vista"));
             }
         } catch (Exception ex) {

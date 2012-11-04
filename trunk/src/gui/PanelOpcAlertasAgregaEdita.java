@@ -563,6 +563,7 @@ private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
     PanelOpcAlertas.getInstance().setModificandoAlerta(false);
     PanelOpcAlertas.getInstance().getPanelAlertasPpal().setVisible(true);
+    PanelOpcAlertas.getInstance().setVisible(true);
 }//GEN-LAST:event_btnVolverActionPerformed
 
 private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -655,6 +656,7 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
     PanelOpcAlertas.getInstance().setModificandoAlerta(false);
     setModificandoCondicion(false);
+    PanelOpcAlertas.getInstance().setVisible(true);
   
 }//GEN-LAST:event_btnGuardarActionPerformed
 

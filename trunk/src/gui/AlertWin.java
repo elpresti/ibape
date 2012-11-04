@@ -6,7 +6,10 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
@@ -28,7 +31,8 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     /**
      * Creates new form Splash
      */
-    public AlertWin(){
+    private AlertWin(){
+       initComponents();
        inicializador();
        controllers.ControllerAlertas.getInstance().addObserver(this);
     }
@@ -71,7 +75,6 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
         btnCerrar = new javax.swing.JButton();
         barraTimeout = new javax.swing.JProgressBar();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(300, 550));
 
         panelAlerta.setPreferredSize(new java.awt.Dimension(300, 480));
@@ -200,7 +203,7 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
-        setIntHum(true);
+        setIntHum(false);
         this.setVisible(false);
 //        int index=controllers.ControllerAlertas.getInstance().getIndexAlertaShowing(getIdShowing());
 //        if (controllers.ControllerAlertas.getInstance().getAlertasActivadas().get(index).getVista()==0){
@@ -317,7 +320,6 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
 
     private void inicializador() {
         this.setVisible(false);
-        initComponents();
         this.setTitle("Alerta");
         panelAlerta.setOpaque(false);
         barraTimeout.setBorderPainted(true);
@@ -328,8 +330,23 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
         this.setLocation(posicionX,posicionY);  
         //hacePreLoad();        
         //VentanaIbape.getInstance().setVisible(true);
+        
+            addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent evt) {
+                ocultarVentana();
+            } 
+
+
+        });
     }
     
+             private void ocultarVentana() {
+                this.setVisible(false);
+            }
+      
+        
+        
     public void muestraAlerta(){
         try {
             threadAlertWin.sleep(1000);
@@ -383,33 +400,39 @@ public class AlertWin extends javax.swing.JFrame implements Observer,Runnable{
 
     public void update(Observable o, Object arg) {
       controllers.ControllerAlertas c = controllers.ControllerAlertas.getInstance();
+      SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");      
       if (o == c){
+
             AlertaListaOn a=c.getAlertaShowing(getIdShowing());
-            lblTituloAlerta.setText(a.getAlerta().getTitulo());
+            lblTituloAlerta.setText("("+a.getIdOcur()+") "+a.getAlerta().getTitulo());
             int cantCondiciones=a.getAlerta().getCondiciones().size();
-            String descripcion=a.getAlerta().getMensaje()+"                                 "+
-                    "***Profundidad: "+a.getValores().get(0)+"***"+
-                    "***Cant. Marcas: "+a.getValores().get(1)+"***"+
-                    "***Latitud: "+a.getValores().get(2)+"***"+
-                    "***Longitud: "+a.getValores().get(3)+"***"+
-                    "***Velocidad: "+a.getValores().get(4)+"***"+
-                    "***Rumbo: "+a.getValores().get(5)+"***"+
-                    "***Vel. agua: "+a.getValores().get(6)+"***"+
-                    "***Temp. agua: "+a.getValores().get(7)+"***"+
-                    "***Fecha: "+a.getValores().get(8)+"***";
+            String fechaAct=""+horaCompleta.format(new Date(((Date) a.getValores().get(8)).getTime()))+"";
+            String descripcion=""+"*Descripcion de alerta: "+
+                    "\n"+" "+
+                    "\n"+""+a.getAlerta().getMensaje()+
+                    "\n"+" "+
+                    "\n"+"*Valores de variable observados:"+
+                    "\n"+" "+
+                    "\n"+"- Profundidad: "+a.getValores().get(0)+
+                    "\n"+"- Cant. Marcas: "+a.getValores().get(1)+
+                    "\n"+"- Latitud: "+a.getValores().get(2)+
+                    "\n"+"- Longitud: "+a.getValores().get(3)+
+                    "\n"+"- Velocidad: "+a.getValores().get(4)+
+                    "\n"+"- Rumbo: "+a.getValores().get(5)+
+                    "\n"+"- Fecha: "+fechaAct+"";
                     
             /*for (int i=0;i<=cantCondiciones-1;i++){
                     descripcion=descripcion+c.getAlertasActivadas().get(c.getAlertasActivadas().size()-1).getAlerta().getCondiciones().get(i).getDescripcion();
             }*/
             jTextAreaDescripcion.setText(descripcion);
-            String fechaAct = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(a.getFechaActivacion());
+            Date fechaAct2 = new Date(a.getFechaActivacion().getTime());
             if (!a.isEstadoActivacion()){
-                String fechaDes = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(a.getFechaDesactivacion());
-                labelFechaDesactivacionDatos.setText(fechaDes);
+                Date fechaDes = new Date(a.getFechaDesactivacion().getTime());
+                labelFechaDesactivacionDatos.setText(horaCompleta.format(fechaDes));
             }else{
                 labelFechaDesactivacionDatos.setText("");
             }
-            labelFechaActivacionDatos.setText(fechaAct);
+            labelFechaActivacionDatos.setText(horaCompleta.format(fechaAct2));
 
             
       }

@@ -5,6 +5,7 @@
 package modelo.alertas;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,8 @@ import java.util.List;
 public class AlertaListaOn {
     private Alerta alerta;
     private boolean estadoActivacion;
-    private Timestamp fechaActivacion;
-    private Timestamp fechaDesactivacion;
+    private java.util.Date fechaActivacion;
+    private java.util.Date fechaDesactivacion;
     private ArrayList<Object> valores;
     private double latitud;
     private double longitud;
@@ -65,33 +66,6 @@ public class AlertaListaOn {
         this.estadoActivacion = estadoActivacion;
     }
 
-    /**
-     * @return the fechaActivacion
-     */
-    public Timestamp getFechaActivacion() {
-        return fechaActivacion;
-    }
-
-    /**
-     * @param fechaActivacion the fechaActivacion to set
-     */
-    public void setFechaActivacion(Timestamp fechaActivacion) {
-        this.fechaActivacion = fechaActivacion;
-    }
-
-    /**
-     * @return the fechaDesactivacion
-     */
-    public Timestamp getFechaDesactivacion() {
-        return fechaDesactivacion;
-    }
-
-    /**
-     * @param fechaDesactivacion the fechaDesactivacion to set
-     */
-    public void setFechaDesactivacion(Timestamp fechaDesactivacion) {
-        this.fechaDesactivacion = fechaDesactivacion;
-    }
 
     /**
      * @return the latitud
@@ -162,4 +136,33 @@ public class AlertaListaOn {
     public void setVista(int vista) {
         this.vista = vista;
     }
+
+    /**
+     * @return the fechaActivacion
+     */
+    public java.util.Date getFechaActivacion() {
+        return fechaActivacion;
+    }
+
+    /**
+     * @param fechaActivacion the fechaActivacion to set
+     */
+    public void setFechaActivacion(java.util.Date fechaActivacion) {
+        this.fechaActivacion = fechaActivacion;
+    }
+
+    /**
+     * @return the fechaDesactivacion
+     */
+    public java.util.Date getFechaDesactivacion() {
+        return fechaDesactivacion;
+    }
+
+    /**
+     * @param fechaDesactivacion the fechaDesactivacion to set
+     */
+    public void setFechaDesactivacion(java.util.Date fechaDesactivacion) {
+        this.fechaDesactivacion = fechaDesactivacion;
+    }
+
 }

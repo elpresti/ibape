@@ -459,7 +459,7 @@ public class PanelNavegacion extends javax.swing.JPanel implements java.util.Obs
 
         jScrollPane2.setViewportView(panelTodo);
 
-        add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        add(jScrollPane2, java.awt.BorderLayout.LINE_END);
 
         panelBtnActualizar.setMaximumSize(new java.awt.Dimension(500, 40));
         panelBtnActualizar.setMinimumSize(new java.awt.Dimension(480, 40));
