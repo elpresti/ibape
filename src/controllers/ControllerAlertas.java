@@ -32,6 +32,7 @@ import org.jdom.Element;
 import persistencia.BrokerConfig;
 import persistencia.Logueador;
 
+    
 /**
  *
  * @author Martin
@@ -469,12 +470,9 @@ public class ControllerAlertas extends Observable implements Observer{
               else 
                   if (o == administraAlertas){
 
-                  }else if (o==ultImg){
-                    if (index==indexCantDeMarcas){
-                        analizaActivacionesCantDeMarcas();
-                    }
+                  }
 
-                    }
+                    
         }
         }
     
@@ -525,8 +523,8 @@ public class ControllerAlertas extends Observable implements Observer{
                 f++;
             }
             Alerta al=alertasEnFuncionamiento.get(i);
-            activacionAnt=existeAlertaActiva(al);            
-            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            activacionAnt=existeAlertaActiva(al);
+            Date fecha=new java.util.Date();
             
             if (activacion){
                 if (activacionAnt){
@@ -643,7 +641,7 @@ public class ControllerAlertas extends Observable implements Observer{
     private boolean existeAlertaActiva(Alerta a) {
         boolean existe=false;
         int i=getAlertasActivadas().size()-1;
-        while ((i>=0)){
+        while ((i>=0)&&(!existe)){
             if (getAlertasActivadas().get(i).getAlerta().getId()==a.getId() && getAlertasActivadas().get(i).isEstadoActivacion()==true){
                 existe=true;
             }
@@ -921,7 +919,6 @@ public class ControllerAlertas extends Observable implements Observer{
         while ((i<alertasEnFuncionamiento.size())){
             condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
             int f=0;
-            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
             activacion=false;
             while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var Latitud
                 if ((condiciones.get(f).getIdVariable()==indexLatitud)){
@@ -929,8 +926,14 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
                 f++;
             }
+            
             Alerta al=alertasEnFuncionamiento.get(i);
-            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            activacionAnt=existeAlertaActiva(al);  
+            
+            if (!activacion){
+                activacionAnt=false;
+            }
+            Date fecha=new java.util.Date();
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
@@ -976,7 +979,6 @@ public class ControllerAlertas extends Observable implements Observer{
         while ((i<alertasEnFuncionamiento.size())){
             condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
             int f=0;
-            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
             activacion=false;
             while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var Longitud
                 if ((condiciones.get(f).getIdVariable()==indexLongitud)){
@@ -984,8 +986,15 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
                 f++;
             }
+            
             Alerta al=alertasEnFuncionamiento.get(i);
-            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            activacionAnt=existeAlertaActiva(al);  
+            
+            if (!activacion){
+                activacionAnt=false;
+            }
+            
+            Date fecha=new java.util.Date();
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
@@ -1031,7 +1040,6 @@ public class ControllerAlertas extends Observable implements Observer{
         while ((i<alertasEnFuncionamiento.size())){
             condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
             int f=0;
-            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
             activacion=false;
             while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var Velocidad
                 if ((condiciones.get(f).getIdVariable()==indexVelocidad)){
@@ -1039,8 +1047,15 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
                 f++;
             }
+            
             Alerta al=alertasEnFuncionamiento.get(i);
-            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            activacionAnt=existeAlertaActiva(al);  
+            
+            if (!activacion){
+                activacionAnt=false;
+            }
+            
+            Date fecha=new java.util.Date();
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
@@ -1086,7 +1101,6 @@ public class ControllerAlertas extends Observable implements Observer{
         while ((i<alertasEnFuncionamiento.size())){
             condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
             int f=0;
-            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
             activacion=false;
             while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var Rumbo
                 if ((condiciones.get(f).getIdVariable()==indexRumbo)){
@@ -1094,8 +1108,15 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
                 f++;
             }
+            
             Alerta al=alertasEnFuncionamiento.get(i);
-            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            activacionAnt=existeAlertaActiva(al);  
+            
+            if (!activacion){
+                activacionAnt=false;
+            }
+
+            Date fecha=new java.util.Date();
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
@@ -1150,7 +1171,6 @@ public class ControllerAlertas extends Observable implements Observer{
         while ((i<alertasEnFuncionamiento.size())){
             condiciones=alertasEnFuncionamiento.get(i).getCondiciones();
             int f=0;
-            activacionAnt=existeAlertaActiva(alertasEnFuncionamiento.get(i));
             activacion=false;
             while ((f<condiciones.size())){//busco alertas que contengan alguna de sus condiciones la var fechaYhora
                 if ((condiciones.get(f).getIdVariable()==indexFechaYhora)){
@@ -1158,8 +1178,16 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
                 f++;
             }
+            
             Alerta al=alertasEnFuncionamiento.get(i);
-            Timestamp fecha=modelo.dataManager.Punto.getInstance().getFechaYhora();
+            activacionAnt=existeAlertaActiva(al);  
+            
+            if (!activacion){
+                activacionAnt=false;
+            }
+
+            Date fecha=new java.util.Date();
+ 
             if (activacion){
                 if (activacionAnt){
                     //Alerta continua activada
@@ -1213,9 +1241,15 @@ public class ControllerAlertas extends Observable implements Observer{
                 }
                 f++;
             }
+            
             Alerta al=alertasEnFuncionamiento.get(i);
-            activacionAnt=existeAlertaActiva(al);            
-            Timestamp fecha=new java.sql.Timestamp(new java.util.Date().getTime());
+            activacionAnt=existeAlertaActiva(al);  
+            
+            if (!activacion){
+                activacionAnt=false;
+            }   
+            
+            Date fecha=new java.util.Date();
             
             if (activacion){
                 if (activacionAnt){
@@ -1263,7 +1297,7 @@ public class ControllerAlertas extends Observable implements Observer{
         } 
     }
 */
-    private int desactivaAlerta(Alerta al,Timestamp fechaDes) {
+    private int desactivaAlerta(Alerta al,Date fechaDes) {
         boolean desactivacion=false;
         int result=-1;
         int i=getAlertasActivadas().size()-1;
@@ -1296,6 +1330,14 @@ public class ControllerAlertas extends Observable implements Observer{
     public void setAlertasActivadas(ArrayList<AlertaListaOn> alertasActivadas) {
         this.alertasActivadas = alertasActivadas;
     }
+    
+        public void muestraOcur(int idOcur) {
+
+            gui.AlertWin.getInstance().setIdShowing(idOcur);
+            setChanged();
+            notifyObservers();
+            
+    }
 
     public void muestraOcurSig(int idShowing) {
         int i=0;
@@ -1312,6 +1354,8 @@ public class ControllerAlertas extends Observable implements Observer{
             notifyObservers();
         }
     }
+    
+    
     
     public void muestraOcurAnt(int idShowing) {
         int i=getAlertasActivadas().size()-1;
@@ -1379,7 +1423,6 @@ public class ControllerAlertas extends Observable implements Observer{
             gui.AlertWin.getInstance().setIdShowing(getAlertasActivadas().get(i).getIdOcur());
             setChanged();
             notifyObservers();
-            AlertWin.getInstance().muestraAlertaSinPreload();
         }
       
     }
@@ -1393,7 +1436,7 @@ public class ControllerAlertas extends Observable implements Observer{
         int cant=0;
         while (i<=getAlertasActivadas().size()-1){
             if (getAlertasActivadas().get(i).getVista()==0){
-               cant=cant++;
+               cant=cant+1;
             }
             i++;
         }
@@ -1478,8 +1521,19 @@ public class ControllerAlertas extends Observable implements Observer{
     public boolean isEstadoAlertas() {
         return estadoAlertas;
     }
+
+    public void cambioCantMarcas() {
+        
+                int index=getIndexCantDeMarcas();
+                AnalizaActivaciones thAnalizaActivaciones = new AnalizaActivaciones();
+                thAnalizaActivaciones.setIndex(index);
+                thAnalizaActivaciones.start();
+    }
+
 }
-    
+
+
+
 class AnalizaActivaciones implements Runnable{
     Thread thAa;
     private int index;

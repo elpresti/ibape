@@ -289,6 +289,8 @@ private void lnkConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//
 private void lnkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkAlertasActionPerformed
     PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());
+    PanelOpcAlertasAgregaEdita.getInstance().setVisible(false);
+    PanelOpcAlertas.getInstance().setVisible(true);
 }//GEN-LAST:event_lnkAlertasActionPerformed
 
 private void lnkCampaniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkCampaniasActionPerformed

@@ -72,8 +72,7 @@ public class UltimaImgProcesada extends Observable{
         this.marcas = marcas;
         if (marcas.size()>0){
             ControllerPois.getInstance().guardaPoiDeImgConMarcas();
-            setChanged();
-            notifyObservers(controllers.ControllerAlertas.getIndexCantDeMarcas());
+            controllers.ControllerAlertas.getInstance().cambioCantMarcas();
         }
     }
 
