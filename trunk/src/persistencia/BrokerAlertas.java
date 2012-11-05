@@ -879,7 +879,7 @@ public boolean deleteAlerta(modelo.alertas.Alerta alerta){
                 ocurAlerta.setValores(valores);
 
                 ocurAlerta.setFechaActivacion(rs2.getDate("fyhini"));
-                ocurAlerta.setFechaDesactivacion(rs2.getDate("fyhini"));  
+                ocurAlerta.setFechaDesactivacion(rs2.getDate("fyhfin"));  
                 ocurAlerta.setVista(rs2.getInt("vista"));  
                 ocurAlertas.add(0,ocurAlerta);
             }
