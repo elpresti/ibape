@@ -182,7 +182,6 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaAlertas.setColumnSelectionAllowed(true);
         tablaAlertas.setMaximumSize(new java.awt.Dimension(480, 270));
         tablaAlertas.setMinimumSize(new java.awt.Dimension(480, 72));
         tablaAlertas.setPreferredScrollableViewportSize(new java.awt.Dimension(480, 22700));
@@ -398,7 +397,6 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tablaOcurAlertas.setColumnSelectionAllowed(true);
         tablaOcurAlertas.setMaximumSize(new java.awt.Dimension(480, 220));
         tablaOcurAlertas.setMinimumSize(new java.awt.Dimension(480, 72));
         tablaOcurAlertas.setPreferredScrollableViewportSize(new java.awt.Dimension(480, 1800));
@@ -760,13 +758,14 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     }
     
     public void actualizaLabelCantOcurNoVistas(){
-        if (controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()==0){
+        int cant=controllers.ControllerAlertas.getInstance().getCantOcurNoVistas();
+        if (cant==0){
             lblOcurNoVistas.setFont(comun);
         }
         else{
             lblOcurNoVistas.setFont(negrita);
         }
-        lblOcurNoVistas.setText("("+controllers.ControllerAlertas.getInstance().getCantOcurNoVistas()+") Activaciones no vistas ");
+        lblOcurNoVistas.setText("("+cant+") Activaciones no vistas ");
         this.revalidate();
     }
     
@@ -782,7 +781,7 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     }
      * */
 
-    private void cargaGrillaOcurAlertas() {
+    public void cargaGrillaOcurAlertas() {
         vaciaTablaOcur();
         
         ArrayList<modelo.alertas.AlertaListaOn> ocurAlertas = controllers.ControllerAlertas.getInstance().getAlertasActivadas();
@@ -797,13 +796,19 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
             // while (), pongo cada objeto Alerta en la grilla de alertas                    
             int i = ocurAlertas.size()-1;
             SimpleDateFormat horaCompleta = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");  
+            String hora="";
             while (i >= 0) {
+                if (ocurAlertas.get(i).getFechaDesactivacion()!=null){
+                    hora=horaCompleta.format(new Date(ocurAlertas.get(i).getFechaDesactivacion().getTime()));
+                }else{
+                    hora="";
+                }
                 if (!(ocurAlertas.get(i).getAlerta()==null)){
                         agregaUnaFilaOcurAlerta(
                         ocurAlertas.get(i).getIdOcur(),
                         ocurAlertas.get(i).getAlerta().getTitulo(),
                         horaCompleta.format(new Date(ocurAlertas.get(i).getFechaActivacion().getTime())),
-                        horaCompleta.format(new Date(ocurAlertas.get(i).getFechaDesactivacion().getTime()))
+                        hora
                         );
                 }
 
@@ -813,7 +818,7 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
         }
     }
 
-    private void vaciaTablaOcur() {
+    public void vaciaTablaOcur() {
          modeloTablaOcur.setRowCount(0);
     }
 
@@ -835,35 +840,3 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     
 }
 
-/* - - -   clases y métodos q configuran las COLUMNAS del TABLEMODEL de la tabla CATEGORIA DE POIS   - - -  */
-class TableModelOcur extends DefaultTableModel {        
-    public TableModelOcur(){
-        String[] encabezado = new String[7];//Defino la Cabecera (columnas)
-        encabezado[0] = "Id";
-        encabezado[1] = "Fecha y hora";        
-        encabezado[2] = "Latitud";
-        encabezado[3] = "Longitud";
-        encabezado[4] = "Profundidad";
-        encabezado[5] = "ImgFileName";
-        encabezado[6] = "Tamaño[px]";
-        this.setColumnIdentifiers(encabezado);
-    }
-    @Override  
-      public Class getColumnClass(int col) {  
-        switch (col){
-            case 0: return Integer.class;//esta column accepts only Integer values
-            case 2: return Double.class;
-            case 3: return Double.class;
-            case 4: return Double.class;
-            case 5: return String.class;
-            case 6: return Integer.class;
-            default: return Object.class;//other columns accept Object
-        }
-    }  
-    @Override  
-      public boolean isCellEditable(int row, int col) {
-        return false; //ninguna es editable
-  /*    if (col == 1) return true;//la columna de los checkbox will be editable
-        else return false; */
-      }
-}
