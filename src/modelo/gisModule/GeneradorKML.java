@@ -144,11 +144,20 @@ public class GeneradorKML {
 //                +"<visibility>1</visibility>" 
                 +"<description>"
                     + "<![CDATA[<div>Recorrido del barco entre "+sdf.format(puntos.get(0).getFechaYhora())+"  y  "+sdf.format(puntos.get(puntos.size()-1).getFechaYhora())
-                    + "<br><strong>Duración del recorrido:</strong> "+(duracion/(1000 * 60 * 60))+" hs = "+(duracion/(1000 * 60))+" min"
-                    + "<br><strong>Campaña:</strong> "+AdministraCampanias.getInstance().getCampaniaEnCurso().getDescripcion()
+                    + "<br><strong>Duración del recorrido:</strong> "+(duracion/(1000 * 60 * 60))+" hs = "+(duracion/(1000 * 60))+" min";
+            if (AdministraCampanias.getInstance().getCampaniaEnCurso() != null){  salida+=
+                      "<br><strong>Campaña:</strong> "+AdministraCampanias.getInstance().getCampaniaEnCurso().getDescripcion()
                     + "<br><strong>Barco:</strong> "+AdministraCampanias.getInstance().getCampaniaEnCurso().getBarco()
-                    + "<br><strong>Capitan:</strong> "+AdministraCampanias.getInstance().getCampaniaEnCurso().getCapitan()
-                + "]]> </description>"
+                    + "<br><strong>Capitan:</strong> "+AdministraCampanias.getInstance().getCampaniaEnCurso().getCapitan();
+            }else{
+                modelo.dataManager.Campania campElegida = persistencia.BrokerCampania.getInstance().getCampaniaFromDb(controllers.ControllerHistorico.getInstance().getIdCampaniaElegida());
+                salida+=
+                      "<br><strong>Campaña:</strong> "+campElegida.getDescripcion()
+                    + "<br><strong>Barco:</strong> "+campElegida.getBarco()
+                    + "<br><strong>Capitan:</strong> "+campElegida.getCapitan();
+            }
+            salida+=
+                  "]]> </description>"
                 +"<styleUrl>#yellowLineGreenPoly</styleUrl>"
                 +"<gx:Track>"
                   //+"<altitudeMode>absolute</altitudeMode>";
