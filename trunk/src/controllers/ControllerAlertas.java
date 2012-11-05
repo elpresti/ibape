@@ -1460,6 +1460,9 @@ public class ControllerAlertas extends Observable implements Observer{
      */
     public void setCantOcurNoVistas(int cantOcurNoVistas) {
     if (cantOcurNoVistas!=this.cantOcurNoVistas){
+        if (cantOcurNoVistas<0){
+            cantOcurNoVistas=0;
+        }
         this.cantOcurNoVistas = cantOcurNoVistas;
         gui.PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
     }

@@ -288,6 +288,8 @@ private void lnkConfiguracionActionPerformed(java.awt.event.ActionEvent evt) {//
 
 private void lnkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkAlertasActionPerformed
     PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
+    PanelOpcAlertas.getInstance().vaciaTablaOcur();
+    PanelOpcAlertas.getInstance().cargaGrillaOcurAlertas();
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());
     PanelOpcAlertasAgregaEdita.getInstance().setVisible(false);
     PanelOpcAlertas.getInstance().setVisible(true);
