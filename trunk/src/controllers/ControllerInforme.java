@@ -21,6 +21,8 @@ import com.sun.pdfview.PDFPage;
 import com.sun.pdfview.PDFViewer;
 import com.sun.pdfview.PagePanel;
 import gui.PanelHistorico;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -37,6 +39,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.dataCapture.Sistema;
@@ -135,6 +138,25 @@ public class ControllerInforme {
     public void abrirPdfGenerado(String ruta){
         try{
             String[] rutaPdf = {GeneradorPDF.getInstance().getRuta_destino().getAbsolutePath()+".pdf"};
+/*
+ *          JFrame pdfWin = new PDFViewer(true);
+            addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent evt) {
+                ocultarVentana();
+            }
+            });
+            pdfWin.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent evt) {
+                pdfWin.setVisible(false);
+            }
+            });
+            //JFrame ventanaPdf = new JFrame();
+            //ventanaPdf.setContentPane(new PDFViewer(true));
+            //ventanaPdf.add(new PDFViewer(true));
+            //pdfViewer.
+*/
             PDFViewer.main(rutaPdf);
         }catch(Exception e){
             Logueador.getInstance().agregaAlLog("abrirPdfGenerado(): "+e.toString());
