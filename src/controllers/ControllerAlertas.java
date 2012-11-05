@@ -455,7 +455,7 @@ public class ControllerAlertas extends Observable implements Observer{
     }
 
     public void update(Observable o, Object arg) {
-    if (arg!=null && isDeteccionAlertas()){ 
+    if (arg!=null && modelo.alertas.AdministraAlertas.getInstance().isEstadoAlertas()){ 
           String indexS=(String) arg.toString();
           int index=Integer.parseInt(indexS);
           if (o == punto){
@@ -1541,6 +1541,8 @@ class AnalizaActivaciones implements Runnable{
         try{
             if (index==ControllerAlertas.getInstance().getIndexProfundidad()){
                 ControllerAlertas.getInstance().analizaActivacionesProfundidad(); 
+            }else if (index==ControllerAlertas.getInstance().getIndexCantDeMarcas()){
+                ControllerAlertas.getInstance().analizaActivacionesCantDeMarcas();
             }else if (index==ControllerAlertas.getInstance().getIndexLatitud()){
                 ControllerAlertas.getInstance().analizaActivacionesLatitud();
             }else if (index==ControllerAlertas.getInstance().getIndexLongitud()){
