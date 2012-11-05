@@ -276,8 +276,8 @@ public class GeneradorKML {
                + "<![CDATA[<div>"
                   + "Datos de este punto "
                   + "<br>  <strong>- Fecha y hora:</strong> "+punto.getFechaYhora()+" hs"
-                  + "<br>  <strong>- Latitud:</strong> "+punto.getLatitud()
-                  + "<br>  <strong>- Longitud:</strong> "+punto.getLongitud()
+                  + "<br>  <strong>- Latitud:</strong> "+Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(punto.getLatitud())
+                  + "<br>  <strong>- Longitud:</strong> "+Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(punto.getLongitud())
                   + "<br>  <strong>- Rumbo:</strong> "+punto.getRumbo()+"° "
                   + "<br>  <strong>- Velocidad:</strong> "+punto.getVelocidad()+" kmph"
                   + "<br>  <strong>- Profundidad:</strong> "+punto.getProfundidad()+" m"                
@@ -390,8 +390,8 @@ public class GeneradorKML {
                + "<![CDATA[<div>"
                   + "Datos de este punto "
                   + "<br>  <strong>- Fecha y hora:</strong> "+punto.getFechaYhora()+" hs"
-                  + "<br>  <strong>- Latitud:</strong> "+punto.getLatitud()+" "+punto.getLatHemisf()
-                  + "<br>  <strong>- Longitud:</strong> "+punto.getLongitud()+" "+punto.getLonHemisf()                  
+                  + "<br>  <strong>- Latitud:</strong> "+Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(punto.getLatConNegativo())+" "+punto.getLatHemisf()
+                  + "<br>  <strong>- Longitud:</strong> "+Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(punto.getLonConNegativo())+" "+punto.getLonHemisf()
                   + "<br>  <strong>- Rumbo:</strong> "+punto.getRumbo()+"° "
                   + "<br>  <strong>- Velocidad:</strong> "+punto.getVelocidad()+" kmph"
                   + "<br>  <strong>- Profundidad:</strong> "+punto.getProfundidad()+" m"                
@@ -419,8 +419,8 @@ public class GeneradorKML {
                     +    "<td valign=\"top\">"
                             + "Datos de este punto "
                             + "<br>  <strong>- Fecha y hora:</strong> "+poi.getFechaHora()+" "+horaStr+" hs"
-                            + "<br>  <strong>- Latitud:</strong> "+poi.getLatitud()
-                            + "<br>  <strong>- Longitud:</strong> "+poi.getLongitud()
+                            + "<br>  <strong>- Latitud:</strong> "+Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(poi.getLatitud())
+                            + "<br>  <strong>- Longitud:</strong> "+Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(poi.getLongitud())
                             + "<br>  <strong>- Categoria de POI:</strong> "+poi.getCategoria().getTitulo();
         contenidoHtml+=getHtmlFromDescripcionDePoi(poi);
         contenidoHtml+=  "</td>"
