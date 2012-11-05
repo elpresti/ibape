@@ -52,9 +52,9 @@ public class Punto extends Observable{
         boolean seModifico=false;         
         if (this.fechaYhora != fechaYhora){
             this.fechaYhora = fechaYhora;
-            setChanged();
-            notifyObservers(controllers.ControllerAlertas.getIndexFechaYhora());
-            seModifico=true;
+                setChanged();
+                notifyObservers(controllers.ControllerAlertas.getIndexFechaYhora());
+            seModifico=true;        
         }
         return seModifico;
     }
@@ -78,8 +78,8 @@ public class Punto extends Observable{
           if (getLatHemisf().equalsIgnoreCase("S"))
               { latString=latString+"-"; }
           setLatConNegativo(Double.valueOf(latString+String.valueOf(latitud)));
-          setChanged();
-          notifyObservers(controllers.ControllerAlertas.getIndexLatitud());
+                setChanged();
+                notifyObservers(controllers.ControllerAlertas.getIndexLatitud());
           seModifico=true;
        }
        return seModifico;
@@ -103,9 +103,9 @@ public class Punto extends Observable{
           String lonString = "";
           if (getLonHemisf().equalsIgnoreCase("W"))
               { lonString=lonString+"-"; }
-          setLonConNegativo(Double.valueOf(lonString+String.valueOf(longitud)));                   
-          setChanged();
-          notifyObservers(controllers.ControllerAlertas.getIndexLongitud());
+          setLonConNegativo(Double.valueOf(lonString+String.valueOf(longitud))); 
+                setChanged();
+                notifyObservers(controllers.ControllerAlertas.getIndexLongitud());
           seModifico=true;
        }
        return seModifico;
@@ -132,8 +132,8 @@ public class Punto extends Observable{
         boolean seModifico=false;         
         if (this.rumbo != rumbo) {
             this.rumbo = rumbo;
-            setChanged();        
-            notifyObservers(controllers.ControllerAlertas.getInstance().getIndexRumbo());                     
+                setChanged();        
+                notifyObservers(controllers.ControllerAlertas.getInstance().getIndexRumbo());
             seModifico=true;
         }
         return seModifico;
@@ -153,8 +153,8 @@ public class Punto extends Observable{
         boolean seModifico=false; 
         if (this.velocidad != velocidad){
             this.velocidad = velocidad;    
-            setChanged();
-            notifyObservers(controllers.ControllerAlertas.getIndexVelocidad());            
+                    setChanged();
+                    notifyObservers(controllers.ControllerAlertas.getIndexVelocidad());  
             seModifico=true;
         }
         return seModifico;
@@ -174,8 +174,9 @@ public class Punto extends Observable{
         boolean seModifico=false;         
         if (this.profundidad != profundidad){
             this.profundidad = profundidad;
-            setChanged();
-            notifyObservers(controllers.ControllerAlertas.getIndexProfundidad());
+                setChanged();
+                notifyObservers(controllers.ControllerAlertas.getIndexProfundidad());
+
             seModifico=true;
         }
         return seModifico;
@@ -195,8 +196,8 @@ public class Punto extends Observable{
         boolean seModifico=false; 
         if (this.velocidadAgua != velocidadAgua) {
             this.velocidadAgua = velocidadAgua;
-            setChanged();
-            notifyObservers(controllers.ControllerAlertas.getIndexVelocidadAgua());
+                setChanged();
+                notifyObservers(controllers.ControllerAlertas.getIndexVelocidadAgua());
             seModifico=true;
         }
         return seModifico;        
@@ -216,8 +217,8 @@ public class Punto extends Observable{
         boolean seModifico=false; 
         if (this.tempAgua != tempAgua) {
             this.tempAgua = tempAgua;
-            setChanged();
-            notifyObservers(controllers.ControllerAlertas.getIndexTempAgua());
+                setChanged();
+                notifyObservers(controllers.ControllerAlertas.getIndexTempAgua());
             seModifico=true;
         }
         return seModifico;
