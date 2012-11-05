@@ -347,19 +347,19 @@ class GeneradorPDF {
                 celda = new PdfPCell(new Phrase("Latitud     "));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
                 tablaLance.addCell(celda);
                 
-                celda = new PdfPCell(new Phrase(String.valueOf(lance.getPosIniLat())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                celda = new PdfPCell(new Phrase(Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(lance.getPosIniLat())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
                 tablaLance.addCell(celda);
 
-                celda = new PdfPCell(new Phrase(String.valueOf(String.valueOf(lance.getPosFinLat()))));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                celda = new PdfPCell(new Phrase(String.valueOf(Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(lance.getPosFinLat()))));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
                 tablaLance.addCell(celda);
 
                 celda = new PdfPCell(new Phrase("Longitud     "));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
                 tablaLance.addCell(celda);
                 
-                celda = new PdfPCell(new Phrase(String.valueOf(lance.getPosIniLon())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                celda = new PdfPCell(new Phrase(Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(lance.getPosIniLon())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
                 tablaLance.addCell(celda);
 
-                celda = new PdfPCell(new Phrase(String.valueOf(lance.getPosFinLon())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
+                celda = new PdfPCell(new Phrase(Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(lance.getPosFinLon())));celda.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);celda.setBorderColor(BaseColor.WHITE);
                 tablaLance.addCell(celda);
                 
                 mipdf.add(tablaLance);
