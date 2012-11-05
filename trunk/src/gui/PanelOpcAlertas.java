@@ -456,6 +456,7 @@ private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     if (filaSeleccionada>=0){
          setModificandoAlerta(true);
          setGuiModificarFilaElegida();
+         VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertasAgregaEdita.getInstance()); 
          PanelOpcAlertasAgregaEdita.getInstance().setVisible(true);
    }
 
@@ -489,6 +490,7 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
                 // TODO add your handling code here:
         getPanelAlertasPpal().setVisible(false);
         panelAgregaEdita.cargaAlertaEditar(-1);
+        VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertasAgregaEdita.getInstance());
         panelAgregaEdita.setVisible(true);
         setModificandoAlerta(false);
     }//GEN-LAST:event_btnInsertarActionPerformed
