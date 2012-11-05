@@ -290,9 +290,16 @@ private void lnkAlertasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     PanelOpcAlertas.getInstance().actualizaLabelCantOcurNoVistas();
     PanelOpcAlertas.getInstance().vaciaTablaOcur();
     PanelOpcAlertas.getInstance().cargaGrillaOcurAlertas();
-    VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());
-    PanelOpcAlertasAgregaEdita.getInstance().setVisible(false);
-    PanelOpcAlertas.getInstance().setVisible(true);
+    if (PanelOpcAlertas.getInstance().isModificandoAlerta()){
+            VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertasAgregaEdita.getInstance());
+            PanelOpcAlertasAgregaEdita.getInstance().setVisible(true);
+            PanelOpcAlertas.getInstance().setVisible(false);
+    }else{
+            VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());    
+            PanelOpcAlertasAgregaEdita.getInstance().setVisible(false);
+            PanelOpcAlertas.getInstance().setVisible(true);
+    }
+
 }//GEN-LAST:event_lnkAlertasActionPerformed
 
 private void lnkCampaniasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnkCampaniasActionPerformed
