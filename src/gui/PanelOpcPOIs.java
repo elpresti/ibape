@@ -51,7 +51,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaPOIS = new javax.swing.table.DefaultTableModel(
             new Object[][]{},
             new String[]{
-                "id","Campaña", "Fecha y Hora", "Categoria", "Coordenadas", "Descripcion"//, "Acciones"
+                "id","Campaña", "Fecha y Hora", "Categoria", "Coordenadas[lat,lon]", "Descripcion"//, "Acciones"
             }) {
 
         boolean[] canEdit = new boolean[]{
@@ -1053,7 +1053,7 @@ public class PanelOpcPOIs extends javax.swing.JPanel {
                             horaCompleta.format(p.getFechaHora()),
                             ("" + BrokerCategoriasPOI.getInstance().getCatPOIFromDB(p.getIdCategoriaPOI()).getTitulo()),
                             //modelo.dataCapture.Sistema.getInstance().getLabelWithImgResized(20, 20, image),
-                            (String.valueOf(p.getLatitud()) + "," + String.valueOf(p.getLongitud())),
+                            (Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(p.getLatitud()) + "," + Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(p.getLongitud())),
                             descripcion//p.getDescripcion()
                         });
             }
