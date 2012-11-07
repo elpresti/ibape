@@ -10,6 +10,8 @@
  */
 package gui;
 
+import controllers.ControllerPpal;
+
 /**
  *
  * @author Sebastian
@@ -149,6 +151,11 @@ public class PanelAyuda extends javax.swing.JPanel {
         panelBtnsAyuda.add(btnAyudaPdf);
 
         btnAyudaOnline.setText("Manual Online");
+        btnAyudaOnline.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAyudaOnlineActionPerformed(evt);
+            }
+        });
         panelBtnsAyuda.add(btnAyudaOnline);
 
         panerMedio.add(panelBtnsAyuda, java.awt.BorderLayout.SOUTH);
@@ -170,6 +177,11 @@ public class PanelAyuda extends javax.swing.JPanel {
 
         add(panelInferior, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAyudaOnlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAyudaOnlineActionPerformed
+        ControllerPpal.getInstance().abreAyudaOnline();
+    }//GEN-LAST:event_btnAyudaOnlineActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAyudaOnline;
     private javax.swing.JButton btnAyudaPdf;

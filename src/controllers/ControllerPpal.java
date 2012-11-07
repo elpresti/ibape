@@ -295,5 +295,10 @@ public class ControllerPpal {
         return modelo.dataManager.UltimaImgProcesada.getInstance().getPorcentajesColores();
     }
     
+    public void abreAyudaOnline(){
+        String urlAyudaOnline = "https://docs.google.com/document/d/1hVcYc_wnO9TtpbMH3SzWf_XhUkNxsVi9q665GpzSc0w/edit";
+        modelo.gisModule.Browser.getInstance().setUrlTemp(urlAyudaOnline);
+        modelo.gisModule.Browser.getInstance().start();
+    }
     
 }
