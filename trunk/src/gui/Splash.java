@@ -80,7 +80,6 @@ public class Splash extends javax.swing.JFrame implements Runnable{
     }
 
     private void inicializador() {
-        VentanaIbape.getInstance();        
         initComponents();
         this.setVisible(true);
         panelLogo.setOpaque(false);
@@ -92,7 +91,8 @@ public class Splash extends javax.swing.JFrame implements Runnable{
         //this.setSize(500, 500); 
         int posicionX = (Toolkit.getDefaultToolkit().getScreenSize().width/2)-(getWidth()/2);
         int posicionY = Toolkit.getDefaultToolkit().getScreenSize().height/2-(getHeight()/2);
-        this.setLocation(posicionX,posicionY);                
+        this.setLocation(posicionX,posicionY);
+        VentanaIbape.getInstance();
         hacePreLoad();        
         setVisible(false);
         dispose();
