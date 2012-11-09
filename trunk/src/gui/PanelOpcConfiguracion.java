@@ -561,7 +561,7 @@ public class PanelOpcConfiguracion extends javax.swing.JPanel {
         panelBtnConectaSonda.add(btnConectaSonda);
 
         btnDesconectaSonda.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnDesconectaSonda.setText("Desconecta");
+        btnDesconectaSonda.setText("Desconectar");
         btnDesconectaSonda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDesconectaSondaActionPerformed(evt);
