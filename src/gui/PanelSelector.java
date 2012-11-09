@@ -78,27 +78,27 @@ public class PanelSelector extends javax.swing.JPanel {
         jXTaskPaneContainer1.setBackground(new java.awt.Color(240, 240, 240));
         jXTaskPaneContainer1.setMaximumSize(new java.awt.Dimension(150, 1000));
         jXTaskPaneContainer1.setMinimumSize(new java.awt.Dimension(150, 100));
-        jXTaskPaneContainer1.setPreferredSize(new java.awt.Dimension(150, 800));
+        jXTaskPaneContainer1.setPreferredSize(new java.awt.Dimension(150, 750));
         jXTaskPaneContainer1.setScrollableTracksViewportWidth(false);
         jXTaskPaneContainer1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelLogo.setPreferredSize(new java.awt.Dimension(150, 150));
 
         lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/logoIbapeChico.png"))); // NOI18N
-        lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18));
+        lblLogo.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         panelLogo.add(lblLogo);
 
         jXTaskPaneContainer1.add(panelLogo);
 
         taskPaneNavegacion.setTitle("Navegación");
-        taskPaneNavegacion.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneNavegacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelNavegacion.setPreferredSize(new java.awt.Dimension(140, 30));
         panelNavegacion.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
 
         lnkNavegacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-navegacion.png"))); // NOI18N
         lnkNavegacion.setText("Navegación");
-        lnkNavegacion.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkNavegacion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkNavegacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkNavegacionActionPerformed(evt);
@@ -106,19 +106,19 @@ public class PanelSelector extends javax.swing.JPanel {
         });
         panelNavegacion.add(lnkNavegacion);
 
-        taskPaneNavegacion.getContentPane().add(panelNavegacion);
+        taskPaneNavegacion.add(panelNavegacion);
 
         jXTaskPaneContainer1.add(taskPaneNavegacion);
 
         taskPaneHistorico.setTitle("Historico");
-        taskPaneHistorico.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelHistorico.setPreferredSize(new java.awt.Dimension(140, 35));
         panelHistorico.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lnkHistorico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-historial.png"))); // NOI18N
         lnkHistorico.setText("Historico");
-        lnkHistorico.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkHistorico.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkHistorico.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkHistoricoActionPerformed(evt);
@@ -126,12 +126,12 @@ public class PanelSelector extends javax.swing.JPanel {
         });
         panelHistorico.add(lnkHistorico);
 
-        taskPaneHistorico.getContentPane().add(panelHistorico);
+        taskPaneHistorico.add(panelHistorico);
 
         jXTaskPaneContainer1.add(taskPaneHistorico);
 
         taskPaneOpciones.setTitle("Opciones");
-        taskPaneOpciones.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneOpciones.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelOpciones.setMinimumSize(new java.awt.Dimension(110, 170));
         panelOpciones.setPreferredSize(new java.awt.Dimension(140, 200));
@@ -141,7 +141,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkConfiguracion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-configuracion.png"))); // NOI18N
         lnkConfiguracion.setText("Configuración");
-        lnkConfiguracion.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkConfiguracion.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkConfiguracion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkConfiguracionActionPerformed(evt);
@@ -155,7 +155,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkAlertas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-alertas.png"))); // NOI18N
         lnkAlertas.setText("Alertas");
-        lnkAlertas.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkAlertas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkAlertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkAlertasActionPerformed(evt);
@@ -169,7 +169,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkCampanias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-campanias.png"))); // NOI18N
         lnkCampanias.setText("Campañas");
-        lnkCampanias.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkCampanias.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkCampanias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkCampaniasActionPerformed(evt);
@@ -183,7 +183,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkPois.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-pois.png"))); // NOI18N
         lnkPois.setText("Puntos de Interes");
-        lnkPois.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkPois.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkPois.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkPoisActionPerformed(evt);
@@ -197,7 +197,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         lnkInformes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-Informes.png"))); // NOI18N
         lnkInformes.setText("Informes");
-        lnkInformes.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkInformes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkInformes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkInformesActionPerformed(evt);
@@ -207,19 +207,19 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelOpciones.add(panelInformes);
 
-        taskPaneOpciones.getContentPane().add(panelOpciones);
+        taskPaneOpciones.add(panelOpciones);
 
         jXTaskPaneContainer1.add(taskPaneOpciones);
 
         taskPaneAyuda.setTitle("Ayuda");
-        taskPaneAyuda.getContentPane().setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+        taskPaneAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         panelAyuda.setPreferredSize(new java.awt.Dimension(140, 35));
         panelAyuda.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         lnkAyuda.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/icono-ayuda.png"))); // NOI18N
         lnkAyuda.setText("Ayuda");
-        lnkAyuda.setFont(new java.awt.Font("Tahoma", 0, 12));
+        lnkAyuda.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lnkAyuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 lnkAyudaActionPerformed(evt);
@@ -227,7 +227,7 @@ public class PanelSelector extends javax.swing.JPanel {
         });
         panelAyuda.add(lnkAyuda);
 
-        taskPaneAyuda.getContentPane().add(panelAyuda);
+        taskPaneAyuda.add(panelAyuda);
 
         jXTaskPaneContainer1.add(taskPaneAyuda);
 
@@ -237,7 +237,7 @@ public class PanelSelector extends javax.swing.JPanel {
 
         panelBtnRegistraPOI.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 20));
 
-        btnRegistraPOI.setFont(new java.awt.Font("Tahoma", 0, 12));
+        btnRegistraPOI.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnRegistraPOI.setText("Registra POI");
         btnRegistraPOI.setMaximumSize(new java.awt.Dimension(110, 23));
         btnRegistraPOI.setPreferredSize(new java.awt.Dimension(110, 23));
