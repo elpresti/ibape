@@ -85,6 +85,8 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         btnModificar = new org.jdesktop.swingx.JXHyperlink();
         btnEliminar = new org.jdesktop.swingx.JXHyperlink();
         panelTablaOcurAlertas = new org.jdesktop.swingx.JXPanel();
+        panelOcurAlertas = new org.jdesktop.swingx.JXPanel();
+        lblTxtTablaAlertas2 = new org.jdesktop.swingx.JXLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaOcurAlertas = new org.jdesktop.swingx.JXTable();
         panelInfoOcurAlertas = new org.jdesktop.swingx.JXPanel();
@@ -221,7 +223,7 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
         panelAccionesAlertaElegida.setLayout(new java.awt.GridLayout(1, 2, 0, 10));
 
         lblAccionesAlerta.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblAccionesAlerta.setText("Acciones sobre la alerta elegida:");
+        lblAccionesAlerta.setText("Acciones sobre Alerta seleccionada:");
         lblAccionesAlerta.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         panelAccionesAlertaElegida.add(lblAccionesAlerta);
 
@@ -270,6 +272,20 @@ public class PanelOpcAlertas extends javax.swing.JPanel {
 
         panelTablaOcurAlertas.setPreferredSize(new java.awt.Dimension(947, 250));
         panelTablaOcurAlertas.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
+
+        panelOcurAlertas.setMaximumSize(new java.awt.Dimension(500, 60));
+        panelOcurAlertas.setMinimumSize(new java.awt.Dimension(500, 20));
+        panelOcurAlertas.setPreferredSize(new java.awt.Dimension(500, 20));
+        panelOcurAlertas.setLayout(new java.awt.GridLayout(1, 1));
+
+        lblTxtTablaAlertas2.setText(" Tabla de Ocurrencia de Alertas:");
+        lblTxtTablaAlertas2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTxtTablaAlertas2.setMaximumSize(new java.awt.Dimension(103, 30));
+        lblTxtTablaAlertas2.setMinimumSize(new java.awt.Dimension(103, 15));
+        lblTxtTablaAlertas2.setPreferredSize(new java.awt.Dimension(103, 30));
+        panelOcurAlertas.add(lblTxtTablaAlertas2);
+
+        panelTablaOcurAlertas.add(panelOcurAlertas);
 
         jScrollPane2.setMaximumSize(new java.awt.Dimension(482, 32767));
         jScrollPane2.setMinimumSize(new java.awt.Dimension(482, 27));
@@ -533,11 +549,13 @@ private void tablaAlertasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRS
     private javax.swing.JLabel lblOcurNoVistas;
     private org.jdesktop.swingx.JXLabel lblTitulo;
     private org.jdesktop.swingx.JXLabel lblTxtTablaAlertas;
+    private org.jdesktop.swingx.JXLabel lblTxtTablaAlertas2;
     private org.jdesktop.swingx.JXPanel panelAcciones;
     private org.jdesktop.swingx.JXPanel panelAccionesAlertaElegida;
     private org.jdesktop.swingx.JXPanel panelAlertasPpal;
     private org.jdesktop.swingx.JXPanel panelCentro;
     private org.jdesktop.swingx.JXPanel panelInfoOcurAlertas;
+    private org.jdesktop.swingx.JXPanel panelOcurAlertas;
     private org.jdesktop.swingx.JXPanel panelOpcionesAlertas;
     private org.jdesktop.swingx.JXPanel panelTablaAlertas;
     private org.jdesktop.swingx.JXPanel panelTablaOcurAlertas;

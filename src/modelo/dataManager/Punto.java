@@ -196,8 +196,8 @@ public class Punto extends Observable{
         boolean seModifico=false; 
         if (this.velocidadAgua != velocidadAgua) {
             this.velocidadAgua = velocidadAgua;
-                setChanged();
-                notifyObservers(controllers.ControllerAlertas.getIndexVelocidadAgua());
+                //setChanged();
+                //notifyObservers(controllers.ControllerAlertas.getIndexVelocidadAgua());
             seModifico=true;
         }
         return seModifico;        
@@ -217,8 +217,8 @@ public class Punto extends Observable{
         boolean seModifico=false; 
         if (this.tempAgua != tempAgua) {
             this.tempAgua = tempAgua;
-                setChanged();
-                notifyObservers(controllers.ControllerAlertas.getIndexTempAgua());
+                //setChanged();
+                //notifyObservers(controllers.ControllerAlertas.getIndexTempAgua());
             seModifico=true;
         }
         return seModifico;
