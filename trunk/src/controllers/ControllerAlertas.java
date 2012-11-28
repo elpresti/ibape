@@ -581,13 +581,9 @@ public class ControllerAlertas extends Observable implements Observer{
                     cumpleTodo=cumpleTodo && cumpleCondicionVelocidad(c);
                 }else if((c.getIdVariable()==indexRumbo)) {
                     cumpleTodo=cumpleTodo && cumpleCondicionRumbo(c);
-                }else if((c.getIdVariable()==indexVelocidadAgua)) {
-                    cumpleTodo=cumpleTodo && cumpleCondicionVelocidadAgua(c);
-                }else if((c.getIdVariable()==indexTempAgua)) {
-                    cumpleTodo=cumpleTodo && cumpleCondicionTemperaturaAgua(c);
-                }else if((c.getIdVariable()==indexFechaYhora)) {
+                }/*else if((c.getIdVariable()==indexFechaYhora)) {
                     cumpleTodo=cumpleTodo && cumpleCondicionFechaYhora(c);
-                }
+                }*/
             f++;
         }
         return cumpleTodo;
@@ -799,7 +795,7 @@ public class ControllerAlertas extends Observable implements Observer{
         }
         return cumpleTodo;
     }
-
+/*
     private boolean cumpleCondicionFechaYhora(Condicion c) {
         boolean cumpleTodo=true;
         if (c.getIdRelacion()==9){
@@ -834,15 +830,8 @@ public class ControllerAlertas extends Observable implements Observer{
         return cumpleTodo;
     }
 
-
-    private boolean cumpleCondicionTemperaturaAgua(Condicion c) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private boolean cumpleCondicionVelocidadAgua(Condicion c) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
+*/
+    
     private boolean cumpleCondicionRumbo(Condicion c) {
     boolean cumpleTodo=true;
         if (c.getIdRelacion()==1){
@@ -1154,14 +1143,7 @@ public class ControllerAlertas extends Observable implements Observer{
 
     }
 
-    public void analizaActivacionesvelocidadAgua() {
-        //throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    public void analizaActivacionesTempAgua() {
-        //throw new UnsupportedOperationException("Not yet implemented");
-    }
-
+/*
     public void analizaActivacionesFechaYhora() { 
         
         ArrayList<Condicion> condiciones;
@@ -1224,7 +1206,7 @@ public class ControllerAlertas extends Observable implements Observer{
         }
 
     }
-
+*/
     public void analizaActivacionesCantDeMarcas() {
     
         ArrayList<Condicion> condiciones;
@@ -1554,13 +1536,9 @@ class AnalizaActivaciones implements Runnable{
                 ControllerAlertas.getInstance().analizaActivacionesVelocidad();
             }else if (index==ControllerAlertas.getInstance().getIndexRumbo()){
                 ControllerAlertas.getInstance().analizaActivacionesRumbo();
-            }else if (index==ControllerAlertas.getInstance().getIndexVelocidadAgua()){
-                ControllerAlertas.getInstance().analizaActivacionesvelocidadAgua();
-            }else if (index==ControllerAlertas.getInstance().getIndexTempAgua()){
-                ControllerAlertas.getInstance().analizaActivacionesTempAgua();
-            }else if (index==ControllerAlertas.getInstance().getIndexFechaYhora()){
+            }/*else if (index==ControllerAlertas.getInstance().getIndexFechaYhora()){
                 ControllerAlertas.getInstance().analizaActivacionesFechaYhora();
-            }            
+            }*/         
         }catch(Exception e){
             //Logueador.getInstance().agregaAlLog("AnalizaActivaciones.run(): "+e.toString());
         }        
