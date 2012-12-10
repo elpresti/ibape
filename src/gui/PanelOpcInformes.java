@@ -277,6 +277,13 @@ public class PanelOpcInformes extends javax.swing.JPanel {
         grupoElijeCampania = new ButtonGroup();
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer2());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor2(new JCheckBox()));
+        
+        //escondo la columna cant. de cajones
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setMinWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setMaxWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setPreferredWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setResizable(false);
+        
         habilitaChkDatosInforme(false);
 
       

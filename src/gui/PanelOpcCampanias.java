@@ -831,6 +831,12 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         setGuiCampaniaFinalizada();
         controlaPanelAccionesCampania();
         jXTaskPaneContainer1.setVisible(false);
+        
+        //escondo la columna duración
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_DURACION).setMinWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_DURACION).setMaxWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_DURACION).setPreferredWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_DURACION).setResizable(false);
     }
 
     public int getIdDeCampaniaSeleccionada() {

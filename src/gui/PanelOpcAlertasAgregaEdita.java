@@ -656,14 +656,14 @@ private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 JOptionPane.showMessageDialog(null, "Hubo un error al intentar guardar Alerta");
                 }
             }
-        }
+        
     PanelOpcAlertas.getInstance().setModificandoAlerta(false);
     setModificandoCondicion(false);
     PanelOpcAlertas.getInstance().vaciaTablaOcur();
     PanelOpcAlertas.getInstance().cargaGrillaOcurAlertas();
     VentanaIbape.getInstance().ponerEnPanelDerecho(PanelOpcAlertas.getInstance());
     PanelOpcAlertas.getInstance().setVisible(true);
-  
+    }
 }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
