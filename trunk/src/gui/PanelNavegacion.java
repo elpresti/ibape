@@ -902,8 +902,10 @@ private void chkConCamaraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         Object[] fila = new Object[7]; //creamos la fila cantColumnas=6
         fila[NRO_COL_ID_MARCA]=id;
         if (fechaYhora != null) { fila[NRO_COL_FECHAYHORA]=sdf.format(fechaYhora); }
-        fila[NRO_COL_LATITUD]=formatter.format((Number)latitud);
-        fila[NRO_COL_LONGITUD]=formatter.format((Number)longitud);
+        //fila[NRO_COL_LATITUD]=formatter.format((Number)latitud); Esto sería para mostrar en decimal
+        fila[NRO_COL_LATITUD]=Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(latitud);
+        //fila[NRO_COL_LONGITUD]=formatter.format((Number)longitud);
+        fila[NRO_COL_LONGITUD]=Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(longitud);
         fila[NRO_COL_PROFUNDIDAD]=profundidad;
         fila[NRO_COL_IMGFILENAME]=imgFileName;
         fila[NRO_COL_TAMANIOPX]=cantPx;
@@ -1064,8 +1066,8 @@ class TableModelMarcasNavegacion extends DefaultTableModel {
       public Class getColumnClass(int col) {  
         switch (col){
             case 0: return Integer.class;//esta column accepts only Integer values
-            case 2: return Double.class;
-            case 3: return Double.class;
+            //case 2: return Double.class; xq ahora serán String
+            //case 3: return Double.class;
             case 4: return Double.class;
             case 5: return String.class;
             case 6: return Integer.class;

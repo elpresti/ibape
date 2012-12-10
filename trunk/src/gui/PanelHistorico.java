@@ -471,6 +471,13 @@ public class PanelHistorico extends javax.swing.JPanel {
         grupoElijeCampania = new ButtonGroup(); 
         tablaCampanias.getColumn(1).setCellRenderer(new RadioButtonRenderer());
         tablaCampanias.getColumn(1).setCellEditor(new RadioButtonEditor(new JCheckBox()));
+        
+        //escondo la columna cant. de cajones
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setMinWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setMaxWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setPreferredWidth(0); 
+        tablaCampanias.getColumnModel().getColumn(NRO_COL_CAJONES).setResizable(false);
+        
         setTxtBtnIniciaMapa(btnIniciarMapaHistorico.getText());
         habilitaPanelTablaCatPois(false);
         seteaBotonesMapa();

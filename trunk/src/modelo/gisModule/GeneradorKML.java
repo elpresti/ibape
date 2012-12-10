@@ -390,8 +390,8 @@ public class GeneradorKML {
                + "<![CDATA[<div>"
                   + "Datos de este punto "
                   + "<br>  <strong>- Fecha y hora:</strong> "+punto.getFechaYhora()+" hs"
-                  + "<br>  <strong>- Latitud:</strong> "+Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(punto.getLatConNegativo())+" "+punto.getLatHemisf()
-                  + "<br>  <strong>- Longitud:</strong> "+Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(punto.getLonConNegativo())+" "+punto.getLonHemisf()
+                  + "<br>  <strong>- Latitud:</strong> "+Sistema.getInstance().getLatEnGradosSexagecimalesFromDecimales(punto.getLatConNegativo())
+                  + "<br>  <strong>- Longitud:</strong> "+Sistema.getInstance().getLonEnGradosSexagecimalesFromDecimales(punto.getLonConNegativo())
                   + "<br>  <strong>- Rumbo:</strong> "+punto.getRumbo()+"° "
                   + "<br>  <strong>- Velocidad:</strong> "+punto.getVelocidad()+" kmph"
                   + "<br>  <strong>- Profundidad:</strong> "+punto.getProfundidad()+" m"                
